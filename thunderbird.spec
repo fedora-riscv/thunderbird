@@ -94,7 +94,7 @@ cp -f %{SOURCE5} .
 %patch24 -p1
 %patch25 -p1
 %patch40 -p1
-%patch41 -p1
+%patch41 -p0
 %patch90 -p0 -b .gtk-file-chooser-trunk
 %patch91 -p1 -b .gtk-file-chooser-updates
 %patch92 -p0 -b .gtk-file-chooser-morefixes
