@@ -8,7 +8,7 @@ ExclusiveArch: i386 x86_64 ia64 ppc s390 s390x
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.0
-Release:	4
+Release:	5
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -26,6 +26,7 @@ Source100:	find-external-requires
 
 Patch1:         thunderbird-0.7.3-freetype-compile.patch
 Patch2:         firefox-1.0-gcc4-compile.patch
+Patch3:         firefox-1.0-recv-fortify.patch
 
 Patch10:        thunderbird-0.7.3-psfonts.patch
 Patch11:        thunderbird-0.7.3-gnome-uriloader.patch
@@ -90,6 +91,7 @@ echo "mk_add_options MOZ_MAKE_FLAGS='%{?_smp_mflags}'" >> .mozconfig
 %patch1 -p0 -b .freetype
 %endif
 %patch2 -p0 -b .gcc4
+%patch3 -p0 -b .recv-fortify
 %patch10 -p1 -b .psfonts
 %patch11 -p1 -b .gnome-uriloader
 %patch12 -p0
@@ -154,17 +156,18 @@ perl -pi -e 's|LIBDIR|%{_libdir}|g' %{buildroot}%{tbdir}/open-browser.sh
 %{__cp} $RPM_BUILD_ROOT/rh-default-prefs $RPM_BUILD_ROOT/%{tbdir}/defaults/pref/all-redhat.js
 %{__rm} $RPM_BUILD_ROOT/rh-default-prefs
 
-cd %{buildroot}%{tbdir}
+cd $RPM_BUILD_ROOT/%{tbdir}
 export MOZ_DISABLE_GNOME=1
 ./thunderbird -register
+cd -
 
-%{__rm} -rf %{buildroot}/%{tbdir}/chrome/{classic,comm,embed-sample,en-{mac,win},help,messenger}
+%{__rm} -rf $RPM_BUILD_ROOT/%{tbdir}/chrome/{classic,comm,embed-sample,en-{mac,win},help,messenger}
 # ...
 
 #===============================================================================
 
 %clean
-%{__rm} -rf %{buildroot}
+%{__rm} -rf $RPM_BUILD_ROOT
 
 #===============================================================================
 
@@ -180,6 +183,9 @@ export MOZ_DISABLE_GNOME=1
 #===============================================================================
 
 %changelog
+* Tue Mar  8 2005 Christopher Aillon <caillon@redhat.com> 1.0-5
+- Add patch to compile against new fortified glibc macros
+
 * Sat Mar  5 2005 Christopher Aillon <caillon@redhat.com> 1.0-4
 - Rebuild against GCC 4.0
 - Add execshield patches
