@@ -8,12 +8,12 @@ ExclusiveArch: i386 x86_64 ia64 ppc
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.0
-Release:	0.rc1.1
+Release:	1
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
 Group:		Applications/Internet
-Source0:	thunderbird-%{version}rc-source.tar.bz2
+Source0:	thunderbird-%{version}-source.tar.bz2
 Source1:	thunderbird.desktop
 # This icon is used with the permission of mozilla.org.
 Source2:	thunderbird-icon.png
@@ -159,6 +159,9 @@ rm -rf %{buildroot}/%{tbdir}/chrome/{classic,comm,embed-sample,en-{mac,win},help
 #===============================================================================
 
 %changelog
+* Wed Dec  8 2004 Christopher Aillon <caillon@redhat.com> 1.0-1
+- Thunderbird 1.0
+
 * Mon Dec  6 2004 Christopher Aillon <caillon@redhat.com> 1.0-0.rc1.1
 - Fix advanced prefs
 
