@@ -8,7 +8,7 @@ ExclusiveArch: i386 x86_64 ia64 ppc
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	0.8.0
-Release:	2
+Release:	3
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -22,6 +22,7 @@ Source4:	thunderbird-mozconfig
 Source5:	release-notes.html
 Source6:	thunderbird-open-browser.sh
 Source7:	thunderbird-prefs
+Source100:	find-external-requires
 Patch1:		thunderbird-0.7.3-em-register.patch
 Patch2:		thunderbird-0.7.3-em-fileuri.patch
 Patch3:		thunderbird-0.7.3-enigmail-debian.patch
@@ -44,6 +45,10 @@ Obsoletes:	MozillaThunderbird
 Provides:	MozillaThunderbird = %{epoch}:%{version}
 
 %define tbdir %{_libdir}/thunderbird-%{version}
+
+AutoProv: 0
+%define _use_internal_dependency_generator 0
+%define __find_requires %{SOURCE100}
 
 %description
 Mozilla Thunderbird is a standalone mail and newsgroup client.
@@ -133,6 +138,9 @@ rm -rf %{buildroot}/%{tbdir}/chrome/{classic,comm,embed-sample,en-{mac,win},help
 #===============================================================================
 
 %changelog
+* Fri Oct  1 2004 Bill Nottingham <notting@redhat.com> 0.8.0-3
+- filter out library Provides: and internal Requires:
+
 * Tue Sep 28 2004 Christopher Aillon <caillon@redhat.com> 0.8.0-2
 - Backport the GTK+ File Chooser.
 - Add fix for JS math on x86_64 systems
