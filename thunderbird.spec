@@ -93,6 +93,7 @@ perl -pi -e 's|COMMAND|%{tbdir}/open-browser.sh|g' \
   %{buildroot}%{tbdir}/defaults/pref/all.js
 
 cd %{buildroot}%{tbdir}
+export MOZ_DISABLE_GNOME=1
 ./thunderbird -register
 
 rm -rf %{buildroot}/%{tbdir}/chrome/{classic,comm,embed-sample,en-{mac,win},help,messenger}
@@ -122,6 +123,7 @@ rm -rf %{buildroot}/%{tbdir}/chrome/{classic,comm,embed-sample,en-{mac,win},help
 - Remove enigmail
 - Update BuildRequires
 - Remove gcc34 and extension manager patches -- they are upstreamed.
+- Fix for gnome-vfs2 error at component registration
 
 * Fri Sep 03 2004 Christopher Aillon <caillon@redhat.com> 0.7.3-5
 - Build with --disable-xprint
