@@ -8,7 +8,7 @@ ExclusiveArch: i386 x86_64 ia64 ppc
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	0.8.0
-Release:	5
+Release:	6
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -42,6 +42,7 @@ Patch102:       thunderbird-0.8.0-button-focus.patch
 Patch103:       thunderbird-0.8.0-imap-race.patch
 Patch104:       thunderbird-0.8.0-xremote-program-name.patch
 Patch105:       thunderbird-0.8.0-xremote-crash.patch
+Patch106:       thunderbird-0.8.0-access-64bit-crash.patch
 
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -86,6 +87,7 @@ cp -f %{SOURCE5} .
 %patch103 -p0 -b .imap-race
 %patch104 -p0 -b .xremote-programname
 %patch105 -p0 -b .xremote-crash
+%patch106 -p0 -b .access-64bit-crash
 
 #===============================================================================
 
@@ -153,6 +155,9 @@ rm -rf %{buildroot}/%{tbdir}/chrome/{classic,comm,embed-sample,en-{mac,win},help
 #===============================================================================
 
 %changelog
+* Tue Oct 12 2004 Christopher Aillon <caillon@redhat.com> 0.8.0-6
+- Fix for 64 bit crash at startup (b.m.o #256603)
+
 * Sat Oct  9 2004 Christopher Aillon <caillon@redhat.com> 0.8.0-5
 - Add patches to fix xremote (#135036)
 
