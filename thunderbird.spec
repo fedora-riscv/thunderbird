@@ -1,3 +1,6 @@
+# Option: Freetype Patch (FC3+)
+%define freetype_fc3 1
+
 ExclusiveArch: i386 x86_64 ia64 ppc
 
 Summary:	Mozilla Thunderbird mail/newsgroup client
@@ -48,7 +51,9 @@ echo "ac_add_options --libdir=%{_libdir}" >> .mozconfig
 echo "ac_add_options --with-default-mozilla-five-home=%{tbdir}" >> .mozconfig
 echo "mk_add_options MOZ_MAKE_FLAGS='%{?_smp_mflags}'" >> .mozconfig
 cp -f %{SOURCE5} .
+%if %{freetype_fc3}
 %patch4 -p0 -b .freetype
+%endif
 %patch5 -p1 -b .psfonts
 %patch6 -p1 -b .gnome-uriloader
 
