@@ -8,7 +8,7 @@ ExclusiveArch: i386 x86_64 ia64 ppc
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	0.8.0
-Release:	7
+Release:	8
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -30,6 +30,12 @@ Patch4:         thunderbird-0.7.3-freetype-compile.patch
 Patch5:         thunderbird-0.7.3-psfonts.patch
 Patch6:         thunderbird-0.7.3-gnome-uriloader.patch
 
+# customization patches
+Patch24:        thunderbird-0.8-default-applications.patch
+Patch25:        thunderbird-0.8-software-update.patch
+
+# local bugfixes
+Patch40:        firefox-PR1-gnome-vfs-default-app.patch
 
 # Backported patches, intended for upstream
 Patch90:        thunderbird-0.8.0-gtk-file-chooser-trunk.patch
@@ -83,6 +89,9 @@ cp -f %{SOURCE5} .
 %endif
 %patch5 -p1 -b .psfonts
 %patch6 -p1 -b .gnome-uriloader
+%patch24 -p1
+%patch25 -p1
+%patch40 -p1
 %patch90 -p0 -b .gtk-file-chooser-trunk
 %patch91 -p1 -b .gtk-file-chooser-updates
 %patch100 -p0 -b .js-64bit-math
@@ -162,6 +171,12 @@ rm -rf %{buildroot}/%{tbdir}/chrome/{classic,comm,embed-sample,en-{mac,win},help
 #===============================================================================
 
 %changelog
+* Mon Oct 18 2004 Christopher Blizzard <blizzard@redhat.com> 0.8.0-8
+- Pull over patches from firefox build:
+  - disable default application dialog
+  - don't include software update since it doesn't work
+  - make external app support work
+
 * Thu Oct 14 2004 Christopher Blizzard <blizzard@redhat.com> 0.8.0-7
 - Use pango for rendering
 
