@@ -8,7 +8,7 @@ ExclusiveArch: i386 x86_64 ia64 ppc
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	0.8.0
-Release:	8
+Release:	9
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -40,6 +40,7 @@ Patch40:        firefox-PR1-gnome-vfs-default-app.patch
 # Backported patches, intended for upstream
 Patch90:        thunderbird-0.8.0-gtk-file-chooser-trunk.patch
 Patch91:        thunderbird-0.8.0-gtk-file-chooser-updates.patch
+Patch92:        thunderbird-0.8.0-gtk-file-chooser-morefixes.patch
 
 # Already upstreamed
 Patch100:       thunderbird-0.8.0-js-64bit-math.patch
@@ -50,7 +51,7 @@ Patch104:       thunderbird-0.8.0-xremote-program-name.patch
 Patch105:       thunderbird-0.8.0-xremote-crash.patch
 Patch106:       thunderbird-0.8.0-access-64bit-crash.patch
 Patch107:       mozilla-1.7.3-pango-render.patch
-
+Patch108:       thunderbird-0.8.0-server-hits.patch
 
 
 
@@ -94,6 +95,7 @@ cp -f %{SOURCE5} .
 %patch40 -p1
 %patch90 -p0 -b .gtk-file-chooser-trunk
 %patch91 -p1 -b .gtk-file-chooser-updates
+%patch92 -p0 -b .gtk-file-chooser-morefixes
 %patch100 -p0 -b .js-64bit-math
 %patch101 -p0 -b .pkgconfig
 %patch102 -p0 -b .button-focus
@@ -102,6 +104,7 @@ cp -f %{SOURCE5} .
 %patch105 -p0 -b .xremote-crash
 %patch106 -p0 -b .access-64bit-crash
 %patch107 -p1 -b .pango
+%patch108 -p0
 
 #===============================================================================
 
@@ -171,6 +174,10 @@ rm -rf %{buildroot}/%{tbdir}/chrome/{classic,comm,embed-sample,en-{mac,win},help
 #===============================================================================
 
 %changelog
+* Tue Oct 19 2004 Christopher Aillon <caillon@redhat.com> 0.8.0-9
+- More file chooser fixes (same as in firefox)
+- Fix for upstream 28327.
+
 * Mon Oct 18 2004 Christopher Blizzard <blizzard@redhat.com> 0.8.0-8
 - Update the pango patch
 
