@@ -7,8 +7,8 @@ ExclusiveArch: i386 x86_64 ia64 ppc s390 s390x
 
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
-Version:	1.0
-Release:	5
+Version:	1.0.2
+Release:	1
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -46,7 +46,7 @@ Patch40:        firefox-PR1-gnome-vfs-default-app.patch
 Patch41:        thunderbird-0.8.0-stack-direction.patch
 
 # Backported patches, intended for upstream
-Patch90:        thunderbird-0.8.0-gtk-file-chooser-morefixes.patch
+Patch90:        firefox-PR1-gtk-file-chooser-morefixes.patch
 
 # Already upstreamed
 Patch101:       thunderbird-0.8.0-pkgconfig.patch
@@ -183,6 +183,9 @@ cd -
 #===============================================================================
 
 %changelog
+* Wed Mar 23 2005 Christopher Aillon <caillon@redhat.com> 1.0.2-1
+- Thunderbird 1.0.2
+
 * Tue Mar  8 2005 Christopher Aillon <caillon@redhat.com> 1.0-5
 - Add patch to compile against new fortified glibc macros
 
