@@ -25,3 +25,4 @@ ac_add_options --disable-tests
 # fedora has permission to use the official Mozilla.org branding
 ac_add_options --enable-official-branding
 
+ac_add_options --enable-pango

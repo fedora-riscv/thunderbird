@@ -8,7 +8,7 @@ ExclusiveArch: i386 x86_64 ia64 ppc
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	0.8.0
-Release:	6
+Release:	7
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -43,6 +43,9 @@ Patch103:       thunderbird-0.8.0-imap-race.patch
 Patch104:       thunderbird-0.8.0-xremote-program-name.patch
 Patch105:       thunderbird-0.8.0-xremote-crash.patch
 Patch106:       thunderbird-0.8.0-access-64bit-crash.patch
+Patch107:       mozilla-1.7.3-pango-render.patch
+
+
 
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -52,6 +55,7 @@ BuildRequires:	XFree86-devel
 BuildRequires:	libIDL-devel
 BuildRequires:	tcsh
 BuildRequires:	freetype-devel
+BuildRequires:  autoconf213
 Prereq:		desktop-file-utils >= %{desktop_file_utils_version}
 Obsoletes:	MozillaThunderbird
 Provides:	MozillaThunderbird = %{epoch}:%{version}
@@ -88,10 +92,13 @@ cp -f %{SOURCE5} .
 %patch104 -p0 -b .xremote-programname
 %patch105 -p0 -b .xremote-crash
 %patch106 -p0 -b .access-64bit-crash
+%patch107 -p1 -b .pango
 
 #===============================================================================
 
 %build
+autoconf-2.13
+
 export RPM_OPT_FLAGS=$(echo $RPM_OPT_FLAGS | sed 's/-O2/-Os/')
 export CFLAGS="$RPM_OPT_FLAGS"
 export CXXFLAGS="$CFLAGS"
@@ -155,6 +162,9 @@ rm -rf %{buildroot}/%{tbdir}/chrome/{classic,comm,embed-sample,en-{mac,win},help
 #===============================================================================
 
 %changelog
+* Thu Oct 14 2004 Christopher Blizzard <blizzard@redhat.com> 0.8.0-7
+- Use pango for rendering
+
 * Tue Oct 12 2004 Christopher Aillon <caillon@redhat.com> 0.8.0-6
 - Fix for 64 bit crash at startup (b.m.o #256603)
 
