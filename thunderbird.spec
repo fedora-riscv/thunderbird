@@ -8,7 +8,7 @@ ExclusiveArch: i386 x86_64 ia64 ppc s390 s390x
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.0.2
-Release:	1
+Release:	2
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
