@@ -2,27 +2,21 @@ ExclusiveArch: i386 x86_64 ia64 ppc
 
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
-Version:	0.7.3
-Release:	5
+Version:	0.8.0
+Release:	1
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
 Group:		Applications/Internet
-Source0:	http://ftp.mozilla.org/pub/mozilla.org/thunderbird/releases/0.7.3/thunderbird-0.7.3-source.tar.bz2
-# Enigmail GPG signatures:
-# http://downloads.us-east3.mozdev.org/enigmail/src/ipc-1.0.7.tar.gz.asc
-# http://downloads.us-east3.mozdev.org/enigmail/src/enigmail-0.85.0.tar.gz.asc
-Source1:	http://downloads.us-east3.mozdev.org/enigmail/src/ipc-1.0.7.tar.gz
-Source2:	http://downloads.us-east3.mozdev.org/enigmail/src/enigmail-0.85.0.tar.gz
-Source3:	mozilla-thunderbird.desktop
+Source0:	http://ftp.mozilla.org/pub/mozilla.org/thunderbird/releases/0.8/thunderbird-source-0.8.tar.bz2
+Source1:	thunderbird.desktop
 # This icon is used with the permission of mozilla.org.
-Source4:	thunderbird-icon.png
-Source5:	thunderbird.sh.in
-Source6:	thunderbird-mozconfig
-Source7:	release-notes.html
-Source8:	thunderbird-open-browser.sh
-Source9:	thunderbird-prefs
-Patch0:		thunderbird-0.7.3-gcc34.patch
+Source2:	thunderbird-icon.png
+Source3:	thunderbird.sh.in
+Source4:	thunderbird-mozconfig
+Source5:	release-notes.html
+Source6:	thunderbird-open-browser.sh
+Source7:	thunderbird-prefs
 Patch1:		thunderbird-0.7.3-em-register.patch
 Patch2:		thunderbird-0.7.3-em-fileuri.patch
 Patch3:		thunderbird-0.7.3-enigmail-debian.patch
@@ -30,51 +24,33 @@ Patch4:         thunderbird-0.7.3-freetype-compile.patch
 Patch5:         thunderbird-0.7.3-psfonts.patch
 Patch6:         thunderbird-0.7.3-gnome-uriloader.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires:	libpng-devel, libjpeg-devel, libmng-devel, gtk2-devel
+BuildRequires:	libpng-devel, libjpeg-devel, gtk2-devel
 BuildRequires:	zlib-devel, gzip, zip, unzip
 BuildRequires:	XFree86-devel
 BuildRequires:	libIDL-devel
 BuildRequires:	desktop-file-utils
 BuildRequires:	tcsh
-#BuildRequires:	/usr/X11R6/bin/Xvfb
 BuildRequires:	freetype-devel
-Requires:	gnupg
 Obsoletes:	MozillaThunderbird
 Provides:	MozillaThunderbird = %{epoch}:%{version}
 
 %define tbdir %{_libdir}/thunderbird-%{version}
-%define enigmail_guid 847b3a00-7ab1-11d4-8f02-006008948af5
-%define enigmime_ver 1.0.7
-%define enigmail_ver 0.85.0
 
 %description
 Mozilla Thunderbird is a standalone mail and newsgroup client.
-
-Enigmail is included in this RPM.
 
 #===============================================================================
 
 %prep
 %setup -q -n mozilla
-cp -f %{SOURCE6} .mozconfig
+cp -f %{SOURCE4} .mozconfig
 echo "ac_add_options --libdir=%{_libdir}" >> .mozconfig
 echo "ac_add_options --with-default-mozilla-five-home=%{tbdir}" >> .mozconfig
 echo "mk_add_options MOZ_MAKE_FLAGS='%{?_smp_mflags}'" >> .mozconfig
-cp -f %{SOURCE7} .
-%setup -T -D -a1 -n mozilla/extensions
-%setup -T -D -a2 -n mozilla/extensions
-%setup -T -D -n mozilla
-%patch0 -p1 -b .gcc34
-%patch1 -p0 -b .emreg
-%patch2 -p0 -b .emfile
-#%patch3 -p1 -b .enigdeb
+cp -f %{SOURCE5} .
 %patch4 -p0 -b .freetype
 %patch5 -p1 -b .psfonts
 %patch6 -p1 -b .gnome-uriloader
-
-# stop extensions being disabled with new profiles
-perl -pi -e 's/chrome:extension="true"/chrome:extension="false"/' \
-    extensions/enigmail/{build/package,ui/content}/contents.rdf
 
 #===============================================================================
 
@@ -85,15 +61,6 @@ export CXXFLAGS="$CFLAGS"
 export BUILD_OFFICIAL=1
 export MOZILLA_OFFICIAL=1
 time make -f client.mk build_all
-
-cd extensions/ipc && ./makemake -r
-make %{?_smp_mflags}
-cd build
-#make xpi
-cd ../../enigmail && ./makemake -r
-make %{?_smp_mflags}
-cd package
-make xpi
 
 #===============================================================================
 
@@ -106,29 +73,29 @@ tar ch ./ | ( cd %{buildroot}%{tbdir} ; tar xf - )
 cd -
 
 # menu entry
-install -p -D %{SOURCE4} %{buildroot}%{_datadir}/pixmaps/thunderbird-icon.png
-desktop-file-install --vendor fedora			\
+install -p -D %{SOURCE2} %{buildroot}%{_datadir}/pixmaps/thunderbird-icon.png
+desktop-file-install --vendor mozilla			\
 	--dir %{buildroot}%{_datadir}/applications  	\
-	--add-category X-Fedora				\
+	--add-category X-Red-Hat			\
 	--add-category Application			\
 	--add-category Network				\
-	%{SOURCE3}
+	%{SOURCE1}
 
-install -m755 %{SOURCE5} %{buildroot}%{_bindir}/mozilla-thunderbird
+install -m755 %{SOURCE3} %{buildroot}%{_bindir}/mozilla-thunderbird
 perl -pi -e 's|TBDIR|%{tbdir}|g' %{buildroot}%{_bindir}/mozilla-thunderbird
 ( cd %{buildroot}%{_bindir} ; ln -s mozilla-thunderbird thunderbird )
 
-install -m755 %{SOURCE8} %{buildroot}%{tbdir}/open-browser.sh
+install -m755 %{SOURCE6} %{buildroot}%{tbdir}/open-browser.sh
 perl -pi -e 's|LIBDIR|%{_libdir}|g' %{buildroot}%{tbdir}/open-browser.sh
 
-install -m644 %{SOURCE9} %{buildroot}%{tbdir}/defaults/pref/all.js
+install -m644 %{SOURCE7} %{buildroot}%{tbdir}/defaults/pref/all.js
 perl -pi -e 's|COMMAND|%{tbdir}/open-browser.sh|g' \
   %{buildroot}%{tbdir}/defaults/pref/all.js
 
 cd %{buildroot}%{tbdir}
 ./thunderbird -register
 
-rm -rf %{buildroot}/%{tbdir}/chrome/{classic,comm,embed-sample,enigm{ime,ail},en-{mac,win},help,messenger}
+rm -rf %{buildroot}/%{tbdir}/chrome/{classic,comm,embed-sample,en-{mac,win},help,messenger}
 # ...
 
 #===============================================================================
@@ -142,7 +109,7 @@ rm -rf %{buildroot}/%{tbdir}/chrome/{classic,comm,embed-sample,enigm{ime,ail},en
 %defattr(-,root,root,-)
 %attr(755,root,root) %{_bindir}/mozilla-thunderbird
 %attr(755,root,root) %{_bindir}/thunderbird
-%attr(644,root,root) %{_datadir}/applications/fedora-mozilla-thunderbird.desktop
+%attr(644,root,root) %{_datadir}/applications/mozilla-thunderbird.desktop
 %attr(644,root,root) %{_datadir}/pixmaps/thunderbird-icon.png
 %{tbdir}
 %doc release-notes.html
@@ -150,6 +117,12 @@ rm -rf %{buildroot}/%{tbdir}/chrome/{classic,comm,embed-sample,enigm{ime,ail},en
 #===============================================================================
 
 %changelog
+* Thu Sep 16 2004 Christopher Aillon <caillon@redhat.com> 0.8.0-1
+- Update to 0.8.0
+- Remove enigmail
+- Update BuildRequires
+- Remove gcc34 and extension manager patches -- they are upstreamed.
+
 * Fri Sep 03 2004 Christopher Aillon <caillon@redhat.com> 0.7.3-5
 - Build with --disable-xprint
 

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=Thunderbird Email
+GenericName=Email
+Comment=Send and Receive Email
+Exec=mozilla-thunderbird
+Icon=thunderbird-icon.png
+Terminal=false
+Type=Application
+StartupWMClass=Thunderbird-bin
