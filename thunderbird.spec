@@ -8,7 +8,7 @@ ExclusiveArch: i386 x86_64 ia64 ppc s390 s390x
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.0
-Release:	2
+Release:	3
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -144,10 +144,11 @@ install -m755 %{SOURCE6} %{buildroot}%{tbdir}/open-browser.sh
 perl -pi -e 's|LIBDIR|%{_libdir}|g' %{buildroot}%{tbdir}/open-browser.sh
 
 %{__cat} %{SOURCE10} | %{__sed} -e 's,THUNDERBIRD_RPM_VR,%{version}-%{release},g' \
-                       %{__sed} -e 's,COMMAND,%{tbdir}/open-browser.sh,g' > rh-default-prefs
-%{__cp} rh-default-prefs $RPM_BUILD_ROOT/%{tbdir}/greprefs/all-redhat.js
-%{__cp} rh-default-prefs $RPM_BUILD_ROOT/%{tbdir}/defaults/pref/all-redhat.js
-%{__rm} rh-default-prefs
+                                -e 's,COMMAND,%{tbdir}/open-browser.sh,g' > \
+        $RPM_BUILD_ROOT/rh-default-prefs
+%{__cp} $RPM_BUILD_ROOT/rh-default-prefs $RPM_BUILD_ROOT/%{tbdir}/greprefs/all-redhat.js
+%{__cp} $RPM_BUILD_ROOT/rh-default-prefs $RPM_BUILD_ROOT/%{tbdir}/defaults/pref/all-redhat.js
+%{__rm} $RPM_BUILD_ROOT/rh-default-prefs
 
 cd %{buildroot}%{tbdir}
 export MOZ_DISABLE_GNOME=1
@@ -175,6 +176,9 @@ rm -rf %{buildroot}/%{tbdir}/chrome/{classic,comm,embed-sample,en-{mac,win},help
 #===============================================================================
 
 %changelog
+* Mon Dec 20 2004 Christopher Aillon <caillon@redhat.com> 1.0-3
+- Rebuild
+
 * Thu Dec 16 2004 Christopher Aillon <caillon@redhat.com> 1.0-2
 - Add RPM version to useragent
 
