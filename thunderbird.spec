@@ -8,7 +8,7 @@ ExclusiveArch: i386 x86_64 ia64 ppc
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	0.8.0
-Release:	3
+Release:	4
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -33,6 +33,8 @@ Patch90:        thunderbird-0.8.0-gtk-file-chooser-trunk.patch
 Patch91:        thunderbird-0.8.0-gtk-file-chooser-updates.patch
 Patch100:       thunderbird-0.8.0-js-64bit-math.patch
 Patch101:       thunderbird-0.8.0-pkgconfig.patch
+Patch102:       thunderbird-0.8.0-button-focus.patch
+Patch103:       thunderbird-0.8.0-imap-race.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:	libpng-devel, libjpeg-devel, gtk2-devel
 BuildRequires:	zlib-devel, gzip, zip, unzip
@@ -71,6 +73,8 @@ cp -f %{SOURCE5} .
 %patch91 -p1 -b .gtk-file-chooser-updates
 %patch100 -p0 -b .js-64bit-math
 %patch101 -p0 -b .pkgconfig
+%patch102 -p0 -b .button-focus
+%patch103 -p0 -b .imap-race
 
 #===============================================================================
 
@@ -138,6 +142,10 @@ rm -rf %{buildroot}/%{tbdir}/chrome/{classic,comm,embed-sample,en-{mac,win},help
 #===============================================================================
 
 %changelog
+* Fri Oct  8 2004 Christopher Aillon <caillon@redhat.com> 0.8.0-4
+- Add patch to fix button focus issues (#133507)
+- Add patch for fix IMAP race issues (bmo #246439)
+
 * Fri Oct  1 2004 Bill Nottingham <notting@redhat.com> 0.8.0-3
 - filter out library Provides: and internal Requires:
 
