@@ -8,7 +8,7 @@ ExclusiveArch: i386 x86_64 ia64 ppc s390 s390x
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.0
-Release:	3
+Release:	4
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -24,13 +24,12 @@ Source6:	thunderbird-open-browser.sh
 Source10:       thunderbird-redhat-default-prefs.js
 Source100:	find-external-requires
 
-Patch1:		thunderbird-0.7.3-em-register.patch
-Patch2:		thunderbird-0.7.3-em-fileuri.patch
-Patch3:		thunderbird-0.7.3-enigmail-debian.patch
-Patch4:         thunderbird-0.7.3-freetype-compile.patch
-Patch5:         thunderbird-0.7.3-psfonts.patch
-Patch6:         thunderbird-0.7.3-gnome-uriloader.patch
-Patch7:         firefox-1.0-prdtoa.patch
+Patch1:         thunderbird-0.7.3-freetype-compile.patch
+Patch2:         firefox-1.0-gcc4-compile.patch
+
+Patch10:        thunderbird-0.7.3-psfonts.patch
+Patch11:        thunderbird-0.7.3-gnome-uriloader.patch
+Patch12:        firefox-1.0-prdtoa.patch
 
 # customization patches
 Patch24:        thunderbird-0.8-default-applications.patch
@@ -54,6 +53,8 @@ Patch103:       mozilla-1.7.3-xptcall-s390.patch
 Patch104:       firefox-1.0-xptcall-s390.patch
 Patch105:       firefox-1.0-nspr-s390.patch
 Patch106:       thunderbird-1.0-useragent.patch
+Patch107:       firefox-1.0-execshield-nspr.patch
+Patch108:       firefox-1.0-exechsield-xpcom.patch
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:	libpng-devel, libjpeg-devel, gtk2-devel
@@ -80,17 +81,18 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 
 %prep
 %setup -q -n mozilla
-cp -f %{SOURCE4} .mozconfig
+%{__cp} -f %{SOURCE4} .mozconfig
 echo "ac_add_options --libdir=%{_libdir}" >> .mozconfig
 echo "ac_add_options --with-default-mozilla-five-home=%{tbdir}" >> .mozconfig
 echo "mk_add_options MOZ_MAKE_FLAGS='%{?_smp_mflags}'" >> .mozconfig
-cp -f %{SOURCE5} .
+%{__cp} -f %{SOURCE5} .
 %if %{freetype_fc3}
-%patch4 -p0 -b .freetype
+%patch1 -p0 -b .freetype
 %endif
-%patch5 -p1 -b .psfonts
-%patch6 -p1 -b .gnome-uriloader
-%patch7 -p0
+%patch2 -p0 -b .gcc4
+%patch10 -p1 -b .psfonts
+%patch11 -p1 -b .gnome-uriloader
+%patch12 -p0
 %patch24 -p1
 %patch25 -p1
 %patch30 -p1
@@ -104,6 +106,8 @@ cp -f %{SOURCE5} .
 %patch104 -p1
 %patch105 -p0
 %patch106 -p0
+%patch107 -p0
+%patch108 -p0
 
 #===============================================================================
 
@@ -120,11 +124,11 @@ time make -f client.mk build_all
 #===============================================================================
 
 %install
-rm -rf %{buildroot}
-mkdir -p %{buildroot}{%{tbdir},%{_bindir}}
+%{__rm} -rf %{buildroot}
+%{__mkdir_p} %{buildroot}{%{tbdir},%{_bindir}}
 
 cd dist/bin
-tar ch ./ | ( cd %{buildroot}%{tbdir} ; tar xf - )
+%{__tar} ch ./ | ( cd %{buildroot}%{tbdir} ; tar xf - )
 cd -
 
 # menu entry
@@ -154,13 +158,13 @@ cd %{buildroot}%{tbdir}
 export MOZ_DISABLE_GNOME=1
 ./thunderbird -register
 
-rm -rf %{buildroot}/%{tbdir}/chrome/{classic,comm,embed-sample,en-{mac,win},help,messenger}
+%{__rm} -rf %{buildroot}/%{tbdir}/chrome/{classic,comm,embed-sample,en-{mac,win},help,messenger}
 # ...
 
 #===============================================================================
 
 %clean
-#rm -rf %{buildroot}
+%{__rm} -rf %{buildroot}
 
 #===============================================================================
 
@@ -176,6 +180,11 @@ rm -rf %{buildroot}/%{tbdir}/chrome/{classic,comm,embed-sample,en-{mac,win},help
 #===============================================================================
 
 %changelog
+* Sat Mar  5 2005 Christopher Aillon <caillon@redhat.com> 1.0-4
+- Rebuild against GCC 4.0
+- Add execshield patches
+- Minor specfile cleanup
+
 * Mon Dec 20 2004 Christopher Aillon <caillon@redhat.com> 1.0-3
 - Rebuild
 
