@@ -8,7 +8,7 @@ ExclusiveArch: i386 x86_64 ia64 ppc
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	0.8.0
-Release:	9
+Release:	10
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -36,6 +36,7 @@ Patch25:        thunderbird-0.8-software-update.patch
 
 # local bugfixes
 Patch40:        firefox-PR1-gnome-vfs-default-app.patch
+Patch41:        thunderbird-0.8.0-stack-direction.patch
 
 # Backported patches, intended for upstream
 Patch90:        thunderbird-0.8.0-gtk-file-chooser-trunk.patch
@@ -93,6 +94,7 @@ cp -f %{SOURCE5} .
 %patch24 -p1
 %patch25 -p1
 %patch40 -p1
+%patch41 -p1
 %patch90 -p0 -b .gtk-file-chooser-trunk
 %patch91 -p1 -b .gtk-file-chooser-updates
 %patch92 -p0 -b .gtk-file-chooser-morefixes
@@ -174,6 +176,9 @@ rm -rf %{buildroot}/%{tbdir}/chrome/{classic,comm,embed-sample,en-{mac,win},help
 #===============================================================================
 
 %changelog
+* Fri Oct 22 2004 Christopher Aillon <caillon@redhat.com> 0.8.0-10
+- Prevent inlining of stack direction detection (#135255)
+
 * Tue Oct 19 2004 Christopher Aillon <caillon@redhat.com> 0.8.0-9
 - More file chooser fixes (same as in firefox)
 - Fix for upstream 28327.
