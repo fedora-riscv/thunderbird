@@ -7,13 +7,13 @@ ExclusiveArch: i386 x86_64 ia64 ppc
 
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
-Version:	0.9
-Release:	2
+Version:	1.0
+Release:	0.rc1.0
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
 Group:		Applications/Internet
-Source0:	thunderbird-%{version}-source.tar.bz2
+Source0:	thunderbird-%{version}rc-source.tar.bz2
 Source1:	thunderbird.desktop
 # This icon is used with the permission of mozilla.org.
 Source2:	thunderbird-icon.png
@@ -159,6 +159,9 @@ rm -rf %{buildroot}/%{tbdir}/chrome/{classic,comm,embed-sample,en-{mac,win},help
 #===============================================================================
 
 %changelog
+* Wed Dec  1 2004 Christopher Aillon <caillon@redhat.com> 1.0-0.rc1.0
+- Update to 1.0 rc1
+
 * Thu Nov 11 2004 Christopher Aillon <caillon@redhat.com> 0.9.0-2
 - Rebuild to fix file chooser
 
