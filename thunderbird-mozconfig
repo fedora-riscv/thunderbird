@@ -1,6 +1,3 @@
-# ------------------------------------------------------------------------------
-# .mozconfig for fedora.us thunderbird RPM
-# ------------------------------------------------------------------------------
 . $topsrcdir/mail/config/mozconfig
 
 export BUILD_OFFICIAL=1
@@ -11,7 +8,6 @@ mk_add_options MOZILLA_OFFICIAL=1
 ac_add_options --enable-default-toolkit=gtk2
 ac_add_options --enable-xft
 ac_add_options --enable-optimize="$CFLAGS"
-#ac_add_options --disable-debug
 
 ac_add_options --with-system-jpeg
 ac_add_options --with-system-png
@@ -26,6 +22,6 @@ ac_add_options --disable-debug
 ac_add_options --disable-strip
 ac_add_options --disable-tests
 
-# fedora.us has permission to use the official Mozilla.org branding
+# fedora has permission to use the official Mozilla.org branding
 ac_add_options --enable-official-branding
 

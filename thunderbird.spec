@@ -1,12 +1,14 @@
 # Option: Freetype Patch (FC3+)
 %define freetype_fc3 1
 
+%define desktop_file_utils_version 0.3
+
 ExclusiveArch: i386 x86_64 ia64 ppc
 
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	0.8.0
-Release:	1
+Release:	2
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -26,14 +28,18 @@ Patch3:		thunderbird-0.7.3-enigmail-debian.patch
 Patch4:         thunderbird-0.7.3-freetype-compile.patch
 Patch5:         thunderbird-0.7.3-psfonts.patch
 Patch6:         thunderbird-0.7.3-gnome-uriloader.patch
+Patch90:        thunderbird-0.8.0-gtk-file-chooser-trunk.patch
+Patch91:        thunderbird-0.8.0-gtk-file-chooser-updates.patch
+Patch100:       thunderbird-0.8.0-js-64bit-math.patch
+Patch101:       thunderbird-0.8.0-pkgconfig.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:	libpng-devel, libjpeg-devel, gtk2-devel
 BuildRequires:	zlib-devel, gzip, zip, unzip
 BuildRequires:	XFree86-devel
 BuildRequires:	libIDL-devel
-BuildRequires:	desktop-file-utils
 BuildRequires:	tcsh
 BuildRequires:	freetype-devel
+Prereq:		desktop-file-utils >= %{desktop_file_utils_version}
 Obsoletes:	MozillaThunderbird
 Provides:	MozillaThunderbird = %{epoch}:%{version}
 
@@ -56,6 +62,10 @@ cp -f %{SOURCE5} .
 %endif
 %patch5 -p1 -b .psfonts
 %patch6 -p1 -b .gnome-uriloader
+%patch90 -p0 -b .gtk-file-chooser-trunk
+%patch91 -p1 -b .gtk-file-chooser-updates
+%patch100 -p0 -b .js-64bit-math
+%patch101 -p0 -b .pkgconfig
 
 #===============================================================================
 
@@ -123,6 +133,11 @@ rm -rf %{buildroot}/%{tbdir}/chrome/{classic,comm,embed-sample,en-{mac,win},help
 #===============================================================================
 
 %changelog
+* Tue Sep 28 2004 Christopher Aillon <caillon@redhat.com> 0.8.0-2
+- Backport the GTK+ File Chooser.
+- Add fix for JS math on x86_64 systems
+- Add pkgconfig patch
+
 * Thu Sep 16 2004 Christopher Aillon <caillon@redhat.com> 0.8.0-1
 - Update to 0.8.0
 - Remove enigmail
