@@ -172,6 +172,9 @@ rm -rf %{buildroot}/%{tbdir}/chrome/{classic,comm,embed-sample,en-{mac,win},help
 
 %changelog
 * Mon Oct 18 2004 Christopher Blizzard <blizzard@redhat.com> 0.8.0-8
+- Update the pango patch
+
+* Mon Oct 18 2004 Christopher Blizzard <blizzard@redhat.com> 0.8.0-8
 - Pull over patches from firefox build:
   - disable default application dialog
   - don't include software update since it doesn't work
