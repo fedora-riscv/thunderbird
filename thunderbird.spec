@@ -7,13 +7,13 @@ ExclusiveArch: i386 x86_64 ia64 ppc
 
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
-Version:	0.8.0
-Release:	10
+Version:	0.9
+Release:	1
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
 Group:		Applications/Internet
-Source0:	http://ftp.mozilla.org/pub/mozilla.org/thunderbird/releases/0.8/thunderbird-source-0.8.tar.bz2
+Source0:	thunderbird-%{version}-source.tar.bz2
 Source1:	thunderbird.desktop
 # This icon is used with the permission of mozilla.org.
 Source2:	thunderbird-icon.png
@@ -23,6 +23,7 @@ Source5:	release-notes.html
 Source6:	thunderbird-open-browser.sh
 Source7:	thunderbird-prefs
 Source100:	find-external-requires
+
 Patch1:		thunderbird-0.7.3-em-register.patch
 Patch2:		thunderbird-0.7.3-em-fileuri.patch
 Patch3:		thunderbird-0.7.3-enigmail-debian.patch
@@ -39,20 +40,11 @@ Patch40:        firefox-PR1-gnome-vfs-default-app.patch
 Patch41:        thunderbird-0.8.0-stack-direction.patch
 
 # Backported patches, intended for upstream
-Patch90:        thunderbird-0.8.0-gtk-file-chooser-trunk.patch
-Patch91:        thunderbird-0.8.0-gtk-file-chooser-updates.patch
-Patch92:        thunderbird-0.8.0-gtk-file-chooser-morefixes.patch
+Patch90:        thunderbird-0.8.0-gtk-file-chooser-morefixes.patch
 
 # Already upstreamed
-Patch100:       thunderbird-0.8.0-js-64bit-math.patch
 Patch101:       thunderbird-0.8.0-pkgconfig.patch
-Patch102:       thunderbird-0.8.0-button-focus.patch
-Patch103:       thunderbird-0.8.0-imap-race.patch
-Patch104:       thunderbird-0.8.0-xremote-program-name.patch
-Patch105:       thunderbird-0.8.0-xremote-crash.patch
-Patch106:       thunderbird-0.8.0-access-64bit-crash.patch
-Patch107:       mozilla-1.7.3-pango-render.patch
-Patch108:       thunderbird-0.8.0-server-hits.patch
+Patch102:       mozilla-1.7.3-pango-render.patch
 
 
 
@@ -95,18 +87,9 @@ cp -f %{SOURCE5} .
 %patch25 -p1
 %patch40 -p1
 %patch41 -p0
-%patch90 -p0 -b .gtk-file-chooser-trunk
-%patch91 -p1 -b .gtk-file-chooser-updates
-%patch92 -p0 -b .gtk-file-chooser-morefixes
-%patch100 -p0 -b .js-64bit-math
+%patch90 -p0 -b .gtk-file-chooser-morefixes
 %patch101 -p0 -b .pkgconfig
-%patch102 -p0 -b .button-focus
-%patch103 -p0 -b .imap-race
-%patch104 -p0 -b .xremote-programname
-%patch105 -p0 -b .xremote-crash
-%patch106 -p0 -b .access-64bit-crash
-%patch107 -p1 -b .pango
-%patch108 -p0
+%patch102 -p1 -b .pango
 
 #===============================================================================
 
@@ -176,6 +159,9 @@ rm -rf %{buildroot}/%{tbdir}/chrome/{classic,comm,embed-sample,en-{mac,win},help
 #===============================================================================
 
 %changelog
+* Fri Nov  5 2004 Christopher Aillon <caillon@redhat.com> 0.9.0-1
+- Update to 0.9
+
 * Fri Oct 22 2004 Christopher Aillon <caillon@redhat.com> 0.8.0-10
 - Prevent inlining of stack direction detection (#135255)
 
