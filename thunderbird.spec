@@ -40,6 +40,7 @@ Patch25:        thunderbird-0.8-software-update.patch
 Patch30:        mozilla-1.7.3-pango-render.patch
 Patch31:        firefox-1.0-pango-selection.patch
 Patch32:        firefox-1.0-pango-space-width.patch
+Patch33:        firefox-1.0-pango-rounding.patch
 
 # local bugfixes
 Patch40:        firefox-PR1-gnome-vfs-default-app.patch
