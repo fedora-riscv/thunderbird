@@ -8,7 +8,7 @@ ExclusiveArch: i386 x86_64 ia64 ppc
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	0.9
-Release:	1
+Release:	2
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -159,6 +159,9 @@ rm -rf %{buildroot}/%{tbdir}/chrome/{classic,comm,embed-sample,en-{mac,win},help
 #===============================================================================
 
 %changelog
+* Thu Nov 11 2004 Christopher Aillon <caillon@redhat.com> 0.9.0-2
+- Rebuild to fix file chooser
+
 * Fri Nov  5 2004 Christopher Aillon <caillon@redhat.com> 0.9.0-1
 - Update to 0.9
 
