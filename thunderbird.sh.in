@@ -12,6 +12,13 @@ MOZ_PROGRAM=$MRE_HOME/thunderbird
 #MOZ_CLIENT_PROGRAM="$MRE_HOME/mozilla-xremote-client -a thunderbird"
 MOZ_CLIENT_PROGRAM="$MRE_HOME/thunderbird -remote" 
 
+##
+## Set MOZ_ENABLE_PANGO
+##
+MOZ_ENABLE_PANGO=1
+export MOZ_ENABLE_PANGO
+
+
 function check_running() {
     $MOZ_CLIENT_PROGRAM 'ping()' 2>/dev/null >/dev/null
     RETURN_VAL=$?

@@ -1,6 +1,6 @@
---- mozilla/config/autoconf.mk.in.foo	2004-03-20 21:31:17.000000000 -0500
-+++ mozilla/config/autoconf.mk.in	2004-10-18 22:49:40.000000000 -0400
-@@ -376,6 +376,10 @@
+--- mozilla/config/autoconf.mk.in.foo	2004-10-31 00:29:54.000000000 -0400
++++ mozilla/config/autoconf.mk.in	2004-12-03 13:30:56.000000000 -0500
+@@ -388,6 +388,10 @@
  MOZ_XFT_LIBS		= @MOZ_XFT_LIBS@
  MOZ_ENABLE_COREXFONTS	= @MOZ_ENABLE_COREXFONTS@
  
@@ -12,7 +12,7 @@
  
  MOZ_ENABLE_XINERAMA	= @MOZ_ENABLE_XINERAMA@
 --- mozilla/gfx/src/gtk/nsGfxFactoryGTK.cpp.foo	2003-09-07 18:20:38.000000000 -0400
-+++ mozilla/gfx/src/gtk/nsGfxFactoryGTK.cpp	2004-10-18 22:49:40.000000000 -0400
++++ mozilla/gfx/src/gtk/nsGfxFactoryGTK.cpp	2004-12-03 13:30:56.000000000 -0500
 @@ -62,6 +62,9 @@
  #ifdef NATIVE_THEME_SUPPORT
  #include "nsNativeThemeGTK.h"
@@ -71,8 +71,8 @@
  
    NS_ADDREF(result);
    nsresult rv = result->QueryInterface(aIID, aResult);
---- /dev/null	2004-02-18 10:26:44.000000000 -0500
-+++ mozilla/gfx/src/gtk/mozilla-decoder.h	2004-10-18 22:49:40.000000000 -0400
+--- mozilla/gfx/src/gtk/mozilla-decoder.h.foo	2004-12-03 13:30:56.000000000 -0500
++++ mozilla/gfx/src/gtk/mozilla-decoder.h	2004-12-03 13:30:56.000000000 -0500
 @@ -0,0 +1,72 @@
 +/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 +/* vim:expandtab:shiftwidth=4:tabstop=4:
@@ -146,8 +146,8 @@
 +G_END_DECLS
 +
 +#endif /*_MOZILLA_DECODER_H */
---- /dev/null	2004-02-18 10:26:44.000000000 -0500
-+++ mozilla/gfx/src/gtk/mozilla-decoder.cpp	2004-10-18 22:49:40.000000000 -0400
+--- mozilla/gfx/src/gtk/mozilla-decoder.cpp.foo	2004-12-03 13:30:56.000000000 -0500
++++ mozilla/gfx/src/gtk/mozilla-decoder.cpp	2004-12-03 13:30:56.000000000 -0500
 @@ -0,0 +1,376 @@
 +/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 +/* vim:expandtab:shiftwidth=4:tabstop=4:
@@ -526,7 +526,7 @@
 +    return PANGO_FC_DECODER(decoder);
 +}
 --- mozilla/gfx/src/gtk/gfxgtk.pkg.foo	2004-01-06 20:21:35.000000000 -0500
-+++ mozilla/gfx/src/gtk/gfxgtk.pkg	2004-10-18 22:49:40.000000000 -0400
++++ mozilla/gfx/src/gtk/gfxgtk.pkg	2004-12-03 13:30:56.000000000 -0500
 @@ -7,3 +7,6 @@
  #if MOZ_ENABLE_XFT
  dist/bin/res/fonts/fontEncoding.properties
@@ -534,8 +534,8 @@
 +#if MOZ_ENABLE_PANGO
 +dist/bin/res/fonts/pangoFontEncoding.properties
 +#endif
---- mozilla/gfx/src/gtk/nsFontMetricsXft.cpp.foo	2004-04-05 15:18:43.000000000 -0400
-+++ mozilla/gfx/src/gtk/nsFontMetricsXft.cpp	2004-10-18 22:49:40.000000000 -0400
+--- mozilla/gfx/src/gtk/nsFontMetricsXft.cpp.foo	2004-10-14 16:36:14.000000000 -0400
++++ mozilla/gfx/src/gtk/nsFontMetricsXft.cpp	2004-12-03 13:30:56.000000000 -0500
 @@ -238,7 +238,7 @@
  
  static int      CalculateSlant   (PRUint8  aStyle);
@@ -683,7 +683,7 @@
  nsFontMetricsXft::GetHints(void)
  {
 --- mozilla/gfx/src/gtk/Makefile.in.foo	2003-11-10 07:24:51.000000000 -0500
-+++ mozilla/gfx/src/gtk/Makefile.in	2004-10-18 22:51:01.000000000 -0400
++++ mozilla/gfx/src/gtk/Makefile.in	2004-12-03 13:30:56.000000000 -0500
 @@ -102,6 +102,12 @@
  		nsFontMetricsXft.cpp
  endif
@@ -710,8 +710,8 @@
  	$(SYSINSTALL) $(IFLAGS1) $^ $(DESTDIR)$(mozappdir)/res/fonts
  endif
  
---- /dev/null	2004-02-18 10:26:44.000000000 -0500
-+++ mozilla/gfx/src/gtk/pangoFontEncoding.properties	2004-10-18 22:49:40.000000000 -0400
+--- mozilla/gfx/src/gtk/pangoFontEncoding.properties.foo	2004-12-03 13:30:56.000000000 -0500
++++ mozilla/gfx/src/gtk/pangoFontEncoding.properties	2004-12-03 13:30:56.000000000 -0500
 @@ -0,0 +1,120 @@
 +# ***** BEGIN LICENSE BLOCK *****
 +# Version: MPL 1.1/GPL 2.0/LGPL 2.1
@@ -834,7 +834,7 @@
 +encoding.mtextra.ftcmap = mac_roman
 +
 --- mozilla/gfx/src/gtk/nsFontMetricsUtils.cpp.foo	2002-10-11 22:03:32.000000000 -0400
-+++ mozilla/gfx/src/gtk/nsFontMetricsUtils.cpp	2004-10-18 22:51:32.000000000 -0400
++++ mozilla/gfx/src/gtk/nsFontMetricsUtils.cpp	2004-12-03 13:32:21.000000000 -0500
 @@ -50,11 +50,20 @@
  #include "nsFontMetricsGTK.h"
  #endif
@@ -886,8 +886,8 @@
 +}
 +
 +#endif
---- /dev/null	2004-02-18 10:26:44.000000000 -0500
-+++ mozilla/gfx/src/gtk/nsFontMetricsPango.cpp	2004-10-18 22:49:40.000000000 -0400
+--- mozilla/gfx/src/gtk/nsFontMetricsPango.cpp.foo	2004-12-03 13:30:56.000000000 -0500
++++ mozilla/gfx/src/gtk/nsFontMetricsPango.cpp	2004-12-03 13:30:56.000000000 -0500
 @@ -0,0 +1,1662 @@
 +/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 +/* vim:expandtab:shiftwidth=4:tabstop=4:
@@ -2552,7 +2552,7 @@
 +    return NS_OK;
 +}
 --- mozilla/gfx/src/gtk/nsRenderingContextGTK.h.foo	2003-02-24 21:38:34.000000000 -0500
-+++ mozilla/gfx/src/gtk/nsRenderingContextGTK.h	2004-10-18 22:49:40.000000000 -0400
++++ mozilla/gfx/src/gtk/nsRenderingContextGTK.h	2004-12-03 13:30:56.000000000 -0500
 @@ -194,6 +194,8 @@
                                 const nsRect &aDestBounds, PRUint32 aCopyFlags);
    NS_IMETHOD RetrieveCurrentNativeGraphicData(PRUint32 * ngd);
@@ -2562,8 +2562,8 @@
    NS_IMETHOD DrawImage(imgIContainer *aImage, const nsRect * aSrcRect, const nsPoint * aDestPoint);
    NS_IMETHOD DrawScaledImage(imgIContainer *aImage, const nsRect * aSrcRect, const nsRect * aDestRect);
  
---- /dev/null	2004-02-18 10:26:44.000000000 -0500
-+++ mozilla/gfx/src/gtk/nsFontMetricsPango.h	2004-10-18 22:49:40.000000000 -0400
+--- mozilla/gfx/src/gtk/nsFontMetricsPango.h.foo	2004-12-03 13:30:56.000000000 -0500
++++ mozilla/gfx/src/gtk/nsFontMetricsPango.h	2004-12-03 13:30:56.000000000 -0500
 @@ -0,0 +1,278 @@
 +/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 +/* vim:expandtab:shiftwidth=4:tabstop=4:
@@ -2844,7 +2844,7 @@
 +    NS_DECL_NSIFONTENUMERATOR
 +};
 --- mozilla/gfx/src/gtk/nsFontMetricsUtils.h.foo	2002-10-11 22:03:32.000000000 -0400
-+++ mozilla/gfx/src/gtk/nsFontMetricsUtils.h	2004-10-18 22:49:40.000000000 -0400
++++ mozilla/gfx/src/gtk/nsFontMetricsUtils.h	2004-12-03 13:30:56.000000000 -0500
 @@ -42,9 +42,12 @@
  extern PRUint32 NS_FontMetricsGetHints    (void);
  extern nsresult NS_FontMetricsFamilyExists(nsIDeviceContext *aDevice,
@@ -2860,7 +2860,7 @@
 +
  #endif /* __nsFontMetricsUtils_h */
 --- mozilla/gfx/src/gtk/nsIFontMetricsGTK.h.foo	2002-10-11 23:00:17.000000000 -0400
-+++ mozilla/gfx/src/gtk/nsIFontMetricsGTK.h	2004-10-18 22:49:40.000000000 -0400
++++ mozilla/gfx/src/gtk/nsIFontMetricsGTK.h	2004-12-03 13:30:56.000000000 -0500
 @@ -121,6 +121,9 @@
      // particular handle.
      virtual GdkFont* GetCurrentGDKFont(void) = 0;
@@ -2872,7 +2872,7 @@
  
  #endif /* __nsIFontMetricsGTK_h */
 --- mozilla/gfx/src/gtk/nsRenderingContextGTK.cpp.foo	2004-02-12 11:52:22.000000000 -0500
-+++ mozilla/gfx/src/gtk/nsRenderingContextGTK.cpp	2004-10-18 22:49:40.000000000 -0400
++++ mozilla/gfx/src/gtk/nsRenderingContextGTK.cpp	2004-12-03 13:30:56.000000000 -0500
 @@ -524,6 +524,9 @@
  
    values.foreground.pixel =
@@ -2896,7 +2896,7 @@
  {
    UpdateGC();
 --- mozilla/gfx/src/gtk/nsGCCache.cpp.foo	2002-02-02 22:47:15.000000000 -0500
-+++ mozilla/gfx/src/gtk/nsGCCache.cpp	2004-10-18 22:49:40.000000000 -0400
++++ mozilla/gfx/src/gtk/nsGCCache.cpp	2004-12-03 13:30:56.000000000 -0500
 @@ -232,98 +232,42 @@
    // We have old GC, reuse it and check what
    // we have to change
@@ -3010,7 +3010,7 @@
    entry->gcv = *gcv;
  }
 --- mozilla/gfx/src/gtk/nsFontMetricsGTK.cpp.foo	2004-03-09 09:14:54.000000000 -0500
-+++ mozilla/gfx/src/gtk/nsFontMetricsGTK.cpp	2004-10-18 22:49:40.000000000 -0400
++++ mozilla/gfx/src/gtk/nsFontMetricsGTK.cpp	2004-12-03 13:30:56.000000000 -0500
 @@ -4600,6 +4600,12 @@
    return mCurrentFont->GetGDKFont();
  }
@@ -3025,7 +3025,7 @@
  static int
  CompareSizes(const void* aArg1, const void* aArg2, void *data)
 --- mozilla/gfx/src/gtk/nsFontMetricsXft.h.foo	2004-02-23 16:38:52.000000000 -0500
-+++ mozilla/gfx/src/gtk/nsFontMetricsXft.h	2004-10-18 22:49:40.000000000 -0400
++++ mozilla/gfx/src/gtk/nsFontMetricsXft.h	2004-12-03 13:30:56.000000000 -0500
 @@ -202,6 +202,8 @@
  
      virtual GdkFont* GetCurrentGDKFont(void);
@@ -3036,7 +3036,7 @@
      static PRUint32    GetHints  (void);
  
 --- mozilla/gfx/src/gtk/nsFontMetricsGTK.h.foo	2004-02-04 20:57:03.000000000 -0500
-+++ mozilla/gfx/src/gtk/nsFontMetricsGTK.h	2004-10-18 22:49:40.000000000 -0400
++++ mozilla/gfx/src/gtk/nsFontMetricsGTK.h	2004-12-03 13:30:56.000000000 -0500
 @@ -344,6 +344,8 @@
  
    virtual GdkFont* GetCurrentGDKFont(void);
@@ -3046,9 +3046,9 @@
    static nsresult FamilyExists(nsIDeviceContext *aDevice, const nsString& aName);
    static PRUint32 GetHints(void);
  
---- mozilla/configure.in.foo	2004-05-25 22:25:16.000000000 -0400
-+++ mozilla/configure.in	2004-10-18 22:49:40.000000000 -0400
-@@ -3429,6 +3429,34 @@
+--- mozilla/configure.in.foo	2004-10-31 02:17:58.000000000 -0500
++++ mozilla/configure.in	2004-12-03 13:30:56.000000000 -0500
+@@ -3475,6 +3475,34 @@
  AC_SUBST(MOZ_XFT_LIBS)
  
  dnl ========================================================

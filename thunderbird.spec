@@ -3,12 +3,12 @@
 
 %define desktop_file_utils_version 0.3
 
-ExclusiveArch: i386 x86_64 ia64 ppc
+ExclusiveArch: i386 x86_64 ia64 ppc s390 s390x
 
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.0
-Release:	1
+Release:	2
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -21,7 +21,7 @@ Source3:	thunderbird.sh.in
 Source4:	thunderbird-mozconfig
 Source5:	release-notes.html
 Source6:	thunderbird-open-browser.sh
-Source7:	thunderbird-prefs
+Source10:       thunderbird-redhat-default-prefs.js
 Source100:	find-external-requires
 
 Patch1:		thunderbird-0.7.3-em-register.patch
@@ -30,10 +30,16 @@ Patch3:		thunderbird-0.7.3-enigmail-debian.patch
 Patch4:         thunderbird-0.7.3-freetype-compile.patch
 Patch5:         thunderbird-0.7.3-psfonts.patch
 Patch6:         thunderbird-0.7.3-gnome-uriloader.patch
+Patch7:         firefox-1.0-prdtoa.patch
 
 # customization patches
 Patch24:        thunderbird-0.8-default-applications.patch
 Patch25:        thunderbird-0.8-software-update.patch
+
+# pango patches
+Patch30:        mozilla-1.7.3-pango-render.patch
+Patch31:        firefox-1.0-pango-selection.patch
+Patch32:        firefox-1.0-pango-space-width.patch
 
 # local bugfixes
 Patch40:        firefox-PR1-gnome-vfs-default-app.patch
@@ -44,9 +50,10 @@ Patch90:        thunderbird-0.8.0-gtk-file-chooser-morefixes.patch
 
 # Already upstreamed
 Patch101:       thunderbird-0.8.0-pkgconfig.patch
-Patch102:       mozilla-1.7.3-pango-render.patch
-
-
+Patch103:       mozilla-1.7.3-xptcall-s390.patch
+Patch104:       firefox-1.0-xptcall-s390.patch
+Patch105:       firefox-1.0-nspr-s390.patch
+Patch106:       thunderbird-1.0-useragent.patch
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:	libpng-devel, libjpeg-devel, gtk2-devel
@@ -83,13 +90,20 @@ cp -f %{SOURCE5} .
 %endif
 %patch5 -p1 -b .psfonts
 %patch6 -p1 -b .gnome-uriloader
+%patch7 -p0
 %patch24 -p1
 %patch25 -p1
+%patch30 -p1
+%patch31 -p1
+%patch32 -p1
 %patch40 -p1
 %patch41 -p0
 %patch90 -p0 -b .gtk-file-chooser-morefixes
 %patch101 -p0 -b .pkgconfig
-%patch102 -p1 -b .pango
+%patch103 -p0
+%patch104 -p1
+%patch105 -p0
+%patch106 -p0
 
 #===============================================================================
 
@@ -129,9 +143,11 @@ perl -pi -e 's|TBDIR|%{tbdir}|g' %{buildroot}%{_bindir}/mozilla-thunderbird
 install -m755 %{SOURCE6} %{buildroot}%{tbdir}/open-browser.sh
 perl -pi -e 's|LIBDIR|%{_libdir}|g' %{buildroot}%{tbdir}/open-browser.sh
 
-install -m644 %{SOURCE7} %{buildroot}%{tbdir}/defaults/pref/all.js
-perl -pi -e 's|COMMAND|%{tbdir}/open-browser.sh|g' \
-  %{buildroot}%{tbdir}/defaults/pref/all.js
+%{__cat} %{SOURCE10} | %{__sed} -e 's,THUNDERBIRD_RPM_VR,%{version}-%{release},g' \
+                       %{__sed} -e 's,COMMAND,%{tbdir}/open-browser.sh,g' > rh-default-prefs
+%{__cp} rh-default-prefs $RPM_BUILD_ROOT/%{tbdir}/greprefs/all-redhat.js
+%{__cp} rh-default-prefs $RPM_BUILD_ROOT/%{tbdir}/defaults/pref/all-redhat.js
+%{__rm} rh-default-prefs
 
 cd %{buildroot}%{tbdir}
 export MOZ_DISABLE_GNOME=1
@@ -159,14 +175,26 @@ rm -rf %{buildroot}/%{tbdir}/chrome/{classic,comm,embed-sample,en-{mac,win},help
 #===============================================================================
 
 %changelog
+* Thu Dec 16 2004 Christopher Aillon <caillon@redhat.com> 1.0-2
+- Add RPM version to useragent
+
+* Thu Dec 16 2004 Christopher Blizzard <blizzard@redhat.com>
+- Port over pango patches from firefox
+
 * Wed Dec  8 2004 Christopher Aillon <caillon@redhat.com> 1.0-1
 - Thunderbird 1.0
 
 * Mon Dec  6 2004 Christopher Aillon <caillon@redhat.com> 1.0-0.rc1.1
 - Fix advanced prefs
 
+* Fri Dec  3 2004 Christopher Aillon <caillon@redhat.com>
+- Make this run on s390(x) now for real
+
 * Wed Dec  1 2004 Christopher Aillon <caillon@redhat.com> 1.0-0.rc1.0
 - Update to 1.0 rc1
+
+* Fri Nov 19 2004 Christopher Aillon <caillon@redhat.com>
+- Add patches to build and run on s390(x)
 
 * Thu Nov 11 2004 Christopher Aillon <caillon@redhat.com> 0.9.0-2
 - Rebuild to fix file chooser
