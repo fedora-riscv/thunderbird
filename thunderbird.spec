@@ -54,7 +54,7 @@ Patch104:       firefox-1.0-xptcall-s390.patch
 Patch105:       firefox-1.0-nspr-s390.patch
 Patch106:       thunderbird-1.0-useragent.patch
 Patch107:       firefox-1.0-execshield-nspr.patch
-Patch108:       firefox-1.0-exechsield-xpcom.patch
+Patch108:       firefox-1.0-execshield-xpcom.patch
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:	libpng-devel, libjpeg-devel, gtk2-devel
