@@ -8,7 +8,7 @@ ExclusiveArch: i386 x86_64 ia64 ppc
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	0.8.0
-Release:	4
+Release:	5
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -29,12 +29,21 @@ Patch3:		thunderbird-0.7.3-enigmail-debian.patch
 Patch4:         thunderbird-0.7.3-freetype-compile.patch
 Patch5:         thunderbird-0.7.3-psfonts.patch
 Patch6:         thunderbird-0.7.3-gnome-uriloader.patch
+
+
+# Backported patches, intended for upstream
 Patch90:        thunderbird-0.8.0-gtk-file-chooser-trunk.patch
 Patch91:        thunderbird-0.8.0-gtk-file-chooser-updates.patch
+
+# Already upstreamed
 Patch100:       thunderbird-0.8.0-js-64bit-math.patch
 Patch101:       thunderbird-0.8.0-pkgconfig.patch
 Patch102:       thunderbird-0.8.0-button-focus.patch
 Patch103:       thunderbird-0.8.0-imap-race.patch
+Patch104:       thunderbird-0.8.0-xremote-program-name.patch
+Patch105:       thunderbird-0.8.0-xremote-crash.patch
+
+
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:	libpng-devel, libjpeg-devel, gtk2-devel
 BuildRequires:	zlib-devel, gzip, zip, unzip
@@ -75,6 +84,8 @@ cp -f %{SOURCE5} .
 %patch101 -p0 -b .pkgconfig
 %patch102 -p0 -b .button-focus
 %patch103 -p0 -b .imap-race
+%patch104 -p0 -b .xremote-programname
+%patch105 -p0 -b .xremote-crash
 
 #===============================================================================
 
@@ -142,6 +153,9 @@ rm -rf %{buildroot}/%{tbdir}/chrome/{classic,comm,embed-sample,en-{mac,win},help
 #===============================================================================
 
 %changelog
+* Sat Oct  9 2004 Christopher Aillon <caillon@redhat.com> 0.8.0-5
+- Add patches to fix xremote (#135036)
+
 * Fri Oct  8 2004 Christopher Aillon <caillon@redhat.com> 0.8.0-4
 - Add patch to fix button focus issues (#133507)
 - Add patch for fix IMAP race issues (bmo #246439)
