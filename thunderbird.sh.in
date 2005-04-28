@@ -13,11 +13,11 @@ MOZ_PROGRAM=$MRE_HOME/thunderbird
 MOZ_CLIENT_PROGRAM="$MRE_HOME/thunderbird -remote" 
 
 ##
-## Set MOZ_ENABLE_PANGO
+## Set MOZ_ENABLE_PANGO is no longer used because Pango is enabled by default
+## you may use MOZ_DISABLE_PANGO=1 to force disabling of pango
 ##
-MOZ_ENABLE_PANGO=1
-export MOZ_ENABLE_PANGO
-
+#MOZ_DISABLE_PANGO=1
+#export MOZ_DISABLE_PANG
 
 function check_running() {
     $MOZ_CLIENT_PROGRAM 'ping()' 2>/dev/null >/dev/null

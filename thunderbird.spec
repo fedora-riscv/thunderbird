@@ -184,6 +184,9 @@ cd -
 #===============================================================================
 
 %changelog
+* Wed Apr 27 2005 Warren Togami <wtogami@redhat.com>
+- correct confusing PANGO vars in startup script
+
 * Wed Mar 23 2005 Christopher Aillon <caillon@redhat.com> 1.0.2-1
 - Thunderbird 1.0.2
 
