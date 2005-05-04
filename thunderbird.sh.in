@@ -4,8 +4,14 @@
 # (based on the Mozilla RPM launch script)
 #
 
-MOZILLA_FIVE_HOME=TBDIR
-MRE_HOME=TBDIR
+MOZ_LIB_DIR="/usr/lib"
+if [ -x "/usr/lib64/thunderbird-TBIRD_VERSION/thunderbird-bin" ]
+then
+  MOZ_LIB_DIR="/usr/lib64"
+fi
+
+MOZILLA_FIVE_HOME="$MOZ_LIB_DIR/thunderbird-TBIRD_VERSION"
+MRE_HOME="$MOZ_LIB_DIR/thunderbird-TBIRD_VERSION"
 export MOZILLA_FIVE_HOME MRE_HOME
 
 MOZ_PROGRAM=$MRE_HOME/thunderbird
@@ -17,7 +23,7 @@ MOZ_CLIENT_PROGRAM="$MRE_HOME/thunderbird -remote"
 ## you may use MOZ_DISABLE_PANGO=1 to force disabling of pango
 ##
 #MOZ_DISABLE_PANGO=1
-#export MOZ_DISABLE_PANG
+#export MOZ_DISABLE_PANGO
 
 function check_running() {
     $MOZ_CLIENT_PROGRAM 'ping()' 2>/dev/null >/dev/null

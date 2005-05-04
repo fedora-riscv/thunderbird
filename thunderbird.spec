@@ -8,7 +8,7 @@ ExclusiveArch: i386 x86_64 ia64 ppc s390 s390x
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.0.2
-Release:	2
+Release:	3
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -25,12 +25,13 @@ Source10:       thunderbird-redhat-default-prefs.js
 Source100:	find-external-requires
 
 Patch1:         thunderbird-0.7.3-freetype-compile.patch
-Patch2:         firefox-1.0-gcc4-compile.patch
-Patch3:         firefox-1.0-recv-fortify.patch
+Patch2:         firefox-1.0-prdtoa.patch
+Patch3:         firefox-1.0-gcc4-compile.patch
+Patch4:         firefox-1.0-recv-fortify.patch
+Patch5:         firefox-1.0-gfxshared_s.patch
 
 Patch10:        thunderbird-0.7.3-psfonts.patch
 Patch11:        thunderbird-0.7.3-gnome-uriloader.patch
-Patch12:        firefox-1.0-prdtoa.patch
 
 # customization patches
 Patch24:        thunderbird-0.8-default-applications.patch
@@ -41,10 +42,13 @@ Patch30:        mozilla-1.7.3-pango-render.patch
 Patch31:        firefox-1.0-pango-selection.patch
 Patch32:        firefox-1.0-pango-space-width.patch
 Patch33:        firefox-1.0-pango-rounding.patch
+Patch34:        firefox-1.0-pango-direction.patch
+Patch35:        firefox-1.0-pango-bidi-justify.patch
 
 # local bugfixes
-Patch40:        firefox-PR1-gnome-vfs-default-app.patch
 Patch41:        thunderbird-0.8.0-stack-direction.patch
+Patch42:        firefox-1.0-download-to-desktop.patch
+Patch43:        firefox-1.0-uriloader.patch
 
 # Backported patches, intended for upstream
 Patch90:        firefox-PR1-gtk-file-chooser-morefixes.patch
@@ -91,18 +95,23 @@ echo "mk_add_options MOZ_MAKE_FLAGS='%{?_smp_mflags}'" >> .mozconfig
 %if %{freetype_fc3}
 %patch1 -p0 -b .freetype
 %endif
-%patch2 -p0 -b .gcc4
-%patch3 -p0 -b .recv-fortify
+%patch2 -p0
+%patch3 -p0 -b .gcc4
+%patch4 -p0 -b .recv-fortify
+%patch5 -p0
 %patch10 -p1 -b .psfonts
 %patch11 -p1 -b .gnome-uriloader
-%patch12 -p0
 %patch24 -p1
 %patch25 -p1
 %patch30 -p1
 %patch31 -p1
 %patch32 -p1
-%patch40 -p1
+%patch33 -p1
+%patch34 -p1
+%patch35 -p0
 %patch41 -p0
+%patch42 -p0
+%patch43 -p0
 %patch90 -p0 -b .gtk-file-chooser-morefixes
 %patch101 -p0 -b .pkgconfig
 %patch103 -p0
@@ -143,9 +152,10 @@ desktop-file-install --vendor mozilla			\
 	--add-category Network				\
 	%{SOURCE1}
 
-install -m755 %{SOURCE3} %{buildroot}%{_bindir}/mozilla-thunderbird
-perl -pi -e 's|TBDIR|%{tbdir}|g' %{buildroot}%{_bindir}/mozilla-thunderbird
-( cd %{buildroot}%{_bindir} ; ln -s mozilla-thunderbird thunderbird )
+# set up the thunderbird start script
+%{__cat} %{SOURCE3} | %{__sed} -e 's,TBIRD_VERSION,%{version},g' > \
+  $RPM_BUILD_ROOT%{_bindir}/thunderbird
+%{__chmod} 755 $RPM_BUILD_ROOT%{_bindir}/thunderbird
 
 install -m755 %{SOURCE6} %{buildroot}%{tbdir}/open-browser.sh
 perl -pi -e 's|LIBDIR|%{_libdir}|g' %{buildroot}%{tbdir}/open-browser.sh
@@ -184,6 +194,14 @@ cd -
 #===============================================================================
 
 %changelog
+* Wed May  4 2005 Christopher Aillon <caillon@redhat.com> 1.0.2-3
+- Don't have downloads "disappear" when downloading to desktop (#139015)
+- Fix for some more cursor issues in textareas (149991, 150002, 152089)
+- Add upstream patch to fix bidi justification of pango
+- Add patch to fix launching of helper applications
+- Add patch to properly link against libgfxshared_s.a
+- Fix multilib conflicts
+
 * Wed Apr 27 2005 Warren Togami <wtogami@redhat.com>
 - correct confusing PANGO vars in startup script
 
