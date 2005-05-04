@@ -184,7 +184,6 @@ cd -
 
 %files
 %defattr(-,root,root,-)
-%attr(755,root,root) %{_bindir}/mozilla-thunderbird
 %attr(755,root,root) %{_bindir}/thunderbird
 %attr(644,root,root) %{_datadir}/applications/mozilla-thunderbird.desktop
 %attr(644,root,root) %{_datadir}/pixmaps/thunderbird-icon.png
