@@ -8,7 +8,7 @@ ExclusiveArch: i386 x86_64 ia64 ppc s390 s390x
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.0.2
-Release:	3
+Release:	4
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -169,7 +169,8 @@ perl -pi -e 's|LIBDIR|%{_libdir}|g' %{buildroot}%{tbdir}/open-browser.sh
 
 cd $RPM_BUILD_ROOT/%{tbdir}
 export MOZ_DISABLE_GNOME=1
-./thunderbird -register
+HOME=%{_tmppath} ./thunderbird -register
+%{__rm} -rf %{_tmppath}/.mozilla
 cd -
 
 %{__rm} -rf $RPM_BUILD_ROOT/%{tbdir}/chrome/{classic,comm,embed-sample,en-{mac,win},help,messenger}
@@ -193,6 +194,9 @@ cd -
 #===============================================================================
 
 %changelog
+* Mon May  9 2005 Christopher Aillon <caillon@redhat.com> 1.0.2-4
+- Add temporary workaround to not create files in the user's $HOME (#149664)
+
 * Wed May  4 2005 Christopher Aillon <caillon@redhat.com> 1.0.2-3
 - Don't have downloads "disappear" when downloading to desktop (#139015)
 - Fix for some more cursor issues in textareas (149991, 150002, 152089)
