@@ -172,7 +172,7 @@ export MOZ_DISABLE_GNOME=1
 
 # munge HOME for now, since XPCOM creates $HOME/.mozilla
 MOZTMP=`mktemp -d`
-HOME=$MOZTMP %{tbdir}/thunderbird -register
+HOME=$MOZTMP ./thunderbird -register
 %{__rm} -rf $MOZTMP/.mozilla
 
 cd -
