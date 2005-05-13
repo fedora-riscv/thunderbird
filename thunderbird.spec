@@ -16,7 +16,7 @@ Group:		Applications/Internet
 Source0:	thunderbird-%{version}-source.tar.bz2
 Source1:	thunderbird.desktop
 # This icon is used with the permission of mozilla.org.
-Source2:	thunderbird-icon.png
+Source2:	thunderbird.png
 Source3:	thunderbird.sh.in
 Source4:	thunderbird-mozconfig
 Source5:	release-notes.html
@@ -144,7 +144,7 @@ cd dist/bin
 cd -
 
 # menu entry
-install -p -D %{SOURCE2} %{buildroot}%{_datadir}/pixmaps/thunderbird-icon.png
+install -p -D %{SOURCE2} %{buildroot}%{_datadir}/pixmaps/thunderbird.png
 desktop-file-install --vendor mozilla			\
 	--dir %{buildroot}%{_datadir}/applications  	\
 	--add-category X-Red-Hat			\
@@ -191,7 +191,7 @@ cd -
 %defattr(-,root,root,-)
 %attr(755,root,root) %{_bindir}/thunderbird
 %attr(644,root,root) %{_datadir}/applications/mozilla-thunderbird.desktop
-%attr(644,root,root) %{_datadir}/pixmaps/thunderbird-icon.png
+%attr(644,root,root) %{_datadir}/pixmaps/thunderbird.png
 %{tbdir}
 %doc release-notes.html
 
