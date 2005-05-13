@@ -8,7 +8,7 @@ ExclusiveArch: i386 x86_64 ia64 ppc s390 s390x
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.0.2
-Release:	4
+Release:	5
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -169,8 +169,12 @@ perl -pi -e 's|LIBDIR|%{_libdir}|g' %{buildroot}%{tbdir}/open-browser.sh
 
 cd $RPM_BUILD_ROOT/%{tbdir}
 export MOZ_DISABLE_GNOME=1
-HOME=%{_tmppath} ./thunderbird -register
-%{__rm} -rf %{_tmppath}/.mozilla
+
+# munge HOME for now, since XPCOM creates $HOME/.mozilla
+MOZTMP=`mktemp -d`
+HOME=$MOZTMP %{tbdir}/thunderbird -register
+%{__rm} -rf $MOZTMP/.mozilla
+
 cd -
 
 %{__rm} -rf $RPM_BUILD_ROOT/%{tbdir}/chrome/{classic,comm,embed-sample,en-{mac,win},help,messenger}
@@ -194,6 +198,9 @@ cd -
 #===============================================================================
 
 %changelog
+* Fri May 13 2005 Christopher Aillon <caillon@redhat.com> 1.0.2-5
+- Update pango patche, MOZ_DISABLE_PANGO now works as advertised.
+
 * Mon May  9 2005 Christopher Aillon <caillon@redhat.com> 1.0.2-4
 - Add temporary workaround to not create files in the user's $HOME (#149664)
 
