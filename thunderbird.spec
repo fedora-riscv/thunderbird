@@ -8,7 +8,7 @@ ExclusiveArch: i386 x86_64 ia64 ppc s390 s390x
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.0.2
-Release:	5
+Release:	6
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -198,6 +198,9 @@ cd -
 #===============================================================================
 
 %changelog
+* Fri May 13 2005 Christopher Aillon <caillon@redhat.com> 1.0.2-6
+- Change the Exec line in the desktop file to `thunderbird`
+
 * Fri May 13 2005 Christopher Aillon <caillon@redhat.com> 1.0.2-5
 - Update pango patche, MOZ_DISABLE_PANGO now works as advertised.
 
