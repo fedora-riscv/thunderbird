@@ -8,7 +8,7 @@ ExclusiveArch: i386 x86_64 ia64 ppc s390 s390x
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.0.2
-Release:	6
+Release:	7
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -44,6 +44,7 @@ Patch32:        firefox-1.0-pango-space-width.patch
 Patch33:        firefox-1.0-pango-rounding.patch
 Patch34:        firefox-1.0-pango-direction.patch
 Patch35:        firefox-1.0-pango-bidi-justify.patch
+Patch36:        firefox-1.0-pango-cairo.patch
 
 # local bugfixes
 Patch41:        thunderbird-0.8.0-stack-direction.patch
@@ -109,6 +110,7 @@ echo "mk_add_options MOZ_MAKE_FLAGS='%{?_smp_mflags}'" >> .mozconfig
 %patch33 -p1
 %patch34 -p1
 %patch35 -p0
+%patch36 -p1
 %patch41 -p0
 %patch42 -p0
 %patch43 -p0
@@ -198,6 +200,10 @@ cd -
 #===============================================================================
 
 %changelog
+* Thu Jun 23 2005 Kristian Høgsberg <krh@redhat.com>  1.0.2-7
+- Add firefox-1.0-pango-cairo.patch to get rid of the last few Xft
+  references, fixing the "no fonts" problem.
+
 * Fri May 13 2005 Christopher Aillon <caillon@redhat.com> 1.0.2-6
 - Change the Exec line in the desktop file to `thunderbird`
 
