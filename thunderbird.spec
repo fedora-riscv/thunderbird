@@ -3,12 +3,12 @@
 
 %define desktop_file_utils_version 0.3
 
-ExclusiveArch: i386 x86_64 ia64 ppc s390 s390x
+ExcludeArch:	ppc64
 
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.0.2
-Release:	7
+Release:	8
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -24,11 +24,14 @@ Source6:	thunderbird-open-browser.sh
 Source10:       thunderbird-redhat-default-prefs.js
 Source100:	find-external-requires
 
+# Build patches
 Patch1:         thunderbird-0.7.3-freetype-compile.patch
 Patch2:         firefox-1.0-prdtoa.patch
 Patch3:         firefox-1.0-gcc4-compile.patch
 Patch4:         firefox-1.0-recv-fortify.patch
 Patch5:         firefox-1.0-gfxshared_s.patch
+Patch6:         firefox-1.0-nss-system-nspr.patch
+Patch7:         firefox-1.0-system-nspr-ldap.patch
 
 Patch10:        thunderbird-0.7.3-psfonts.patch
 Patch11:        thunderbird-0.7.3-gnome-uriloader.patch
@@ -62,10 +65,13 @@ Patch105:       firefox-1.0-nspr-s390.patch
 Patch106:       thunderbird-1.0-useragent.patch
 Patch107:       firefox-1.0-execshield-nspr.patch
 Patch108:       firefox-1.0-execshield-xpcom.patch
+Patch109:       firefox-1.0-imgloader-comarray.patch
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+Requires:       nspr >= %{nspr_devel}
 BuildRequires:	libpng-devel, libjpeg-devel, gtk2-devel
 BuildRequires:	zlib-devel, gzip, zip, unzip
+BuildRequires:  nspr-devel >= %{nspr_version}
 BuildRequires:	XFree86-devel
 BuildRequires:	libIDL-devel
 BuildRequires:	tcsh
@@ -100,6 +106,8 @@ echo "mk_add_options MOZ_MAKE_FLAGS='%{?_smp_mflags}'" >> .mozconfig
 %patch3 -p0 -b .gcc4
 %patch4 -p0 -b .recv-fortify
 %patch5 -p0
+%patch6 -p1
+%patch7 -p0
 %patch10 -p1 -b .psfonts
 %patch11 -p1 -b .gnome-uriloader
 %patch24 -p1
@@ -122,6 +130,7 @@ echo "mk_add_options MOZ_MAKE_FLAGS='%{?_smp_mflags}'" >> .mozconfig
 %patch106 -p0
 %patch107 -p0
 %patch108 -p0
+%patch109 -p0
 
 #===============================================================================
 
@@ -200,6 +209,10 @@ cd -
 #===============================================================================
 
 %changelog
+* Fri Jul 15 2005 Christopher Aillon <caillon@redhat.com> 1.0.2-8
+- Use system NSPR
+- Fix crash on 64bit platforms (#160330)
+
 * Thu Jun 23 2005 Kristian Høgsberg <krh@redhat.com>  1.0.2-7
 - Add firefox-1.0-pango-cairo.patch to get rid of the last few Xft
   references, fixing the "no fonts" problem.
