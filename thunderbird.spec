@@ -7,8 +7,8 @@ ExcludeArch:	ppc64
 
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
-Version:	1.0.2
-Release:	8
+Version:	1.0.6
+Release:	0.1.fc5
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -59,13 +59,12 @@ Patch90:        firefox-PR1-gtk-file-chooser-morefixes.patch
 
 # Already upstreamed
 Patch101:       thunderbird-0.8.0-pkgconfig.patch
-Patch103:       mozilla-1.7.3-xptcall-s390.patch
-Patch104:       firefox-1.0-xptcall-s390.patch
-Patch105:       firefox-1.0-nspr-s390.patch
-Patch106:       thunderbird-1.0-useragent.patch
-Patch107:       firefox-1.0-execshield-nspr.patch
-Patch108:       firefox-1.0-execshield-xpcom.patch
-Patch109:       firefox-1.0-imgloader-comarray.patch
+Patch102:       thunderbird-1.0-useragent.patch
+Patch103:       firefox-1.0-gtk-system-colors.patch
+Patch104:       firefox-1.0-remote-intern-atoms.patch
+Patch105:       firefox-1.0-g-application-name.patch
+Patch106:       firefox-1.0-candidate-window.patch
+Patch107:       firefox-1.0-imgloader-comarray.patch
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires:       nspr >= %{nspr_devel}
@@ -124,13 +123,12 @@ echo "mk_add_options MOZ_MAKE_FLAGS='%{?_smp_mflags}'" >> .mozconfig
 %patch43 -p0
 %patch90 -p0 -b .gtk-file-chooser-morefixes
 %patch101 -p0 -b .pkgconfig
+%patch102 -p0
 %patch103 -p0
-%patch104 -p1
+%patch104 -p0
 %patch105 -p0
-%patch106 -p0
+%patch106 -p1
 %patch107 -p0
-%patch108 -p0
-%patch109 -p0
 
 #===============================================================================
 
@@ -209,6 +207,9 @@ cd -
 #===============================================================================
 
 %changelog
+* Mon Jul 18 2005 Christopher Aillon <caillon@redhat.com> 1.0.6-0.1.fc5
+- 1.0.6 Release Candidate
+
 * Fri Jul 15 2005 Christopher Aillon <caillon@redhat.com> 1.0.2-8
 - Use system NSPR
 - Fix crash on 64bit platforms (#160330)
