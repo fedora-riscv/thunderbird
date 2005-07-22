@@ -8,7 +8,7 @@ ExcludeArch:	ppc64
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.0.6
-Release:	0.1.fc5
+Release:	2
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -207,6 +207,9 @@ cd -
 #===============================================================================
 
 %changelog
+* Fri Jul 22 2005 Christopher Aillon <caillon@redhat.com> 1.0.6-2
+- Update to 1.0.6
+
 * Mon Jul 18 2005 Christopher Aillon <caillon@redhat.com> 1.0.6-0.1.fc5
 - 1.0.6 Release Candidate
 
