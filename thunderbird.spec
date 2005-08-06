@@ -8,7 +8,7 @@ ExcludeArch:	ppc64
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.0.6
-Release:	2
+Release:	3
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -55,7 +55,8 @@ Patch42:        firefox-1.0-download-to-desktop.patch
 Patch43:        firefox-1.0-uriloader.patch
 
 # Backported patches, intended for upstream
-Patch90:        firefox-PR1-gtk-file-chooser-morefixes.patch
+Patch90:        thunderbird-1.0-gtk-file-chooser-morefixes.patch
+Patch91:        firefox-1.1-modal-filechooser.patch
 
 # Already upstreamed
 Patch101:       thunderbird-0.8.0-pkgconfig.patch
@@ -122,6 +123,7 @@ echo "mk_add_options MOZ_MAKE_FLAGS='%{?_smp_mflags}'" >> .mozconfig
 %patch42 -p0
 %patch43 -p0
 %patch90 -p0 -b .gtk-file-chooser-morefixes
+%patch91 -p0
 %patch101 -p0 -b .pkgconfig
 %patch102 -p0
 %patch103 -p0
@@ -207,6 +209,9 @@ cd -
 #===============================================================================
 
 %changelog
+* Sat Aug  6 2005 Christopher Aillon <caillon@redhat.com> 1.0.6-3
+- Add patch to make file chooser dialog modal
+
 * Fri Jul 22 2005 Christopher Aillon <caillon@redhat.com> 1.0.6-2
 - Update to 1.0.6
 
