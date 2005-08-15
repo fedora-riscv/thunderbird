@@ -8,7 +8,7 @@ ExcludeArch:	ppc64
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.0.6
-Release:	3
+Release:	4
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -209,6 +209,9 @@ cd -
 #===============================================================================
 
 %changelog
+* Sun Aug 14 2005 Christopher Aillon <caillon@redhat.com> 1.0.6-4
+- Rebuild
+
 * Sat Aug  6 2005 Christopher Aillon <caillon@redhat.com> 1.0.6-3
 - Add patch to make file chooser dialog modal
 
