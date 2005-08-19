@@ -8,7 +8,7 @@ ExcludeArch:	ppc64
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.0.6
-Release:	4
+Release:	5
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -209,6 +209,10 @@ cd -
 #===============================================================================
 
 %changelog
+* Thu Aug 18 2005 Kristian Høgsberg <krh@redhat.com> 0:1.0.6-5
+- Update firefox-1.0-pango-cairo.patch to also fix xft usage in
+  mozilla/gfx/src/gtk/mozilla-decoder.cpp
+
 * Sun Aug 14 2005 Christopher Aillon <caillon@redhat.com> 1.0.6-4
 - Rebuild
 
