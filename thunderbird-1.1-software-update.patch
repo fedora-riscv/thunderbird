@@ -1,0 +1,27 @@
+Index: mail/components/preferences/advanced.xul
+===================================================================
+RCS file: /cvsroot/mozilla/mail/components/preferences/advanced.xul,v
+retrieving revision 1.13.2.1
+diff -d -u -p -r1.13.2.1 advanced.xul
+--- mail/components/preferences/advanced.xul	2 Sep 2005 23:29:08 -0000	1.13.2.1
++++ mail/components/preferences/advanced.xul	15 Sep 2005 05:50:06 -0000
+@@ -66,19 +66,8 @@
+       <preference id="offline.download.download_messages"    name="offline.download.download_messages"    type="int"/>
+       <preference id="mail.prompt_purge_threshhold"          name="mail.prompt_purge_threshhold"    type="bool"/>
+       <preference id="mail.purge_threshhold"                 name="mail.purge_threshhold"    type="int"/> 
+-      <preference id="app.update.enabled" name="app.update.enabled" type="bool"
+-                  onchange="gAdvancedPane.updateAppUpdateItems();
+-                            gAdvancedPane.updateAutoItems();
+-                            gAdvancedPane.updateModeItems();"/>
+-      <preference id="app.update.auto" name="app.update.auto" type="bool"
+-                  onchange="gAdvancedPane.updateAutoItems(); gAdvancedPane.updateModeItems();"/>
+-      <preference id="app.update.mode" name="app.update.mode" type="int"
+-                  onchange="gAdvancedPane.updateModeItems();"/>
+       <preference id="extensions.update.enabled" name="extensions.update.enabled" type="bool"
+                   onchange="gAdvancedPane.updateAddonUpdateUI();"/>
+-      <preference id="app.update.disable_button.showUpdateHistory"
+-                  name="app.update.disable_button.showUpdateHistory"
+-                  type="bool"/>
+     </preferences>
+ 
+     <tabbox id="advancedPrefs" flex="1" onselect="gAdvancedPane.tabSelectionChanged();">

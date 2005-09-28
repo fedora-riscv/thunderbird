@@ -1,74 +1,56 @@
-# Option: Freetype Patch (FC3+)
-%define freetype_fc3 1
+%define desktop_file_utils_version 0.9
+%define nspr_version 4.6
+%define cairo_version 1.0
 
-%define desktop_file_utils_version 0.3
-
-ExcludeArch:	ppc64
+%define official_branding 0
 
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
-Version:	1.0.6
-Release:	5
+Version:	1.5
+Release:	0.5.0.beta1
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
 Group:		Applications/Internet
-Source0:	thunderbird-%{version}-source.tar.bz2
-Source1:	thunderbird.desktop
-# This icon is used with the permission of mozilla.org.
-Source2:	thunderbird.png
-Source3:	thunderbird.sh.in
-Source4:	thunderbird-mozconfig
-Source5:	release-notes.html
-Source6:	thunderbird-open-browser.sh
-Source10:       thunderbird-redhat-default-prefs.js
-Source100:	find-external-requires
+%if %{official_branding}
+%define tarball thunderbird-%{version}-source.tar.bz2
+%else
+%define tarball thunderbird-1.5b1-source.tar.bz2
+%endif
+Source0:        %{tarball}
+Source10:       thunderbird-mozconfig
+Source11:       thunderbird-mozconfig-branded
+Source12:       thunderbird-redhat-default-prefs.js
+Source20:       thunderbird.desktop
+Source21:       thunderbird.sh.in
+Source22:       thunderbird.png
+Source30:       thunderbird-open-browser.sh
+Source100:      find-external-requires
 
 # Build patches
-Patch1:         thunderbird-0.7.3-freetype-compile.patch
 Patch2:         firefox-1.0-prdtoa.patch
-Patch3:         firefox-1.0-gcc4-compile.patch
-Patch4:         firefox-1.0-recv-fortify.patch
-Patch5:         firefox-1.0-gfxshared_s.patch
-Patch6:         firefox-1.0-nss-system-nspr.patch
-Patch7:         firefox-1.0-system-nspr-ldap.patch
+Patch6:         firefox-1.1-nss-system-nspr.patch
 
 Patch10:        thunderbird-0.7.3-psfonts.patch
 Patch11:        thunderbird-0.7.3-gnome-uriloader.patch
 
 # customization patches
 Patch24:        thunderbird-0.8-default-applications.patch
-Patch25:        thunderbird-0.8-software-update.patch
-
-# pango patches
-Patch30:        mozilla-1.7.3-pango-render.patch
-Patch31:        firefox-1.0-pango-selection.patch
-Patch32:        firefox-1.0-pango-space-width.patch
-Patch33:        firefox-1.0-pango-rounding.patch
-Patch34:        firefox-1.0-pango-direction.patch
-Patch35:        firefox-1.0-pango-bidi-justify.patch
-Patch36:        firefox-1.0-pango-cairo.patch
+Patch25:        thunderbird-1.1-software-update.patch
 
 # local bugfixes
-Patch41:        thunderbird-0.8.0-stack-direction.patch
-Patch42:        firefox-1.0-download-to-desktop.patch
-Patch43:        firefox-1.0-uriloader.patch
+Patch42:        firefox-1.1-uriloader.patch
 
-# Backported patches, intended for upstream
-Patch90:        thunderbird-1.0-gtk-file-chooser-morefixes.patch
-Patch91:        firefox-1.1-modal-filechooser.patch
+# font system fixes
+Patch81:        firefox-nopangoxft.patch
 
-# Already upstreamed
-Patch101:       thunderbird-0.8.0-pkgconfig.patch
-Patch102:       thunderbird-1.0-useragent.patch
-Patch103:       firefox-1.0-gtk-system-colors.patch
-Patch104:       firefox-1.0-remote-intern-atoms.patch
-Patch105:       firefox-1.0-g-application-name.patch
-Patch106:       firefox-1.0-candidate-window.patch
-Patch107:       firefox-1.0-imgloader-comarray.patch
+# patches from upstream (Patch100+)
+Patch100:       firefox-1.5-cairo-show-text-behavior-change.patch
+
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires:       nspr >= %{nspr_devel}
+BuildRequires:  cairo-devel >= %{cairo_version}
 BuildRequires:	libpng-devel, libjpeg-devel, gtk2-devel
 BuildRequires:	zlib-devel, gzip, zip, unzip
 BuildRequires:  nspr-devel >= %{nspr_version}
@@ -94,43 +76,22 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 
 %prep
 %setup -q -n mozilla
-%{__cp} -f %{SOURCE4} .mozconfig
-echo "ac_add_options --libdir=%{_libdir}" >> .mozconfig
-echo "ac_add_options --with-default-mozilla-five-home=%{tbdir}" >> .mozconfig
-echo "mk_add_options MOZ_MAKE_FLAGS='%{?_smp_mflags}'" >> .mozconfig
-%{__cp} -f %{SOURCE5} .
-%if %{freetype_fc3}
-%patch1 -p0 -b .freetype
-%endif
+
 %patch2 -p0
-%patch3 -p0 -b .gcc4
-%patch4 -p0 -b .recv-fortify
-%patch5 -p0
 %patch6 -p1
-%patch7 -p0
 %patch10 -p1 -b .psfonts
 %patch11 -p1 -b .gnome-uriloader
 %patch24 -p1
-%patch25 -p1
-%patch30 -p1
-%patch31 -p1
-%patch32 -p1
-%patch33 -p1
-%patch34 -p1
-%patch35 -p0
-%patch36 -p1
-%patch41 -p0
+%patch25 -p0
 %patch42 -p0
-%patch43 -p0
-%patch90 -p0 -b .gtk-file-chooser-morefixes
-%patch91 -p0
-%patch101 -p0 -b .pkgconfig
-%patch102 -p0
-%patch103 -p0
-%patch104 -p0
-%patch105 -p0
-%patch106 -p1
-%patch107 -p0
+%patch81 -p1
+%patch100 -p0
+
+%{__rm} -f .mozconfig
+%{__cp} %{SOURCE10} .mozconfig
+%if %{official_branding}
+%{__cat} %{SOURCE11} >> .mozconfig
+%endif
 
 #===============================================================================
 
@@ -147,56 +108,61 @@ time make -f client.mk build_all
 #===============================================================================
 
 %install
-%{__rm} -rf %{buildroot}
-%{__mkdir_p} %{buildroot}{%{tbdir},%{_bindir}}
+%{__rm} -rf $RPM_BUILD_ROOT
 
-cd dist/bin
-%{__tar} ch ./ | ( cd %{buildroot}%{tbdir} ; tar xf - )
+cd mail/installer
+%{__make} STRIP=/bin/true
 cd -
 
-# menu entry
-install -p -D %{SOURCE2} %{buildroot}%{_datadir}/pixmaps/thunderbird.png
-desktop-file-install --vendor mozilla			\
-	--dir %{buildroot}%{_datadir}/applications  	\
-	--add-category X-Red-Hat			\
-	--add-category Application			\
-	--add-category Network				\
-	%{SOURCE1}
+%{__mkdir_p} $RPM_BUILD_ROOT{%{_libdir},%{_bindir},%{_datadir}/applications}
+
+%{__tar} -C $RPM_BUILD_ROOT%{_libdir}/ -xzf dist/%{name}-*linux*.tar.gz
+%{__mv} $RPM_BUILD_ROOT%{_libdir}/%{name} $RPM_BUILD_ROOT%{tbdir}
+
+%{__rm} -f $RPM_BUILD_ROOT%{_libdir}/%{name}-*linux*.tar
+
+%{__install} -p -D %{SOURCE22} $RPM_BUILD_ROOT%{_datadir}/pixmaps/%{name}.png
+
+desktop-file-install --vendor mozilla \
+  --dir $RPM_BUILD_ROOT%{_datadir}/applications \
+  --add-category X-Fedora \
+  --add-category Application \
+  --add-category Network \
+  %{SOURCE20}
 
 # set up the thunderbird start script
-%{__cat} %{SOURCE3} | %{__sed} -e 's,TBIRD_VERSION,%{version},g' > \
+%{__cat} %{SOURCE21} | %{__sed} -e 's,TBIRD_VERSION,%{version},g' > \
   $RPM_BUILD_ROOT%{_bindir}/thunderbird
-%{__chmod} 755 $RPM_BUILD_ROOT%{_bindir}/thunderbird
+%{__chmod} 755 $RPM_BUILD_ROOT/%{_bindir}/thunderbird
 
-install -m755 %{SOURCE6} %{buildroot}%{tbdir}/open-browser.sh
-perl -pi -e 's|LIBDIR|%{_libdir}|g' %{buildroot}%{tbdir}/open-browser.sh
+install -m755 %{SOURCE30} $RPM_BUILD_ROOT/%{tbdir}/open-browser.sh
+perl -pi -e 's|LIBDIR|%{_libdir}|g' $RPM_BUILD_ROOT/%{tbdir}/open-browser.sh
 
-%{__cat} %{SOURCE10} | %{__sed} -e 's,THUNDERBIRD_RPM_VR,%{version}-%{release},g' \
+%{__cat} %{SOURCE12} | %{__sed} -e 's,THUNDERBIRD_RPM_VR,%{version}-%{release},g' \
                                 -e 's,COMMAND,%{tbdir}/open-browser.sh,g' > \
         $RPM_BUILD_ROOT/rh-default-prefs
 %{__cp} $RPM_BUILD_ROOT/rh-default-prefs $RPM_BUILD_ROOT/%{tbdir}/greprefs/all-redhat.js
 %{__cp} $RPM_BUILD_ROOT/rh-default-prefs $RPM_BUILD_ROOT/%{tbdir}/defaults/pref/all-redhat.js
 %{__rm} $RPM_BUILD_ROOT/rh-default-prefs
 
-cd $RPM_BUILD_ROOT/%{tbdir}
-export MOZ_DISABLE_GNOME=1
+# own mozilla plugin dir (#135050)
+%{__mkdir_p} $RPM_BUILD_ROOT%{_libdir}/mozilla/plugins
 
-# munge HOME for now, since XPCOM creates $HOME/.mozilla
-MOZTMP=`mktemp -d`
-HOME=$MOZTMP ./thunderbird -register
-%{__rm} -rf $MOZTMP/.mozilla
+%{__rm} -f $RPM_BUILD_ROOT%{tbdir}/thunderbird-config
 
+cd $RPM_BUILD_ROOT%{tbdir}/chrome
+find . -name "*" -type d -maxdepth 1 -exec %{__rm} -rf {} \;
 cd -
-
-%{__rm} -rf $RPM_BUILD_ROOT/%{tbdir}/chrome/{classic,comm,embed-sample,en-{mac,win},help,messenger}
-# ...
-
-#===============================================================================
 
 %clean
 %{__rm} -rf $RPM_BUILD_ROOT
 
-#===============================================================================
+%post
+update-desktop-database %{_datadir}/applications
+
+%postun
+update-desktop-database %{_datadir}/applications
+
 
 %files
 %defattr(-,root,root,-)
@@ -204,14 +170,13 @@ cd -
 %attr(644,root,root) %{_datadir}/applications/mozilla-thunderbird.desktop
 %attr(644,root,root) %{_datadir}/pixmaps/thunderbird.png
 %{tbdir}
-%doc release-notes.html
 
 #===============================================================================
 
 %changelog
-* Thu Aug 18 2005 Kristian Høgsberg <krh@redhat.com> 0:1.0.6-5
-- Update firefox-1.0-pango-cairo.patch to also fix xft usage in
-  mozilla/gfx/src/gtk/mozilla-decoder.cpp
+* Wed Sep 28 2005 Christopher Aillon <caillon@redhat.com> 1.5-0.5.0.beta1
+- Update to 1.5 beta1
+- Bring the install phase of the spec file up to speed
 
 * Sun Aug 14 2005 Christopher Aillon <caillon@redhat.com> 1.0.6-4
 - Rebuild
