@@ -1,3 +1,6 @@
+# Temporary until this works again
+ExcludeArch:    ppc64
+
 %define desktop_file_utils_version 0.9
 %define nspr_version 4.6
 %define cairo_version 1.0
@@ -29,6 +32,7 @@ Source100:      find-external-requires
 
 # Build patches
 Patch2:         firefox-1.0-prdtoa.patch
+Patch5:         firefox-1.1-visibility.patch
 Patch6:         firefox-1.1-nss-system-nspr.patch
 
 Patch10:        thunderbird-0.7.3-psfonts.patch
@@ -78,6 +82,14 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %setup -q -n mozilla
 
 %patch2 -p0
+
+# Pragma visibility is broken on most platforms for some reason.
+# It works on i386 so leave it alone there.  Disable elsewhere.
+# See http://gcc.gnu.org/bugzilla/show_bug.cgi?id=20297
+%ifarch i386
+%patch5  -p0
+%endif
+
 %patch6 -p1
 %patch10 -p1 -b .psfonts
 %patch11 -p1 -b .gnome-uriloader
