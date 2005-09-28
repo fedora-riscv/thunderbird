@@ -86,7 +86,7 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 # Pragma visibility is broken on most platforms for some reason.
 # It works on i386 so leave it alone there.  Disable elsewhere.
 # See http://gcc.gnu.org/bugzilla/show_bug.cgi?id=20297
-%ifarch i386
+%ifnarch i386
 %patch5  -p0
 %endif
 
