@@ -62,7 +62,6 @@ BuildRequires:	XFree86-devel
 BuildRequires:	libIDL-devel
 BuildRequires:	tcsh
 BuildRequires:	freetype-devel
-BuildRequires:  autoconf213
 Prereq:		desktop-file-utils >= %{desktop_file_utils_version}
 Obsoletes:	MozillaThunderbird
 Provides:	MozillaThunderbird = %{epoch}:%{version}
@@ -108,8 +107,6 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 #===============================================================================
 
 %build
-autoconf-2.13
-
 export RPM_OPT_FLAGS=$(echo $RPM_OPT_FLAGS | sed 's/-O2/-Os/')
 export CFLAGS="$RPM_OPT_FLAGS"
 export CXXFLAGS="$CFLAGS"
