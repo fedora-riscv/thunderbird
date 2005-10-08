@@ -10,7 +10,7 @@ ExcludeArch:    ppc64
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5
-Release:	0.5.0.beta1
+Release:	0.5.0.beta2
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -18,7 +18,7 @@ Group:		Applications/Internet
 %if %{official_branding}
 %define tarball thunderbird-%{version}-source.tar.bz2
 %else
-%define tarball thunderbird-1.5b1-source.tar.bz2
+%define tarball thunderbird-1.5b2-source.tar.bz2
 %endif
 Source0:        %{tarball}
 Source10:       thunderbird-mozconfig
@@ -49,7 +49,6 @@ Patch42:        firefox-1.1-uriloader.patch
 Patch81:        firefox-nopangoxft.patch
 
 # patches from upstream (Patch100+)
-Patch100:       firefox-1.5-cairo-show-text-behavior-change.patch
 
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -96,7 +95,6 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %patch25 -p0
 %patch42 -p0
 %patch81 -p1
-%patch100 -p0
 
 %{__rm} -f .mozconfig
 %{__cp} %{SOURCE10} .mozconfig
@@ -183,6 +181,9 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Sat Oct  8 2005 Christopher Aillon <caillon@redhat.com> 1.5-0.5.0.beta2
+- Update to 1.5 beta2
+
 * Wed Sep 28 2005 Christopher Aillon <caillon@redhat.com> 1.5-0.5.0.beta1
 - Update to 1.5 beta1
 - Bring the install phase of the spec file up to speed
