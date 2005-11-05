@@ -57,7 +57,6 @@ BuildRequires:  cairo-devel >= %{cairo_version}
 BuildRequires:	libpng-devel, libjpeg-devel, gtk2-devel
 BuildRequires:	zlib-devel, gzip, zip, unzip
 BuildRequires:  nspr-devel >= %{nspr_version}
-BuildRequires:	XFree86-devel
 BuildRequires:	libIDL-devel
 BuildRequires:	tcsh
 BuildRequires:	freetype-devel
