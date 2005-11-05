@@ -18,7 +18,7 @@ Group:		Applications/Internet
 %if %{official_branding}
 %define tarball thunderbird-%{version}-source.tar.bz2
 %else
-%define tarball thunderbird-1.5b2-source.tar.bz2
+%define tarball thunderbird-1.5rc1-source.tar.bz2
 %endif
 Source0:        %{tarball}
 Source10:       thunderbird-mozconfig
