@@ -10,7 +10,7 @@ ExcludeArch:    ppc64
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5
-Release:	0.5.0.beta2
+Release:	0.5.0.rc1
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -181,6 +181,9 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Sat Nov  5 2005 Christopher Aillon <caillon@redhat.com> 1.5-0.5.0.rc1
+- Update to 1.5 rc1
+
 * Sat Oct  8 2005 Christopher Aillon <caillon@redhat.com> 1.5-0.5.0.beta2
 - Update to 1.5 beta2
 
