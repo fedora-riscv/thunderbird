@@ -10,7 +10,7 @@ ExcludeArch:    ppc64
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5
-Release:	0.5.1.rc1
+Release: 0.5.1.rc1.1
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -183,6 +183,9 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Fri Dec 09 2005 Jesse Keating <jkeating@redhat.com>
+- rebuilt
+
 * Mon Nov 28 2005 Christopher Aillon <caillon@redhat.com> - 1.5-0.5.1.rc1
 - Fix issue with popup dialogs and other actions causing lockups
 
