@@ -1,3 +1,6 @@
+# ppc64 still broken, see https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=175944
+ExcludeArch: ppc64
+
 %define desktop_file_utils_version 0.9
 %define nspr_version 4.6
 %define nss_version 3.10
@@ -8,7 +11,7 @@
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5
-Release:	0.5.2.rc1
+Release:	0.5.3.rc1
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -185,7 +188,10 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
-* Thu Dec 15 2005 Christopher Aillon <caillon@redhat.com> - 1.5-0.5.2.rc1
+* Fri Dec 16 2005 Christopher Aillon <caillon@redhat.com> - 1.5-0.5.3.rc1
+- Once again, disable ppc64 because of a new issue.
+  See https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=175944
+
 - Use the system NSS libraries
 - Build on ppc64
 
