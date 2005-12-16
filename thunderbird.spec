@@ -1,8 +1,6 @@
-# Temporary until this works again
-ExcludeArch:    ppc64
-
 %define desktop_file_utils_version 0.9
 %define nspr_version 4.6
+%define nss_version 3.10
 %define cairo_version 1.0
 
 %define official_branding 0
@@ -10,7 +8,7 @@ ExcludeArch:    ppc64
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5
-Release: 0.5.1.rc1.1
+Release:	0.5.2.rc1
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -32,6 +30,7 @@ Source100:      find-external-requires
 
 # Build patches
 Patch2:         firefox-1.0-prdtoa.patch
+Patch4:         firefox-1.5-with-system-nss.patch
 Patch5:         firefox-1.1-visibility.patch
 Patch6:         firefox-1.1-nss-system-nspr.patch
 
@@ -53,11 +52,13 @@ Patch100:       firefox-bug305970.patch
 
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-Requires:       nspr >= %{nspr_devel}
+Requires:       nspr >= %{nspr_version}
+Requires:       nss >= %{nss_version}
 BuildRequires:  cairo-devel >= %{cairo_version}
 BuildRequires:	libpng-devel, libjpeg-devel, gtk2-devel
 BuildRequires:	zlib-devel, gzip, zip, unzip
 BuildRequires:  nspr-devel >= %{nspr_version}
+BuildRequires:  nss-devel >= %{nss_version}
 BuildRequires:	libIDL-devel
 BuildRequires:	tcsh
 BuildRequires:	freetype-devel
@@ -80,6 +81,7 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %setup -q -n mozilla
 
 %patch2 -p0
+%patch4 -p1
 
 # Pragma visibility is broken on most platforms for some reason.
 # It works on i386 so leave it alone there.  Disable elsewhere.
@@ -183,6 +185,10 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Thu Dec 15 2005 Christopher Aillon <caillon@redhat.com> - 1.5-0.5.2.rc1
+- Use the system NSS libraries
+- Build on ppc64
+
 * Fri Dec 09 2005 Jesse Keating <jkeating@redhat.com>
 - rebuilt
 
