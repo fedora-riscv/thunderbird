@@ -11,7 +11,7 @@ ExcludeArch: ppc64
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5
-Release:	0.5.3.rc1
+Release:	0.5.4.rc1
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -62,7 +62,6 @@ BuildRequires:	libpng-devel, libjpeg-devel, gtk2-devel
 BuildRequires:	zlib-devel, gzip, zip, unzip
 BuildRequires:  nspr-devel >= %{nspr_version}
 BuildRequires:  nss-devel >= %{nss_version}
-BuildRequires:  nss-pkcs11-devel >= %{nss_version}
 BuildRequires:	libIDL-devel
 BuildRequires:	tcsh
 BuildRequires:	freetype-devel
@@ -189,6 +188,9 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Fri Dec 16 2005 Christopher Aillon <caillon@redhat.com> - 1.5-0.5.4.rc1
+- Rebuild
+
 * Fri Dec 16 2005 Christopher Aillon <caillon@redhat.com> - 1.5-0.5.3.rc1
 - Once again, disable ppc64 because of a new issue.
   See https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=175944
