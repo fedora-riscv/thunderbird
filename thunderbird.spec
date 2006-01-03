@@ -1,6 +1,3 @@
-# ppc64 still broken, see https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=175944
-ExcludeArch: ppc64
-
 %define desktop_file_utils_version 0.9
 %define nspr_version 4.6
 %define nss_version 3.10
@@ -11,7 +8,7 @@ ExcludeArch: ppc64
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5
-Release:	0.5.4.rc1
+Release:	0.5.5.rc1
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -188,6 +185,9 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Tue Jan  3 2006 Christopher Aillon <caillon@redhat.com> - 1.5-0.5.5.rc1
+- Looks like we can build on ppc64 again.
+
 * Fri Dec 16 2005 Christopher Aillon <caillon@redhat.com> - 1.5-0.5.4.rc1
 - Rebuild
 
