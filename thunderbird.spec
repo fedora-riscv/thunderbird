@@ -8,7 +8,7 @@
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5
-Release:	0.5.5.rc1
+Release:	0.5.6.rc1
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -49,6 +49,7 @@ Patch81:        firefox-nopangoxft.patch
 
 # patches from upstream (Patch100+)
 Patch100:       firefox-bug305970.patch
+Patch101:       thunderbird-1.5-bug304720.patch
 
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -99,6 +100,7 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %patch81 -p1
 
 %patch100 -p1
+%patch101 -p1
 
 %{__rm} -f .mozconfig
 %{__cp} %{SOURCE10} .mozconfig
@@ -185,6 +187,10 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Wed Jan 11 2006 Christopher Aillon <caillon@redhat.com> - 1.5-0.5.6.rc1
+- Fix crash when deleting highlighted text while composing mail within
+  plaintext editor with spellcheck enabled.
+
 * Tue Jan  3 2006 Christopher Aillon <caillon@redhat.com> - 1.5-0.5.5.rc1
 - Looks like we can build on ppc64 again.
 
