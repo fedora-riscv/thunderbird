@@ -3,12 +3,12 @@
 %define nss_version 3.10
 %define cairo_version 1.0
 
-%define official_branding 0
+%define official_branding 1
 
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5
-Release:	0.5.6.rc1
+Release:	1
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -187,6 +187,9 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Thu Jan 12 2006 Christopher Aillon <caillon@redhat.com> - 1.5-1
+- Official 1.5 release is out
+
 * Wed Jan 11 2006 Christopher Aillon <caillon@redhat.com> - 1.5-0.5.6.rc1
 - Fix crash when deleting highlighted text while composing mail within
   plaintext editor with spellcheck enabled.
