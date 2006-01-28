@@ -8,7 +8,7 @@
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5
-Release:	1
+Release:	2
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -19,6 +19,7 @@ Group:		Applications/Internet
 %define tarball thunderbird-1.5rc1-source.tar.bz2
 %endif
 Source0:        %{tarball}
+Source1:        thunderbird-langpacks-20060127.tar.bz2
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
 Source12:       thunderbird-redhat-default-prefs.js
@@ -65,7 +66,6 @@ BuildRequires:	tcsh
 BuildRequires:	freetype-devel
 Prereq:		desktop-file-utils >= %{desktop_file_utils_version}
 Obsoletes:	MozillaThunderbird
-Provides:	MozillaThunderbird = %{epoch}:%{version}
 
 %define tbdir %{_libdir}/thunderbird-%{version}
 
@@ -161,6 +161,18 @@ perl -pi -e 's|LIBDIR|%{_libdir}|g' $RPM_BUILD_ROOT/%{tbdir}/open-browser.sh
 # own mozilla plugin dir (#135050)
 %{__mkdir_p} $RPM_BUILD_ROOT%{_libdir}/mozilla/plugins
 
+# Install langpacks
+%{__mkdir_p} $RPM_BUILD_ROOT%{tbdir}/extensions
+%{__tar} xjf %{SOURCE1}
+for langpack in `ls thunderbird-langpacks/*.xpi`; do
+  language=`basename $langpack .xpi`
+  extensiondir=$RPM_BUILD_ROOT%{tbdir}/extensions/langpack-$language@thunderbird.mozilla.org
+  %{__mkdir_p} $extensiondir
+  unzip $langpack -d $extensiondir
+done
+%{__rm} -rf thunderbird-langpacks
+
+
 %{__rm} -f $RPM_BUILD_ROOT%{tbdir}/thunderbird-config
 
 cd $RPM_BUILD_ROOT%{tbdir}/chrome
@@ -187,6 +199,10 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Fri Jan 27 2006 Christopher Aillon <caillon@redhat.com> - 1.5-2
+- Add some langpacks back in
+- Stop providing MozillaThunderbird
+
 * Thu Jan 12 2006 Christopher Aillon <caillon@redhat.com> - 1.5-1
 - Official 1.5 release is out
 
