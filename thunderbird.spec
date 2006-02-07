@@ -8,7 +8,7 @@
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5
-Release:	2
+Release:	2.1
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -199,6 +199,9 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Tue Feb 07 2006 Jesse Keating <jkeating@redhat.com> - 0:1.5-2.1
+- rebuilt for new gcc4.1 snapshot and glibc changes
+
 * Fri Jan 27 2006 Christopher Aillon <caillon@redhat.com> - 1.5-2
 - Add some langpacks back in
 - Stop providing MozillaThunderbird
