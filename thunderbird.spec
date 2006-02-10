@@ -34,6 +34,7 @@ Patch2:         firefox-1.0-prdtoa.patch
 Patch4:         firefox-1.5-with-system-nss.patch
 Patch5:         firefox-1.1-visibility.patch
 Patch6:         firefox-1.1-nss-system-nspr.patch
+Patch7:       firefox-1.5.0.1-dumpstack.patch
 
 Patch10:        thunderbird-0.7.3-psfonts.patch
 Patch11:        thunderbird-0.7.3-gnome-uriloader.patch
@@ -51,7 +52,6 @@ Patch81:        firefox-nopangoxft.patch
 # patches from upstream (Patch100+)
 Patch100:       firefox-bug305970.patch
 Patch101:       thunderbird-1.5-bug304720.patch
-Patch102:       firefox-1.5-dumpstack.patch
 
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -93,6 +93,7 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %endif
 
 %patch6 -p1
+%patch7 -p0
 %patch10 -p1 -b .psfonts
 %patch11 -p1 -b .gnome-uriloader
 %patch24 -p1
@@ -102,7 +103,6 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 
 %patch100 -p1
 %patch101 -p1
-%patch102 -p0
 
 %{__rm} -f .mozconfig
 %{__cp} %{SOURCE10} .mozconfig
