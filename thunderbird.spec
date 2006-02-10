@@ -8,7 +8,7 @@
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5
-Release:	2.1
+Release:	3
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -51,6 +51,7 @@ Patch81:        firefox-nopangoxft.patch
 # patches from upstream (Patch100+)
 Patch100:       firefox-bug305970.patch
 Patch101:       thunderbird-1.5-bug304720.patch
+Patch102:       firefox-1.5-dumpstack.patch
 
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -101,6 +102,7 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 
 %patch100 -p1
 %patch101 -p1
+%patch102 -p0
 
 %{__rm} -f .mozconfig
 %{__cp} %{SOURCE10} .mozconfig
@@ -169,6 +171,18 @@ for langpack in `ls thunderbird-langpacks/*.xpi`; do
   extensiondir=$RPM_BUILD_ROOT%{tbdir}/extensions/langpack-$language@thunderbird.mozilla.org
   %{__mkdir_p} $extensiondir
   unzip $langpack -d $extensiondir
+  find $extensiondir -type f | xargs chmod 644
+
+  langtmp=%{_tmpdir}/%{name}/langpack-$language
+  %{__mkdir_p} $langtmp
+  jarfile=$extensiondir/chrome/$language.jar
+  unzip $jarfile -d $langtmp
+  find $langtmp -type f | xargs chmod 644
+  %{__rm} -rf $jarfile
+  cd $langtmp
+  zip -r -D $jarfile locale
+  %{__rm} -rf locale
+  cd -
 done
 %{__rm} -rf thunderbird-langpacks
 
@@ -199,7 +213,11 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
-* Tue Feb 07 2006 Jesse Keating <jkeating@redhat.com> - 0:1.5-2.1
+* Fri Feb 10 2006 Christopher Aillon <caillon@redhat.com> - 1.5-3
+- Add dumpstack.patch
+- Improve the langpack install stuff
+
+* Tue Feb 07 2006 Jesse Keating <jkeating@redhat.com> - 1.5-2.1
 - rebuilt for new gcc4.1 snapshot and glibc changes
 
 * Fri Jan 27 2006 Christopher Aillon <caillon@redhat.com> - 1.5-2
