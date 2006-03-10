@@ -8,7 +8,7 @@
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5
-Release:	3
+Release:	4
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -213,6 +213,10 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Fri Mar 10 2006 Christopher Aillon <caillon@redhat.com> - 1.5-4
+- Disable pango by default in non-indic locales per upstream request.
+  Users can export MOZ_ENABLE_PANGO=1 to force pango support.
+
 * Fri Feb 10 2006 Christopher Aillon <caillon@redhat.com> - 1.5-3
 - Add dumpstack.patch
 - Improve the langpack install stuff
