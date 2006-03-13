@@ -8,7 +8,7 @@
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5
-Release:	4
+Release:	5
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -34,7 +34,7 @@ Patch2:         firefox-1.0-prdtoa.patch
 Patch4:         firefox-1.5-with-system-nss.patch
 Patch5:         firefox-1.1-visibility.patch
 Patch6:         firefox-1.1-nss-system-nspr.patch
-Patch7:       firefox-1.5.0.1-dumpstack.patch
+Patch7:         firefox-1.5.0.1-dumpstack.patch
 
 Patch10:        thunderbird-0.7.3-psfonts.patch
 Patch11:        thunderbird-0.7.3-gnome-uriloader.patch
@@ -52,6 +52,7 @@ Patch81:        firefox-nopangoxft.patch
 # patches from upstream (Patch100+)
 Patch100:       firefox-bug305970.patch
 Patch101:       thunderbird-1.5-bug304720.patch
+Patch102:       thunderbird-1.5-pango-start.patch
 
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -213,9 +214,8 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
-* Fri Mar 10 2006 Christopher Aillon <caillon@redhat.com> - 1.5-4
-- Disable pango by default in non-indic locales per upstream request.
-  Users can export MOZ_ENABLE_PANGO=1 to force pango support.
+* Mon Mar 13 2006 Christopher Aillon <caillon@redhat.com> - 1.5-5
+- Add a notice to the mail start page denoting this is a pango enabled build.
 
 * Fri Feb 10 2006 Christopher Aillon <caillon@redhat.com> - 1.5-3
 - Add dumpstack.patch
