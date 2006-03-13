@@ -66,6 +66,8 @@ BuildRequires:  nss-devel >= %{nss_version}
 BuildRequires:	libIDL-devel
 BuildRequires:	tcsh
 BuildRequires:	freetype-devel
+BuildRequires:  libXt-devel
+BuildRequires:  libXrender-devel
 Prereq:		desktop-file-utils >= %{desktop_file_utils_version}
 Obsoletes:	MozillaThunderbird
 
