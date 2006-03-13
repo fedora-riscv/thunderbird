@@ -5,10 +5,13 @@
 
 %define official_branding 1
 
+
+ExcludeArch:    s390x s390 ppc64 ia64
+
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5
-Release:	5
+Release:	6
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -106,6 +109,7 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 
 %patch100 -p1
 %patch101 -p1
+%patch102 -p1
 
 %{__rm} -f .mozconfig
 %{__cp} %{SOURCE10} .mozconfig
@@ -216,6 +220,9 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Mon Mar 13 2006 Christopher Aillon <caillon@redhat.com> - 1.5.6
+- Temporarily disable other arches that we don't ship FC5 with, for time
+
 * Mon Mar 13 2006 Christopher Aillon <caillon@redhat.com> - 1.5-5
 - Add a notice to the mail start page denoting this is a pango enabled build.
 
