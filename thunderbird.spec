@@ -5,13 +5,10 @@
 
 %define official_branding 1
 
-
-ExcludeArch:    s390x s390 ppc64 ia64
-
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5
-Release:	6
+Release:	7
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -220,6 +217,9 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Thu Mar 16 2006 Christopher Aillon <caillon@redhat.com> - 1.5-7
+- Bring the other arches back
+
 * Mon Mar 13 2006 Christopher Aillon <caillon@redhat.com> - 1.5.6
 - Temporarily disable other arches that we don't ship FC5 with, for time
 
