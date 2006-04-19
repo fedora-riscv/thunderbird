@@ -7,8 +7,8 @@
 
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
-Version:	1.5
-Release:	7
+Version:	1.5.0.2
+Release:	2
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -19,7 +19,7 @@ Group:		Applications/Internet
 %define tarball thunderbird-1.5rc1-source.tar.bz2
 %endif
 Source0:        %{tarball}
-Source1:        thunderbird-langpacks-20060127.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20060419.tar.bz2
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
 Source12:       thunderbird-redhat-default-prefs.js
@@ -34,7 +34,6 @@ Patch2:         firefox-1.0-prdtoa.patch
 Patch4:         firefox-1.5-with-system-nss.patch
 Patch5:         firefox-1.1-visibility.patch
 Patch6:         firefox-1.1-nss-system-nspr.patch
-Patch7:         firefox-1.5.0.1-dumpstack.patch
 
 Patch10:        thunderbird-0.7.3-psfonts.patch
 Patch11:        thunderbird-0.7.3-gnome-uriloader.patch
@@ -96,7 +95,6 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %endif
 
 %patch6 -p1
-%patch7 -p0
 %patch10 -p1 -b .psfonts
 %patch11 -p1 -b .gnome-uriloader
 %patch24 -p1
@@ -217,6 +215,9 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Wed Apr 19 2006 Christopher Aillon <caillon@redhat.com> - 1.5.0.2-2
+- Update to 1.5.0.2
+
 * Thu Mar 16 2006 Christopher Aillon <caillon@redhat.com> - 1.5-7
 - Bring the other arches back
 
