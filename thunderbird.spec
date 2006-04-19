@@ -49,8 +49,6 @@ Patch42:        firefox-1.1-uriloader.patch
 Patch81:        firefox-nopangoxft.patch
 
 # patches from upstream (Patch100+)
-Patch100:       firefox-bug305970.patch
-Patch101:       thunderbird-1.5-bug304720.patch
 Patch102:       thunderbird-1.5-pango-start.patch
 
 
@@ -102,8 +100,6 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %patch42 -p0
 %patch81 -p1
 
-%patch100 -p1
-%patch101 -p1
 %patch102 -p1
 
 %{__rm} -f .mozconfig
