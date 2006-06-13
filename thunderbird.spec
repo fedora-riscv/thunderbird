@@ -61,11 +61,12 @@ BuildRequires:	zlib-devel, gzip, zip, unzip
 BuildRequires:  nspr-devel >= %{nspr_version}
 BuildRequires:  nss-devel >= %{nss_version}
 BuildRequires:	libIDL-devel
+BuildRequires:  desktop-file-utils
 BuildRequires:	tcsh
 BuildRequires:	freetype-devel
 BuildRequires:  libXt-devel
 BuildRequires:  libXrender-devel
-Prereq:		desktop-file-utils >= %{desktop_file_utils_version}
+Requires:	desktop-file-utils >= %{desktop_file_utils_version}
 Obsoletes:	MozillaThunderbird
 
 %define tbdir %{_libdir}/thunderbird-%{version}
@@ -213,6 +214,7 @@ update-desktop-database %{_datadir}/applications
 %changelog
 * Mon Jun 12 2006 Kai Engert <kengert@redhat.com> - 1.5.0.4-2
 - Update to 1.5.0.4
+- Fix desktop-file-utils requires
 
 * Wed Apr 19 2006 Christopher Aillon <caillon@redhat.com> - 1.5.0.2-2
 - Update to 1.5.0.2
