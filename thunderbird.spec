@@ -8,7 +8,7 @@
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5.0.4
-Release:	2
+Release:	2.1
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -212,6 +212,9 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Wed Jul 12 2006 Jesse Keating <jkeating@redhat.com> - sh: line 0: fg: no job control
+- rebuild
+
 * Mon Jun 12 2006 Kai Engert <kengert@redhat.com> - 1.5.0.4-2
 - Update to 1.5.0.4
 - Fix desktop-file-utils requires
