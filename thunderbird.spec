@@ -7,8 +7,8 @@
 
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
-Version:	1.5.0.4
-Release:	2.1
+Version:	1.5.0.5
+Release:	2
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -19,7 +19,7 @@ Group:		Applications/Internet
 %define tarball thunderbird-1.5rc1-source.tar.bz2
 %endif
 Source0:        %{tarball}
-Source1:        thunderbird-langpacks-%{version}-20060612.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20060726.tar.bz2
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
 Source12:       thunderbird-redhat-default-prefs.js
@@ -212,7 +212,10 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
-* Wed Jul 12 2006 Jesse Keating <jkeating@redhat.com> - sh: line 0: fg: no job control
+* Thu Jul 27 2006 Christopher Aillon <caillon@redhat.com> - 1.5.0.5-2
+- Update to 1.5.0.5
+
+* Wed Jul 12 2006 Jesse Keating <jkeating@redhat.com> - 1.5.0.4-2.1
 - rebuild
 
 * Mon Jun 12 2006 Kai Engert <kengert@redhat.com> - 1.5.0.4-2
