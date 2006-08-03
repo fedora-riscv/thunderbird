@@ -8,7 +8,7 @@
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5.0.5
-Release:	3
+Release:	4
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -34,6 +34,7 @@ Patch2:         firefox-1.0-prdtoa.patch
 Patch4:         firefox-1.5-with-system-nss.patch
 Patch5:         firefox-1.1-visibility.patch
 Patch6:         firefox-1.1-nss-system-nspr.patch
+Patch7:         thunderbird-mimeeobj-externalc.patch
 
 Patch10:        thunderbird-0.7.3-psfonts.patch
 Patch11:        thunderbird-0.7.3-gnome-uriloader.patch
@@ -94,6 +95,7 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %endif
 
 %patch6 -p1
+%patch7 -p1
 %patch10 -p1 -b .psfonts
 %patch11 -p1 -b .gnome-uriloader
 %patch24 -p1
@@ -212,6 +214,9 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Thu Aug  3 2006 Kai Engert <kengert@redhat.com> - 1.5.0.5-4
+- Fix a build failure in mailnews mime code.
+
 * Tue Aug  1 2006 Matthias Clasen <mclasen@redhat.com> - 1.5.0.5-3
 - Rebuild
 
