@@ -25,16 +25,6 @@ MOZ_CLIENT_PROGRAM="$MRE_HOME/thunderbird -remote"
 #MOZ_DISABLE_PANGO=1
 #export MOZ_DISABLE_PANGO
 
-# For now, in order to ship with firefox trademarks, we need to default to
-# disable pango on non-indic locales.  Use MOZ_ENABLE_PANGO=1 to force pango.
-tmplang=${LC_CTYPE:-${LANG:-"en_US.UTF-8"}}
-if ! echo $tmplang | grep "^..[_-]IN" > /dev/null; then
-   if [ -z "$MOZ_ENABLE_PANGO" ]; then
-     MOZ_DISABLE_PANGO=1
-     export MOZ_DISABLE_PANGO
-   fi
-fi
-
 
 function check_running() {
     $MOZ_CLIENT_PROGRAM 'ping()' 2>/dev/null >/dev/null

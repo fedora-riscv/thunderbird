@@ -8,7 +8,7 @@
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5.0.5
-Release:	4
+Release:	5
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -32,7 +32,7 @@ Source100:      find-external-requires
 # Build patches
 Patch2:         firefox-1.0-prdtoa.patch
 Patch4:         firefox-1.5-with-system-nss.patch
-Patch5:         firefox-1.1-visibility.patch
+Patch5:         thunderbird-1.5-visibility.patch
 Patch6:         firefox-1.1-nss-system-nspr.patch
 Patch7:         thunderbird-mimeeobj-externalc.patch
 
@@ -47,7 +47,8 @@ Patch25:        thunderbird-1.1-software-update.patch
 Patch42:        firefox-1.1-uriloader.patch
 
 # font system fixes
-Patch81:        firefox-nopangoxft.patch
+Patch81:        firefox-1.5-nopangoxft.patch
+Patch82:        firefox-1.5-pango-mathml.patch
 
 # patches from upstream (Patch100+)
 Patch102:       thunderbird-1.5-pango-start.patch
@@ -86,13 +87,7 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 
 %patch2 -p0
 %patch4 -p1
-
-# Pragma visibility is broken on most platforms for some reason.
-# It works on i386 so leave it alone there.  Disable elsewhere.
-# See http://gcc.gnu.org/bugzilla/show_bug.cgi?id=20297
-%ifnarch i386
-%patch5  -p0
-%endif
+%patch5 -p1 -b .visibility
 
 %patch6 -p1
 %patch7 -p1
@@ -119,7 +114,8 @@ export CFLAGS="$RPM_OPT_FLAGS"
 export CXXFLAGS="$CFLAGS"
 export BUILD_OFFICIAL=1
 export MOZILLA_OFFICIAL=1
-time make -f client.mk build_all
+export LDFLAGS="-Wl,-rpath,%{tbdir}"
+make -f client.mk build
 
 #===============================================================================
 
@@ -214,6 +210,14 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Tue Sep  5 2006 Christopher Aillon <caillon@redhat.com> - 1.5.0.5-5
+- Update nopangoxft.patch
+- Fix rendering of MathML thanks to Behdad Esfahbod.
+- Update start page text to reflect the MathML fixes.
+- Enable pango by default on all locales
+- Build using -rpath
+- Re-enable GCC visibility
+
 * Thu Aug  3 2006 Kai Engert <kengert@redhat.com> - 1.5.0.5-4
 - Fix a build failure in mailnews mime code.
 
