@@ -8,7 +8,7 @@
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5.0.5
-Release:	5
+Release:	6
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -49,6 +49,7 @@ Patch42:        firefox-1.1-uriloader.patch
 # font system fixes
 Patch81:        firefox-1.5-nopangoxft.patch
 Patch82:        firefox-1.5-pango-mathml.patch
+Patch83:        firefox-1.5-pango-cursor-position.patch
 
 # patches from upstream (Patch100+)
 Patch102:       thunderbird-1.5-pango-start.patch
@@ -97,6 +98,8 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %patch25 -p0
 %patch42 -p0
 %patch81 -p1
+%patch82 -p1
+%patch83 -p1
 
 %patch102 -p1
 
@@ -210,6 +213,9 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Wed Sep  6 2006 Christopher Aillon <caillon@redhat.com> - 1.5.0.5-6
+- Fix for cursor position in editor widgets by tagoh and behdad (#198759)
+
 * Tue Sep  5 2006 Christopher Aillon <caillon@redhat.com> - 1.5.0.5-5
 - Update nopangoxft.patch
 - Fix rendering of MathML thanks to Behdad Esfahbod.
