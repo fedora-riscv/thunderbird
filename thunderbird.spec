@@ -72,7 +72,7 @@ BuildRequires:  libXrender-devel
 Requires:	desktop-file-utils >= %{desktop_file_utils_version}
 Obsoletes:	MozillaThunderbird
 
-%define tbdir %{_libdir}/thunderbird-%{version}
+%define mozappdir %{_libdir}/thunderbird-%{version}
 
 AutoProv: 0
 %define _use_internal_dependency_generator 0
@@ -117,7 +117,7 @@ export CFLAGS="$RPM_OPT_FLAGS"
 export CXXFLAGS="$CFLAGS"
 export BUILD_OFFICIAL=1
 export MOZILLA_OFFICIAL=1
-export LDFLAGS="-Wl,-rpath,%{tbdir}"
+export LDFLAGS="-Wl,-rpath,%{mozappdir}"
 make -f client.mk build
 
 #===============================================================================
@@ -132,7 +132,7 @@ cd -
 %{__mkdir_p} $RPM_BUILD_ROOT{%{_libdir},%{_bindir},%{_datadir}/applications}
 
 %{__tar} -C $RPM_BUILD_ROOT%{_libdir}/ -xzf dist/%{name}-*linux*.tar.gz
-%{__mv} $RPM_BUILD_ROOT%{_libdir}/%{name} $RPM_BUILD_ROOT%{tbdir}
+%{__mv} $RPM_BUILD_ROOT%{_libdir}/%{name} $RPM_BUILD_ROOT%{mozappdir}
 
 %{__rm} -f $RPM_BUILD_ROOT%{_libdir}/%{name}-*linux*.tar
 
@@ -150,25 +150,31 @@ desktop-file-install --vendor mozilla \
   $RPM_BUILD_ROOT%{_bindir}/thunderbird
 %{__chmod} 755 $RPM_BUILD_ROOT/%{_bindir}/thunderbird
 
-install -m755 %{SOURCE30} $RPM_BUILD_ROOT/%{tbdir}/open-browser.sh
-perl -pi -e 's|LIBDIR|%{_libdir}|g' $RPM_BUILD_ROOT/%{tbdir}/open-browser.sh
+install -m755 %{SOURCE30} $RPM_BUILD_ROOT/%{mozappdir}/open-browser.sh
+perl -pi -e 's|LIBDIR|%{_libdir}|g' $RPM_BUILD_ROOT/%{mozappdir}/open-browser.sh
 
 %{__cat} %{SOURCE12} | %{__sed} -e 's,THUNDERBIRD_RPM_VR,%{version}-%{release},g' \
-                                -e 's,COMMAND,%{tbdir}/open-browser.sh,g' > \
+                                -e 's,COMMAND,%{mozappdir}/open-browser.sh,g' > \
         $RPM_BUILD_ROOT/rh-default-prefs
-%{__cp} $RPM_BUILD_ROOT/rh-default-prefs $RPM_BUILD_ROOT/%{tbdir}/greprefs/all-redhat.js
-%{__cp} $RPM_BUILD_ROOT/rh-default-prefs $RPM_BUILD_ROOT/%{tbdir}/defaults/pref/all-redhat.js
+%{__cp} $RPM_BUILD_ROOT/rh-default-prefs $RPM_BUILD_ROOT/%{mozappdir}/greprefs/all-redhat.js
+%{__cp} $RPM_BUILD_ROOT/rh-default-prefs $RPM_BUILD_ROOT/%{mozappdir}/defaults/pref/all-redhat.js
 %{__rm} $RPM_BUILD_ROOT/rh-default-prefs
+
+%{__mkdir_p} $RPM_BUILD_ROOT%{mozappdir}/chrome/icons/default/
+%{__cp} other-licenses/branding/%{name}/default.xpm \
+        $RPM_BUILD_ROOT%{mozappdir}/chrome/icons/default/
+%{__cp} other-licenses/branding/%{name}/default.xpm \
+        $RPM_BUILD_ROOT%{mozappdir}/icons/
 
 # own mozilla plugin dir (#135050)
 %{__mkdir_p} $RPM_BUILD_ROOT%{_libdir}/mozilla/plugins
 
 # Install langpacks
-%{__mkdir_p} $RPM_BUILD_ROOT%{tbdir}/extensions
+%{__mkdir_p} $RPM_BUILD_ROOT%{mozappdir}/extensions
 %{__tar} xjf %{SOURCE1}
 for langpack in `ls thunderbird-langpacks/*.xpi`; do
   language=`basename $langpack .xpi`
-  extensiondir=$RPM_BUILD_ROOT%{tbdir}/extensions/langpack-$language@thunderbird.mozilla.org
+  extensiondir=$RPM_BUILD_ROOT%{mozappdir}/extensions/langpack-$language@thunderbird.mozilla.org
   %{__mkdir_p} $extensiondir
   unzip $langpack -d $extensiondir
   find $extensiondir -type f | xargs chmod 644
@@ -187,9 +193,9 @@ done
 %{__rm} -rf thunderbird-langpacks
 
 
-%{__rm} -f $RPM_BUILD_ROOT%{tbdir}/thunderbird-config
+%{__rm} -f $RPM_BUILD_ROOT%{mozappdir}/thunderbird-config
 
-cd $RPM_BUILD_ROOT%{tbdir}/chrome
+cd $RPM_BUILD_ROOT%{mozappdir}/chrome
 find . -name "*" -type d -maxdepth 1 -exec %{__rm} -rf {} \;
 cd -
 
@@ -208,11 +214,15 @@ update-desktop-database %{_datadir}/applications
 %attr(755,root,root) %{_bindir}/thunderbird
 %attr(644,root,root) %{_datadir}/applications/mozilla-thunderbird.desktop
 %attr(644,root,root) %{_datadir}/pixmaps/thunderbird.png
-%{tbdir}
+%{mozappdir}
 
 #===============================================================================
 
 %changelog
+* Thu Sep  7 2006 Christopher Aillon <caillon@redhat.com> - 1.5.0.5-7
+- Let there be art for Alt+Tab again
+- s/tbdir/mozappdir/g
+
 * Wed Sep  6 2006 Christopher Aillon <caillon@redhat.com> - 1.5.0.5-6
 - Fix for cursor position in editor widgets by tagoh and behdad (#198759)
 
