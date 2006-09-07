@@ -8,7 +8,7 @@
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5.0.5
-Release:	7
+Release:	8
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -160,6 +160,12 @@ perl -pi -e 's|LIBDIR|%{_libdir}|g' $RPM_BUILD_ROOT/%{mozappdir}/open-browser.sh
 %{__cp} $RPM_BUILD_ROOT/rh-default-prefs $RPM_BUILD_ROOT/%{mozappdir}/defaults/pref/all-redhat.js
 %{__rm} $RPM_BUILD_ROOT/rh-default-prefs
 
+%{__rm} -f $RPM_BUILD_ROOT%{mozappdir}/thunderbird-config
+
+cd $RPM_BUILD_ROOT%{mozappdir}/chrome
+find . -name "*" -type d -maxdepth 1 -exec %{__rm} -rf {} \;
+cd -
+
 %{__mkdir_p} $RPM_BUILD_ROOT%{mozappdir}/chrome/icons/default/
 %{__cp} other-licenses/branding/%{name}/default.xpm \
         $RPM_BUILD_ROOT%{mozappdir}/chrome/icons/default/
@@ -193,12 +199,6 @@ done
 %{__rm} -rf thunderbird-langpacks
 
 
-%{__rm} -f $RPM_BUILD_ROOT%{mozappdir}/thunderbird-config
-
-cd $RPM_BUILD_ROOT%{mozappdir}/chrome
-find . -name "*" -type d -maxdepth 1 -exec %{__rm} -rf {} \;
-cd -
-
 %clean
 %{__rm} -rf $RPM_BUILD_ROOT
 
@@ -219,6 +219,9 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Thu Sep  7 2006 Christopher Aillon <caillon@redhat.com> - 1.5.0.5-8
+- Shuffle order of the install phase around
+
 * Thu Sep  7 2006 Christopher Aillon <caillon@redhat.com> - 1.5.0.5-7
 - Let there be art for Alt+Tab again
 - s/tbdir/mozappdir/g
