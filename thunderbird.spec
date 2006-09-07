@@ -8,7 +8,7 @@
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5.0.5
-Release:	6
+Release:	7
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
