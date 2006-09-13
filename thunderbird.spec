@@ -7,8 +7,8 @@
 
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
-Version:	1.5.0.5
-Release:	8
+Version:	1.5.0.7
+Release:	1%{?dist}
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -219,6 +219,9 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Wed Sep 13 2006 Christopher Aillon <caillon@redhat.com> - 1.5.0.7-1
+- Update to 1.5.0.7
+
 * Thu Sep  7 2006 Christopher Aillon <caillon@redhat.com> - 1.5.0.5-8
 - Shuffle order of the install phase around
 
