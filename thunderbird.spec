@@ -19,7 +19,7 @@ Group:		Applications/Internet
 %define tarball thunderbird-1.5rc1-source.tar.bz2
 %endif
 Source0:        %{tarball}
-Source1:        thunderbird-langpacks-%{version}-20060726.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20060911.tar.bz2
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
 Source12:       thunderbird-redhat-default-prefs.js
