@@ -34,7 +34,6 @@ Patch2:         firefox-1.0-prdtoa.patch
 Patch4:         firefox-1.5-with-system-nss.patch
 Patch5:         thunderbird-1.5-visibility.patch
 Patch6:         firefox-1.1-nss-system-nspr.patch
-Patch7:         thunderbird-mimeeobj-externalc.patch
 
 Patch10:        thunderbird-0.7.3-psfonts.patch
 Patch11:        thunderbird-0.7.3-gnome-uriloader.patch
@@ -91,7 +90,6 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %patch5 -p1 -b .visibility
 
 %patch6 -p1
-%patch7 -p1
 %patch10 -p1 -b .psfonts
 %patch11 -p1 -b .gnome-uriloader
 %patch24 -p1
