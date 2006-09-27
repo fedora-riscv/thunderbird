@@ -8,7 +8,7 @@
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5.0.7
-Release:	1%{?dist}
+Release:	2%{?dist}
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -50,8 +50,20 @@ Patch81:        firefox-1.5-nopangoxft.patch
 Patch82:        firefox-1.5-pango-mathml.patch
 Patch83:        firefox-1.5-pango-cursor-position.patch
 
-# patches from upstream (Patch100+)
-Patch102:       thunderbird-1.5-pango-start.patch
+# Other 
+Patch100:       firefox-1.5-gtk-key-theme-crash.patch
+Patch101:       firefox-1.5-embedwindow-visibility.patch
+Patch102:       firefox-1.5-theme-change.patch
+
+%if %{official_branding}
+# Required by Mozilla Corporation
+
+
+%else
+# Not yet approved by Mozillla Corporation
+
+
+%endif
 
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -99,7 +111,21 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %patch82 -p1
 %patch83 -p1
 
-%patch102 -p1
+%patch100 -p0 -b .gtk-key-theme-crash
+%patch101 -p0 -b .embedwindow-visibility
+%patch102 -p0 -b .theme-change
+
+
+%if %{official_branding}
+# Required by Mozilla Corporation
+
+
+%else
+# Not yet approved by Mozillla Corporation
+
+
+%endif
+
 
 %{__rm} -f .mozconfig
 %{__cp} %{SOURCE10} .mozconfig
@@ -217,6 +243,11 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Wed Sep 27 2006 Christopher Aillon <caillon@redhat.com> - 1.5.0.7-2
+- Fix crash when changing gtk key theme
+- Prevent UI freezes while changing GNOME theme
+- Remove verbiage about pango; no longer required by upstream.
+
 * Wed Sep 13 2006 Christopher Aillon <caillon@redhat.com> - 1.5.0.7-1
 - Update to 1.5.0.7
 
