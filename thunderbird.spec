@@ -8,7 +8,7 @@
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5.0.7
-Release:	2%{?dist}
+Release:	3%{?dist}
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -43,6 +43,7 @@ Patch24:        thunderbird-0.8-default-applications.patch
 Patch25:        thunderbird-1.1-software-update.patch
 
 # local bugfixes
+Patch40:        firefox-1.5-bullet-bill.patch
 Patch42:        firefox-1.1-uriloader.patch
 
 # font system fixes
@@ -106,6 +107,7 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %patch11 -p1 -b .gnome-uriloader
 %patch24 -p1
 %patch25 -p0
+%patch40 -p1
 %patch42 -p0
 %patch81 -p1
 %patch82 -p1
@@ -243,6 +245,9 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Wed Oct  4 2006 Christopher Aillon <caillon@redhat.com> - 1.5.0.7-3
+- Bring the invisible character to parity with GTK+
+
 * Wed Sep 27 2006 Christopher Aillon <caillon@redhat.com> - 1.5.0.7-2
 - Fix crash when changing gtk key theme
 - Prevent UI freezes while changing GNOME theme
