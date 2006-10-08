@@ -8,7 +8,7 @@
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5.0.7
-Release:	3%{?dist}
+Release:	4%{?dist}
 Epoch:		0
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
@@ -245,6 +245,9 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Sun Oct  8 2006 Christopher Aillon <caillon@redhat.com> - 1.5.0.7-4
+- Default to use of system colors
+
 * Wed Oct  4 2006 Christopher Aillon <caillon@redhat.com> - 1.5.0.7-3
 - Bring the invisible character to parity with GTK+
 
