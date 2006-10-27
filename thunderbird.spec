@@ -8,8 +8,7 @@
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5.0.7
-Release:	4%{?dist}
-Epoch:		0
+Release:	5%{?dist}
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
 Group:		Applications/Internet
@@ -50,6 +49,7 @@ Patch42:        firefox-1.1-uriloader.patch
 Patch81:        firefox-1.5-nopangoxft.patch
 Patch82:        firefox-1.5-pango-mathml.patch
 Patch83:        firefox-1.5-pango-cursor-position.patch
+Patch84:        firefox-1.5-pango-printing.patch
 
 # Other 
 Patch100:       firefox-1.5-gtk-key-theme-crash.patch
@@ -112,6 +112,7 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %patch81 -p1
 %patch82 -p1
 %patch83 -p1
+%patch84 -p0
 
 %patch100 -p0 -b .gtk-key-theme-crash
 %patch101 -p0 -b .embedwindow-visibility
@@ -245,31 +246,34 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
-* Sun Oct  8 2006 Christopher Aillon <caillon@redhat.com> - 1.5.0.7-4
+* Fri Oct 27 2006 Christopher Aillon <caillon@redhat.com> 1.5.0.7-5
+- Include pango printing patch from Behdad and co.
+
+* Sun Oct  8 2006 Christopher Aillon <caillon@redhat.com> 1.5.0.7-4
 - Default to use of system colors
 
-* Wed Oct  4 2006 Christopher Aillon <caillon@redhat.com> - 1.5.0.7-3
+* Wed Oct  4 2006 Christopher Aillon <caillon@redhat.com> 1.5.0.7-3
 - Bring the invisible character to parity with GTK+
 
-* Wed Sep 27 2006 Christopher Aillon <caillon@redhat.com> - 1.5.0.7-2
+* Wed Sep 27 2006 Christopher Aillon <caillon@redhat.com> 1.5.0.7-2
 - Fix crash when changing gtk key theme
 - Prevent UI freezes while changing GNOME theme
 - Remove verbiage about pango; no longer required by upstream.
 
-* Wed Sep 13 2006 Christopher Aillon <caillon@redhat.com> - 1.5.0.7-1
+* Wed Sep 13 2006 Christopher Aillon <caillon@redhat.com> 1.5.0.7-1
 - Update to 1.5.0.7
 
-* Thu Sep  7 2006 Christopher Aillon <caillon@redhat.com> - 1.5.0.5-8
+* Thu Sep  7 2006 Christopher Aillon <caillon@redhat.com> 1.5.0.5-8
 - Shuffle order of the install phase around
 
-* Thu Sep  7 2006 Christopher Aillon <caillon@redhat.com> - 1.5.0.5-7
+* Thu Sep  7 2006 Christopher Aillon <caillon@redhat.com> 1.5.0.5-7
 - Let there be art for Alt+Tab again
 - s/tbdir/mozappdir/g
 
-* Wed Sep  6 2006 Christopher Aillon <caillon@redhat.com> - 1.5.0.5-6
+* Wed Sep  6 2006 Christopher Aillon <caillon@redhat.com> 1.5.0.5-6
 - Fix for cursor position in editor widgets by tagoh and behdad (#198759)
 
-* Tue Sep  5 2006 Christopher Aillon <caillon@redhat.com> - 1.5.0.5-5
+* Tue Sep  5 2006 Christopher Aillon <caillon@redhat.com> 1.5.0.5-5
 - Update nopangoxft.patch
 - Fix rendering of MathML thanks to Behdad Esfahbod.
 - Update start page text to reflect the MathML fixes.
@@ -277,59 +281,59 @@ update-desktop-database %{_datadir}/applications
 - Build using -rpath
 - Re-enable GCC visibility
 
-* Thu Aug  3 2006 Kai Engert <kengert@redhat.com> - 1.5.0.5-4
+* Thu Aug  3 2006 Kai Engert <kengert@redhat.com> 1.5.0.5-4
 - Fix a build failure in mailnews mime code.
 
-* Tue Aug  1 2006 Matthias Clasen <mclasen@redhat.com> - 1.5.0.5-3
+* Tue Aug  1 2006 Matthias Clasen <mclasen@redhat.com> 1.5.0.5-3
 - Rebuild
 
-* Thu Jul 27 2006 Christopher Aillon <caillon@redhat.com> - 1.5.0.5-2
+* Thu Jul 27 2006 Christopher Aillon <caillon@redhat.com> 1.5.0.5-2
 - Update to 1.5.0.5
 
-* Wed Jul 12 2006 Jesse Keating <jkeating@redhat.com> - 1.5.0.4-2.1
+* Wed Jul 12 2006 Jesse Keating <jkeating@redhat.com> 1.5.0.4-2.1
 - rebuild
 
-* Mon Jun 12 2006 Kai Engert <kengert@redhat.com> - 1.5.0.4-2
+* Mon Jun 12 2006 Kai Engert <kengert@redhat.com> 1.5.0.4-2
 - Update to 1.5.0.4
 - Fix desktop-file-utils requires
 
-* Wed Apr 19 2006 Christopher Aillon <caillon@redhat.com> - 1.5.0.2-2
+* Wed Apr 19 2006 Christopher Aillon <caillon@redhat.com> 1.5.0.2-2
 - Update to 1.5.0.2
 
-* Thu Mar 16 2006 Christopher Aillon <caillon@redhat.com> - 1.5-7
+* Thu Mar 16 2006 Christopher Aillon <caillon@redhat.com> 1.5-7
 - Bring the other arches back
 
-* Mon Mar 13 2006 Christopher Aillon <caillon@redhat.com> - 1.5.6
+* Mon Mar 13 2006 Christopher Aillon <caillon@redhat.com> 1.5.6
 - Temporarily disable other arches that we don't ship FC5 with, for time
 
-* Mon Mar 13 2006 Christopher Aillon <caillon@redhat.com> - 1.5-5
+* Mon Mar 13 2006 Christopher Aillon <caillon@redhat.com> 1.5-5
 - Add a notice to the mail start page denoting this is a pango enabled build.
 
-* Fri Feb 10 2006 Christopher Aillon <caillon@redhat.com> - 1.5-3
+* Fri Feb 10 2006 Christopher Aillon <caillon@redhat.com> 1.5-3
 - Add dumpstack.patch
 - Improve the langpack install stuff
 
-* Tue Feb 07 2006 Jesse Keating <jkeating@redhat.com> - 1.5-2.1
+* Tue Feb 07 2006 Jesse Keating <jkeating@redhat.com> 1.5-2.1
 - rebuilt for new gcc4.1 snapshot and glibc changes
 
-* Fri Jan 27 2006 Christopher Aillon <caillon@redhat.com> - 1.5-2
+* Fri Jan 27 2006 Christopher Aillon <caillon@redhat.com> 1.5-2
 - Add some langpacks back in
 - Stop providing MozillaThunderbird
 
-* Thu Jan 12 2006 Christopher Aillon <caillon@redhat.com> - 1.5-1
+* Thu Jan 12 2006 Christopher Aillon <caillon@redhat.com> 1.5-1
 - Official 1.5 release is out
 
-* Wed Jan 11 2006 Christopher Aillon <caillon@redhat.com> - 1.5-0.5.6.rc1
+* Wed Jan 11 2006 Christopher Aillon <caillon@redhat.com> 1.5-0.5.6.rc1
 - Fix crash when deleting highlighted text while composing mail within
   plaintext editor with spellcheck enabled.
 
-* Tue Jan  3 2006 Christopher Aillon <caillon@redhat.com> - 1.5-0.5.5.rc1
+* Tue Jan  3 2006 Christopher Aillon <caillon@redhat.com> 1.5-0.5.5.rc1
 - Looks like we can build on ppc64 again.
 
-* Fri Dec 16 2005 Christopher Aillon <caillon@redhat.com> - 1.5-0.5.4.rc1
+* Fri Dec 16 2005 Christopher Aillon <caillon@redhat.com> 1.5-0.5.4.rc1
 - Rebuild
 
-* Fri Dec 16 2005 Christopher Aillon <caillon@redhat.com> - 1.5-0.5.3.rc1
+* Fri Dec 16 2005 Christopher Aillon <caillon@redhat.com> 1.5-0.5.3.rc1
 - Once again, disable ppc64 because of a new issue.
   See https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=175944
 
@@ -339,7 +343,7 @@ update-desktop-database %{_datadir}/applications
 * Fri Dec 09 2005 Jesse Keating <jkeating@redhat.com>
 - rebuilt
 
-* Mon Nov 28 2005 Christopher Aillon <caillon@redhat.com> - 1.5-0.5.1.rc1
+* Mon Nov 28 2005 Christopher Aillon <caillon@redhat.com> 1.5-0.5.1.rc1
 - Fix issue with popup dialogs and other actions causing lockups
 
 * Sat Nov  5 2005 Christopher Aillon <caillon@redhat.com> 1.5-0.5.0.rc1
