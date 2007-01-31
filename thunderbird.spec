@@ -8,7 +8,7 @@
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5.0.9
-Release:	5%{?dist}
+Release:	6%{?dist}
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
 Group:		Applications/Internet
@@ -57,6 +57,7 @@ Patch87:        firefox-1.5-pango-underline.patch
 # Other 
 Patch102:       firefox-1.5-theme-change.patch
 Patch103:       thunderbird-1.5-profile-migrator.patch
+Patch104:       firefox-1.5-dnd-nograb.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -134,6 +135,7 @@ popd
 
 %patch102 -p0 -b .theme-change
 %patch103 -p1 -b .profile-migrator
+%patch104 -p1 -b .dnd-nograb
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -273,6 +275,9 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Tue Jan 30 2007 Christopher Aillon <caillon@redhat.com> 1.5.0.9-6
+- Fix the DND implementation to not grab, so it works with new GTK+.
+
 * Thu Dec 21 2006 Behdad Esfahbod <besfahbo@redhat.com> 1.5.0.9-5
 - Added firefox-1.5-pango-underline.patch
 
