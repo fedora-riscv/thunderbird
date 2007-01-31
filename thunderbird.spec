@@ -8,7 +8,7 @@
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5.0.9
-Release:	6%{?dist}
+Release:	7%{?dist}
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
 Group:		Applications/Internet
@@ -275,6 +275,10 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Tue Jan 30 2007 Christopher Aillon <caillon@redhat.com> 1.5.0.9-7
+- Updated cursor position patch from tagoh to fix issue with "jumping"
+  cursor when in a textfield with tabs.
+
 * Tue Jan 30 2007 Christopher Aillon <caillon@redhat.com> 1.5.0.9-6
 - Fix the DND implementation to not grab, so it works with new GTK+.
 

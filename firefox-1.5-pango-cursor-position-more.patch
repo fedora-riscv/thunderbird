@@ -10,7 +10,7 @@ diff -pruN -x '.moz*' -x .deps -x 'firefox*' -x '*.mk' -x 'config*' -x dist -x b
 -        // no need to re-measure when at the end of the last-in-flow
 -      }
 +      if (hitLength > 0)
-+	inRendContext->GetRangeWidth(paintBuffer.mBuffer, mContentLength, 0, hitLength, (PRUint32&)width);
++	inRendContext->GetRangeWidth(paintBuffer.mBuffer, textLength, 0, hitLength, (PRUint32&)width);
        else
 -        inRendContext->GetWidth(paintBuffer.mBuffer, hitLength, width);
 +	width = 0;
