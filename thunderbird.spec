@@ -8,7 +8,7 @@
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	1.5.0.9
-Release:	7%{?dist}
+Release:	8%{?dist}
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
 Group:		Applications/Internet
@@ -53,6 +53,7 @@ Patch84:        firefox-1.5-pango-printing.patch
 Patch85:        firefox-1.5-pango-cursor-position-more.patch
 Patch86:        firefox-1.5-pango-justified-range.patch
 Patch87:        firefox-1.5-pango-underline.patch
+Patch88:        firefox-1.5-xft-rangewidth.patch
 
 # Other 
 Patch102:       firefox-1.5-theme-change.patch
@@ -124,6 +125,7 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %patch85 -p1 -b .pango-cursor-position-more
 %patch86 -p1 -b .pango-justified-range
 %patch87 -p1 -b .pango-underline
+%patch88 -p1 -b .nopangoxft2
 pushd gfx/src/ps
   # This sort of sucks, but it works for now.
   ln -s ../gtk/nsFontMetricsPango.h .
@@ -275,6 +277,10 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Mon Feb 12 2007 Martin Stransky <stransky@redhat.com> 1.5.0.9-8
+- added fix for #227406: garbage characters on some websites
+  (when pango is disabled)
+  
 * Tue Jan 30 2007 Christopher Aillon <caillon@redhat.com> 1.5.0.9-7
 - Updated cursor position patch from tagoh to fix issue with "jumping"
   cursor when in a textfield with tabs.
