@@ -7,8 +7,8 @@
 
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
-Version:	1.5.0.9
-Release:	8%{?dist}
+Version:	1.5.0.10
+Release:	1%{?dist}
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
 Group:		Applications/Internet
@@ -18,7 +18,7 @@ Group:		Applications/Internet
 %define tarball thunderbird-1.5rc1-source.tar.bz2
 %endif
 Source0:        %{tarball}
-Source1:        thunderbird-langpacks-%{version}-20061215.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20070301.tar.bz2
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
 Source12:       thunderbird-redhat-default-prefs.js
@@ -30,9 +30,9 @@ Source100:      find-external-requires
 
 # Build patches
 Patch2:         firefox-1.0-prdtoa.patch
-Patch4:         firefox-1.5-with-system-nss.patch
+Patch4:         firefox-1.5.0.10-with-system-nss.patch
 Patch5:         thunderbird-1.5-visibility.patch
-Patch6:         firefox-1.1-nss-system-nspr.patch
+Patch6:         firefox-1.5.0.10-nss-system-nspr.patch
 
 Patch10:        thunderbird-0.7.3-psfonts.patch
 Patch11:        thunderbird-0.7.3-gnome-uriloader.patch
@@ -137,7 +137,7 @@ popd
 
 %patch102 -p0 -b .theme-change
 %patch103 -p1 -b .profile-migrator
-%patch104 -p1 -b .dnd-nograb
+#%patch104 -p1 -b .dnd-nograb
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -277,6 +277,9 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Fri Mar 2 2007 Martin Stransky <stransky@redhat.com> 1.5.0.10-1
+- Update to 1.5.0.10
+
 * Mon Feb 12 2007 Martin Stransky <stransky@redhat.com> 1.5.0.9-8
 - added fix for #227406: garbage characters on some websites
   (when pango is disabled)
