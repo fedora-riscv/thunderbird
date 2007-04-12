@@ -7,18 +7,18 @@
 
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
-Version:	1.5.0.10
-Release:	1%{?dist}
+Version:	2.0.0.0
+Release:	0.4.rc1%{?dist}
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
 Group:		Applications/Internet
-%if %{official_branding}
+%if ! %{official_branding}
 %define tarball thunderbird-%{version}-source.tar.bz2
 %else
-%define tarball thunderbird-1.5rc1-source.tar.bz2
+%define tarball thunderbird-2.0.0.0rc1-source.tar.bz2
 %endif
 Source0:        %{tarball}
-Source1:        thunderbird-langpacks-%{version}-20070301.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20070411.tar.bz2
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
 Source12:       thunderbird-redhat-default-prefs.js
@@ -29,6 +29,7 @@ Source30:       thunderbird-open-browser.sh
 Source100:      find-external-requires
 
 # Build patches
+Patch1:         firefox-2.0-link-layout.patch
 Patch2:         firefox-1.0-prdtoa.patch
 Patch4:         firefox-1.5.0.10-with-system-nss.patch
 Patch5:         thunderbird-1.5-visibility.patch
@@ -38,7 +39,7 @@ Patch10:        thunderbird-0.7.3-psfonts.patch
 Patch11:        thunderbird-0.7.3-gnome-uriloader.patch
 
 # customization patches
-Patch24:        thunderbird-0.8-default-applications.patch
+Patch24:        thunderbird-2.0-default-applications.patch
 Patch25:        thunderbird-1.1-software-update.patch
 
 # local bugfixes
@@ -49,7 +50,7 @@ Patch42:        firefox-1.1-uriloader.patch
 Patch81:        firefox-1.5-nopangoxft.patch
 Patch82:        firefox-1.5-pango-mathml.patch
 Patch83:        firefox-1.5-pango-cursor-position.patch
-Patch84:        firefox-1.5-pango-printing.patch
+Patch84:        firefox-2.0-pango-printing.patch
 Patch85:        firefox-1.5-pango-cursor-position-more.patch
 Patch86:        firefox-1.5-pango-justified-range.patch
 Patch87:        firefox-1.5-pango-underline.patch
@@ -104,24 +105,24 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 
 %prep
 %setup -q -n mozilla
-
+%patch1 -p1 -b .link-layout
 %patch2 -p0
-%patch4 -p1
+#%patch4 -p1
 #%patch5 -p1 -b .visibility
 
-%patch6 -p1
+#%patch6 -p1
 %patch10 -p1 -b .psfonts
 %patch11 -p1 -b .gnome-uriloader
-%patch24 -p1
-%patch25 -p0
+%patch24 -p1 -b .default-applications
+#%patch25 -p0 -b .software-update
 %patch40 -p1
 %patch42 -p0
 
 # font system fixes
 %patch81 -p1 -b .nopangoxft
-%patch82 -p1 -b .pango-mathml
+#%patch82 -p1 -b .pango-mathml
 %patch83 -p1 -b .pango-cursor-position
-%patch84 -p1 -b .pango-printing
+%patch84 -p0 -b .pango-printing
 %patch85 -p1 -b .pango-cursor-position-more
 %patch86 -p1 -b .pango-justified-range
 %patch87 -p1 -b .pango-underline
@@ -183,22 +184,14 @@ make -f client.mk build
 %install
 %{__rm} -rf $RPM_BUILD_ROOT
 
-cd mail/installer
-%{__make} STRIP=/bin/true
-cd -
+DESTDIR=$RPM_BUILD_ROOT make install
 
 %{__mkdir_p} $RPM_BUILD_ROOT{%{_libdir},%{_bindir},%{_datadir}/applications}
-
-%{__tar} -C $RPM_BUILD_ROOT%{_libdir}/ -xzf dist/%{name}-*linux*.tar.gz
-%{__mv} $RPM_BUILD_ROOT%{_libdir}/%{name} $RPM_BUILD_ROOT%{mozappdir}
-
-%{__rm} -f $RPM_BUILD_ROOT%{_libdir}/%{name}-*linux*.tar
 
 %{__install} -p -D %{SOURCE22} $RPM_BUILD_ROOT%{_datadir}/pixmaps/%{name}.png
 
 desktop-file-install --vendor mozilla \
   --dir $RPM_BUILD_ROOT%{_datadir}/applications \
-  --add-category X-Fedora \
   --add-category Application \
   --add-category Network \
   %{SOURCE20}
@@ -209,8 +202,9 @@ desktop-file-install --vendor mozilla \
 %{__chmod} 755 $RPM_BUILD_ROOT/%{_bindir}/thunderbird
 
 install -m755 %{SOURCE30} $RPM_BUILD_ROOT/%{mozappdir}/open-browser.sh
-perl -pi -e 's|LIBDIR|%{_libdir}|g' $RPM_BUILD_ROOT/%{mozappdir}/open-browser.sh
+%{__sed} -i -e 's|LIBDIR|%{_libdir}|g' $RPM_BUILD_ROOT/%{mozappdir}/open-browser.sh
 
+# set up our default preferences
 %{__cat} %{SOURCE12} | %{__sed} -e 's,THUNDERBIRD_RPM_VR,%{version}-%{release},g' \
                                 -e 's,COMMAND,%{mozappdir}/open-browser.sh,g' > \
         $RPM_BUILD_ROOT/rh-default-prefs
@@ -218,7 +212,7 @@ perl -pi -e 's|LIBDIR|%{_libdir}|g' $RPM_BUILD_ROOT/%{mozappdir}/open-browser.sh
 %{__cp} $RPM_BUILD_ROOT/rh-default-prefs $RPM_BUILD_ROOT/%{mozappdir}/defaults/pref/all-redhat.js
 %{__rm} $RPM_BUILD_ROOT/rh-default-prefs
 
-%{__rm} -f $RPM_BUILD_ROOT%{mozappdir}/thunderbird-config
+%{__rm} -f $RPM_BUILD_ROOT%{_bindir}/thunderbird-config
 
 cd $RPM_BUILD_ROOT%{mozappdir}/chrome
 find . -name "*" -type d -maxdepth 1 -exec %{__rm} -rf {} \;
@@ -243,18 +237,29 @@ for langpack in `ls thunderbird-langpacks/*.xpi`; do
   unzip $langpack -d $extensiondir
   find $extensiondir -type f | xargs chmod 644
 
-  langtmp=%{_tmpdir}/%{name}/langpack-$language
+  tmpdir=`mktemp -d %{name}.XXXXXXXX`
+  langtmp=$tmpdir/%{name}/langpack-$language
   %{__mkdir_p} $langtmp
   jarfile=$extensiondir/chrome/$language.jar
   unzip $jarfile -d $langtmp
+
   find $langtmp -type f | xargs chmod 644
   %{__rm} -rf $jarfile
   cd $langtmp
   zip -r -D $jarfile locale
   %{__rm} -rf locale
   cd -
+  %{__rm} -rf $tmpdir
 done
 %{__rm} -rf thunderbird-langpacks
+
+
+# Copy over the LICENSE
+install -c -m 644 LICENSE $RPM_BUILD_ROOT%{mozappdir}
+
+# ghost files
+touch $RPM_BUILD_ROOT%{mozappdir}/components/compreg.dat
+touch $RPM_BUILD_ROOT%{mozappdir}/components/xpti.dat
 
 
 %clean
@@ -272,11 +277,30 @@ update-desktop-database %{_datadir}/applications
 %attr(755,root,root) %{_bindir}/thunderbird
 %attr(644,root,root) %{_datadir}/applications/mozilla-thunderbird.desktop
 %attr(644,root,root) %{_datadir}/pixmaps/thunderbird.png
+%exclude %{_includedir}/%{name}-%{version}
+%exclude %{_datadir}/idl/%{name}-%{version}
+%exclude %{_libdir}/pkgconfig/*.pc
 %{mozappdir}
 
 #===============================================================================
 
 %changelog
+* Thu Apr 12 2007 Christopher Aillon <caillon@redhat.com> 2.0.0.0-0.3.rc1
+- Rebuild into Fedora
+
+* Wed Apr 11 2007 Christopher Aillon <caillon@redhat.com> 2.0.0.0-0.3.rc1
+- Update langpacks
+
+* Thu Apr  5 2007 Christopher Aillon <caillon@redhat.com> 2.0.0.0-0.2.rc1
+- Build option tweaks
+- Bring the install section to parity with Firefox's
+
+* Thu Apr  5 2007 Christopher Aillon <caillon@redhat.com> 2.0.0.0-0.1.rc1
+- Update to 2.0.0.0 RC1
+
+* Sun Mar 25 2007 Christopher Aillon <caillon@redhat.com> 1.5.0.11-1
+- Update to 1.5.0.11
+
 * Fri Mar 2 2007 Martin Stransky <stransky@redhat.com> 1.5.0.10-1
 - Update to 1.5.0.10
 

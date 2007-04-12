@@ -14,9 +14,9 @@ MOZILLA_FIVE_HOME="$MOZ_LIB_DIR/thunderbird-TBIRD_VERSION"
 MRE_HOME="$MOZ_LIB_DIR/thunderbird-TBIRD_VERSION"
 export MOZILLA_FIVE_HOME MRE_HOME
 
-MOZ_PROGRAM=$MRE_HOME/thunderbird
+MOZ_PROGRAM=$MRE_HOME/thunderbird-bin
 #MOZ_CLIENT_PROGRAM="$MRE_HOME/mozilla-xremote-client -a thunderbird"
-MOZ_CLIENT_PROGRAM="$MRE_HOME/thunderbird -remote" 
+MOZ_CLIENT_PROGRAM="$MRE_HOME/thunderbird-bin -remote" 
 
 ##
 ## Set MOZ_ENABLE_PANGO is no longer used because Pango is enabled by default

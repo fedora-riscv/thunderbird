@@ -1,0 +1,16 @@
+Index: mozilla/mail/components/shell/nsMailGNOMEIntegration.cpp
+===================================================================
+RCS file: /cvsroot/mozilla/mail/components/shell/nsMailGNOMEIntegration.cpp,v
+retrieving revision 1.8.2.1
+diff -d -u -p -r1.8.2.1 nsMailGNOMEIntegration.cpp
+--- mozilla/mail/components/shell/nsMailGNOMEIntegration.cpp	23 Oct 2006 03:32:47 -0000	1.8.2.1
++++ mozilla/mail/components/shell/nsMailGNOMEIntegration.cpp	11 Apr 2007 18:50:02 -0000
+@@ -69,7 +69,7 @@ static const char* const sFeedProtocols[
+   "feed"
+ };
+ 
+-nsMailGNOMEIntegration::nsMailGNOMEIntegration(): mCheckedThisSession(PR_FALSE)
++nsMailGNOMEIntegration::nsMailGNOMEIntegration(): mCheckedThisSession(PR_TRUE)
+ {}
+ 
+ nsresult
