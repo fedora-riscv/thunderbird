@@ -8,7 +8,7 @@
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	2.0.0.0
-Release:	0.4.rc1%{?dist}
+Release:	0.5.rc1%{?dist}
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
 Group:		Applications/Internet
@@ -192,8 +192,8 @@ DESTDIR=$RPM_BUILD_ROOT make install
 
 desktop-file-install --vendor mozilla \
   --dir $RPM_BUILD_ROOT%{_datadir}/applications \
-  --add-category Application \
   --add-category Network \
+  --add-category Email \
   %{SOURCE20}
 
 # set up the thunderbird start script
@@ -277,15 +277,44 @@ update-desktop-database %{_datadir}/applications
 %attr(755,root,root) %{_bindir}/thunderbird
 %attr(644,root,root) %{_datadir}/applications/mozilla-thunderbird.desktop
 %attr(644,root,root) %{_datadir}/pixmaps/thunderbird.png
+%{mozappdir}/LICENSE
+%{mozappdir}/chrome
+%{mozappdir}/components
+%{mozappdir}/defaults
+%{mozappdir}/dictionaries
+%{mozappdir}/extensions
+%{mozappdir}/greprefs
+%{mozappdir}/icons
+%{mozappdir}/init.d
+%{mozappdir}/isp
+%{mozappdir}/mozilla-xremote-client
+%{mozappdir}/open-browser.sh
+%{mozappdir}/regxpcom
+%{mozappdir}/res
+%{mozappdir}/run-mozilla.sh
+%{mozappdir}/thunderbird-bin
+%{mozappdir}/updater
+%{mozappdir}/*.so
+
 %exclude %{_includedir}/%{name}-%{version}
 %exclude %{_datadir}/idl/%{name}-%{version}
 %exclude %{_libdir}/pkgconfig/*.pc
-%{mozappdir}
+%exclude %{mozappdir}/TestGtkEmbed
+%exclude %{mozappdir}/xpidl
+%exclude %{mozappdir}/xpcshell
+%exclude %{mozappdir}/xpt_dump
+%exclude %{mozappdir}/xpt_link
+%exclude %{mozappdir}/xpicleanup
 
 #===============================================================================
 
 %changelog
-* Thu Apr 12 2007 Christopher Aillon <caillon@redhat.com> 2.0.0.0-0.3.rc1
+* Fri Apr 13 2007 Christopher Aillon <caillon@redhat.com> 2.0.0.0-0.5.rc1
+- Fix the desktop file
+- Clean up the files list
+- Remove the default client stuff from the pref window
+
+* Thu Apr 12 2007 Christopher Aillon <caillon@redhat.com> 2.0.0.0-0.4.rc1
 - Rebuild into Fedora
 
 * Wed Apr 11 2007 Christopher Aillon <caillon@redhat.com> 2.0.0.0-0.3.rc1

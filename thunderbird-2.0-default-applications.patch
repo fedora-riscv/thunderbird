@@ -14,3 +14,19 @@ diff -d -u -p -r1.8.2.1 nsMailGNOMEIntegration.cpp
  {}
  
  nsresult
+Index: mozilla/mail/components/preferences/general.xul
+===================================================================
+RCS file: /cvsroot/mozilla/mail/components/preferences/general.xul,v
+retrieving revision 1.4.2.9
+diff -d -u -p -r1.4.2.9 general.xul
+--- mozilla/mail/components/preferences/general.xul	18 Feb 2007 20:26:46 -0000	1.4.2.9
++++ mozilla/mail/components/preferences/general.xul	13 Apr 2007 19:34:19 -0000
+@@ -70,7 +70,7 @@
+ 
+     <stringbundle id="bundlePreferences" src="chrome://messenger/locale/preferences/preferences.properties"/>
+ 
+-#ifdef HAVE_SHELL_SERVICE
++#ifdef 0
+     <stringbundle id="bundleShell" src="chrome://messenger/locale/shellservice.properties"/>
+     <stringbundle id="bundleBrand" src="chrome://branding/locale/brand.properties"/>
+     
