@@ -8,17 +8,17 @@
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	2.0.0.0
-Release:	0.5.rc1%{?dist}
+Release:	1%{?dist}
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
 Group:		Applications/Internet
-%if ! %{official_branding}
+%if %{official_branding}
 %define tarball thunderbird-%{version}-source.tar.bz2
 %else
 %define tarball thunderbird-2.0.0.0rc1-source.tar.bz2
 %endif
 Source0:        %{tarball}
-Source1:        thunderbird-langpacks-%{version}-20070411.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20070419.tar.bz2
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
 Source12:       thunderbird-redhat-default-prefs.js
@@ -309,6 +309,9 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Thu Apr 19 2007 Christopher Aillon <caillon@redhat.com> 2.0.0.0-1
+- Update to 2.0.0.0 Final
+
 * Fri Apr 13 2007 Christopher Aillon <caillon@redhat.com> 2.0.0.0-0.5.rc1
 - Fix the desktop file
 - Clean up the files list
