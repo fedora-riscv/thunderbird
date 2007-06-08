@@ -7,8 +7,8 @@
 
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
-Version:	2.0.0.0
-Release:	1%{?dist}
+Version:	2.0.0.4
+Release:	0.rc1%{?dist}
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
 Group:		Applications/Internet
@@ -18,7 +18,7 @@ Group:		Applications/Internet
 %define tarball thunderbird-2.0.0.0rc1-source.tar.bz2
 %endif
 Source0:        %{tarball}
-Source1:        thunderbird-langpacks-%{version}-20070419.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20070608.tar.bz2
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
 Source12:       thunderbird-redhat-default-prefs.js
@@ -44,6 +44,7 @@ Patch25:        thunderbird-1.1-software-update.patch
 
 # local bugfixes
 Patch40:        firefox-1.5-bullet-bill.patch
+Patch41:        firefox-2.0.0.4-undo-uriloader.patch
 Patch42:        firefox-1.1-uriloader.patch
 
 # font system fixes
@@ -116,6 +117,7 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %patch24 -p1 -b .default-applications
 #%patch25 -p0 -b .software-update
 %patch40 -p1
+%patch41 -p1
 %patch42 -p0
 
 # font system fixes
@@ -309,6 +311,9 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Fri Jun  8 2007 Christopher Aillon <caillon@redhat.com> 2.0.0.4-0.rc1
+- 2.0.0.4 rc1
+
 * Thu Apr 19 2007 Christopher Aillon <caillon@redhat.com> 2.0.0.0-1
 - Update to 2.0.0.0 Final
 
