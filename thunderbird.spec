@@ -8,7 +8,7 @@
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	2.0.0.4
-Release:	0.rc1%{?dist}
+Release:	1%{?dist}
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
 Group:		Applications/Internet
@@ -18,7 +18,7 @@ Group:		Applications/Internet
 %define tarball thunderbird-2.0.0.0rc1-source.tar.bz2
 %endif
 Source0:        %{tarball}
-Source1:        thunderbird-langpacks-%{version}-20070608.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20070615.tar.bz2
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
 Source12:       thunderbird-redhat-default-prefs.js
@@ -311,6 +311,9 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Fri Jun 15 2007 Christopher Aillon <caillon@redhat.com> 2.0.0.4-1
+- 2.0.0.4
+
 * Fri Jun  8 2007 Christopher Aillon <caillon@redhat.com> 2.0.0.4-0.rc1
 - 2.0.0.4 rc1
 
