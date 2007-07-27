@@ -8,7 +8,7 @@
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	2.0.0.5
-Release:	1%{?dist}
+Release:	2%{?dist}
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
 Group:		Applications/Internet
@@ -56,6 +56,7 @@ Patch85:        firefox-1.5-pango-cursor-position-more.patch
 Patch86:        firefox-1.5-pango-justified-range.patch
 Patch87:        firefox-1.5-pango-underline.patch
 Patch88:        firefox-1.5-xft-rangewidth.patch
+Patch89:        firefox-2.0-pango-ligatures.patch
 
 # Other 
 Patch102:       firefox-1.5-theme-change.patch
@@ -129,6 +130,7 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %patch86 -p1 -b .pango-justified-range
 %patch87 -p1 -b .pango-underline
 %patch88 -p1 -b .nopangoxft2
+%patch89 -p1 -b .pango-ligatures
 pushd gfx/src/ps
   # This sort of sucks, but it works for now.
   ln -s ../gtk/nsFontMetricsPango.h .
@@ -311,6 +313,9 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Wed Jul 25 2007 Martin Stransky <stransky@redhat.com> 2.0.0.5-2
+- added ligature pango fix
+
 * Fri Jul 20 2007 Kai Engert <kengert@redhat.com> - 2.0.0.5-1
 - 2.0.0.5
 
