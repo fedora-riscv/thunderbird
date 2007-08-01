@@ -8,7 +8,7 @@
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	2.0.0.0
-Release:	2%{?dist}
+Release:	3%{?dist}
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
 Group:		Applications/Internet
@@ -311,7 +311,7 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
-* Tue Jul 31 2007 Martin Stransky <stransky@redhat.com> 2.0.0.0-2
+* Tue Jul 31 2007 Martin Stransky <stransky@redhat.com> 2.0.0.0-3
 - added pango ligature fix
 
 * Thu Apr 19 2007 Christopher Aillon <caillon@redhat.com> 2.0.0.0-1
