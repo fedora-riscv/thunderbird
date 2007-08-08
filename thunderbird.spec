@@ -44,6 +44,7 @@ Patch25:        thunderbird-1.1-software-update.patch
 
 # local bugfixes
 Patch40:        firefox-1.5-bullet-bill.patch
+Patch41:        firefox-2.0.0.4-undo-uriloader.patch
 Patch42:        firefox-1.1-uriloader.patch
 
 # font system fixes
@@ -117,6 +118,7 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %patch24 -p1 -b .default-applications
 #%patch25 -p0 -b .software-update
 %patch40 -p1
+%patch41 -p1
 %patch42 -p0
 
 # font system fixes
