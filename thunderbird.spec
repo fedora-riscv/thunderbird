@@ -7,8 +7,8 @@
 
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
-Version:	2.0.0.0
-Release:	3%{?dist}
+Version:	2.0.0.6
+Release:	1%{?dist}
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
 Group:		Applications/Internet
@@ -18,7 +18,7 @@ Group:		Applications/Internet
 %define tarball thunderbird-2.0.0.0rc1-source.tar.bz2
 %endif
 Source0:        %{tarball}
-Source1:        thunderbird-langpacks-%{version}-20070419.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20070808.tar.bz2
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
 Source12:       thunderbird-redhat-default-prefs.js
@@ -128,7 +128,7 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %patch86 -p1 -b .pango-justified-range
 %patch87 -p1 -b .pango-underline
 %patch88 -p1 -b .nopangoxft2
-%patch89 -p1 -b .ligatures
+%patch89 -p1 -b .pango-ligatures
 pushd gfx/src/ps
   # This sort of sucks, but it works for now.
   ln -s ../gtk/nsFontMetricsPango.h .
@@ -279,6 +279,7 @@ update-desktop-database %{_datadir}/applications
 %attr(755,root,root) %{_bindir}/thunderbird
 %attr(644,root,root) %{_datadir}/applications/mozilla-thunderbird.desktop
 %attr(644,root,root) %{_datadir}/pixmaps/thunderbird.png
+%dir %{mozappdir}
 %{mozappdir}/LICENSE
 %{mozappdir}/chrome
 %{mozappdir}/components
@@ -311,6 +312,10 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Wed Aug  8 2007 Christopher Aillon <caillon@redhat.com> 2.0.0.6-1
+- Update to 2.0.0.6
+- Own the application directory (#244901)
+
 * Tue Jul 31 2007 Martin Stransky <stransky@redhat.com> 2.0.0.0-3
 - added pango ligature fix
 
