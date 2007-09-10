@@ -8,7 +8,7 @@
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	2.0.0.6
-Release:	2%{?dist}
+Release:	3%{?dist}
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPLv1.1 or GPLv2+ or LGPLv2+
 Group:		Applications/Internet
@@ -314,6 +314,9 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Mon Sep 10 2007 Martin Stransky <stransky@redhat.com> 2.0.0.6-3
+- added fix for #246248 - firefox crashes when searching for word "do"
+
 * Mon Aug 13 2007 Christopher Aillon <caillon@redhat.com> 2.0.0.6-2
 - Update the license tag
 
