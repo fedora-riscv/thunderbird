@@ -8,7 +8,7 @@
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	2.0.0.6
-Release:	3%{?dist}
+Release:	4%{?dist}
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPLv1.1 or GPLv2+ or LGPLv2+
 Group:		Applications/Internet
@@ -62,6 +62,7 @@ Patch89:        firefox-2.0-pango-ligatures.patch
 Patch102:       firefox-1.5-theme-change.patch
 Patch103:       thunderbird-1.5-profile-migrator.patch
 Patch104:       firefox-1.5-dnd-nograb.patch
+Patch106:       firefox-2.0-indicator-crash.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -143,6 +144,7 @@ popd
 %patch102 -p0 -b .theme-change
 %patch103 -p1 -b .profile-migrator
 #%patch104 -p1 -b .dnd-nograb
+%patch106 -p1 -b .indicator-crash
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -314,6 +316,10 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Tue Sep 11 2007 Christopher Aillon <caillon@redhat.com> 2.0.0.6-4
+- Fix crashes when using GTK+ themes containing a gtkrc which specify 
+  GtkOptionMenu::indicator_size and GtkOptionMenu::indicator_spacing
+
 * Mon Sep 10 2007 Martin Stransky <stransky@redhat.com> 2.0.0.6-3
 - added fix for #246248 - firefox crashes when searching for word "do"
 
