@@ -321,7 +321,7 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
-* Wed Sep 26 2007 Martin Stransky <stransky@redhat.com> 2.0.0.6-3
+* Wed Sep 26 2007 Martin Stransky <stransky@redhat.com> 2.0.0.6-6
 - Fixed #242657 - firefox -g doesn't work
 
 * Tue Sep 25 2007 Christopher Aillon <caillon@redhat.com> 2.0.0.6-5
