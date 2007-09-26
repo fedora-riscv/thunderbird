@@ -1,0 +1,12 @@
+diff -up mozilla/mail/app/Makefile.in.old mozilla/mail/app/Makefile.in
+--- mozilla/mail/app/Makefile.in.old	2007-02-28 07:52:59.000000000 +0100
++++ mozilla/mail/app/Makefile.in	2007-09-26 16:53:51.000000000 +0200
+@@ -257,7 +257,7 @@ libs:: thunderbird
+ 	$(INSTALL) $< $(DIST)/bin
+ 
+ install:: thunderbird
+-	$(SYSINSTALL) $< $(DESTDIR)$(bindir)
++	$(SYSINSTALL) $< $(DESTDIR)$(mozappdir)
+ 
+ GARBAGE += thunderbird
+ GARBAGE += $(addprefix $(DIST)/bin/defaults/pref/, all.js all-thunderbird.js channel-prefs.js mailnews.js)

@@ -8,7 +8,7 @@
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
 Version:	2.0.0.6
-Release:	5%{?dist}
+Release:	6%{?dist}
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPLv1.1 or GPLv2+ or LGPLv2+
 Group:		Applications/Internet
@@ -64,6 +64,7 @@ Patch103:       thunderbird-1.5-profile-migrator.patch
 Patch104:       firefox-1.5-dnd-nograb.patch
 Patch106:       firefox-2.0-indicator-crash.patch
 Patch111:       thunderbird-path.patch
+Patch112:       thunderbird-2.0-enable-debug.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -147,6 +148,7 @@ popd
 #%patch104 -p1 -b .dnd-nograb
 %patch106 -p1 -b .indicator-crash
 %patch111 -p1 -b .path
+%patch112 -p1 -b .debug
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -302,6 +304,7 @@ update-desktop-database %{_datadir}/applications
 %{mozappdir}/res
 %{mozappdir}/run-mozilla.sh
 %{mozappdir}/thunderbird-bin
+%{mozappdir}/thunderbird
 %{mozappdir}/updater
 %{mozappdir}/*.so
 
@@ -318,6 +321,9 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Wed Sep 26 2007 Martin Stransky <stransky@redhat.com> 2.0.0.6-3
+- Fixed #242657 - firefox -g doesn't work
+
 * Tue Sep 25 2007 Christopher Aillon <caillon@redhat.com> 2.0.0.6-5
 - Removed hardcoded MAX_PATH, PATH_MAX and MAXPATHLEN macros
 
