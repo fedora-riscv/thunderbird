@@ -45,7 +45,6 @@ Patch41:        firefox-2.0.0.4-undo-uriloader.patch
 Patch42:        firefox-1.1-uriloader.patch
 
 # font system fixes
-Patch81:        firefox-1.5-nopangoxft.patch
 Patch82:        firefox-1.5-pango-mathml.patch
 Patch83:        firefox-1.5-pango-cursor-position.patch
 Patch84:        firefox-2.0-pango-printing.patch
@@ -58,7 +57,6 @@ Patch89:        firefox-2.0-pango-ligatures.patch
 # Other 
 Patch102:       firefox-1.5-theme-change.patch
 Patch103:       thunderbird-1.5-profile-migrator.patch
-Patch106:       firefox-2.0-indicator-crash.patch
 Patch111:       thunderbird-path.patch
 Patch112:       thunderbird-2.0-enable-debug.patch
 
@@ -118,7 +116,6 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %patch42 -p0
 
 # font system fixes
-%patch81 -p1 -b .nopangoxft
 #%patch82 -p1 -b .pango-mathml
 %patch83 -p1 -b .pango-cursor-position
 %patch84 -p0 -b .pango-printing
@@ -138,7 +135,6 @@ popd
 
 %patch102 -p0 -b .theme-change
 %patch103 -p1 -b .profile-migrator
-%patch106 -p1 -b .indicator-crash
 %patch111 -p1 -b .path
 %patch112 -p1 -b .debug
 
