@@ -7,8 +7,8 @@
 
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
-Version:	2.0.0.5
-Release:	2%{?dist}
+Version:	2.0.0.9
+Release:	1%{?dist}
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPL
 Group:		Applications/Internet
@@ -18,7 +18,7 @@ Group:		Applications/Internet
 %define tarball thunderbird-2.0.0.0rc1-source.tar.bz2
 %endif
 Source0:        %{tarball}
-Source1:        thunderbird-langpacks-%{version}-20070720.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20071115.tar.bz2
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
 Source12:       thunderbird-redhat-default-prefs.js
@@ -45,7 +45,6 @@ Patch41:        firefox-2.0.0.4-undo-uriloader.patch
 Patch42:        firefox-1.1-uriloader.patch
 
 # font system fixes
-Patch81:        firefox-1.5-nopangoxft.patch
 Patch82:        firefox-1.5-pango-mathml.patch
 Patch83:        firefox-1.5-pango-cursor-position.patch
 Patch84:        firefox-2.0-pango-printing.patch
@@ -115,7 +114,6 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %patch42 -p0
 
 # font system fixes
-%patch81 -p1 -b .nopangoxft
 #%patch82 -p1 -b .pango-mathml
 %patch83 -p1 -b .pango-cursor-position
 %patch84 -p0 -b .pango-printing
@@ -305,6 +303,9 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Thu Nov 15 2007 Christopher Aillon <caillon@redhat.com> 2.0.0.9-1
+- Update to 2.0.0.9
+
 * Wed Jul 25 2007 Martin Stransky <stransky@redhat.com> 2.0.0.5-2
 - added ligature pango fix
 
