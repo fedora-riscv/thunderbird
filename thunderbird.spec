@@ -31,9 +31,6 @@ Source100:      find-external-requires
 # Build patches
 Patch1:         firefox-2.0-link-layout.patch
 Patch2:         firefox-1.0-prdtoa.patch
-Patch4:         firefox-1.5.0.10-with-system-nss.patch
-Patch5:         thunderbird-1.5-visibility.patch
-Patch6:         firefox-1.5.0.10-nss-system-nspr.patch
 
 Patch10:        thunderbird-0.7.3-psfonts.patch
 Patch11:        thunderbird-0.7.3-gnome-uriloader.patch
@@ -61,7 +58,6 @@ Patch89:        firefox-2.0-pango-ligatures.patch
 # Other 
 Patch102:       firefox-1.5-theme-change.patch
 Patch103:       thunderbird-1.5-profile-migrator.patch
-Patch104:       firefox-1.5-dnd-nograb.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -109,10 +105,7 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %setup -q -n mozilla
 %patch1 -p1 -b .link-layout
 %patch2 -p0
-#%patch4 -p1
-#%patch5 -p1 -b .visibility
 
-#%patch6 -p1
 %patch10 -p1 -b .psfonts
 %patch11 -p1 -b .gnome-uriloader
 %patch24 -p1 -b .default-applications
@@ -142,7 +135,6 @@ popd
 
 %patch102 -p0 -b .theme-change
 %patch103 -p1 -b .profile-migrator
-#%patch104 -p1 -b .dnd-nograb
 
 %if %{official_branding}
 # Required by Mozilla Corporation
