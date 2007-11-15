@@ -7,8 +7,8 @@
 
 Summary:	Mozilla Thunderbird mail/newsgroup client
 Name:		thunderbird
-Version:	2.0.0.6
-Release:	6%{?dist}
+Version:	2.0.0.9
+Release:	1%{?dist}
 URL:		http://www.mozilla.org/projects/thunderbird/
 License:	MPLv1.1 or GPLv2+ or LGPLv2+
 Group:		Applications/Internet
@@ -18,7 +18,7 @@ Group:		Applications/Internet
 %define tarball thunderbird-2.0.0.0rc1-source.tar.bz2
 %endif
 Source0:        %{tarball}
-Source1:        thunderbird-langpacks-%{version}-20070808.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20071115.tar.bz2
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
 Source12:       thunderbird-redhat-default-prefs.js
@@ -313,6 +313,9 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Thu Nov 15 2007 Christopher Aillon <caillon@redhat.com> 2.0.0.9-1
+- Update to 2.0.0.9
+
 * Wed Sep 26 2007 Martin Stransky <stransky@redhat.com> 2.0.0.6-6
 - Fixed #242657 - firefox -g doesn't work
 
