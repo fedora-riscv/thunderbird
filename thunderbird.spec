@@ -5,13 +5,13 @@
 
 %define official_branding 1
 
-Summary:	Mozilla Thunderbird mail/newsgroup client
-Name:		thunderbird
-Version:	2.0.0.9
-Release:	1%{?dist}
-URL:		http://www.mozilla.org/projects/thunderbird/
-License:	MPLv1.1 or GPLv2+ or LGPLv2+
-Group:		Applications/Internet
+Summary:        Mozilla Thunderbird mail/newsgroup client
+Name:           thunderbird
+Version:        2.0.0.9
+Release:        2%{?dist}
+URL:            http://www.mozilla.org/projects/thunderbird/
+License:        MPLv1.1 or GPLv2+ or LGPLv2+
+Group:          Applications/Internet
 %if %{official_branding}
 %define tarball thunderbird-%{version}-source.tar.bz2
 %else
@@ -37,7 +37,6 @@ Patch11:        thunderbird-0.7.3-gnome-uriloader.patch
 
 # customization patches
 Patch24:        thunderbird-2.0-default-applications.patch
-Patch25:        thunderbird-1.1-software-update.patch
 
 # local bugfixes
 Patch40:        firefox-1.5-bullet-bill.patch
@@ -45,7 +44,6 @@ Patch41:        firefox-2.0.0.4-undo-uriloader.patch
 Patch42:        firefox-1.1-uriloader.patch
 
 # font system fixes
-Patch82:        firefox-1.5-pango-mathml.patch
 Patch83:        firefox-1.5-pango-cursor-position.patch
 Patch84:        firefox-2.0-pango-printing.patch
 Patch85:        firefox-1.5-pango-cursor-position-more.patch
@@ -71,25 +69,23 @@ Patch112:       thunderbird-2.0-enable-debug.patch
 %endif
 
 
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires:       nspr >= %{nspr_version}
 Requires:       nss >= %{nss_version}
 %if 0%{?rhel} >= 5
-Requires: 	launchmail
+Requires:       launchmail
 %endif
 BuildRequires:  cairo-devel >= %{cairo_version}
-BuildRequires:	libpng-devel, libjpeg-devel, gtk2-devel
-BuildRequires:	zlib-devel, gzip, zip, unzip
+BuildRequires:  libpng-devel, libjpeg-devel, gtk2-devel
+BuildRequires:  zlib-devel, gzip, zip, unzip
 BuildRequires:  nspr-devel >= %{nspr_version}
 BuildRequires:  nss-devel >= %{nss_version}
-BuildRequires:	libIDL-devel
+BuildRequires:  libIDL-devel
 BuildRequires:  desktop-file-utils
-BuildRequires:	tcsh
-BuildRequires:	freetype-devel
+BuildRequires:  freetype-devel
 BuildRequires:  libXt-devel
 BuildRequires:  libXrender-devel
-Requires:	desktop-file-utils >= %{desktop_file_utils_version}
-Obsoletes:	MozillaThunderbird
+Requires:       desktop-file-utils >= %{desktop_file_utils_version}
 
 %define mozappdir %{_libdir}/thunderbird-%{version}
 
@@ -110,13 +106,11 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %patch10 -p1 -b .psfonts
 %patch11 -p1 -b .gnome-uriloader
 %patch24 -p1 -b .default-applications
-#%patch25 -p0 -b .software-update
 %patch40 -p1
 %patch41 -p1
 %patch42 -p0
 
 # font system fixes
-#%patch82 -p1 -b .pango-mathml
 %patch83 -p1 -b .pango-cursor-position
 %patch84 -p0 -b .pango-printing
 %patch85 -p1 -b .pango-cursor-position-more
@@ -276,9 +270,14 @@ update-desktop-database %{_datadir}/applications
 %attr(644,root,root) %{_datadir}/applications/mozilla-thunderbird.desktop
 %attr(644,root,root) %{_datadir}/pixmaps/thunderbird.png
 %dir %{mozappdir}
-%{mozappdir}/LICENSE
+%doc %{mozappdir}/LICENSE
 %{mozappdir}/chrome
-%{mozappdir}/components
+%dir %{mozappdir}/components
+%ghost %{mozappdir}/components/compreg.dat
+%ghost %{mozappdir}/components/xpti.dat
+%{mozappdir}/components/*.so
+%{mozappdir}/components/*.xpt
+%attr(644,root,root) %{mozappdir}/components/*.js
 %{mozappdir}/defaults
 %{mozappdir}/dictionaries
 %{mozappdir}/extensions
@@ -309,6 +308,10 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Sun Dec  9 2007 Christopher Aillon <caillon@redhat.com> 2.0.0.9-2
+- Fix some rpmlint warnings
+- Drop some old patches and obsoletes
+
 * Thu Nov 15 2007 Christopher Aillon <caillon@redhat.com> 2.0.0.9-1
 - Update to 2.0.0.9
 
@@ -714,38 +717,38 @@ update-desktop-database %{_datadir}/applications
 * Sun Apr 04 2004 Warren Togami <wtogami@redhat.com> 0:0.5-0.fdr.10
 - Minor cleanups
 
-* Sun Apr 04 2004 David Hill <djh[at]ii.net>	0:0.5-0.fdr.8
+* Sun Apr 04 2004 David Hill <djh[at]ii.net> 0:0.5-0.fdr.8
 - minor improvements to open-browser.sh and startup script
 - update to latest version of Blizzard's x-remote patch
 
-* Thu Mar 25 2004 David Hill <djh[at]ii.net>	0:0.5-0.fdr.7
+* Thu Mar 25 2004 David Hill <djh[at]ii.net> 0:0.5-0.fdr.7
 - update open-browser.sh, startup script, and BuildRequires
 
-* Sun Mar 14 2004 David Hill <djh[at]ii.net>	0:0.5-0.fdr.6
+* Sun Mar 14 2004 David Hill <djh[at]ii.net> 0:0.5-0.fdr.6
 - update open-browser script, modify BuildRequires (Warren)
 - add Blizzard's x-remote patch
 - initial attempt at x-remote-enabled startup script
 
-* Sun Mar 07 2004 David Hill <djh[at]ii.net>	0:0.5-0.fdr.5
+* Sun Mar 07 2004 David Hill <djh[at]ii.net> 0:0.5-0.fdr.5
 - refuse to run with excessive privileges
 
-* Fri Feb 27 2004 David Hill <djh[at]ii.net>	0:0.5-0.fdr.4
+* Fri Feb 27 2004 David Hill <djh[at]ii.net> 0:0.5-0.fdr.4
 - add Mozilla x86_64 patch (Oliver Sontag)
 - Enigmail source filenames now include the version
 - modify BuildRoot
 
-* Thu Feb 26 2004 David Hill <djh[at]ii.net>	0:0.5-0.fdr.3
+* Thu Feb 26 2004 David Hill <djh[at]ii.net> 0:0.5-0.fdr.3
 - use the updated official tarball
 
-* Wed Feb 18 2004 David Hill <djh[at]ii.net>	0:0.5-0.fdr.2
+* Wed Feb 18 2004 David Hill <djh[at]ii.net> 0:0.5-0.fdr.2
 - fix %%prep script
 
-* Mon Feb 16 2004 David Hill <djh[at]ii.net>	0:0.5-0.fdr.1
+* Mon Feb 16 2004 David Hill <djh[at]ii.net> 0:0.5-0.fdr.1
 - update Enigmail to 0.83.3
 - use official source tarball (after removing the CRLFs)
 - package renamed to thunderbird
 
-* Mon Feb 09 2004 David Hill <djh[at]ii.net>	0:0.5-0.fdr.0
+* Mon Feb 09 2004 David Hill <djh[at]ii.net> 0:0.5-0.fdr.0
 - update to 0.5
 - check for lockfile before launching
 
@@ -753,11 +756,11 @@ update-desktop-database %{_datadir}/applications
 - update to latest cvs
 - update to Enigmail 0.83.2
 
-* Thu Jan 29 2004 David Hill <djh[at]ii.net>	0:0.4-0.fdr.5
+* Thu Jan 29 2004 David Hill <djh[at]ii.net> 0:0.4-0.fdr.5
 - update to Enigmail 0.83.1
 - removed Mozilla/Firebird script patching
 
-* Sat Jan 03 2004 David Hill <djh[at]ii.net>	0:0.4-0.fdr.4
+* Sat Jan 03 2004 David Hill <djh[at]ii.net> 0:0.4-0.fdr.4
 - add startup notification to .desktop file
 
 * Thu Dec 25 2003 Warren Togami <warren@togami.com> 0:0.4-0.fdr.3
@@ -766,14 +769,14 @@ update-desktop-database %{_datadir}/applications
 - dir ownership
 - XXX: Source fails build on x86_64... fix later
 
-* Tue Dec 23 2003 David Hill <djh[at]ii.net>	0:0.4-0.fdr.2
+* Tue Dec 23 2003 David Hill <djh[at]ii.net> 0:0.4-0.fdr.2
 - update to Enigmail 0.82.5
 - add Warren's open-browser.sh (#1113)
 
-* Tue Dec 09 2003 David Hill <djh[at]ii.net>	0:0.4-0.fdr.1
+* Tue Dec 09 2003 David Hill <djh[at]ii.net> 0:0.4-0.fdr.1
 - use Thunderbird's mozilla-xremote-client to launch browser
 
-* Sun Dec 07 2003 David Hill <djh[at]ii.net>	0:0.4-0.fdr.0
+* Sun Dec 07 2003 David Hill <djh[at]ii.net> 0:0.4-0.fdr.0
 - update to 0.4
 - make hyperlinks work (with recent versions of Firebird/Mozilla)
 
@@ -792,24 +795,24 @@ update-desktop-database %{_datadir}/applications
 - alter mozconfig for new build requirements
 - add missing BuildReq (#987)
 
-* Thu Oct 16 2003 David Hill <djh[at]ii.net>	0:0.3-0.fdr.0
+* Thu Oct 16 2003 David Hill <djh[at]ii.net> 0:0.3-0.fdr.0
 - update to 0.3
 
-* Sun Oct 12 2003 David Hill <djh[at]ii.net>	0:0.3rc3-0.fdr.0
+* Sun Oct 12 2003 David Hill <djh[at]ii.net> 0:0.3rc3-0.fdr.0
 - update to 0.3rc3
 - update Enigmail to 0.81.7
 
-* Thu Oct 02 2003 David Hill <djh[at]ii.net>	0:0.3rc2-0.fdr.0
+* Thu Oct 02 2003 David Hill <djh[at]ii.net> 0:0.3rc2-0.fdr.0
 - update to 0.3rc2
 
-* Wed Sep 17 2003 David Hill <djh[at]ii.net>	0:0.2-0.fdr.2
+* Wed Sep 17 2003 David Hill <djh[at]ii.net> 0:0.2-0.fdr.2
 - simplify startup script
 
-* Wed Sep 10 2003 David Hill <djh[at]ii.net>	0:0.2-0.fdr.1
+* Wed Sep 10 2003 David Hill <djh[at]ii.net> 0:0.2-0.fdr.1
 - add GPG support (Enigmail 0.81.6)
 - specfile fixes (#679)
 
-* Thu Sep 04 2003 David Hill <djh[at]ii.net>	0:0.2-0.fdr.0
+* Thu Sep 04 2003 David Hill <djh[at]ii.net> 0:0.2-0.fdr.0
 - update to 0.2
 
 * Mon Sep 01 2003 David Hill <djh[at]ii.net>
