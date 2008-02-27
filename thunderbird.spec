@@ -32,6 +32,7 @@ Source100:      find-external-requires
 Patch1:         firefox-2.0-link-layout.patch
 Patch2:         firefox-1.0-prdtoa.patch
 Patch3:         thunderbird-2.0.0.12-gcc43.patch
+Patch4:         thunderbird-2.0.0.12-SECAlgorithmID.patch
 
 Patch10:        thunderbird-0.7.3-psfonts.patch
 Patch11:        thunderbird-0.7.3-gnome-uriloader.patch
@@ -104,6 +105,7 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %patch1 -p1 -b .link-layout
 %patch2 -p0
 %patch3 -p0 -b .gcc43
+%patch4 -p1 -b .SECAlgorithmID
 
 %patch10 -p1 -b .psfonts
 %patch11 -p1 -b .gnome-uriloader
