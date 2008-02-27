@@ -118,7 +118,7 @@
  
  nsFontMetricsPango::nsFontMetricsPango()
  {
-@@ -169,14 +228,20 @@ nsFontMetricsPango::Init(const nsFont& a
+@@ -169,15 +228,21 @@ nsFontMetricsPango::Init(const nsFont& a
      mLangGroup = aLangGroup;
  
      // Hang on to the device context
@@ -134,7 +134,8 @@
      // Make sure to clamp the pixel size to something reasonable so we
      // don't make the X server blow up.
      nscoord screenPixels = gdk_screen_height();
-     mPointSize = PR_MIN(screenPixels * FONT_MAX_FONT_SCALE, mPointSize);
+     mPointSize = PR_MIN((screenPixels - 1) * FONT_MAX_FONT_SCALE, mPointSize);
+     mPointSize = PR_MIN(2000, mPointSize);
 +#endif
  
      // enumerate over the font names passed in

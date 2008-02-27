@@ -4575,14 +4575,6 @@ Index: config/system-headers
  fribidi/fribidi.h
  FSp_fopen.h
  fstream.h
-@@ -208,6 +209,7 @@
- gdk/gdkevents.h
- gdk/gdk.h
- gdk/gdkkeysyms.h
-+gdk/gdkpango.h
- gdk/gdkprivate.h
- gdk/gdkregion.h
- gdk/gdkwindow.h
 @@ -501,6 +503,7 @@
  pango/pangofc-fontmap.h
  pango/pango-fontmap.h
