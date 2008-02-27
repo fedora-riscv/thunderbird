@@ -7,8 +7,8 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        2.0.0.9
-Release:        2%{?dist}
+Version:        2.0.0.12
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -18,7 +18,7 @@ Group:          Applications/Internet
 %define tarball thunderbird-2.0.0.0rc1-source.tar.bz2
 %endif
 Source0:        %{tarball}
-Source1:        thunderbird-langpacks-%{version}-20071115.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20080226.tar.bz2
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
 Source12:       thunderbird-redhat-default-prefs.js
@@ -31,6 +31,7 @@ Source100:      find-external-requires
 # Build patches
 Patch1:         firefox-2.0-link-layout.patch
 Patch2:         firefox-1.0-prdtoa.patch
+Patch3:         thunderbird-2.0.0.12-gcc43.patch
 
 Patch10:        thunderbird-0.7.3-psfonts.patch
 Patch11:        thunderbird-0.7.3-gnome-uriloader.patch
@@ -102,6 +103,7 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %setup -q -n mozilla
 %patch1 -p1 -b .link-layout
 %patch2 -p0
+%patch3 -p0 -b .gcc43
 
 %patch10 -p1 -b .psfonts
 %patch11 -p1 -b .gnome-uriloader
@@ -178,9 +180,9 @@ make -f client.mk build
 
 DESTDIR=$RPM_BUILD_ROOT make install
 
-%{__mkdir_p} $RPM_BUILD_ROOT{%{_libdir},%{_bindir},%{_datadir}/applications}
+%{__mkdir_p} $RPM_BUILD_ROOT{%{_libdir},%{_bindir},%{_datadir}/applications,%{_datadir}/icons/hicolor/48x48/apps}
 
-%{__install} -p -D %{SOURCE22} $RPM_BUILD_ROOT%{_datadir}/pixmaps/%{name}.png
+%{__install} -p -D %{SOURCE22} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/48x48/apps/%{name}.png
 
 desktop-file-install --vendor mozilla \
   --dir $RPM_BUILD_ROOT%{_datadir}/applications \
@@ -258,17 +260,24 @@ touch $RPM_BUILD_ROOT%{mozappdir}/components/xpti.dat
 %{__rm} -rf $RPM_BUILD_ROOT
 
 %post
-update-desktop-database %{_datadir}/applications
+update-desktop-database &> /dev/null || :
+touch --no-create %{_datadir}/icons/hicolor
+if [ -x %{_bindir}/gtk-update-icon-cache ]; then
+  %{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor || :
+fi
 
 %postun
-update-desktop-database %{_datadir}/applications
-
+update-desktop-database &> /dev/null || :
+touch --no-create %{_datadir}/icons/hicolor
+if [ -x %{_bindir}/gtk-update-icon-cache ]; then
+  %{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor || :
+fi
 
 %files
 %defattr(-,root,root,-)
 %attr(755,root,root) %{_bindir}/thunderbird
 %attr(644,root,root) %{_datadir}/applications/mozilla-thunderbird.desktop
-%attr(644,root,root) %{_datadir}/pixmaps/thunderbird.png
+%attr(644,root,root) %{_datadir}/icons/hicolor/48x48/apps/thunderbird.png
 %dir %{mozappdir}
 %doc %{mozappdir}/LICENSE
 %{mozappdir}/chrome
@@ -308,6 +317,10 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Tue Feb 26 2008 Christopher Aillon <caillon@redhat.com> 2.0.0.12-1
+- Update to 2.0.0.12
+- Fix up icon location and some scriptlets
+
 * Sun Dec  9 2007 Christopher Aillon <caillon@redhat.com> 2.0.0.9-2
 - Fix some rpmlint warnings
 - Drop some old patches and obsoletes
