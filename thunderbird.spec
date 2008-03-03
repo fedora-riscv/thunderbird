@@ -8,7 +8,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        2.0.0.12
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -319,6 +319,9 @@ fi
 #===============================================================================
 
 %changelog
+* Mon Mar 03 2008 Martin Stransky <stransky@redhat.com> 2.0.0.12-2
+- Updated starting script (#426331)
+
 * Tue Feb 26 2008 Christopher Aillon <caillon@redhat.com> 2.0.0.12-1
 - Update to 2.0.0.12
 - Fix up icon location and some scriptlets

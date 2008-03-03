@@ -4,19 +4,34 @@
 # (based on the Mozilla RPM launch script)
 #
 
-MOZ_LIB_DIR="/usr/lib"
-if [ -x "/usr/lib64/thunderbird-TBIRD_VERSION/thunderbird-bin" ]
-then
-  MOZ_LIB_DIR="/usr/lib64"
+##
+## Variables
+##
+MOZ_ARCH=$(uname -m)
+case $MOZ_ARCH in
+        x86_64 | ia64 | s390 )
+                MOZ_LIB_DIR="/usr/lib64"
+                SECONDARY_LIB_DIR="/usr/lib"
+                ;;
+        * )
+                MOZ_LIB_DIR="/usr/lib"
+                SECONDARY_LIB_DIR="/usr/lib64"
+                ;;
+esac
+
+if [ ! -x $MOZ_LIB_DIR/thunderbird-TBIRD_VERSION/thunderbird ]; then
+    if [ ! -x $SECONDARY_LIB_DIR/thunderbird-TBIRD_VERSION/thunderbird ]; then
+        echo "Error: $MOZ_LIB_DIR/thunderbird-TBIRD_VERSION/thunderbird not found"
+        if [ -d $SECONDARY_LIB_DIR ]; then
+            echo "       $SECONDARY_LIB_DIR/thunderbird-TBIRD_VERSION/thunderbird not found"
+        fi
+        exit 1
+    fi
+    MOZ_LIB_DIR="$SECONDARY_LIB_DIR"
 fi
 
-MOZILLA_FIVE_HOME="$MOZ_LIB_DIR/thunderbird-TBIRD_VERSION"
-MRE_HOME="$MOZ_LIB_DIR/thunderbird-TBIRD_VERSION"
-export MOZILLA_FIVE_HOME MRE_HOME
-
-MOZ_PROGRAM=$MRE_HOME/thunderbird
-#MOZ_CLIENT_PROGRAM="$MRE_HOME/mozilla-xremote-client -a thunderbird"
-MOZ_CLIENT_PROGRAM="$MRE_HOME/thunderbird-bin -remote" 
+MOZ_DIST_BIN="$MOZ_LIB_DIR/thunderbird-TBIRD_VERSION"
+MOZ_PROGRAM="$MOZ_DIST_BIN/thunderbird"
 
 ##
 ## Set MOZ_ENABLE_PANGO is no longer used because Pango is enabled by default
@@ -25,74 +40,4 @@ MOZ_CLIENT_PROGRAM="$MRE_HOME/thunderbird-bin -remote"
 #MOZ_DISABLE_PANGO=1
 #export MOZ_DISABLE_PANGO
 
-
-function check_running() {
-    $MOZ_CLIENT_PROGRAM 'ping()' 2>/dev/null >/dev/null
-    RETURN_VAL=$?
-    if [ "$RETURN_VAL" -eq "2" ]; then
-      echo 0
-      return 0
-    else
-      echo 1
-      return 1
-    fi
-}
-
-function rm_shit() {
-    find $HOME/.thunderbird -name XUL.mfasl 2>/dev/null | xargs rm -f
-}
-
-# currently unused
-MOZARGS=""
-
-ALREADY_RUNNING=`check_running`
-
-# If no command-line arguments given...
-if [ -z "$1" ]; then
-    if [ "${ALREADY_RUNNING}" -eq "1" ]; then
-        exec $MOZ_CLIENT_PROGRAM "xfeDoCommand(openInbox)" >/dev/null 2>&1
-    else
-        rm_shit
-        exec $MOZ_PROGRAM $MOZARGS >/dev/null 2>&1
-    fi
-fi
-
-for arg in $@ ; do
-    case "$1" in
-    -remote)
-        shift
-        exec $MOZ_PROGRAM -remote "$@"
-        ;;
-
-    -mail)
-        shift
-        if [ "${ALREADY_RUNNING}" -eq "1" ]; then
-            # remove 'mailto:' prefix
-            ARGS="`echo $@ | sed 's/^mailto://'`"
-            exec $MOZ_CLIENT_PROGRAM "mailto($ARGS)"
-        else
-            rm_shit
-            exec $MOZ_PROGRAM $MOZARGS -mail "$@"
-        fi
-        ;;
-
-    -compose)
-        shift
-        if [ "${ALREADY_RUNNING}" -eq "1" ]; then
-            # remove 'mailto:' prefix
-            ARGS="`echo $@ | sed 's/^mailto://'`"
-            exec $MOZ_CLIENT_PROGRAM "mailto($ARGS)"
-        else
-            rm_shit
-            exec $MOZ_PROGRAM $MOZARGS -compose "$@"
-        fi
-        ;;
-
-    *)
-        # for now, pass it on and hope for the best
-        exec $MOZ_PROGRAM $MOZARGS "$@"
-        ;;
-    esac
-    shift
-done
-
+exec $MOZ_PROGRAM "$@"
