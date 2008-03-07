@@ -309,6 +309,9 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
+* Fri Mar 07 2008 Martin Stransky <stransky@redhat.com>
+- updated starting script, fixes #436410
+
 * Tue Feb 26 2008 Christopher Aillon <caillon@redhat.com> 2.0.0.12-1
 - Update to 2.0.0.12
 
