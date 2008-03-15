@@ -8,7 +8,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        2.0.0.12
-Release:        2%{?dist}
+Release:        3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -101,7 +101,9 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 #===============================================================================
 
 %prep
-%setup -q -n mozilla
+%setup -q -c
+cd mozilla
+
 %patch1 -p1 -b .link-layout
 %patch2 -p0
 %patch3 -p0 -b .gcc43
@@ -156,6 +158,7 @@ popd
 #===============================================================================
 
 %build
+cd mozilla
 
 # Build with -Os as it helps the browser; also, don't override mozilla's warning
 # level; they use -Wall but disable a few warnings that show up _everywhere_
@@ -179,6 +182,7 @@ make -f client.mk build
 
 %install
 %{__rm} -rf $RPM_BUILD_ROOT
+cd mozilla
 
 DESTDIR=$RPM_BUILD_ROOT make install
 
@@ -319,6 +323,9 @@ fi
 #===============================================================================
 
 %changelog
+* Sat Mar 15 2008 Christopher Aillon <caillon@redhat.com> 2.0.0.12-3
+- Avoid conflict between gecko debuginfos
+
 * Mon Mar 03 2008 Martin Stransky <stransky@redhat.com> 2.0.0.12-2
 - Updated starting script (#426331)
 
