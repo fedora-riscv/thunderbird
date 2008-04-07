@@ -8,7 +8,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        2.0.0.12
-Release:        3%{?dist}
+Release:        4%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -228,6 +228,7 @@ cd -
 %{__mkdir_p} $RPM_BUILD_ROOT%{_libdir}/mozilla/plugins
 
 # Install langpacks
+touch ../%{name}.lang
 %{__mkdir_p} $RPM_BUILD_ROOT%{mozappdir}/extensions
 %{__tar} xjf %{SOURCE1}
 for langpack in `ls thunderbird-langpacks/*.xpi`; do
@@ -250,6 +251,10 @@ for langpack in `ls thunderbird-langpacks/*.xpi`; do
   %{__rm} -rf locale
   cd -
   %{__rm} -rf $tmpdir
+
+  language=`echo $language | sed -e 's/-/_/g'`
+  extensiondir=`echo $extensiondir | sed -e "s,^$RPM_BUILD_ROOT,,"`
+  echo "%%lang($language) $extensiondir" >> ../%{name}.lang
 done
 %{__rm} -rf thunderbird-langpacks
 
@@ -279,7 +284,7 @@ if [ -x %{_bindir}/gtk-update-icon-cache ]; then
   %{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor || :
 fi
 
-%files
+%files -f %{name}.lang
 %defattr(-,root,root,-)
 %attr(755,root,root) %{_bindir}/thunderbird
 %attr(644,root,root) %{_datadir}/applications/mozilla-thunderbird.desktop
@@ -295,7 +300,8 @@ fi
 %attr(644,root,root) %{mozappdir}/components/*.js
 %{mozappdir}/defaults
 %{mozappdir}/dictionaries
-%{mozappdir}/extensions
+%dir %{mozappdir}/extensions
+%{mozappdir}/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}
 %{mozappdir}/greprefs
 %{mozappdir}/icons
 %{mozappdir}/init.d
@@ -323,6 +329,9 @@ fi
 #===============================================================================
 
 %changelog
+* Mon Apr  7 2008 Christopher Aillon <caillon@redhat.com> 2.0.0.12-4
+- Add %%lang attributes to langpacks
+
 * Sat Mar 15 2008 Christopher Aillon <caillon@redhat.com> 2.0.0.12-3
 - Avoid conflict between gecko debuginfos
 
