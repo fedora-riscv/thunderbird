@@ -8,7 +8,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        2.0.0.12
-Release:        4%{?dist}
+Release:        5%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -329,6 +329,9 @@ fi
 #===============================================================================
 
 %changelog
+* Fri Apr 18 2008 Christopher Aillon <caillon@redhat.com> - 2.0.0.12-5
+- rebuilt
+
 * Mon Apr  7 2008 Christopher Aillon <caillon@redhat.com> 2.0.0.12-4
 - Add %%lang attributes to langpacks
 
