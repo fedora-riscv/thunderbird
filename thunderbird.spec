@@ -8,7 +8,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        2.0.0.12
-Release:        5%{?dist}
+Release:        6%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -188,7 +188,7 @@ DESTDIR=$RPM_BUILD_ROOT make install
 
 %{__mkdir_p} $RPM_BUILD_ROOT{%{_libdir},%{_bindir},%{_datadir}/applications,%{_datadir}/icons/hicolor/48x48/apps}
 
-%{__install} -p -D %{SOURCE22} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/48x48/apps/%{name}.png
+%{__install} -p -D %{SOURCE22} $RPM_BUILD_ROOT%{_datadir}/pixmaps/%{name}.png
 
 desktop-file-install --vendor mozilla \
   --dir $RPM_BUILD_ROOT%{_datadir}/applications \
@@ -288,7 +288,7 @@ fi
 %defattr(-,root,root,-)
 %attr(755,root,root) %{_bindir}/thunderbird
 %attr(644,root,root) %{_datadir}/applications/mozilla-thunderbird.desktop
-%attr(644,root,root) %{_datadir}/icons/hicolor/48x48/apps/thunderbird.png
+%attr(644,root,root) %{_datadir}/pixmaps/thunderbird.png
 %dir %{mozappdir}
 %doc %{mozappdir}/LICENSE
 %{mozappdir}/chrome
@@ -329,6 +329,9 @@ fi
 #===============================================================================
 
 %changelog
+* Fri Apr 18 2008 Christopher Aillon <caillon@redhat.com> - 2.0.0.12-6
+- Icon belongs in _datadir/pixmaps
+
 * Fri Apr 18 2008 Christopher Aillon <caillon@redhat.com> - 2.0.0.12-5
 - rebuilt
 
