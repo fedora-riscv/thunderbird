@@ -7,8 +7,8 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        2.0.0.12
-Release:        6%{?dist}
+Version:        2.0.0.14
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -18,7 +18,7 @@ Group:          Applications/Internet
 %define tarball thunderbird-2.0.0.0rc1-source.tar.bz2
 %endif
 Source0:        %{tarball}
-Source1:        thunderbird-langpacks-%{version}-20080226.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20080501.tar.bz2
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
 Source12:       thunderbird-redhat-default-prefs.js
@@ -31,8 +31,6 @@ Source100:      find-external-requires
 # Build patches
 Patch1:         firefox-2.0-link-layout.patch
 Patch2:         firefox-1.0-prdtoa.patch
-Patch3:         thunderbird-2.0.0.12-gcc43.patch
-Patch4:         thunderbird-2.0.0.12-SECAlgorithmID.patch
 
 Patch10:        thunderbird-0.7.3-psfonts.patch
 Patch11:        thunderbird-0.7.3-gnome-uriloader.patch
@@ -106,8 +104,6 @@ cd mozilla
 
 %patch1 -p1 -b .link-layout
 %patch2 -p0
-%patch3 -p0 -b .gcc43
-%patch4 -p1 -b .SECAlgorithmID
 
 %patch10 -p1 -b .psfonts
 %patch11 -p1 -b .gnome-uriloader
@@ -262,6 +258,10 @@ done
 # Copy over the LICENSE
 install -c -m 644 LICENSE $RPM_BUILD_ROOT%{mozappdir}
 
+# Use the system hunspell dictionaries
+%{__rm} -rf $RPM_BUILD_ROOT/%{mozappdir}/dictionaries
+ln -s %{_datadir}/myspell $RPM_BUILD_ROOT%{mozappdir}/dictionaries
+
 # ghost files
 touch $RPM_BUILD_ROOT%{mozappdir}/components/compreg.dat
 touch $RPM_BUILD_ROOT%{mozappdir}/components/xpti.dat
@@ -329,6 +329,10 @@ fi
 #===============================================================================
 
 %changelog
+* Thu May  1 2008 Christopher Aillon <caillon@redhat.com> - 2.0.0.14-1
+- Update to 2.0.0.14
+- Use the system dictionaries
+
 * Fri Apr 18 2008 Christopher Aillon <caillon@redhat.com> - 2.0.0.12-6
 - Icon belongs in _datadir/pixmaps
 
