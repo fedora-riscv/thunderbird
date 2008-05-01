@@ -309,7 +309,7 @@ update-desktop-database %{_datadir}/applications
 #===============================================================================
 
 %changelog
-* Thu May  2 2008 Christopher Aillon <caillon@redhat.com> 2.0.0.14-1
+* Thu May  1 2008 Christopher Aillon <caillon@redhat.com> 2.0.0.14-1
 - Update to 2.0.0.14
 
 * Fri Mar 07 2008 Martin Stransky <stransky@redhat.com>
