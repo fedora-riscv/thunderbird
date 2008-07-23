@@ -7,7 +7,7 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        2.0.0.14
+Version:        2.0.0.16
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
@@ -18,7 +18,7 @@ Group:          Applications/Internet
 %define tarball thunderbird-2.0.0.0rc1-source.tar.bz2
 %endif
 Source0:        %{tarball}
-Source1:        thunderbird-langpacks-%{version}-20080501.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20080723.tar.bz2
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
 Source12:       thunderbird-redhat-default-prefs.js
@@ -329,14 +329,17 @@ fi
 #===============================================================================
 
 %changelog
-* Thu May  1 2008 Christopher Aillon <caillon@redhat.com> - 2.0.0.14-1
+* Wed Jul 23 2008 Christopher Aillon <caillon@redhat.com> 2.0.0.16-1
+- Update to 2.0.0.16
+
+* Thu May  1 2008 Christopher Aillon <caillon@redhat.com> 2.0.0.14-1
 - Update to 2.0.0.14
 - Use the system dictionaries
 
-* Fri Apr 18 2008 Christopher Aillon <caillon@redhat.com> - 2.0.0.12-6
+* Fri Apr 18 2008 Christopher Aillon <caillon@redhat.com> 2.0.0.12-6
 - Icon belongs in _datadir/pixmaps
 
-* Fri Apr 18 2008 Christopher Aillon <caillon@redhat.com> - 2.0.0.12-5
+* Fri Apr 18 2008 Christopher Aillon <caillon@redhat.com> 2.0.0.12-5
 - rebuilt
 
 * Mon Apr  7 2008 Christopher Aillon <caillon@redhat.com> 2.0.0.12-4
