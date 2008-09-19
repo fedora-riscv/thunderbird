@@ -1,10 +1,10 @@
 Index: layout/base/nsPresContext.cpp
 ===================================================================
 RCS file: /cvsroot/mozilla/layout/base/nsPresContext.cpp,v
-retrieving revision 3.288.12.2.4.1
-diff -d -u -p -r3.288.12.2.4.1 nsPresContext.cpp
---- layout/base/nsPresContext.cpp	21 Apr 2006 23:30:50 -0000	3.288.12.2.4.1
-+++ layout/base/nsPresContext.cpp	26 Sep 2006 19:26:40 -0000
+retrieving revision 3.288.12.5
+diff -d -u -p -r3.288.12.5 nsPresContext.cpp
+--- layout/base/nsPresContext.cpp	17 May 2006 07:56:35 -0000	3.288.12.5
++++ layout/base/nsPresContext.cpp	19 Sep 2008 16:33:31 -0000
 @@ -73,6 +73,9 @@
  #include "nsIDOMDocument.h"
  #include "nsAutoPtr.h"
@@ -41,7 +41,7 @@ diff -d -u -p -r3.288.12.2.4.1 nsPresContext.cpp
  void
  nsPresContext::GetFontPreferences()
  {
-@@ -709,6 +724,9 @@ nsPresContext::Init(nsIDeviceContext* aD
+@@ -716,6 +731,9 @@ nsPresContext::Init(nsIDeviceContext* aD
                                         this);
  #endif
  
@@ -51,7 +51,7 @@ diff -d -u -p -r3.288.12.2.4.1 nsPresContext.cpp
    // Initialize our state from the user preferences
    GetUserPreferences();
  
-@@ -1180,33 +1198,126 @@ nsPresContext::GetTheme()
+@@ -1197,33 +1215,126 @@ nsPresContext::GetTheme()
  void
  nsPresContext::ThemeChanged()
  {
@@ -187,7 +187,7 @@ diff -d -u -p -r3.288.12.2.4.1 nsPresContext.cpp
  
    // Clear out all of the style data since it may contain RGB values
    // which originated from system colors.
-@@ -1222,7 +1333,17 @@ nsPresContext::SysColorChanged()
+@@ -1239,7 +1350,17 @@ nsPresContext::SysColorChanged()
    // data without reflowing/updating views will lead to incorrect change hints
    // later, because when generating change hints, any style structs which have
    // been cleared and not reread are assumed to not be used at all.
@@ -209,10 +209,10 @@ diff -d -u -p -r3.288.12.2.4.1 nsPresContext.cpp
 Index: layout/base/nsPresContext.h
 ===================================================================
 RCS file: /cvsroot/mozilla/layout/base/nsPresContext.h,v
-retrieving revision 3.150.4.2
-diff -d -u -p -r3.150.4.2 nsPresContext.h
---- layout/base/nsPresContext.h	29 Aug 2005 16:15:39 -0000	3.150.4.2
-+++ layout/base/nsPresContext.h	26 Sep 2006 19:26:40 -0000
+retrieving revision 3.150.4.3
+diff -d -u -p -r3.150.4.3 nsPresContext.h
+--- layout/base/nsPresContext.h	29 Aug 2007 23:07:47 -0000	3.150.4.3
++++ layout/base/nsPresContext.h	19 Sep 2008 16:33:31 -0000
 @@ -56,6 +56,7 @@
  #include "nsCRT.h"
  #include "nsIPrintSettings.h"
@@ -229,8 +229,8 @@ diff -d -u -p -r3.150.4.2 nsPresContext.h
  class nsICSSPseudoComparator;
  class nsIAtom;
  struct nsStyleStruct;
-@@ -627,6 +629,14 @@ public:
-   const nscoord* GetBorderWidthTable() { return mBorderWidthTable; }
+@@ -630,6 +632,14 @@ public:
+   PRBool IsChrome();
  
  protected:
 +  static NS_HIDDEN_(void*) PR_CALLBACK ThemeChangedInternal(PLEvent* aEvent);
@@ -244,7 +244,7 @@ diff -d -u -p -r3.150.4.2 nsPresContext.h
    NS_HIDDEN_(void) SetImgAnimations(nsIContent *aParent, PRUint16 aMode);
    NS_HIDDEN_(void) GetDocumentColorPreferences();
  
-@@ -654,6 +664,7 @@ protected:
+@@ -657,6 +667,7 @@ protected:
                                          // from gfx back to layout.
    nsIEventStateManager* mEventManager;  // [STRONG]
    nsILookAndFeel*       mLookAndFeel;   // [STRONG]
@@ -252,7 +252,7 @@ diff -d -u -p -r3.150.4.2 nsPresContext.h
    nsIAtom*              mMedium;        // initialized by subclass ctors;
                                          // weak pointer to static atom
  
-@@ -724,6 +735,8 @@ protected:
+@@ -727,6 +738,8 @@ protected:
    unsigned              mCanPaginatedScroll : 1;
    unsigned              mDoScaledTwips : 1;
    unsigned              mEnableJapaneseTransform : 1;
