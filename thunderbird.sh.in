@@ -40,4 +40,10 @@ MOZ_PROGRAM="$MOZ_DIST_BIN/thunderbird"
 #MOZ_DISABLE_PANGO=1
 #export MOZ_DISABLE_PANGO
 
+##
+## Disable the GNOME crash dialog, Moz has it's own
+## 
+GNOME_DISABLE_CRASH_DIALOG=1
+export GNOME_DISABLE_CRASH_DIALOG
+
 exec $MOZ_PROGRAM "$@"

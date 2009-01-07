@@ -8,7 +8,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        2.0.0.19
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -329,6 +329,9 @@ fi
 #===============================================================================
 
 %changelog
+* Wed Jan 07 2009 Christopher Aillon <caillon@redhat.com> - 2.0.0.19-2
+- Disable the crash dialog
+
 * Mon Jan  5 2009 Christopher Aillon <caillon@redhat.com> 2.0.0.19-1
 - Update to 2.0.0.19
 
