@@ -49,7 +49,7 @@ Requires:       nss >= %{nss_version}
 %if 0%{?rhel} >= 5
 Requires:       launchmail
 %endif
-BuildRequires:  autoconf >= %{autoconf_version}
+BuildRequires:  autoconf = %{autoconf_version}
 BuildRequires:  cairo-devel >= %{cairo_version}
 BuildRequires:  libpng-devel, libjpeg-devel, gtk2-devel
 BuildRequires:  zlib-devel, gzip, zip, unzip
