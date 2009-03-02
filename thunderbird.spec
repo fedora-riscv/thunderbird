@@ -7,18 +7,18 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        2.0.0.18
-Release:        3%{?dist}
+Version:        3.0
+Release:        1.beta2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 %if %{official_branding}
-%define tarball thunderbird-%{version}-source.tar.bz2
+%define tarball thunderbird-%{version}b2-source.tar.bz2
 %else
-%define tarball thunderbird-2.0.0.0rc1-source.tar.bz2
+%define tarball thunderbird-3.0b2-source.tar.bz2
 %endif
 Source0:        %{tarball}
-Source1:        thunderbird-langpacks-%{version}-20081119.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20090302.tar.bz2
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
 Source12:       thunderbird-redhat-default-prefs.js
@@ -28,35 +28,8 @@ Source22:       thunderbird.png
 Source30:       thunderbird-open-browser.sh
 Source100:      find-external-requires
 
-# Build patches
-Patch1:         firefox-2.0-link-layout.patch
-Patch2:         firefox-1.0-prdtoa.patch
-
-Patch10:        thunderbird-0.7.3-psfonts.patch
-Patch11:        thunderbird-0.7.3-gnome-uriloader.patch
-
-# customization patches
-Patch24:        thunderbird-2.0-default-applications.patch
-
-# local bugfixes
-Patch40:        firefox-1.5-bullet-bill.patch
-Patch41:        firefox-2.0.0.4-undo-uriloader.patch
-Patch42:        firefox-1.1-uriloader.patch
-
-# font system fixes
-Patch83:        firefox-1.5-pango-cursor-position.patch
-Patch84:        firefox-2.0-pango-printing.patch
-Patch85:        firefox-1.5-pango-cursor-position-more.patch
-Patch86:        firefox-1.5-pango-justified-range.patch
-Patch87:        firefox-1.5-pango-underline.patch
-Patch88:        firefox-1.5-xft-rangewidth.patch
-Patch89:        firefox-2.0-pango-ligatures.patch
-
-# Other 
-Patch102:       firefox-1.5-theme-change.patch
-Patch103:       thunderbird-1.5-profile-migrator.patch
-Patch111:       thunderbird-path.patch
-Patch112:       thunderbird-2.0-enable-debug.patch
+Patch1:         mozilla-jemalloc.patch
+Patch2:         thunderbird-shared-error.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -87,7 +60,7 @@ BuildRequires:  libXt-devel
 BuildRequires:  libXrender-devel
 Requires:       desktop-file-utils >= %{desktop_file_utils_version}
 
-%define mozappdir %{_libdir}/thunderbird-%{version}
+%define mozappdir %{_libdir}/thunderbird-%{version}b2
 
 AutoProv: 0
 %define _use_internal_dependency_generator 0
@@ -100,39 +73,10 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 
 %prep
 %setup -q -c
-cd mozilla
+#cd mozilla
 
-%patch1 -p1 -b .link-layout
-%patch2 -p0
-
-%patch10 -p1 -b .psfonts
-%patch11 -p1 -b .gnome-uriloader
-%patch24 -p1 -b .default-applications
-%patch40 -p1
-%patch41 -p1
-%patch42 -p0
-
-# font system fixes
-%patch83 -p1 -b .pango-cursor-position
-%patch84 -p0 -b .pango-printing
-%patch85 -p1 -b .pango-cursor-position-more
-%patch86 -p1 -b .pango-justified-range
-%patch87 -p1 -b .pango-underline
-%patch88 -p1 -b .nopangoxft2
-%patch89 -p1 -b .pango-ligatures
-pushd gfx/src/ps
-  # This sort of sucks, but it works for now.
-  ln -s ../gtk/nsFontMetricsPango.h .
-  ln -s ../gtk/nsFontMetricsPango.cpp .
-  ln -s ../gtk/mozilla-decoder.h .
-  ln -s ../gtk/mozilla-decoder.cpp .
-popd
-
-
-%patch102 -p0 -b .theme-change
-%patch103 -p1 -b .profile-migrator
-%patch111 -p1 -b .path
-%patch112 -p1 -b .debug
+%patch1 -p0 -b .jemalloc
+%patch2 -p1 -b .shared-error
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -154,7 +98,7 @@ popd
 #===============================================================================
 
 %build
-cd mozilla
+#cd mozilla
 
 # Build with -Os as it helps the browser; also, don't override mozilla's warning
 # level; they use -Wall but disable a few warnings that show up _everywhere_
@@ -178,10 +122,12 @@ make -f client.mk build
 
 %install
 %{__rm} -rf $RPM_BUILD_ROOT
-cd mozilla
+#cd mozilla
 
+cd objdir-tb
 DESTDIR=$RPM_BUILD_ROOT make install
 
+cd -
 %{__mkdir_p} $RPM_BUILD_ROOT{%{_libdir},%{_bindir},%{_datadir}/applications,%{_datadir}/icons/hicolor/48x48/apps}
 
 %{__install} -p -D %{SOURCE22} $RPM_BUILD_ROOT%{_datadir}/pixmaps/%{name}.png
@@ -192,20 +138,22 @@ desktop-file-install --vendor mozilla \
   --add-category Email \
   %{SOURCE20}
 
+
 # set up the thunderbird start script
-%{__cat} %{SOURCE21} | %{__sed} -e 's,TBIRD_VERSION,%{version},g' > \
+rm -f $RPM_BUILD_ROOT/%{_bindir}/thunderbird
+%{__cat} %{SOURCE21} | %{__sed} -e 's,TBIRD_VERSION,%{version}b2,g' > \
   $RPM_BUILD_ROOT%{_bindir}/thunderbird
 %{__chmod} 755 $RPM_BUILD_ROOT/%{_bindir}/thunderbird
 
-install -m755 %{SOURCE30} $RPM_BUILD_ROOT/%{mozappdir}/open-browser.sh
+install -Dm755 %{SOURCE30} $RPM_BUILD_ROOT/%{mozappdir}/open-browser.sh
 %{__sed} -i -e 's|LIBDIR|%{_libdir}|g' $RPM_BUILD_ROOT/%{mozappdir}/open-browser.sh
 
 # set up our default preferences
 %{__cat} %{SOURCE12} | %{__sed} -e 's,THUNDERBIRD_RPM_VR,%{version}-%{release},g' \
                                 -e 's,COMMAND,%{mozappdir}/open-browser.sh,g' > \
         $RPM_BUILD_ROOT/rh-default-prefs
-%{__cp} $RPM_BUILD_ROOT/rh-default-prefs $RPM_BUILD_ROOT/%{mozappdir}/greprefs/all-redhat.js
-%{__cp} $RPM_BUILD_ROOT/rh-default-prefs $RPM_BUILD_ROOT/%{mozappdir}/defaults/pref/all-redhat.js
+%{__install} -D $RPM_BUILD_ROOT/rh-default-prefs $RPM_BUILD_ROOT/%{mozappdir}/greprefs/all-redhat.js
+%{__install} -D $RPM_BUILD_ROOT/rh-default-prefs $RPM_BUILD_ROOT/%{mozappdir}/defaults/pref/all-redhat.js
 %{__rm} $RPM_BUILD_ROOT/rh-default-prefs
 
 %{__rm} -f $RPM_BUILD_ROOT%{_bindir}/thunderbird-config
@@ -217,6 +165,8 @@ cd -
 %{__mkdir_p} $RPM_BUILD_ROOT%{mozappdir}/chrome/icons/default/
 %{__cp} other-licenses/branding/%{name}/default.xpm \
         $RPM_BUILD_ROOT%{mozappdir}/chrome/icons/default/
+
+%{__mkdir_p} $RPM_BUILD_ROOT%{mozappdir}/icons/
 %{__cp} other-licenses/branding/%{name}/default.xpm \
         $RPM_BUILD_ROOT%{mozappdir}/icons/
 
@@ -224,7 +174,9 @@ cd -
 %{__mkdir_p} $RPM_BUILD_ROOT%{_libdir}/mozilla/plugins
 
 # Install langpacks
-touch ../%{name}.lang
+%{__rm} -f %{name}.lang # Delete for --short-circuit option
+touch %{name}.lang
+
 %{__mkdir_p} $RPM_BUILD_ROOT%{mozappdir}/extensions
 %{__tar} xjf %{SOURCE1}
 for langpack in `ls thunderbird-langpacks/*.xpi`; do
@@ -250,19 +202,22 @@ for langpack in `ls thunderbird-langpacks/*.xpi`; do
 
   language=`echo $language | sed -e 's/-/_/g'`
   extensiondir=`echo $extensiondir | sed -e "s,^$RPM_BUILD_ROOT,,"`
-  echo "%%lang($language) $extensiondir" >> ../%{name}.lang
+  echo "%%lang($language) $extensiondir" >> %{name}.lang
 done
 %{__rm} -rf thunderbird-langpacks
 
 
 # Copy over the LICENSE
+cd mozilla
 install -c -m 644 LICENSE $RPM_BUILD_ROOT%{mozappdir}
+cd -
 
 # Use the system hunspell dictionaries
 %{__rm} -rf $RPM_BUILD_ROOT/%{mozappdir}/dictionaries
 ln -s %{_datadir}/myspell $RPM_BUILD_ROOT%{mozappdir}/dictionaries
 
 # ghost files
+%{__mkdir_p} $RPM_BUILD_ROOT%{mozappdir}/components
 touch $RPM_BUILD_ROOT%{mozappdir}/components/compreg.dat
 touch $RPM_BUILD_ROOT%{mozappdir}/components/xpti.dat
 
@@ -304,31 +259,39 @@ fi
 %{mozappdir}/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}
 %{mozappdir}/greprefs
 %{mozappdir}/icons
-%{mozappdir}/init.d
 %{mozappdir}/isp
 %{mozappdir}/mozilla-xremote-client
 %{mozappdir}/open-browser.sh
-%{mozappdir}/regxpcom
 %{mozappdir}/res
 %{mozappdir}/run-mozilla.sh
 %{mozappdir}/thunderbird-bin
 %{mozappdir}/thunderbird
 %{mozappdir}/updater
 %{mozappdir}/*.so
-
-%exclude %{_includedir}/%{name}-%{version}
-%exclude %{_datadir}/idl/%{name}-%{version}
-%exclude %{_libdir}/pkgconfig/*.pc
-%exclude %{mozappdir}/TestGtkEmbed
-%exclude %{mozappdir}/xpidl
-%exclude %{mozappdir}/xpcshell
-%exclude %{mozappdir}/xpt_dump
-%exclude %{mozappdir}/xpt_link
-%exclude %{mozappdir}/xpicleanup
+%dir %{mozappdir}/modules
+%{mozappdir}/modules/*.jsm
+%{mozappdir}/modules/*.js
+%dir %{mozappdir}/modules/gloda
+%{mozappdir}/modules/gloda/*.js
+%dir %{mozappdir}/modules/activity
+%{mozappdir}/modules/activity/*.js
+%{mozappdir}/README.txt
+%{mozappdir}/platform.ini
+%{mozappdir}/updater.ini
+%{mozappdir}/application.ini
+%exclude %{mozappdir}/LICENSE.txt
+%exclude %{mozappdir}/license.html
+%exclude %{mozappdir}/dependentlibs.list
+%exclude %{mozappdir}/removed-files
 
 #===============================================================================
 
 %changelog
+* Mon Mar  2 2009 Jan Horak <jhorak@redhat.com> - 3.0-1.beta2
+- Update to 3.0 beta2
+- Removed creation of thunderbird start script by rpmbuild
+- Added Patch2 to build correctly when building with --enable-shared option 
+
 * Wed Feb 25 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.0.0.18-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
 
