@@ -2,6 +2,7 @@
 %define nspr_version 4.6
 %define nss_version 3.10
 %define cairo_version 1.0
+%define autoconf_version 2.13
 
 %define official_branding 1
 
@@ -48,6 +49,7 @@ Requires:       nss >= %{nss_version}
 %if 0%{?rhel} >= 5
 Requires:       launchmail
 %endif
+BuildRequires:  autoconf >= %{autoconf_version}
 BuildRequires:  cairo-devel >= %{cairo_version}
 BuildRequires:  libpng-devel, libjpeg-devel, gtk2-devel
 BuildRequires:  zlib-devel, gzip, zip, unzip
