@@ -1,0 +1,39 @@
+diff -upU8 thunderbird-3.0/mail/installer/Makefile.in.shared-error thunderbird-3.0/mail/installer/Makefile.in
+--- thunderbird-3.0/mail/installer/Makefile.in.shared-error	2009-02-24 03:16:03.000000000 +0100
++++ thunderbird-3.0/mail/installer/Makefile.in	2009-02-27 16:02:31.000000000 +0100
+@@ -56,16 +56,17 @@ NO_PKG_FILES = \
+ 	PalmSyncInstall.exe \
+ 	$(NULL)
+ 
+ include $(topsrcdir)/config/rules.mk
+ 
+ MOZ_PKG_REMOVALS = $(srcdir)/removed-files.in
+ 
+ ifdef BUILD_STATIC_LIBS
++ifeq (BUILD_STATIC_LIBS, 1)
+ ifeq (WINNT,$(OS_ARCH))
+ MOZ_PKG_MANIFEST_P = $(srcdir)/windows/packages-static
+ endif
+ else
+ $(error you need a "--enable-static --disable-shared" build to create an installer)
+ endif
+ 
+ MOZ_NONLOCALIZED_PKG_LIST = \
+@@ -80,16 +81,17 @@ MOZ_LOCALIZED_PKG_LIST = $(AB_CD)
+ DEFINES += -DAB_CD=$(AB_CD)
+ 
+ ifdef MOZ_PKG_MANIFEST_P
+ MOZ_PKG_MANIFEST = packages-static
+ 
+ $(MOZ_PKG_MANIFEST): $(MOZ_PKG_MANIFEST_P)
+ 	$(PERL) $(MOZILLA_SRCDIR)/config/preprocessor.pl $(DEFINES) $(ACDEFINES) $< > $@
+ endif
++endif
+ 
+ ifneq (,$(filter mac cocoa,$(MOZ_WIDGET_TOOLKIT)))
+ MOZ_PKG_MAC_DSSTORE=branding/dsstore
+ MOZ_PKG_MAC_BACKGROUND=branding/background.png
+ MOZ_PKG_MAC_ICON=branding/disk.icns
+ MOZ_PKG_MAC_EXTRA=--symlink "/Applications:/ "
+ endif
+ 
