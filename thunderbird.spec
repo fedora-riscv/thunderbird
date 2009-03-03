@@ -48,9 +48,6 @@ Patch4:         thunderbird-pango.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires:       nspr >= %{nspr_version}
 Requires:       nss >= %{nss_version}
-#%if 0%{?rhel} >= 5
-#Requires:       launchmail
-#%endif
 BuildRequires:  libcurl-devel
 BuildRequires:  cairo-devel >= %{cairo_version}
 BuildRequires:  dbus-glib-devel >= %{dbus_glib_version}
@@ -299,7 +296,6 @@ fi
 %changelog
 * Mon Mar  2 2009 Jan Horak <jhorak@redhat.com> - 3.0-1.beta2
 - Update to 3.0 beta2
-- Removed creation of thunderbird start script by rpmbuild
 - Added Patch2 to build correctly when building with --enable-shared option 
 
 * Wed Feb 25 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.0.0.18-3
