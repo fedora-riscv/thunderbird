@@ -48,11 +48,9 @@ Patch4:         thunderbird-pango.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires:       nspr >= %{nspr_version}
 Requires:       nss >= %{nss_version}
-%if 0%{?rhel} >= 5
-Requires:       launchmail
-%endif
-BuildRequires:  autoconf213
-BuildRequires:  alsa-lib-devel
+#%if 0%{?rhel} >= 5
+#Requires:       launchmail
+#%endif
 BuildRequires:  libcurl-devel
 BuildRequires:  cairo-devel >= %{cairo_version}
 BuildRequires:  dbus-glib-devel >= %{dbus_glib_version}
@@ -66,6 +64,8 @@ BuildRequires:  pango-devel >= 1.22
 BuildRequires:  freetype-devel >= 2.1.9
 BuildRequires:  libXt-devel
 BuildRequires:  libXrender-devel
+BuildRequires:  alsa-lib-devel
+BuildRequires:  autoconf213
 Requires:       desktop-file-utils >= %{desktop_file_utils_version}
 
 %define mozappdir %{_libdir}/thunderbird-%{version}b2
