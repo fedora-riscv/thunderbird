@@ -1,0 +1,50 @@
+diff -upU8 thunderbird-3.0/mozilla/gfx/thebes/src/gfxPangoFonts.cpp.pango-fix thunderbird-3.0/mozilla/gfx/thebes/src/gfxPangoFonts.cpp
+--- thunderbird-3.0/mozilla/gfx/thebes/src/gfxPangoFonts.cpp.pango-fix	2009-03-03 12:04:16.000000000 +0100
++++ thunderbird-3.0/mozilla/gfx/thebes/src/gfxPangoFonts.cpp	2009-03-03 12:05:37.000000000 +0100
+@@ -1798,22 +1798,21 @@ gfx_pango_font_map_context_substitute(Pa
+     double size = pango_font_description_get_size(desc) / FLOAT_PANGO_SCALE;
+     gfxPangoFontGroup *fontGroup = GetFontGroup(context);
+     PRBool usePrinterFont = fontGroup && fontGroup->GetStyle()->printerFont;
+     PrepareSortPattern(pattern, size, 1.0, usePrinterFont);
+ }
+ 
+ static PangoFcFont *
+ gfx_pango_font_map_create_font(PangoFcFontMap *fontmap,
+-                               PangoContext *context,
+-                               const PangoFontDescription *desc,
+-                               FcPattern *pattern)
++                               PangoFcFontKey *fontkey)
+ {
++    const FcPattern *p_pattern = pango_fc_font_key_get_pattern(fontkey);
+     return PANGO_FC_FONT(g_object_new(GFX_TYPE_PANGO_FC_FONT,
+-                                      "pattern", pattern, NULL));
++                                      "pattern", p_pattern, NULL));
+ }
+ 
+ static void
+ gfx_pango_font_map_class_init(gfxPangoFontMapClass *klass)
+ {
+     // inherit GObjectClass::finalize from parent as this class adds no data.
+ 
+     PangoFontMapClass *fontmap_class = PANGO_FONT_MAP_CLASS (klass);
+@@ -1823,19 +1822,18 @@ gfx_pango_font_map_class_init(gfxPangoFo
+     fontmap_class->load_fontset = gfx_pango_font_map_load_fontset;
+     // inherit fontmap_class->shape_engine_type from PangoFcFontMap
+ 
+     PangoFcFontMapClass *fcfontmap_class = PANGO_FC_FONT_MAP_CLASS (klass);
+     fcfontmap_class->get_resolution = gfx_pango_font_map_get_resolution;
+     // context_key_* virtual functions are only necessary if we want to
+     // dynamically respond to changes in the screen cairo_font_options_t.
+ 
+-    // context_substitute and get_font are not likely to be used but
++    // get_font are not likely to be used but
+     //   implemented because the class makes them available.
+-    fcfontmap_class->context_substitute = gfx_pango_font_map_context_substitute;
+     fcfontmap_class->create_font = gfx_pango_font_map_create_font;
+ }
+ 
+ /**
+  ** gfxPangoFontGroup
+  **/
+ 
+ struct FamilyCallbackData {

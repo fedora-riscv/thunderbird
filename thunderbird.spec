@@ -3,7 +3,6 @@
 %define nss_version 3.10
 %define cairo_version 1.0
 %define dbus_glib_version 0.6
-%define autoconf_version 2.13
 
 %define official_branding 1
 
@@ -33,6 +32,7 @@ Source100:      find-external-requires
 Patch1:         mozilla-jemalloc.patch
 Patch2:         thunderbird-shared-error.patch
 Patch3:         xulrunner-elif.patch
+Patch4:         thunderbird-pango.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -51,7 +51,7 @@ Requires:       nss >= %{nss_version}
 %if 0%{?rhel} >= 5
 Requires:       launchmail
 %endif
-BuildRequires:  autoconf213 >= %{autoconf_version}
+BuildRequires:  autoconf213
 BuildRequires:  alsa-lib-devel
 BuildRequires:  libcurl-devel
 BuildRequires:  cairo-devel >= %{cairo_version}
@@ -86,6 +86,7 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %patch1 -p0 -b .jemalloc
 %patch2 -p1 -b .shared-error
 %patch3 -p0 -b .xulrunner-elif
+%patch4 -p1 -b .pango-fix
 
 %if %{official_branding}
 # Required by Mozilla Corporation
