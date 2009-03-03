@@ -118,11 +118,11 @@ export RPM_OPT_FLAGS=$MOZ_OPT_FLAGS
 export PREFIX='%{_prefix}'
 export LIBDIR='%{_libdir}'
 
-%ifarch ppc ppc64 s390 s390x
-%define moz_make_flags -j1
-%else
-%define moz_make_flags %{?_smp_mflags}
-%endif
+#%ifarch ppc ppc64 s390 s390x
+#%define moz_make_flags -j1
+#%else
+#%define moz_make_flags %{?_smp_mflags}
+#%endif
 
 export LDFLAGS="-Wl,-rpath,%{mozappdir}"
 export MAKE="gmake %{moz_make_flags}"
