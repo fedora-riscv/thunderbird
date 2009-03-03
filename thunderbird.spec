@@ -115,6 +115,7 @@ export RPM_OPT_FLAGS=$MOZ_OPT_FLAGS
 export PREFIX='%{_prefix}'
 export LIBDIR='%{_libdir}'
 
+%define moz_make_flags -j1
 #%ifarch ppc ppc64 s390 s390x
 #%define moz_make_flags -j1
 #%else
