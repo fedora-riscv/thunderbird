@@ -9,7 +9,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.0
-Release:        1.beta2%{?dist}
+Release:        2.beta2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -63,6 +63,9 @@ BuildRequires:  libXt-devel
 BuildRequires:  libXrender-devel
 BuildRequires:  alsa-lib-devel
 BuildRequires:  autoconf213
+BuildRequires:  GConf2-devel
+BuildRequires:  gnome-vfs2-devel
+BuildRequires:  libgnomeui-devel
 Requires:       desktop-file-utils >= %{desktop_file_utils_version}
 
 %define mozappdir %{_libdir}/thunderbird-%{version}b2
@@ -295,6 +298,10 @@ fi
 #===============================================================================
 
 %changelog
+* Tue Mar 17 2009 Jan Horak <jhorak@redhat.com> - 3.0-2.beta2
+- Fixed clicked link does not open in browser (#489120)
+- Fixed missing help in thunderbird (#488885)
+
 * Mon Mar  2 2009 Jan Horak <jhorak@redhat.com> - 3.0-1.beta2
 - Update to 3.0 beta2
 - Added Patch2 to build correctly when building with --enable-shared option 
