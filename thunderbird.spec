@@ -9,7 +9,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.0
-Release:        2.beta2%{?dist}
+Release:        2.1.beta2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -298,6 +298,9 @@ fi
 #===============================================================================
 
 %changelog
+* Mon Mar 23 2009 Christopher Aillon <caillon@redhat.com> - 3.0-2.1.beta2
+- Disable the default app nag dialog
+
 * Tue Mar 17 2009 Jan Horak <jhorak@redhat.com> - 3.0-2.beta2
 - Fixed clicked link does not open in browser (#489120)
 - Fixed missing help in thunderbird (#488885)

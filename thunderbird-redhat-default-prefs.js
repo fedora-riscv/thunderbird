@@ -4,6 +4,7 @@ pref("browser.display.use_system_colors",   true);
 pref("general.useragent.vendor", "Fedora");
 pref("general.useragent.vendorSub", "THUNDERBIRD_RPM_VR");
 pref("intl.locale.matchOS", true);
+pref("mail.shell.checkDefaultClient", false);
 
 # Make hyperlinks work
 pref("network.protocol-handler.app.http", "COMMAND");
