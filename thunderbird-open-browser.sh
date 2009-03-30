@@ -40,9 +40,9 @@ if [ -z $url ]; then
     url=about:blank
 fi
 
-# Use gnome-open if it exists (Gnome 2.6+ only)
-if [ -f /usr/bin/gnome-open ]; then
-    OUTPUT="$(/usr/bin/gnome-open "$url" 2>&1)"
+# Use xdg-open if it exists (Gnome 2.6+ only)
+if [ -f /usr/bin/xdg-open ]; then
+    OUTPUT="$(/usr/bin/xdg-open "$url" 2>&1)"
     if [ $? -ne 0 ]; then
         error_exit "$OUTPUT"
     fi

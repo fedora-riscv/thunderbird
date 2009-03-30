@@ -8,7 +8,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        2.0.0.21
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -329,6 +329,9 @@ fi
 #===============================================================================
 
 %changelog
+* Mon Mar 30 2009 Jan Horak <jhorak@redhat.com> - 2.0.0.21-2
+- Fixed open-browser.sh to use xdg-open instead of gnome-open
+
 * Fri Mar 20 2009 Christopher Aillon <caillon@redhat.com> - 2.0.0.21-1
 - Update to 2.0.0.21
 
