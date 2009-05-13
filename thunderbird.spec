@@ -1,25 +1,29 @@
 %define desktop_file_utils_version 0.9
 %define nspr_version 4.6
-%define nss_version 3.10
+%define nss_version 3.12.3
 %define cairo_version 1.0
 %define dbus_glib_version 0.6
+%define version_internal 3.0b3pre
+%define build_langpacks 0
 
 %define official_branding 1
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.0
-Release:        2.3.beta2%{?dist}
+Release:        2.4.b3pre.hg.6a6386c16e98%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 %if %{official_branding}
-%define tarball thunderbird-%{version}b2-source.tar.bz2
+%define tarball thunderbird-%{version}-6a6386c16e98-source.tar.bz2
 %else
 %define tarball thunderbird-3.0b2-source.tar.bz2
 %endif
 Source0:        %{tarball}
+%if %{build_langpacks}
 Source1:        thunderbird-langpacks-%{version}-20090302.tar.bz2
+%endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
 Source12:       thunderbird-redhat-default-prefs.js
@@ -31,10 +35,6 @@ Source100:      find-external-requires
 
 Patch1:         mozilla-jemalloc.patch
 Patch2:         thunderbird-shared-error.patch
-Patch3:         xulrunner-elif.patch
-Patch4:         thunderbird-pango.patch
-Patch5:         thunderbird-imap-startup-crash.patch
-
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -70,7 +70,7 @@ BuildRequires:  gnome-vfs2-devel
 BuildRequires:  libgnomeui-devel
 Requires:       desktop-file-utils >= %{desktop_file_utils_version}
 
-%define mozappdir %{_libdir}/thunderbird-%{version}b2
+%define mozappdir %{_libdir}/thunderbird-%{version_internal}
 
 AutoProv: 0
 %define _use_internal_dependency_generator 0
@@ -87,9 +87,6 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 
 %patch1 -p0 -b .jemalloc
 %patch2 -p1 -b .shared-error
-%patch3 -p0 -b .xulrunner-elif
-%patch4 -p1 -b .pango-fix
-%patch5 -p1 -b .imap-startup-crash
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -155,7 +152,7 @@ desktop-file-install --vendor mozilla \
 
 # set up the thunderbird start script
 rm -f $RPM_BUILD_ROOT/%{_bindir}/thunderbird
-%{__cat} %{SOURCE21} | %{__sed} -e 's,TBIRD_VERSION,%{version}b2,g' > \
+%{__cat} %{SOURCE21} | %{__sed} -e 's,TBIRD_VERSION,%{version_internal},g' > \
   $RPM_BUILD_ROOT%{_bindir}/thunderbird
 %{__chmod} 755 $RPM_BUILD_ROOT/%{_bindir}/thunderbird
 
@@ -191,6 +188,7 @@ cd -
 %{__rm} -f %{name}.lang # Delete for --short-circuit option
 touch %{name}.lang
 
+%if %{build_langpacks}
 %{__mkdir_p} $RPM_BUILD_ROOT%{mozappdir}/extensions
 %{__tar} xjf %{SOURCE1}
 for langpack in `ls thunderbird-langpacks/*.xpi`; do
@@ -219,7 +217,7 @@ for langpack in `ls thunderbird-langpacks/*.xpi`; do
   echo "%%lang($language) $extensiondir" >> %{name}.lang
 done
 %{__rm} -rf thunderbird-langpacks
-
+%endif # build_langpacks
 
 # Copy over the LICENSE
 cd mozilla
@@ -301,20 +299,23 @@ fi
 #===============================================================================
 
 %changelog
+* Wed May 13 2009 Christopher Aillon <caillon@redhat.com> - 3.0-2.4
+- Update to a post beta2 snapshot
+
 * Wed May 13 2009 Christopher Aillon <caillon@redhat.com> - 3.0-2.3
 - Fix startup crash when imap server sends list response with trailing delimiter
 
-* Mon Mar 30 2009 Jan Horak <jhorak@redhat.com> - 3.0-2.2.beta2
+* Mon Mar 30 2009 Jan Horak <jhorak@redhat.com> - 3.0-2.2
 - Fixed open-browser.sh to use xdg-open instead of gnome-open
 
-* Mon Mar 23 2009 Christopher Aillon <caillon@redhat.com> - 3.0-2.1.beta2
+* Mon Mar 23 2009 Christopher Aillon <caillon@redhat.com> - 3.0-2.1
 - Disable the default app nag dialog
 
-* Tue Mar 17 2009 Jan Horak <jhorak@redhat.com> - 3.0-2.beta2
+* Tue Mar 17 2009 Jan Horak <jhorak@redhat.com> - 3.0-2
 - Fixed clicked link does not open in browser (#489120)
 - Fixed missing help in thunderbird (#488885)
 
-* Mon Mar  2 2009 Jan Horak <jhorak@redhat.com> - 3.0-1.beta2
+* Mon Mar  2 2009 Jan Horak <jhorak@redhat.com> - 3.0-1
 - Update to 3.0 beta2
 - Added Patch2 to build correctly when building with --enable-shared option 
 
