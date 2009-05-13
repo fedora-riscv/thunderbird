@@ -9,7 +9,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.0
-Release:        2.2.beta2%{?dist}
+Release:        2.3.beta2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -33,6 +33,8 @@ Patch1:         mozilla-jemalloc.patch
 Patch2:         thunderbird-shared-error.patch
 Patch3:         xulrunner-elif.patch
 Patch4:         thunderbird-pango.patch
+Patch5:         thunderbird-imap-startup-crash.patch
+
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -87,6 +89,7 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %patch2 -p1 -b .shared-error
 %patch3 -p0 -b .xulrunner-elif
 %patch4 -p1 -b .pango-fix
+%patch5 -p1 -b .imap-startup-crash
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -298,6 +301,9 @@ fi
 #===============================================================================
 
 %changelog
+* Wed May 13 2009 Christopher Aillon <caillon@redhat.com> - 3.0-2.3
+- Fix startup crash when imap server sends list response with trailing delimiter
+
 * Mon Mar 30 2009 Jan Horak <jhorak@redhat.com> - 3.0-2.2.beta2
 - Fixed open-browser.sh to use xdg-open instead of gnome-open
 
