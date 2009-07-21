@@ -3,26 +3,26 @@
 %define nss_version 3.12.3
 %define cairo_version 1.0
 %define dbus_glib_version 0.6
-%define version_internal 3.0b3pre
-%define build_langpacks 0
+%define version_internal 3.0b3
+%define build_langpacks 1
 
 %define official_branding 1
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.0
-Release:        2.4.b3pre.hg.6a6386c16e98%{?dist}
+Release:        2.5.b3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 %if %{official_branding}
-%define tarball thunderbird-%{version}-6a6386c16e98-source.tar.bz2
+%define tarball thunderbird-%{version}b3-source.tar.bz2 
 %else
 %define tarball thunderbird-3.0b2-source.tar.bz2
 %endif
 Source0:        %{tarball}
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20090302.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20090721.tar.bz2
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -169,18 +169,6 @@ install -Dm755 %{SOURCE30} $RPM_BUILD_ROOT/%{mozappdir}/open-browser.sh
 
 %{__rm} -f $RPM_BUILD_ROOT%{_bindir}/thunderbird-config
 
-cd $RPM_BUILD_ROOT%{mozappdir}/chrome
-find . -name "*" -type d -maxdepth 1 -exec %{__rm} -rf {} \;
-cd -
-
-%{__mkdir_p} $RPM_BUILD_ROOT%{mozappdir}/chrome/icons/default/
-%{__cp} other-licenses/branding/%{name}/default.xpm \
-        $RPM_BUILD_ROOT%{mozappdir}/chrome/icons/default/
-
-%{__mkdir_p} $RPM_BUILD_ROOT%{mozappdir}/icons/
-%{__cp} other-licenses/branding/%{name}/default.xpm \
-        $RPM_BUILD_ROOT%{mozappdir}/icons/
-
 # own mozilla plugin dir (#135050)
 %{__mkdir_p} $RPM_BUILD_ROOT%{_libdir}/mozilla/plugins
 
@@ -295,10 +283,14 @@ fi
 %exclude %{mozappdir}/license.html
 %exclude %{mozappdir}/dependentlibs.list
 %exclude %{mozappdir}/removed-files
+%{mozappdir}/update.locale
 
 #===============================================================================
 
 %changelog
+* Thu Jul 16 2009 Jan Horak <jhorak@redhat.com> - 3.0-2.5
+- Update to 3.0 beta3
+
 * Wed May 13 2009 Christopher Aillon <caillon@redhat.com> - 3.0-2.4
 - Update to a post beta2 snapshot
 
