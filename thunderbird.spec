@@ -11,7 +11,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.0
-Release:        2.4.b3%{?dist}
+Release:        2.5.b3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -52,6 +52,7 @@ Patch4:         thunderbird-pango.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires:       nspr >= %{nspr_version}
 Requires:       nss >= %{nss_version}
+Requires:       hunspell
 BuildRequires:  libcurl-devel
 BuildRequires:  cairo-devel >= %{cairo_version}
 BuildRequires:  dbus-glib-devel >= %{dbus_glib_version}
@@ -70,6 +71,7 @@ BuildRequires:  autoconf213
 BuildRequires:  GConf2-devel
 BuildRequires:  gnome-vfs2-devel
 BuildRequires:  libgnomeui-devel
+BuildRequires:  hunspell-devel
 Requires:       desktop-file-utils >= %{desktop_file_utils_version}
 
 %define mozappdir %{_libdir}/thunderbird-%{version_internal}
@@ -292,6 +294,9 @@ fi
 #===============================================================================
 
 %changelog
+* Fri Jul 24 2009 Jan Horak <jhorak@redhat.com> - 3.0-2.5.beta3
+- Use system hunspell
+
 * Tue Jul 21 2009 Jan Horak <jhorak@redhat.com> - 3.0-2.4.beta3
 - Update to 3.0 beta3
 
