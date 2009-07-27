@@ -11,7 +11,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.0
-Release:        2.5.b3%{?dist}
+Release:        3.5.b3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -294,6 +294,9 @@ fi
 #===============================================================================
 
 %changelog
+* Sun Jul 26 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.0-3.5.b3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
+
 * Fri Jul 24 2009 Jan Horak <jhorak@redhat.com> - 3.0-2.5.beta3
 - Use system hunspell
 
