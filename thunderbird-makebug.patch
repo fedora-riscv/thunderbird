@@ -1,0 +1,12 @@
+diff -up thunderbird-3.0/mozilla/modules/libpr0n/build/Makefile.in.makebug thunderbird-3.0/mozilla/modules/libpr0n/build/Makefile.in
+--- thunderbird-3.0/mozilla/modules/libpr0n/build/Makefile.in.makebug	2009-07-15 22:37:19.000000000 +0200
++++ thunderbird-3.0/mozilla/modules/libpr0n/build/Makefile.in	2009-07-30 16:10:37.000000000 +0200
+@@ -103,7 +103,7 @@ EXTRA_DSO_LDOPTS = \
+ GARBAGE += _img_list nsImgBuildDefines.h
+ 
+ export::
+-	@{ \
++	@{ set \
+ 	$(foreach d,$(filter-out icon,$(MOZ_IMG_DECODERS)), \
+ 		echo "#define IMG_BUILD_DECODER_${d}";) \
+ 	$(foreach d,$(MOZ_IMG_ENCODERS), \

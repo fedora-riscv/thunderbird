@@ -37,7 +37,7 @@ Patch1:         mozilla-jemalloc.patch
 Patch2:         thunderbird-shared-error.patch
 Patch3:         xulrunner-elif.patch
 Patch4:         thunderbird-pango.patch
-Patch4:         thunderbird-makebug.patch
+Patch5:         thunderbird-makebug.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
