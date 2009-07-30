@@ -37,6 +37,7 @@ Patch1:         mozilla-jemalloc.patch
 Patch2:         thunderbird-shared-error.patch
 Patch3:         xulrunner-elif.patch
 Patch4:         thunderbird-pango.patch
+Patch4:         thunderbird-makebug.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -93,6 +94,7 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %patch2 -p1 -b .shared-error
 #%patch3 -p0 -b .xulrunner-elif
 #%patch4 -p1 -b .pango-fix
+%patch5 -p1 -b .makebug
 
 %if %{official_branding}
 # Required by Mozilla Corporation
