@@ -11,7 +11,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.0
-Release:        3.5.b3%{?dist}
+Release:        3.6.b3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -37,8 +37,6 @@ Patch1:         mozilla-jemalloc.patch
 Patch2:         thunderbird-shared-error.patch
 Patch3:         xulrunner-elif.patch
 Patch4:         thunderbird-pango.patch
-Patch5:         thunderbird-makebug.patch
-Patch6:         thunderbird-setjmp.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -95,8 +93,6 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %patch2 -p1 -b .shared-error
 #%patch3 -p0 -b .xulrunner-elif
 #%patch4 -p1 -b .pango-fix
-%patch5 -p1 -b .makebug
-%patch6 -p1 -b .setjmp
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -298,6 +294,9 @@ fi
 #===============================================================================
 
 %changelog
+* Mon Aug  3 2009 Jan Horak <jhorak@redhat.com> - 3.0-3.6.beta3
+- Build with system hunspell
+
 * Sun Jul 26 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.0-3.5.b3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
 
