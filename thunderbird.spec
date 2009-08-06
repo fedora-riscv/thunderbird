@@ -74,6 +74,7 @@ BuildRequires:  sqlite-devel >= %{sqlite_version}
 BuildRequires:  startup-notification-devel
 BuildRequires:  alsa-lib-devel
 BuildRequires:  autoconf213
+BuildRequires:  desktop-file-utils
 
 Requires:       mozilla-filesystem
 Requires:       nspr >= %{nspr_version}
