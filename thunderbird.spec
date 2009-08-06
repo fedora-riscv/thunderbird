@@ -12,7 +12,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.0
-Release:        3.6.b3%{?dist}
+Release:        3.7.b3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -73,7 +73,6 @@ BuildRequires:  hunspell-devel
 BuildRequires:  sqlite-devel >= %{sqlite_version}
 BuildRequires:  startup-notification-devel
 BuildRequires:  alsa-lib-devel
-BuildRequires:  libnotify-devel
 
 Requires:       mozilla-filesystem
 Requires:       nspr >= %{nspr_version}
@@ -300,6 +299,9 @@ fi
 #===============================================================================
 
 %changelog
+* Thu Aug  6 2009 Jan Horak <jhorak@redhat.com> - 3.0-3.7.beta3
+- Removed unused build requirements
+
 * Mon Aug  3 2009 Jan Horak <jhorak@redhat.com> - 3.0-3.6.beta3
 - Build with system hunspell
 
