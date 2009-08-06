@@ -41,6 +41,11 @@ MOZ_PROGRAM="$MOZ_DIST_BIN/thunderbird"
 #export MOZ_DISABLE_PANGO
 
 ##
+## Set MOZ_APP_LAUNCHER for gnome-session
+##
+export MOZ_APP_LAUNCHER="/usr/bin/thunderbird"
+
+##
 ## Disable the GNOME crash dialog, Moz has it's own
 ## 
 GNOME_DISABLE_CRASH_DIALOG=1

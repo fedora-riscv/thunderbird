@@ -12,7 +12,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.0
-Release:        3.7.b3%{?dist}
+Release:        3.8.b3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -36,8 +36,6 @@ Source100:      find-external-requires
 
 Patch1:         mozilla-jemalloc.patch
 Patch2:         thunderbird-shared-error.patch
-Patch3:         xulrunner-elif.patch
-Patch4:         thunderbird-pango.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -98,8 +96,6 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 
 %patch1 -p0 -b .jemalloc
 %patch2 -p1 -b .shared-error
-#%patch3 -p0 -b .xulrunner-elif
-#%patch4 -p1 -b .pango-fix
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -301,6 +297,10 @@ fi
 #===============================================================================
 
 %changelog
+* Thu Aug  6 2009 Martin Stransky <stransky@redhat.com> - 3.0-3.8.beta3
+- Added fix for #437596
+- Removed unused patches
+
 * Thu Aug  6 2009 Jan Horak <jhorak@redhat.com> - 3.0-3.7.beta3
 - Removed unused build requirements
 
