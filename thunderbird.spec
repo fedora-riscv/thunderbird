@@ -35,6 +35,7 @@ Source100:      find-external-requires
 
 Patch1:         mozilla-jemalloc.patch
 Patch2:         thunderbird-shared-error.patch
+Patch3:         xulrunner-gtk-include.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -86,7 +87,8 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 #cd mozilla
 
 %patch1 -p0 -b .jemalloc
-%patch2 -p1 -b .shared-error
+#%patch2 -p1 -b .shared-error
+%patch2 -p1 -b .gtk
 
 %if %{official_branding}
 # Required by Mozilla Corporation
