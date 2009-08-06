@@ -1,8 +1,9 @@
-%define desktop_file_utils_version 0.9
-%define nspr_version 4.6
-%define nss_version 3.12.3
-%define cairo_version 1.0
-%define dbus_glib_version 0.6
+%define nspr_version 4.8
+%define nss_version 3.12.3.99
+%define cairo_version 1.6.0
+%define freetype_version 2.1.9
+%define sqlite_version 3.6.14
+
 %define version_internal 3.0b3
 %define build_langpacks 1
 
@@ -50,29 +51,34 @@ Patch4:         thunderbird-pango.patch
 
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-Requires:       nspr >= %{nspr_version}
-Requires:       nss >= %{nss_version}
-Requires:       hunspell
-BuildRequires:  libcurl-devel
-BuildRequires:  cairo-devel >= %{cairo_version}
-BuildRequires:  dbus-glib-devel >= %{dbus_glib_version}
-BuildRequires:  libpng-devel, libjpeg-devel, gtk2-devel
-BuildRequires:  zlib-devel, gzip, zip, unzip
 BuildRequires:  nspr-devel >= %{nspr_version}
 BuildRequires:  nss-devel >= %{nss_version}
+BuildRequires:  cairo-devel >= %{cairo_version}
+BuildRequires:  libpng-devel
+BuildRequires:  libjpeg-devel
+BuildRequires:  zip
+BuildRequires:  bzip2-devel
+BuildRequires:  zlib-devel
 BuildRequires:  libIDL-devel
-BuildRequires:  desktop-file-utils
-BuildRequires:  pango-devel >= 1.22
-BuildRequires:  freetype-devel >= 2.1.9
+BuildRequires:  gtk2-devel
+BuildRequires:  gnome-vfs2-devel
+BuildRequires:  libgnome-devel
+BuildRequires:  libgnomeui-devel
+BuildRequires:  krb5-devel
+BuildRequires:  pango-devel
+BuildRequires:  freetype-devel >= %{freetype_version}
 BuildRequires:  libXt-devel
 BuildRequires:  libXrender-devel
-BuildRequires:  alsa-lib-devel
-BuildRequires:  autoconf213
-BuildRequires:  GConf2-devel
-BuildRequires:  gnome-vfs2-devel
-BuildRequires:  libgnomeui-devel
 BuildRequires:  hunspell-devel
-Requires:       desktop-file-utils >= %{desktop_file_utils_version}
+BuildRequires:  sqlite-devel >= %{sqlite_version}
+BuildRequires:  startup-notification-devel
+BuildRequires:  alsa-lib-devel
+BuildRequires:  libnotify-devel
+
+Requires:       mozilla-filesystem
+Requires:       nspr >= %{nspr_version}
+Requires:       nss >= %{nss_version}
+Requires:       sqlite >= %{sqlite_version}
 
 %define mozappdir %{_libdir}/thunderbird-%{version_internal}
 
