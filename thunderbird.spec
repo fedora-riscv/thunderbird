@@ -7,8 +7,8 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        2.0.0.21
-Release:        2%{?dist}
+Version:        2.0.0.23
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -18,7 +18,7 @@ Group:          Applications/Internet
 %define tarball thunderbird-2.0.0.0rc1-source.tar.bz2
 %endif
 Source0:        %{tarball}
-Source1:        thunderbird-langpacks-%{version}-20090320.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20090818.tar.bz2
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
 Source12:       thunderbird-redhat-default-prefs.js
@@ -329,6 +329,9 @@ fi
 #===============================================================================
 
 %changelog
+* Fri Aug 21 2009 Jan Horak <jhorak@redhat.com> - 2.0.0.23-1
+- Update to 2.0.0.23
+
 * Mon Mar 30 2009 Jan Horak <jhorak@redhat.com> - 2.0.0.21-2
 - Fixed open-browser.sh to use xdg-open instead of gnome-open
 
