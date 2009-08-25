@@ -32,6 +32,7 @@ Source100:      find-external-requires
 Patch1:         firefox-2.0-link-layout.patch
 Patch2:         firefox-1.0-prdtoa.patch
 Patch3:         thunderbird-2.0-visibility.patch
+Patch4:         thunderbird-elif.patch
 
 Patch10:        thunderbird-0.7.3-psfonts.patch
 Patch11:        thunderbird-0.7.3-gnome-uriloader.patch
@@ -107,11 +108,9 @@ cd mozilla
 %patch2 -p0
 
 # Pragma visibility is broken on most platforms for some reason.
-# It works on i386 so leave it alone there.  Disable elsewhere.
 # See http://gcc.gnu.org/bugzilla/show_bug.cgi?id=20297
-%ifnarch i386
 %patch3  -p1
-%endif
+%patch4  -p1 -b .elif
 
 %patch10 -p1 -b .psfonts
 %patch11 -p1 -b .gnome-uriloader
