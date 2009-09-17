@@ -189,9 +189,9 @@ install -Dm755 %{SOURCE30} $RPM_BUILD_ROOT/%{mozappdir}/open-browser.sh
 %{__mkdir_p} $RPM_BUILD_ROOT%{_libdir}/mozilla/plugins
 
 # Install langpacks
+cd %{_builddir}/%{?buildsubdir}
 %{__rm} -f %{name}.lang # Delete for --short-circuit option
 touch %{name}.lang
-
 %if %{build_langpacks}
 %{__mkdir_p} $RPM_BUILD_ROOT%{mozappdir}/extensions
 %{__tar} xjf %{SOURCE1}
@@ -222,6 +222,7 @@ for langpack in `ls thunderbird-langpacks/*.xpi`; do
 done
 %{__rm} -rf thunderbird-langpacks
 %endif # build_langpacks
+cd -
 
 # Copy over the LICENSE
 cd mozilla
