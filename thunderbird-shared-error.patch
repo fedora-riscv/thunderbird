@@ -11,5 +11,5 @@ diff -up thunderbird-3.0/mail/installer/Makefile.in.shared-error thunderbird-3.0
  endif
 +endif
  
- include $(MOZILLA_SRCDIR)/toolkit/mozapps/installer/packager.mk
- 
+ # On mozilla-central, packager.mk uses core_abspath to redefine DIST
+ # As the comm-central config.mk doesn't set it, do it ourselves instead

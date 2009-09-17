@@ -4,26 +4,35 @@
 %define freetype_version 2.1.9
 %define sqlite_version 3.6.14
 
-%define version_internal 3.0b3
+%define version_internal 3.0b4
 %define build_langpacks 1
 
+# The tarball is pretty inconsistent with directory structure.
+# Sometimes there is a top level directory.  That goes here.
+#
+# IMPORTANT: If there is no top level directory, this should be 
+# set to the cwd, ie: '.'
+#%define tarballdir .
+%define tarballdir comm-central
+
+%define mozappdir %{_libdir}/thunderbird-%{version_internal}
 %define official_branding 1
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.0
-Release:        3.8.b3%{?dist}
+Release:        3.9.b4%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 %if %{official_branding}
-%define tarball thunderbird-%{version}b3-source.tar.bz2
+%define tarball thunderbird-%{version}b4-source.tar.bz2
 %else
 %define tarball thunderbird-3.0b2-source.tar.bz2
 %endif
 Source0:        %{tarball}
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20090721.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20090917.tar.bz2
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -79,8 +88,6 @@ Requires:       nspr >= %{nspr_version}
 Requires:       nss >= %{nss_version}
 Requires:       sqlite >= %{sqlite_version}
 
-%define mozappdir %{_libdir}/thunderbird-%{version_internal}
-
 AutoProv: 0
 %define _use_internal_dependency_generator 0
 %define __find_requires %{SOURCE100}
@@ -92,7 +99,7 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 
 %prep
 %setup -q -c
-#cd mozilla
+cd %{tarballdir}
 
 %patch1 -p0 -b .jemalloc
 %patch2 -p1 -b .shared-error
@@ -117,7 +124,7 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 #===============================================================================
 
 %build
-#cd mozilla
+cd %{tarballdir}
 
 # Build with -Os as it helps the browser; also, don't override mozilla's warning
 # level; they use -Wall but disable a few warnings that show up _everywhere_
@@ -142,7 +149,7 @@ make -f client.mk build
 
 %install
 %{__rm} -rf $RPM_BUILD_ROOT
-#cd mozilla
+cd %{tarballdir}
 
 cd objdir-tb
 DESTDIR=$RPM_BUILD_ROOT make install
@@ -297,6 +304,9 @@ fi
 #===============================================================================
 
 %changelog
+* Thu Sep 17 2009 Christopher Aillon <caillon@redhat.com> - 3.0-3.9.b4
+- Beta 4 candidate build 4
+
 * Thu Aug  6 2009 Martin Stransky <stransky@redhat.com> - 3.0-3.8.beta3
 - Added fix for #437596
 - Removed unused patches
