@@ -222,7 +222,7 @@ for langpack in `ls thunderbird-langpacks/*.xpi`; do
 done
 %{__rm} -rf thunderbird-langpacks
 %endif # build_langpacks
-cd -
+cd %{_builddir}/%{?buildsubdir}/%{tarballdir}
 
 # Copy over the LICENSE
 cd mozilla
