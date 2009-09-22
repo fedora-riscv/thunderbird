@@ -3,7 +3,7 @@
 %define nss_version 3.12.3
 %define cairo_version 1.0
 %define dbus_glib_version 0.6
-%define version_internal 3.0b3
+%define version_internal 3.0b4
 %define build_langpacks 1
 
 %define official_branding 1
@@ -11,18 +11,18 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.0
-Release:        2.6.b3%{?dist}
+Release:        2.7.b4%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 %if %{official_branding}
-%define tarball thunderbird-%{version}b3-source.tar.bz2 
+%define tarball thunderbird-%{version}b4-source.tar.bz2
 %else
 %define tarball thunderbird-3.0b2-source.tar.bz2
 %endif
 Source0:        %{tarball}
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20090721.tar.bz2
+Source1:        thunderbird-langpacks-%{version}b4-20090917.tar.bz2
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -83,7 +83,7 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 
 %prep
 %setup -q -c
-#cd mozilla
+cd comm-central
 
 %patch1 -p0 -b .jemalloc
 %patch2 -p1 -b .shared-error
@@ -108,7 +108,7 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 #===============================================================================
 
 %build
-#cd mozilla
+cd comm-central
 
 # Build with -Os as it helps the browser; also, don't override mozilla's warning
 # level; they use -Wall but disable a few warnings that show up _everywhere_
@@ -133,7 +133,7 @@ make -f client.mk build
 
 %install
 %{__rm} -rf $RPM_BUILD_ROOT
-#cd mozilla
+cd comm-central
 
 cd objdir-tb
 DESTDIR=$RPM_BUILD_ROOT make install
@@ -239,7 +239,7 @@ if [ -x %{_bindir}/gtk-update-icon-cache ]; then
   %{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor || :
 fi
 
-%files -f %{name}.lang
+%files -f comm-central/%{name}.lang
 %defattr(-,root,root,-)
 %attr(755,root,root) %{_bindir}/thunderbird
 %attr(644,root,root) %{_datadir}/applications/mozilla-thunderbird.desktop
@@ -288,6 +288,9 @@ fi
 #===============================================================================
 
 %changelog
+* Thu Sep 17 2009 Jan Horak <jhorak@redhat.com> - 3.0-2.7
+- Update to 3.0 beta4
+
 * Thu Jul 16 2009 Jan Horak <jhorak@redhat.com> - 3.0-2.6
 - Rebuild for update
 
