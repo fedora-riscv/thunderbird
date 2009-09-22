@@ -32,7 +32,7 @@ Group:          Applications/Internet
 %endif
 Source0:        %{tarball}
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20090917.tar.bz2
+Source1:        thunderbird-langpacks-%{version}b4-20090917.tar.bz2
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -306,7 +306,7 @@ fi
 
 %changelog
 * Thu Sep 17 2009 Christopher Aillon <caillon@redhat.com> - 3.0-3.9.b4
-- Beta 4 candidate build 4
+- Update to 3.0 b4
 
 * Thu Aug  6 2009 Martin Stransky <stransky@redhat.com> - 3.0-3.8.beta3
 - Added fix for #437596
