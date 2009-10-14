@@ -10,3 +10,9 @@ pref("mail.shell.checkDefaultClient", false);
 pref("network.protocol-handler.app.http", "COMMAND");
 pref("network.protocol-handler.app.https", "COMMAND");
 pref("network.protocol-handler.app.ftp", "COMMAND");
+
+# Disable global indexing by default
+pref("mailnews.database.global.indexer.enabled", false);
+
+# Do not switch to Smart Folders after upgrade to 3.0b4
+pref("mail.folder.views.version", "1")

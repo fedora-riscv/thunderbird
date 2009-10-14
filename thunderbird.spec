@@ -11,7 +11,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.0
-Release:        2.7.b4%{?dist}
+Release:        2.8.b4%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -288,6 +288,10 @@ fi
 #===============================================================================
 
 %changelog
+* Wed Oct 14 2009 Jan Horak <jhorak@redhat.com> - 3.0.2.8
+- Global indexing disabled by default
+- Migration to Smart Folders disabled by default
+
 * Thu Sep 17 2009 Jan Horak <jhorak@redhat.com> - 3.0-2.7
 - Update to 3.0 beta4
 
