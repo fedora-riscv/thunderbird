@@ -21,7 +21,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.0
-Release:        3.9.b4%{?dist}
+Release:        3.10.b4%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -32,7 +32,7 @@ Group:          Applications/Internet
 %endif
 Source0:        %{tarball}
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}b4-20090917.tar.bz2
+Source1:        thunderbird-langpacks-%{version}b4-20091109.tar.bz2
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -305,6 +305,9 @@ fi
 #===============================================================================
 
 %changelog
+* Mon Nov  9 2009 Jan Horak <jhorak@redhat.com> - 3.0-3.10.b4
+- Fixed cs localisation
+
 * Thu Sep 17 2009 Christopher Aillon <caillon@redhat.com> - 3.0-3.9.b4
 - Update to 3.0 b4
 
