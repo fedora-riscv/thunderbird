@@ -3,9 +3,9 @@
 %define cairo_version 1.6.0
 %define freetype_version 2.1.9
 %define sqlite_version 3.6.14
-
-%define version_internal 3.0b4
+%define version_internal 3.0rc1
 %define build_langpacks 1
+%define moz_objdir objdir-tb
 
 # The tarball is pretty inconsistent with directory structure.
 # Sometimes there is a top level directory.  That goes here.
@@ -13,26 +13,26 @@
 # IMPORTANT: If there is no top level directory, this should be 
 # set to the cwd, ie: '.'
 #%define tarballdir .
-%define tarballdir comm-central
+%define tarballdir comm-1.9.1
 
-%define mozappdir %{_libdir}/thunderbird-%{version_internal}
+%define mozappdir %{_libdir}/thunderbird-%{version}
 %define official_branding 1
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.0
-Release:        3.9.b4%{?dist}
+Release:        3.11.rc1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 %if %{official_branding}
-%define tarball thunderbird-%{version}b4-source.tar.bz2
+%define tarball thunderbird-%{version_internal}.source.tar.bz2
 %else
 %define tarball thunderbird-3.0b2-source.tar.bz2
 %endif
 Source0:        %{tarball}
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}b4-20090917.tar.bz2
+Source1:        thunderbird-langpacks-%{version_internal}-20091118.tar.bz2
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -45,6 +45,7 @@ Source100:      find-external-requires
 
 Patch1:         mozilla-jemalloc.patch
 Patch2:         thunderbird-shared-error.patch
+#Patch3:         fix-include.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -95,6 +96,37 @@ AutoProv: 0
 %description
 Mozilla Thunderbird is a standalone mail and newsgroup client.
 
+%package devel
+Summary: Development files for Thunderbird
+Group: Development/Libraries
+Provides: thunderbird-devel = %{version}
+
+Requires: thunderbird = %{version}-%{release}
+Requires: nspr-devel >= %{nspr_version}
+Requires: nss-devel >= %{nss_version}
+Requires: cairo-devel >= %{cairo_version}
+Requires: libjpeg-devel
+Requires: bzip2-devel
+Requires: zlib-devel
+Requires: libIDL-devel
+Requires: gtk2-devel
+Requires: gnome-vfs2-devel
+Requires: libgnome-devel
+Requires: libgnomeui-devel
+Requires: krb5-devel
+Requires: pango-devel
+Requires: freetype-devel >= %{freetype_version}
+Requires: libXt-devel
+Requires: libXrender-devel
+Requires: hunspell-devel
+#TEMP Requires: sqlite-devel
+Requires: startup-notification-devel
+Requires: alsa-lib-devel
+#Requires: libnotify-devel
+
+%description devel
+Thunderbird development files.
+
 #===============================================================================
 
 %prep
@@ -103,6 +135,7 @@ cd %{tarballdir}
 
 %patch1 -p0 -b .jemalloc
 %patch2 -p1 -b .shared-error
+#%patch3 -p1 -b .fix-include
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -135,15 +168,19 @@ export PREFIX='%{_prefix}'
 export LIBDIR='%{_libdir}'
 
 %define moz_make_flags -j1
-#%ifarch ppc ppc64 s390 s390x
-#%define moz_make_flags -j1
-#%else
-#%define moz_make_flags %{?_smp_mflags}
-#%endif
+%ifarch ppc ppc64 s390 s390x
+%define moz_make_flags -j1
+%else
+%define moz_make_flags %{?_smp_mflags}
+%endif
 
 export LDFLAGS="-Wl,-rpath,%{mozappdir}"
 export MAKE="gmake %{moz_make_flags}"
 make -f client.mk build
+
+# create debuginfo for crash-stats.mozilla.com
+#cd %{moz_objdir}
+#make buildsymbols
 
 #===============================================================================
 
@@ -151,7 +188,7 @@ make -f client.mk build
 %{__rm} -rf $RPM_BUILD_ROOT
 cd %{tarballdir}
 
-cd objdir-tb
+cd %{moz_objdir}
 DESTDIR=$RPM_BUILD_ROOT make install
 
 cd -
@@ -168,7 +205,7 @@ desktop-file-install --vendor mozilla \
 
 # set up the thunderbird start script
 rm -f $RPM_BUILD_ROOT/%{_bindir}/thunderbird
-%{__cat} %{SOURCE21} | %{__sed} -e 's,TBIRD_VERSION,%{version_internal},g' > \
+%{__cat} %{SOURCE21} | %{__sed} -e 's,TBIRD_VERSION,%{version},g' > \
   $RPM_BUILD_ROOT%{_bindir}/thunderbird
 %{__chmod} 755 $RPM_BUILD_ROOT/%{_bindir}/thunderbird
 
@@ -189,7 +226,6 @@ install -Dm755 %{SOURCE30} $RPM_BUILD_ROOT/%{mozappdir}/open-browser.sh
 %{__mkdir_p} $RPM_BUILD_ROOT%{_libdir}/mozilla/plugins
 
 # Install langpacks
-cd %{_builddir}/%{?buildsubdir}
 %{__rm} -f %{name}.lang # Delete for --short-circuit option
 touch %{name}.lang
 %if %{build_langpacks}
@@ -222,7 +258,6 @@ for langpack in `ls thunderbird-langpacks/*.xpi`; do
 done
 %{__rm} -rf thunderbird-langpacks
 %endif # build_langpacks
-cd %{_builddir}/%{?buildsubdir}/%{tarballdir}
 
 # Copy over the LICENSE
 cd mozilla
@@ -238,6 +273,20 @@ ln -s %{_datadir}/myspell $RPM_BUILD_ROOT%{mozappdir}/dictionaries
 touch $RPM_BUILD_ROOT%{mozappdir}/components/compreg.dat
 touch $RPM_BUILD_ROOT%{mozappdir}/components/xpti.dat
 
+# Devel package - sdk
+#%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/idl/thunderbird-%{version_internal}
+#%{__cp} %{moz_objdir}/mozilla/dist/sdk/idl/* $RPM_BUILD_ROOT%{_datadir}/idl/thunderbird-%{version_internal}
+
+#%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/include/thunderbird-%{version_internal}
+#%{__cp} %{moz_objdir}/mozilla/dist/sdk/include/* $RPM_BUILD_ROOT%{_datadir}/include/thunderbird-%{version_internal}
+
+#%{__cp} %{moz_objdir}/mozilla/dist/sdk/bin/* $RPM_BUILD_ROOT%{mozappdir}/
+
+
+# Add debuginfo for crash-stats.mozilla.com 
+#cp mozilla/dist/thunderbird-%{version_internal}.en-US.linux-%{_target_cpu}-crashreporter-symbols.zip $RPM_BUILD_ROOT/%{_libdir}/debug%{mozappdir} TODO arch
+#%{__mkdir_p} $RPM_BUILD_ROOT%{_libdir}/debug%{mozappdir}
+#%{__cp} %{moz_objdir}/mozilla/dist/thunderbird-%{version_internal}.en-US.linux-*.crashreporter-symbols.zip $RPM_BUILD_ROOT%{_libdir}/debug%{mozappdir}
 
 %clean
 %{__rm} -rf $RPM_BUILD_ROOT
@@ -256,7 +305,7 @@ if [ -x %{_bindir}/gtk-update-icon-cache ]; then
   %{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor || :
 fi
 
-%files -f %{name}.lang
+%files -f %{tarballdir}/%{name}.lang
 %defattr(-,root,root,-)
 %attr(755,root,root) %{_bindir}/thunderbird
 %attr(644,root,root) %{_datadir}/applications/mozilla-thunderbird.desktop
@@ -285,6 +334,9 @@ fi
 %{mozappdir}/thunderbird
 %{mozappdir}/updater
 %{mozappdir}/*.so
+#%{mozappdir}/crashreporter
+#%{mozappdir}/crashreporter.ini
+#%{mozappdir}/Throbber-small.gif
 %dir %{mozappdir}/modules
 %{mozappdir}/modules/*.jsm
 %{mozappdir}/modules/*.js
@@ -296,15 +348,27 @@ fi
 %{mozappdir}/platform.ini
 %{mozappdir}/updater.ini
 %{mozappdir}/application.ini
-%exclude %{mozappdir}/LICENSE.txt
-%exclude %{mozappdir}/license.html
+#%exclude %{mozappdir}/LICENSE.txt
+#%exclude %{mozappdir}/license.html
 %exclude %{mozappdir}/dependentlibs.list
 %exclude %{mozappdir}/removed-files
 %{mozappdir}/update.locale
 
+# TODO: devel package
+#%files devel 
+#%defattr(-,root,root,-) 
+#%{_datadir}/idl/thunderbird-%{version_internal}
+#%{_datadir}/include/thunderbird-%{version_internal}
+#%{mozappdir}/xpidl
+#%{mozappdir}/xpt_dump
+#%{mozappdir}/xpt_link
+
 #===============================================================================
 
 %changelog
+* Thu Nov 19 2009 Jan Horak <jhorak@redhat.com> - 3.0-3.10.rc1
+- Update to RC1
+
 * Thu Sep 17 2009 Christopher Aillon <caillon@redhat.com> - 3.0-3.9.b4
 - Update to 3.0 b4
 
