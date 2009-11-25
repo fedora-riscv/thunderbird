@@ -17,6 +17,7 @@
 
 %define mozappdir %{_libdir}/thunderbird-%{version}
 %define official_branding 1
+%define include_debuginfo 0
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
@@ -37,15 +38,16 @@ Source1:        thunderbird-langpacks-%{version_internal}-20091118.tar.bz2
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
 Source12:       thunderbird-redhat-default-prefs.js
+Source13:       thunderbird-mozconfig-debuginfo
 Source20:       thunderbird.desktop
 Source21:       thunderbird.sh.in
-Source22:       thunderbird.png
 Source30:       thunderbird-open-browser.sh
 Source100:      find-external-requires
 
 Patch1:         mozilla-jemalloc.patch
 Patch2:         thunderbird-shared-error.patch
-#Patch3:         fix-include.patch
+Patch3:         thunderbird-debuginfo-fix-include.patch
+Patch4:         thunderbird-clipboard-crash.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -96,37 +98,37 @@ AutoProv: 0
 %description
 Mozilla Thunderbird is a standalone mail and newsgroup client.
 
-%package devel
-Summary: Development files for Thunderbird
-Group: Development/Libraries
-Provides: thunderbird-devel = %{version}
-
-Requires: thunderbird = %{version}-%{release}
-Requires: nspr-devel >= %{nspr_version}
-Requires: nss-devel >= %{nss_version}
-Requires: cairo-devel >= %{cairo_version}
-Requires: libjpeg-devel
-Requires: bzip2-devel
-Requires: zlib-devel
-Requires: libIDL-devel
-Requires: gtk2-devel
-Requires: gnome-vfs2-devel
-Requires: libgnome-devel
-Requires: libgnomeui-devel
-Requires: krb5-devel
-Requires: pango-devel
-Requires: freetype-devel >= %{freetype_version}
-Requires: libXt-devel
-Requires: libXrender-devel
-Requires: hunspell-devel
-#TEMP Requires: sqlite-devel
-Requires: startup-notification-devel
-Requires: alsa-lib-devel
+#%package devel
+#Summary: Development files for Thunderbird
+#Group: Development/Libraries
+#Provides: thunderbird-devel = %{version}
+#
+#Requires: thunderbird = %{version}-%{release}
+#Requires: nspr-devel >= %{nspr_version}
+#Requires: nss-devel >= %{nss_version}
+#Requires: cairo-devel >= %{cairo_version}
+#Requires: libjpeg-devel
+#Requires: bzip2-devel
+#Requires: zlib-devel
+#Requires: libIDL-devel
+#Requires: gtk2-devel
+#Requires: gnome-vfs2-devel
+#Requires: libgnome-devel
+#Requires: libgnomeui-devel
+#Requires: krb5-devel
+#Requires: pango-devel
+#Requires: freetype-devel >= %{freetype_version}
+#Requires: libXt-devel
+#Requires: libXrender-devel
+#Requires: hunspell-devel
+#Requires: sqlite-devel
+#Requires: startup-notification-devel
+#Requires: alsa-lib-devel
 #Requires: libnotify-devel
 
-%description devel
-Thunderbird development files.
-
+#%description devel
+#Thunderbird development files.
+#
 #===============================================================================
 
 %prep
@@ -135,7 +137,12 @@ cd %{tarballdir}
 
 %patch1 -p0 -b .jemalloc
 %patch2 -p1 -b .shared-error
-#%patch3 -p1 -b .fix-include
+
+%if %{include_debuginfo}
+%patch3 -p1 -b .fix-include
+%endif
+
+%patch4 -p1 -b .clipboard-crash
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -152,6 +159,9 @@ cd %{tarballdir}
 %{__cp} %{SOURCE10} .mozconfig
 %if %{official_branding}
 %{__cat} %{SOURCE11} >> .mozconfig
+%endif
+%if %{include_debuginfo}
+%{__cat} %{SOURCE13} >> .mozconfig
 %endif
 
 #===============================================================================
@@ -179,8 +189,10 @@ export MAKE="gmake %{moz_make_flags}"
 make -f client.mk build
 
 # create debuginfo for crash-stats.mozilla.com
-#cd %{moz_objdir}
-#make buildsymbols
+%if %{include_debuginfo}
+cd %{moz_objdir}
+make buildsymbols
+%endif
 
 #===============================================================================
 
@@ -191,10 +203,29 @@ cd %{tarballdir}
 cd %{moz_objdir}
 DESTDIR=$RPM_BUILD_ROOT make install
 
+# install icons
 cd -
-%{__mkdir_p} $RPM_BUILD_ROOT{%{_libdir},%{_bindir},%{_datadir}/applications,%{_datadir}/icons/hicolor/48x48/apps}
+%{__cp} other-licenses/branding/%{name}/mailicon16.png \
+        $RPM_BUILD_ROOT/%{mozappdir}/icons/
+%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/16x16/apps
+%{__cp} other-licenses/branding/%{name}/mailicon16.png \
+        $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/16x16/apps/thunderbird.png
+%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/22x22/apps
+%{__cp} other-licenses/branding/%{name}/mailicon22.png \
+        $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/22x22/apps/thunderbird.png
+%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/24x24/apps
+%{__cp} other-licenses/branding/%{name}/mailicon24.png \
+        $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/24x24/apps/thunderbird.png
+%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/32x32/apps
+%{__cp} other-licenses/branding/%{name}/mailicon32.png \
+        $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/32x32/apps/thunderbird.png
+%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/48x48/apps
+%{__cp} other-licenses/branding/%{name}/mailicon48.png \
+        $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/48x48/apps/thunderbird.png
+%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/256x256/apps
+%{__cp} other-licenses/branding/%{name}/mailicon256.png \
+        $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/256x256/apps/thunderbird.png
 
-%{__install} -p -D %{SOURCE22} $RPM_BUILD_ROOT%{_datadir}/pixmaps/%{name}.png
 
 desktop-file-install --vendor mozilla \
   --dir $RPM_BUILD_ROOT%{_datadir}/applications \
@@ -284,9 +315,11 @@ touch $RPM_BUILD_ROOT%{mozappdir}/components/xpti.dat
 
 
 # Add debuginfo for crash-stats.mozilla.com 
-#cp mozilla/dist/thunderbird-%{version_internal}.en-US.linux-%{_target_cpu}-crashreporter-symbols.zip $RPM_BUILD_ROOT/%{_libdir}/debug%{mozappdir} TODO arch
-#%{__mkdir_p} $RPM_BUILD_ROOT%{_libdir}/debug%{mozappdir}
-#%{__cp} %{moz_objdir}/mozilla/dist/thunderbird-%{version_internal}.en-US.linux-*.crashreporter-symbols.zip $RPM_BUILD_ROOT%{_libdir}/debug%{mozappdir}
+%if %{include_debuginfo}
+cp mozilla/dist/thunderbird-%{version_internal}.en-US.linux-%{_target_cpu}-crashreporter-symbols.zip $RPM_BUILD_ROOT/%{_libdir}/debug%{mozappdir}
+mkdir -p $RPM_BUILD_ROOT%{_libdir}/debug%{mozappdir}
+cp %{moz_objdir}/mozilla/dist/thunderbird-%{version_internal}.en-US.linux-i686.crashreporter-symbols.zip $RPM_BUILD_ROOT%{_libdir}/debug%{mozappdir}
+%endif
 
 %clean
 %{__rm} -rf $RPM_BUILD_ROOT
@@ -309,7 +342,6 @@ fi
 %defattr(-,root,root,-)
 %attr(755,root,root) %{_bindir}/thunderbird
 %attr(644,root,root) %{_datadir}/applications/mozilla-thunderbird.desktop
-%attr(644,root,root) %{_datadir}/pixmaps/thunderbird.png
 %dir %{mozappdir}
 %doc %{mozappdir}/LICENSE
 %{mozappdir}/chrome
@@ -334,9 +366,6 @@ fi
 %{mozappdir}/thunderbird
 %{mozappdir}/updater
 %{mozappdir}/*.so
-#%{mozappdir}/crashreporter
-#%{mozappdir}/crashreporter.ini
-#%{mozappdir}/Throbber-small.gif
 %dir %{mozappdir}/modules
 %{mozappdir}/modules/*.jsm
 %{mozappdir}/modules/*.js
@@ -348,11 +377,20 @@ fi
 %{mozappdir}/platform.ini
 %{mozappdir}/updater.ini
 %{mozappdir}/application.ini
-#%exclude %{mozappdir}/LICENSE.txt
-#%exclude %{mozappdir}/license.html
 %exclude %{mozappdir}/dependentlibs.list
 %exclude %{mozappdir}/removed-files
 %{mozappdir}/update.locale
+%{_datadir}/icons/hicolor/16x16/apps/thunderbird.png
+%{_datadir}/icons/hicolor/22x22/apps/thunderbird.png
+%{_datadir}/icons/hicolor/24x24/apps/thunderbird.png
+%{_datadir}/icons/hicolor/256x256/apps/thunderbird.png
+%{_datadir}/icons/hicolor/32x32/apps/thunderbird.png
+%{_datadir}/icons/hicolor/48x48/apps/thunderbird.png
+%if %{include_debuginfo}
+%{mozappdir}/crashreporter
+%{mozappdir}/crashreporter.ini
+%{mozappdir}/Throbber-small.gif
+%endif
 
 # TODO: devel package
 #%files devel 
@@ -366,7 +404,10 @@ fi
 #===============================================================================
 
 %changelog
-* Thu Nov 19 2009 Jan Horak <jhorak@redhat.com> - 3.0-3.10.rc1
+* Wed Nov 25 2009 Jan Horak <jhorak@redhat.com> - 3.0-3.12.rc1
+- Sync with Mozilla latest RC1 build
+
+* Thu Nov 19 2009 Jan Horak <jhorak@redhat.com> - 3.0-3.11.rc1
 - Update to RC1
 
 * Thu Sep 17 2009 Christopher Aillon <caillon@redhat.com> - 3.0-3.9.b4
