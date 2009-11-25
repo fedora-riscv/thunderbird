@@ -1,6 +1,7 @@
 pref("app.update.enabled", false);
 pref("app.update.autoInstallEnabled", false);
-pref("browser.display.use_system_colors",   true);
+# Allow users to set custom colors
+# pref("browser.display.use_system_colors",   true);
 pref("general.useragent.vendor", "Fedora");
 pref("general.useragent.vendorSub", "THUNDERBIRD_RPM_VR");
 pref("intl.locale.matchOS", true);
