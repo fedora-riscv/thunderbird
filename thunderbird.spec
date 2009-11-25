@@ -17,11 +17,12 @@
 
 %define mozappdir %{_libdir}/thunderbird-%{version}
 %define official_branding 1
+%define include_debuginfo 0
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.0
-Release:        3.11.rc1%{?dist}
+Release:        3.12.rc1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -32,19 +33,21 @@ Group:          Applications/Internet
 %endif
 Source0:        %{tarball}
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version_internal}-20091118.tar.bz2
+Source1:        thunderbird-langpacks-%{version_internal}-20091125.tar.bz2
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
 Source12:       thunderbird-redhat-default-prefs.js
+Source13:       thunderbird-mozconfig-debuginfo
 Source20:       thunderbird.desktop
 Source21:       thunderbird.sh.in
-Source22:       thunderbird.png
 Source30:       thunderbird-open-browser.sh
 Source100:      find-external-requires
 
 Patch1:         mozilla-jemalloc.patch
 Patch2:         thunderbird-shared-error.patch
+Patch3:         thunderbird-debuginfo-fix-include.patch
+Patch4:         thunderbird-clipboard-crash.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -104,6 +107,12 @@ cd %{tarballdir}
 %patch1 -p0 -b .jemalloc
 %patch2 -p1 -b .shared-error
 
+%if %{include_debuginfo}
+%patch3 -p1 -b .fix-include
+%endif
+
+%patch4 -p1 -b .clipboard-crash
+
 %if %{official_branding}
 # Required by Mozilla Corporation
 
@@ -119,6 +128,9 @@ cd %{tarballdir}
 %{__cp} %{SOURCE10} .mozconfig
 %if %{official_branding}
 %{__cat} %{SOURCE11} >> .mozconfig
+%endif
+%if %{include_debuginfo}
+%{__cat} %{SOURCE13} >> .mozconfig
 %endif
 
 #===============================================================================
@@ -145,6 +157,12 @@ export LDFLAGS="-Wl,-rpath,%{mozappdir}"
 export MAKE="gmake %{moz_make_flags}"
 make -f client.mk build
 
+# create debuginfo for crash-stats.mozilla.com
+%if %{include_debuginfo}
+cd %{moz_objdir}
+make buildsymbols
+%endif
+
 #===============================================================================
 
 %install
@@ -154,10 +172,29 @@ cd %{tarballdir}
 cd %{moz_objdir}
 DESTDIR=$RPM_BUILD_ROOT make install
 
+# install icons
 cd -
-%{__mkdir_p} $RPM_BUILD_ROOT{%{_libdir},%{_bindir},%{_datadir}/applications,%{_datadir}/icons/hicolor/48x48/apps}
+%{__cp} other-licenses/branding/%{name}/mailicon16.png \
+        $RPM_BUILD_ROOT/%{mozappdir}/icons/
+%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/16x16/apps
+%{__cp} other-licenses/branding/%{name}/mailicon16.png \
+        $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/16x16/apps/thunderbird.png
+%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/22x22/apps
+%{__cp} other-licenses/branding/%{name}/mailicon22.png \
+        $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/22x22/apps/thunderbird.png
+%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/24x24/apps
+%{__cp} other-licenses/branding/%{name}/mailicon24.png \
+        $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/24x24/apps/thunderbird.png
+%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/32x32/apps
+%{__cp} other-licenses/branding/%{name}/mailicon32.png \
+        $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/32x32/apps/thunderbird.png
+%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/48x48/apps
+%{__cp} other-licenses/branding/%{name}/mailicon48.png \
+        $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/48x48/apps/thunderbird.png
+%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/256x256/apps
+%{__cp} other-licenses/branding/%{name}/mailicon256.png \
+        $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/256x256/apps/thunderbird.png
 
-%{__install} -p -D %{SOURCE22} $RPM_BUILD_ROOT%{_datadir}/pixmaps/%{name}.png
 
 desktop-file-install --vendor mozilla \
   --dir $RPM_BUILD_ROOT%{_datadir}/applications \
@@ -191,7 +228,6 @@ install -Dm755 %{SOURCE30} $RPM_BUILD_ROOT/%{mozappdir}/open-browser.sh
 # Install langpacks
 %{__rm} -f %{name}.lang # Delete for --short-circuit option
 touch %{name}.lang
-
 %if %{build_langpacks}
 %{__mkdir_p} $RPM_BUILD_ROOT%{mozappdir}/extensions
 %{__tar} xjf %{SOURCE1}
@@ -237,6 +273,12 @@ ln -s %{_datadir}/myspell $RPM_BUILD_ROOT%{mozappdir}/dictionaries
 touch $RPM_BUILD_ROOT%{mozappdir}/components/compreg.dat
 touch $RPM_BUILD_ROOT%{mozappdir}/components/xpti.dat
 
+# Add debuginfo for crash-stats.mozilla.com 
+%if %{include_debuginfo}
+cp mozilla/dist/thunderbird-%{version_internal}.en-US.linux-%{_target_cpu}-crashreporter-symbols.zip $RPM_BUILD_ROOT/%{_libdir}/debug%{mozappdir}
+mkdir -p $RPM_BUILD_ROOT%{_libdir}/debug%{mozappdir}
+cp %{moz_objdir}/mozilla/dist/thunderbird-%{version_internal}.en-US.linux-i686.crashreporter-symbols.zip $RPM_BUILD_ROOT%{_libdir}/debug%{mozappdir}
+%endif
 
 %clean
 %{__rm} -rf $RPM_BUILD_ROOT
@@ -259,7 +301,6 @@ fi
 %defattr(-,root,root,-)
 %attr(755,root,root) %{_bindir}/thunderbird
 %attr(644,root,root) %{_datadir}/applications/mozilla-thunderbird.desktop
-%attr(644,root,root) %{_datadir}/pixmaps/thunderbird.png
 %dir %{mozappdir}
 %doc %{mozappdir}/LICENSE
 %{mozappdir}/chrome
@@ -295,15 +336,27 @@ fi
 %{mozappdir}/platform.ini
 %{mozappdir}/updater.ini
 %{mozappdir}/application.ini
-#%exclude %{mozappdir}/LICENSE.txt
-#%exclude %{mozappdir}/license.html
 %exclude %{mozappdir}/dependentlibs.list
 %exclude %{mozappdir}/removed-files
 %{mozappdir}/update.locale
+%{_datadir}/icons/hicolor/16x16/apps/thunderbird.png
+%{_datadir}/icons/hicolor/22x22/apps/thunderbird.png
+%{_datadir}/icons/hicolor/24x24/apps/thunderbird.png
+%{_datadir}/icons/hicolor/256x256/apps/thunderbird.png
+%{_datadir}/icons/hicolor/32x32/apps/thunderbird.png
+%{_datadir}/icons/hicolor/48x48/apps/thunderbird.png
+%if %{include_debuginfo}
+%{mozappdir}/crashreporter
+%{mozappdir}/crashreporter.ini
+%{mozappdir}/Throbber-small.gif
+%endif
 
 #===============================================================================
 
 %changelog
+* Wed Nov 25 2009 Jan Horak <jhorak@redhat.com> - 3.0-3.12.rc1
+- Sync with Mozilla latest RC1 build
+
 * Thu Nov 19 2009 Jan Horak <jhorak@redhat.com> - 3.0-3.11.rc1
 - Update to 3.0 RC1
 
