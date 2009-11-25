@@ -33,7 +33,7 @@ Group:          Applications/Internet
 %endif
 Source0:        %{tarball}
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version_internal}-20091118.tar.bz2
+Source1:        thunderbird-langpacks-%{version_internal}-20091125.tar.bz2
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded

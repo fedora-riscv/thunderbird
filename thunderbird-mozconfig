@@ -1,5 +1,3 @@
-#export CFLAGS=-gstabs+
-#export CXXFLAGS=-gstabs+
 mk_add_options MOZ_CO_PROJECT=mail
 ac_add_options --enable-application=mail
 mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/objdir-tb/
@@ -29,9 +27,6 @@ ac_add_options --enable-svg
 ac_add_options --enable-canvas
 ac_add_options --enable-system-hunspell
 ac_add_options --disable-crashreporter
-#ac_add_options --disable-static
-#ac_add_options --disable-static-mail
-#ac_add_options --enable-libxul
 
 export BUILD_OFFICIAL=1
 export MOZILLA_OFFICIAL=1
