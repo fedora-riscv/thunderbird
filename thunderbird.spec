@@ -3,7 +3,7 @@
 %define cairo_version 1.6.0
 %define freetype_version 2.1.9
 %define sqlite_version 3.6.14
-%define version_internal 3.0rc1
+%define version_internal 3.0rc2
 %define build_langpacks 1
 %define moz_objdir objdir-tb
 
@@ -22,7 +22,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.0
-Release:        3.12.rc1%{?dist}
+Release:        3.13.rc2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -33,7 +33,7 @@ Group:          Applications/Internet
 %endif
 Source0:        %{tarball}
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version_internal}-20091125.tar.bz2
+Source1:        thunderbird-langpacks-%{version_internal}-20091203.tar.bz2
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -354,6 +354,9 @@ fi
 #===============================================================================
 
 %changelog
+* Thu Dec  3 2009 Jan Horak <jhorak@redhat.com> - 3.0-3.13.rc2
+- Update to 3.0 RC2
+
 * Wed Nov 25 2009 Jan Horak <jhorak@redhat.com> - 3.0-3.12.rc1
 - Sync with Mozilla latest RC1 build
 
