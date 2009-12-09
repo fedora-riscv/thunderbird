@@ -3,7 +3,6 @@
 %define nss_version 3.12.3
 %define cairo_version 1.0
 %define dbus_glib_version 0.6
-%define version_internal 3.0rc2
 %define build_langpacks 1
 %define moz_objdir objdir-tb
 
@@ -22,18 +21,18 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.0
-Release:        2.10.rc2%{?dist}
+Release:        3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 %if %{official_branding}
-%define tarball thunderbird-%{version_internal}.source.tar.bz2
+%define tarball thunderbird-%{version}.source.tar.bz2
 %else
 %define tarball thunderbird-3.0b2-source.tar.bz2
 %endif
 Source0:        %{tarball}
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version_internal}-20091203.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20091209.tar.bz2
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -221,7 +220,6 @@ install -Dm755 %{SOURCE30} $RPM_BUILD_ROOT/%{mozappdir}/open-browser.sh
 # Install langpacks
 %{__rm} -f %{name}.lang # Delete for --short-circuit option
 touch %{name}.lang
-
 %if %{build_langpacks}
 %{__mkdir_p} $RPM_BUILD_ROOT%{mozappdir}/extensions
 %{__tar} xjf %{SOURCE1}
@@ -269,9 +267,9 @@ touch $RPM_BUILD_ROOT%{mozappdir}/components/xpti.dat
 
 # Add debuginfo for crash-stats.mozilla.com 
 %if %{include_debuginfo}
-cp mozilla/dist/thunderbird-%{version_internal}.en-US.linux-%{_target_cpu}-crashreporter-symbols.zip $RPM_BUILD_ROOT/%{_libdir}/debug%{mozappdir}
+cp mozilla/dist/thunderbird-%{version}.en-US.linux-%{_target_cpu}-crashreporter-symbols.zip $RPM_BUILD_ROOT/%{_libdir}/debug%{mozappdir}
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/debug%{mozappdir}
-cp %{moz_objdir}/mozilla/dist/thunderbird-%{version_internal}.en-US.linux-i686.crashreporter-symbols.zip $RPM_BUILD_ROOT%{_libdir}/debug%{mozappdir}
+cp %{moz_objdir}/mozilla/dist/thunderbird-%{version}.en-US.linux-i686.crashreporter-symbols.zip $RPM_BUILD_ROOT%{_libdir}/debug%{mozappdir}
 %endif
 
 %clean
@@ -348,6 +346,9 @@ fi
 #===============================================================================
 
 %changelog
+* Wed Dec  9 2009 Jan Horak <jhorak@redhat.com> - 3.0-3
+- Update to 3.0
+
 * Thu Dec  3 2009 Jan Horak <jhorak@redhat.com> - 3.0.2.10.rc2
 - Update to 3.0 RC2
 
