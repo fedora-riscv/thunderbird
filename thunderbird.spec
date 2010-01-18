@@ -21,7 +21,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -259,11 +259,11 @@ install -Dm755 %{SOURCE30} $RPM_BUILD_ROOT/%{mozappdir}/open-browser.sh
 %{__rm} -f %{name}.lang # Delete for --short-circuit option
 touch %{name}.lang
 %if %{build_langpacks}
-%{__mkdir_p} $RPM_BUILD_ROOT%{mozappdir}/extensions
+%{__mkdir_p} $RPM_BUILD_ROOT%{mozappdir}/langpacks
 %{__tar} xjf %{SOURCE1}
 for langpack in `ls thunderbird-langpacks/*.xpi`; do
   language=`basename $langpack .xpi`
-  extensiondir=$RPM_BUILD_ROOT%{mozappdir}/extensions/langpack-$language@thunderbird.mozilla.org
+  extensiondir=$RPM_BUILD_ROOT%{mozappdir}/langpacks/langpack-$language@thunderbird.mozilla.org
   %{__mkdir_p} $extensiondir
   unzip $langpack -d $extensiondir
   find $extensiondir -type f | xargs chmod 644
@@ -354,6 +354,7 @@ fi
 %{mozappdir}/dictionaries
 %dir %{mozappdir}/extensions
 %{mozappdir}/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}
+%dir %{mozappdir}/langpacks
 %{mozappdir}/greprefs
 %{mozappdir}/icons
 %{mozappdir}/isp
@@ -403,6 +404,10 @@ fi
 #===============================================================================
 
 %changelog
+* Mon Jan 18 2010 Martin Stransky <stransky@redhat.com> - 3.0-5
+- Added fix for #480603 - thunderbird takes 
+  unacceptably long time to start
+
 * Wed Dec  9 2009 Jan Horak <jhorak@redhat.com> - 3.0-4
 - Update to 3.0
 
