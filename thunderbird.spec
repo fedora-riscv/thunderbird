@@ -14,14 +14,16 @@
 #%define tarballdir .
 %define tarballdir comm-1.9.1
 
-%define mozappdir %{_libdir}/thunderbird-%{version}
 %define official_branding 1
 %define include_debuginfo 0
 
+%define version_internal  3.0
+%define mozappdir         %{_libdir}/%{name}-%{version_internal}
+
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        3.0
-Release:        5%{?dist}
+Version:        3.0.1
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -32,7 +34,7 @@ Group:          Applications/Internet
 %endif
 Source0:        %{tarball}
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20091209.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20100120.tar.bz2
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -43,6 +45,7 @@ Source21:       thunderbird.sh.in
 Source30:       thunderbird-open-browser.sh
 Source100:      find-external-requires
 
+Patch0:         thunderbird-version.patch
 Patch1:         mozilla-jemalloc.patch
 Patch2:         thunderbird-shared-error.patch
 Patch3:         thunderbird-debuginfo-fix-include.patch
@@ -134,6 +137,10 @@ Mozilla Thunderbird is a standalone mail and newsgroup client.
 %setup -q -c
 cd %{tarballdir}
 
+sed -e 's/__RPM_VERSION_INTERNAL__/%{version_internal}/' %{P:%%PATCH0} \
+    > version.patch
+%{__patch} -p1 -b --suffix .version --fuzz=0 < version.patch
+
 %patch1 -p0 -b .jemalloc
 %patch2 -p1 -b .shared-error
 
@@ -168,6 +175,9 @@ cd %{tarballdir}
 %build
 cd %{tarballdir}
 
+INTERNAL_GECKO=%{version_internal}
+MOZ_APP_DIR=%{mozappdir}
+
 # Build with -Os as it helps the browser; also, don't override mozilla's warning
 # level; they use -Wall but disable a few warnings that show up _everywhere_
 MOZ_OPT_FLAGS=$(echo $RPM_OPT_FLAGS | %{__sed} -e 's/-O2/-Os/' -e 's/-Wall//')
@@ -198,6 +208,11 @@ make buildsymbols
 %install
 %{__rm} -rf $RPM_BUILD_ROOT
 cd %{tarballdir}
+
+INTERNAL_GECKO=%{version_internal}
+
+INTERNAL_APP_NAME=%{name}-${INTERNAL_GECKO}
+MOZ_APP_DIR=%{_libdir}/${INTERNAL_APP_NAME}
 
 cd %{moz_objdir}
 DESTDIR=$RPM_BUILD_ROOT make install
@@ -235,7 +250,7 @@ desktop-file-install --vendor mozilla \
 
 # set up the thunderbird start script
 rm -f $RPM_BUILD_ROOT/%{_bindir}/thunderbird
-%{__cat} %{SOURCE21} | %{__sed} -e 's,TBIRD_VERSION,%{version},g' > \
+%{__cat} %{SOURCE21} | %{__sed} -e 's,TBIRD_VERSION,%{version_internal},g' > \
   $RPM_BUILD_ROOT%{_bindir}/thunderbird
 %{__chmod} 755 $RPM_BUILD_ROOT/%{_bindir}/thunderbird
 
@@ -404,6 +419,9 @@ fi
 #===============================================================================
 
 %changelog
+* Wed Jan 20 2010 Martin Stransky <stransky@redhat.com> - 3.0.1-1
+- Update to 3.0.1
+
 * Mon Jan 18 2010 Martin Stransky <stransky@redhat.com> - 3.0-5
 - Added fix for #480603 - thunderbird takes 
   unacceptably long time to start
