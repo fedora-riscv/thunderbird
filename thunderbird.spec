@@ -23,7 +23,7 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        3.0.2
+Version:        3.0.3
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
@@ -35,7 +35,7 @@ Group:          Applications/Internet
 %endif
 Source0:        %{tarball}
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20100225.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20100301.tar.bz2
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -362,6 +362,9 @@ fi
 #===============================================================================
 
 %changelog
+* Mon Mar  1 2010 Jan Horak <jhorak@redhat.com> - 3.0.3-1
+- Update to 3.0.3
+
 * Thu Feb 25 2010 Jan Horak <jhorak@redhat.com> - 3.0.2-1
 - Update to 3.0.2
 
