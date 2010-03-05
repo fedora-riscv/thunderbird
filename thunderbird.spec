@@ -5,6 +5,7 @@
 %define sqlite_version 3.6.14
 %define build_langpacks 1
 %define moz_objdir objdir-tb
+%define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
 
 # The tarball is pretty inconsistent with directory structure.
 # Sometimes there is a top level directory.  That goes here.
@@ -23,7 +24,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.0.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -239,6 +240,10 @@ install -Dm755 %{SOURCE30} $RPM_BUILD_ROOT/%{mozappdir}/open-browser.sh
 # own mozilla plugin dir (#135050)
 %{__mkdir_p} $RPM_BUILD_ROOT%{_libdir}/mozilla/plugins
 
+# own extension directories
+%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/mozilla/extensions/%{thunderbird_app_id}
+%{__mkdir_p} $RPM_BUILD_ROOT%{_libdir}/mozilla/extensions/%{thunderbird_app_id}
+
 # Install langpacks
 %{__rm} -f %{name}.lang # Delete for --short-circuit option
 touch %{name}.lang
@@ -315,6 +320,8 @@ fi
 %defattr(-,root,root,-)
 %attr(755,root,root) %{_bindir}/thunderbird
 %attr(644,root,root) %{_datadir}/applications/mozilla-thunderbird.desktop
+%dir %{_datadir}/mozilla/extensions/%{thunderbird_app_id}
+%dir %{_libdir}/mozilla/extensions/%{thunderbird_app_id}
 %dir %{mozappdir}
 %doc %{mozappdir}/LICENSE
 %{mozappdir}/chrome
@@ -368,6 +375,9 @@ fi
 #===============================================================================
 
 %changelog
+* Sat Mar 06 2010 Kalev Lember <kalev@smartlink.ee> - 3.0.3-2
+- Own extension directories (#532132)
+
 * Mon Mar  1 2010 Jan Horak <jhorak@redhat.com> - 3.0.3-1
 - Update to 3.0.3
 
