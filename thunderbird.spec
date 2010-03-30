@@ -16,7 +16,7 @@
 %define tarballdir comm-1.9.1
 
 %define official_branding 1
-%define include_debuginfo 1
+%define include_debuginfo 0
 
 %define version_internal  3.0
 %define mozappdir         %{_libdir}/%{name}-%{version_internal}
@@ -35,33 +35,40 @@ Group:          Applications/Internet
 %endif
 Source0:        %{tarball}
 %if %{build_langpacks}
+# Language package archive is build by RH
 Source1:        thunderbird-langpacks-%{version}-20100330.tar.bz2
 %endif
+# Config file for compilation
 Source10:       thunderbird-mozconfig
+# Config file for branded compilation
 Source11:       thunderbird-mozconfig-branded
+# Default preferences for Thunderbird
 Source12:       thunderbird-redhat-default-prefs.js
+# Config file for debug builds
 Source13:       thunderbird-mozconfig-debuginfo
+# Desktop file
 Source20:       thunderbird.desktop
+# TB execute script
 Source21:       thunderbird.sh.in
+# Script called when user click on link in message
 Source30:       thunderbird-open-browser.sh
+# Finds requirements provided outside of the current file set
 Source100:      find-external-requires
 
+# Fix for version issues
 Patch0:         thunderbird-version.patch
+# Fix for jemalloc
 Patch1:         mozilla-jemalloc.patch
+# Fix for installation fail when building with dynamic linked libraries
 Patch2:         thunderbird-shared-error.patch
-#Patch3:         thunderbird-debuginfo-fix-include.patch
-Patch4:         thunderbird-clipboard-crash.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
 
-
 %else
 # Not yet approved by Mozillla Corporation
 
-
 %endif
-
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  nspr-devel >= %{nspr_version}
@@ -88,7 +95,6 @@ BuildRequires:  startup-notification-devel
 BuildRequires:  alsa-lib-devel
 BuildRequires:  autoconf213
 BuildRequires:  desktop-file-utils
-
 Requires:       mozilla-filesystem
 Requires:       nspr >= %{nspr_version}
 Requires:       nss >= %{nss_version}
@@ -145,22 +151,13 @@ sed -e 's/__RPM_VERSION_INTERNAL__/%{version_internal}/' %{P:%%PATCH0} \
 %patch1 -p0 -b .jemalloc
 %patch2 -p1 -b .shared-error
 
-%if %{include_debuginfo}
-#%patch3 -p1 -b .fix-include
-%endif
-
-%patch4 -p1 -b .clipboard-crash
-
 %if %{official_branding}
 # Required by Mozilla Corporation
-
 
 %else
 # Not yet approved by Mozillla Corporation
 
-
 %endif
-
 
 %{__rm} -f .mozconfig
 %{__cp} %{SOURCE10} .mozconfig
@@ -340,8 +337,12 @@ mkdir -p $RPM_BUILD_ROOT%{_libdir}/debug%{mozappdir}
 cp %{moz_objdir}/mozilla/dist/thunderbird-%{version}.en-US.linux-i686.crashreporter-symbols.zip $RPM_BUILD_ROOT%{_libdir}/debug%{mozappdir}
 %endif
 
+#===============================================================================
+
 %clean
 %{__rm} -rf $RPM_BUILD_ROOT
+
+#===============================================================================
 
 %post
 update-desktop-database &> /dev/null || :
@@ -350,12 +351,16 @@ if [ -x %{_bindir}/gtk-update-icon-cache ]; then
   %{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor || :
 fi
 
+#===============================================================================
+
 %postun
 update-desktop-database &> /dev/null || :
 touch --no-create %{_datadir}/icons/hicolor
 if [ -x %{_bindir}/gtk-update-icon-cache ]; then
   %{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor || :
 fi
+
+#===============================================================================
 
 %files -f %{tarballdir}/%{name}.lang
 %defattr(-,root,root,-)
