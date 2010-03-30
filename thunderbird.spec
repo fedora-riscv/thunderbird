@@ -16,15 +16,15 @@
 %define tarballdir comm-1.9.1
 
 %define official_branding 1
-%define include_debuginfo 0
+%define include_debuginfo 1
 
 %define version_internal  3.0
 %define mozappdir         %{_libdir}/%{name}-%{version_internal}
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        3.0.3
-Release:        2%{?dist}
+Version:        3.0.4
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -35,7 +35,7 @@ Group:          Applications/Internet
 %endif
 Source0:        %{tarball}
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20100301.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20100330.tar.bz2
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -49,7 +49,7 @@ Source100:      find-external-requires
 Patch0:         thunderbird-version.patch
 Patch1:         mozilla-jemalloc.patch
 Patch2:         thunderbird-shared-error.patch
-Patch3:         thunderbird-debuginfo-fix-include.patch
+#Patch3:         thunderbird-debuginfo-fix-include.patch
 Patch4:         thunderbird-clipboard-crash.patch
 
 %if %{official_branding}
@@ -146,7 +146,7 @@ sed -e 's/__RPM_VERSION_INTERNAL__/%{version_internal}/' %{P:%%PATCH0} \
 %patch2 -p1 -b .shared-error
 
 %if %{include_debuginfo}
-%patch3 -p1 -b .fix-include
+#%patch3 -p1 -b .fix-include
 %endif
 
 %patch4 -p1 -b .clipboard-crash
@@ -426,6 +426,9 @@ fi
 #===============================================================================
 
 %changelog
+* Tue Mar 30 2010 Jan Horak <jhorak@redhat.com> - 3.0.4-1
+- Update to 3.0.4
+
 * Sat Mar 06 2010 Kalev Lember <kalev@smartlink.ee> - 3.0.3-2
 - Own extension directories (#532132)
 
