@@ -9,3 +9,4 @@ Terminal=false
 Type=Application
 StartupWMClass=Thunderbird-bin
 MimeType=message/rfc822;
+StartupNotify=true
