@@ -13,30 +13,31 @@
 # IMPORTANT: If there is no top level directory, this should be 
 # set to the cwd, ie: '.'
 #%define tarballdir .
-%define tarballdir comm-1.9.1
+%define tarballdir comm-1.9.2
 
 %define official_branding 1
 %define include_debuginfo 0
 
-%define version_internal  3.0
+%define version_internal  3.1
 %define mozappdir         %{_libdir}/%{name}-%{version_internal}
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        3.0.4
-Release:        3%{?dist}
+Version:        3.1
+Release:        0.1.rc1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 %if %{official_branding}
-%define tarball thunderbird-%{version}.source.tar.bz2
+#%define tarball thunderbird-%{version}.source.tar.bz2
+%define tarball thunderbird-3.1rc1.source.tar.bz2
 %else
-%define tarball thunderbird-3.0b2-source.tar.bz2
+%define tarball thunderbird-3.1rc1.source.tar.bz2
 %endif
 Source0:        %{tarball}
 %if %{build_langpacks}
 # Language package archive is build by RH
-Source1:        thunderbird-langpacks-%{version}-20100330.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20100527.tar.bz2
 %endif
 # Config file for compilation
 Source10:       thunderbird-mozconfig
@@ -61,8 +62,7 @@ Patch0:         thunderbird-version.patch
 Patch1:         mozilla-jemalloc.patch
 # Fix for installation fail when building with dynamic linked libraries
 Patch2:         thunderbird-shared-error.patch
-# Fix for crash mozbz#550455, remove when 3.0.5
-Patch3:         thunderbird-436533.patch
+
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -109,38 +109,6 @@ AutoProv: 0
 %description
 Mozilla Thunderbird is a standalone mail and newsgroup client.
 
-#%package devel
-#Summary: Development files for Thunderbird
-#Group: Development/Libraries
-#Provides: thunderbird-devel = %{version}
-#
-#Requires: thunderbird = %{version}-%{release}
-#Requires: nspr-devel >= %{nspr_version}
-#Requires: nss-devel >= %{nss_version}
-#Requires: cairo-devel >= %{cairo_version}
-#Requires: libjpeg-devel
-#Requires: bzip2-devel
-#Requires: zlib-devel
-#Requires: libIDL-devel
-#Requires: gtk2-devel
-#Requires: gnome-vfs2-devel
-#Requires: libgnome-devel
-#Requires: libgnomeui-devel
-#Requires: krb5-devel
-#Requires: pango-devel
-#Requires: freetype-devel >= %{freetype_version}
-#Requires: libXt-devel
-#Requires: libXrender-devel
-#Requires: hunspell-devel
-#Requires: sqlite-devel
-#Requires: startup-notification-devel
-#Requires: alsa-lib-devel
-#Requires: libnotify-devel
-
-#%description devel
-#Thunderbird development files.
-#
-#===============================================================================
 
 %prep
 %setup -q -c
@@ -152,7 +120,6 @@ sed -e 's/__RPM_VERSION_INTERNAL__/%{version_internal}/' %{P:%%PATCH0} \
 
 %patch1 -p0 -b .jemalloc
 %patch2 -p1 -b .shared-error
-%patch3 -p1 -b .436533
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -323,15 +290,6 @@ ln -s %{_datadir}/myspell $RPM_BUILD_ROOT%{mozappdir}/dictionaries
 touch $RPM_BUILD_ROOT%{mozappdir}/components/compreg.dat
 touch $RPM_BUILD_ROOT%{mozappdir}/components/xpti.dat
 
-# Devel package - sdk
-#%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/idl/thunderbird-%{version_internal}
-#%{__cp} %{moz_objdir}/mozilla/dist/sdk/idl/* $RPM_BUILD_ROOT%{_datadir}/idl/thunderbird-%{version_internal}
-
-#%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/include/thunderbird-%{version_internal}
-#%{__cp} %{moz_objdir}/mozilla/dist/sdk/include/* $RPM_BUILD_ROOT%{_datadir}/include/thunderbird-%{version_internal}
-
-#%{__cp} %{moz_objdir}/mozilla/dist/sdk/bin/* $RPM_BUILD_ROOT%{mozappdir}/
-
 
 # Add debuginfo for crash-stats.mozilla.com 
 %if %{include_debuginfo}
@@ -422,18 +380,13 @@ fi
 %{mozappdir}/Throbber-small.gif
 %endif
 
-# TODO: devel package
-#%files devel 
-#%defattr(-,root,root,-) 
-#%{_datadir}/idl/thunderbird-%{version_internal}
-#%{_datadir}/include/thunderbird-%{version_internal}
-#%{mozappdir}/xpidl
-#%{mozappdir}/xpt_dump
-#%{mozappdir}/xpt_link
 
 #===============================================================================
 
 %changelog
+* Tue May 25 2010 Christopher Aillon <caillon@redhat.com> 3.1-0.1.rc1
+- Thunderbird 3.1 RC1
+
 * Fri Apr 30 2010 Jan Horak <jhorak@redhat.com> - 3.0.4-3
 - Fix for mozbz#550455
 
