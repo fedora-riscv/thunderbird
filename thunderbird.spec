@@ -63,7 +63,8 @@ Patch0:         thunderbird-version.patch
 Patch1:         mozilla-jemalloc.patch
 # Fix for installation fail when building with dynamic linked libraries
 Patch2:         thunderbird-shared-error.patch
-
+# Fixes gcc complain that nsFrame::delete is protected
+Patch4:         xulrunner-1.9.2.1-build.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -122,6 +123,8 @@ sed -e 's/__RPM_VERSION_INTERNAL__/%{version_internal}/' %{P:%%PATCH0} \
 
 %patch1 -p0 -b .jemalloc
 %patch2 -p1 -b .shared-error
+%patch4 -p1 -b .protected
+
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -337,6 +340,7 @@ fi
 %dir %{mozappdir}/components
 %ghost %{mozappdir}/components/compreg.dat
 %ghost %{mozappdir}/components/xpti.dat
+%{mozappdir}/components/components.list
 %{mozappdir}/components/*.so
 %{mozappdir}/components/*.xpt
 %attr(644,root,root) %{mozappdir}/components/*.js
@@ -367,7 +371,6 @@ fi
 %{mozappdir}/platform.ini
 %{mozappdir}/updater.ini
 %{mozappdir}/application.ini
-%exclude %{mozappdir}/dependentlibs.list
 %exclude %{mozappdir}/removed-files
 %{mozappdir}/update.locale
 %{_datadir}/icons/hicolor/16x16/apps/thunderbird.png
