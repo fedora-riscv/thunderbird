@@ -17,7 +17,7 @@
 %define tarballdir comm-1.9.2
 
 %define official_branding 1
-%define include_debuginfo 0
+%define include_debuginfo 1
 
 %define version_internal  3.1
 %define mozappdir         %{_libdir}/%{name}-%{version_internal}
@@ -25,7 +25,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.1
-Release:        0.2.rc2%{?dist}
+Release:        0.3.rc2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -298,9 +298,8 @@ touch $RPM_BUILD_ROOT%{mozappdir}/components/xpti.dat
 
 # Add debuginfo for crash-stats.mozilla.com 
 %if %{include_debuginfo}
-cp mozilla/dist/thunderbird-%{version}.en-US.linux-%{_target_cpu}-crashreporter-symbols.zip $RPM_BUILD_ROOT/%{_libdir}/debug%{mozappdir}
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/debug%{mozappdir}
-cp %{moz_objdir}/mozilla/dist/thunderbird-%{version}.en-US.linux-i686.crashreporter-symbols.zip $RPM_BUILD_ROOT%{_libdir}/debug%{mozappdir}
+cp %{moz_objdir}/mozilla/dist/thunderbird-%{version}.en-US.linux-*.crashreporter-symbols.zip $RPM_BUILD_ROOT%{_libdir}/debug%{mozappdir}
 %endif
 
 #===============================================================================
@@ -389,6 +388,10 @@ fi
 #===============================================================================
 
 %changelog
+* Fri Jun 11 2010 Jan Horak <jhorak@redhat.com> - 3.1-0.3.rc2
+- Switch to Mozilla crash reporting tool
+- TryExec added to desktop file
+
 * Wed Jun  9 2010 Christopher Aillon <caillon@redhat.com> 3.1-0.2.rc2
 - Thunderbird 3.1 RC2
 
