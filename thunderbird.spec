@@ -61,8 +61,6 @@ Patch0:         thunderbird-version.patch
 Patch1:         mozilla-jemalloc.patch
 # Fix for installation fail when building with dynamic linked libraries
 Patch2:         thunderbird-shared-error.patch
-# Fix for crash mozbz#550455, remove when 3.0.5
-Patch3:         thunderbird-436533.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -115,7 +113,6 @@ sed -e 's/__RPM_VERSION_INTERNAL__/%{version_internal}/' %{P:%%PATCH0} \
 
 %patch1 -p0 -b .jemalloc
 %patch2 -p1 -b .shared-error
-%patch3 -p1 -b .436533
 
 %if %{official_branding}
 # Required by Mozilla Corporation
