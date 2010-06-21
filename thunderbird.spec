@@ -3,6 +3,7 @@
 %define cairo_version 1.6.0
 %define freetype_version 2.1.9
 %define sqlite_version 3.6.14
+%define libnotify_version 0.4
 %define build_langpacks 1
 %define moz_objdir objdir-tb
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
@@ -13,23 +14,24 @@
 # IMPORTANT: If there is no top level directory, this should be 
 # set to the cwd, ie: '.'
 #%define tarballdir .
-%define tarballdir comm-1.9.1
+%define tarballdir comm-1.9.2
 
 %define official_branding 1
 %define include_debuginfo 0
 
-%define version_internal  3.0
+%define version_internal  3.1
 %define mozappdir         %{_libdir}/%{name}-%{version_internal}
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        3.0.5
-Release:        1%{?dist}
+Version:        3.1
+Release:        0.1.rc2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 %if %{official_branding}
-%define tarball thunderbird-%{version}.source.tar.bz2
+#%define tarball thunderbird-%{version}.source.tar.bz2
+%define tarball thunderbird-3.1rc2.source.tar.bz2
 %else
 %define tarball thunderbird-3.0b2-source.tar.bz2
 %endif
@@ -61,6 +63,8 @@ Patch0:         thunderbird-version.patch
 Patch1:         mozilla-jemalloc.patch
 # Fix for installation fail when building with dynamic linked libraries
 Patch2:         thunderbird-shared-error.patch
+# Fixes gcc complain that nsFrame::delete is protected
+Patch4:         xulrunner-1.9.2.1-build.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -74,6 +78,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  nspr-devel >= %{nspr_version}
 BuildRequires:  nss-devel >= %{nss_version}
 BuildRequires:  cairo-devel >= %{cairo_version}
+BuildRequires:  libnotify-devel >= %{libnotify_version}
 BuildRequires:  libpng-devel
 BuildRequires:  libjpeg-devel
 BuildRequires:  zip
@@ -95,6 +100,7 @@ BuildRequires:  startup-notification-devel
 BuildRequires:  alsa-lib-devel
 BuildRequires:  autoconf213
 BuildRequires:  desktop-file-utils
+BuildRequires:  libcurl-devel
 Requires:       mozilla-filesystem
 Requires:       nspr >= %{nspr_version}
 Requires:       nss >= %{nss_version}
@@ -150,6 +156,7 @@ sed -e 's/__RPM_VERSION_INTERNAL__/%{version_internal}/' %{P:%%PATCH0} \
 
 %patch1 -p0 -b .jemalloc
 %patch2 -p1 -b .shared-error
+%patch4 -p1 -b .protected
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -332,9 +339,8 @@ touch $RPM_BUILD_ROOT%{mozappdir}/components/xpti.dat
 
 # Add debuginfo for crash-stats.mozilla.com 
 %if %{include_debuginfo}
-cp mozilla/dist/thunderbird-%{version}.en-US.linux-%{_target_cpu}-crashreporter-symbols.zip $RPM_BUILD_ROOT/%{_libdir}/debug%{mozappdir}
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/debug%{mozappdir}
-cp %{moz_objdir}/mozilla/dist/thunderbird-%{version}.en-US.linux-i686.crashreporter-symbols.zip $RPM_BUILD_ROOT%{_libdir}/debug%{mozappdir}
+cp %{moz_objdir}/mozilla/dist/thunderbird-%{version}.en-US.linux-*.crashreporter-symbols.zip $RPM_BUILD_ROOT%{_libdir}/debug%{mozappdir}
 %endif
 
 #===============================================================================
@@ -374,6 +380,7 @@ fi
 %dir %{mozappdir}/components
 %ghost %{mozappdir}/components/compreg.dat
 %ghost %{mozappdir}/components/xpti.dat
+%{mozappdir}/components/components.list
 %{mozappdir}/components/*.so
 %{mozappdir}/components/*.xpt
 %attr(644,root,root) %{mozappdir}/components/*.js
@@ -404,7 +411,6 @@ fi
 %{mozappdir}/platform.ini
 %{mozappdir}/updater.ini
 %{mozappdir}/application.ini
-%exclude %{mozappdir}/dependentlibs.list
 %exclude %{mozappdir}/removed-files
 %{mozappdir}/update.locale
 %{_datadir}/icons/hicolor/16x16/apps/thunderbird.png
@@ -431,6 +437,9 @@ fi
 #===============================================================================
 
 %changelog
+* Mon Jun 21 2010 Jan Horak <jhorak@redhat.com> - 3.1-0.1.rc2
+- Update to 3.1 RC2
+
 * Mon Jun 21 2010 Jan Horak <jhorak@redhat.com> - 3.0.5-1
 - Update to 3.0.5
 
