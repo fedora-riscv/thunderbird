@@ -5,6 +5,7 @@ Name=Thunderbird Email
 GenericName=Email
 Comment=Send and Receive Email
 Exec=thunderbird
+TryExec=thunderbird
 Icon=thunderbird
 Terminal=false
 Type=Application
