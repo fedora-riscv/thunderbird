@@ -101,6 +101,7 @@ BuildRequires:  alsa-lib-devel
 BuildRequires:  autoconf213
 BuildRequires:  desktop-file-utils
 BuildRequires:  libcurl-devel
+BuildRequires:  wireless-tools-devel
 Requires:       mozilla-filesystem
 Requires:       nspr >= %{nspr_version}
 Requires:       nss >= %{nss_version}
