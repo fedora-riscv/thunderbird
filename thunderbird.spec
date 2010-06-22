@@ -103,6 +103,7 @@ BuildRequires:  alsa-lib-devel
 BuildRequires:  autoconf213
 BuildRequires:  desktop-file-utils
 BuildRequires:  libcurl-devel
+BuildRequires:  glibc-static
 Requires:       mozilla-filesystem
 Requires:       nspr >= %{nspr_version}
 Requires:       nss >= %{nss_version}
@@ -393,6 +394,7 @@ fi
 
 %changelog
 * Fri Jun 11 2010 Jan Horak <jhorak@redhat.com> - 3.1-0.3.rc2
+- Enable mozilla crash reporter
 - TryExec added to desktop file
 
 * Wed Jun  9 2010 Christopher Aillon <caillon@redhat.com> 3.1-0.2.rc2
