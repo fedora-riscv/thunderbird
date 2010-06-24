@@ -25,13 +25,12 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.1
-Release:        0.3.rc2%{?dist}
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 %if %{official_branding}
-#%define tarball thunderbird-%{version}.source.tar.bz2
-%define tarball thunderbird-3.1rc2.source.tar.bz2
+%define tarball thunderbird-%{version}.source.tar.bz2
 %else
 %define tarball thunderbird-3.1rc1.source.tar.bz2
 %endif
@@ -394,6 +393,9 @@ fi
 #===============================================================================
 
 %changelog
+* Thu Jun 24 2010 Jan Horak <jhorak@redhat.com> - 3.1-1
+- Thunderbird 3.1
+
 * Fri Jun 11 2010 Jan Horak <jhorak@redhat.com> - 3.1-0.3.rc2
 - TryExec added to desktop file
 
