@@ -17,7 +17,7 @@
 %define tarballdir comm-1.9.2
 
 %define official_branding 1
-%define include_debuginfo 1
+%define include_debuginfo 0
 
 %define version_internal  3.1
 %define mozappdir         %{_libdir}/%{name}-%{version_internal}
@@ -395,7 +395,6 @@ fi
 
 %changelog
 * Fri Jun 11 2010 Jan Horak <jhorak@redhat.com> - 3.1-0.3.rc2
-- Enable mozilla crash reporter
 - TryExec added to desktop file
 
 * Wed Jun  9 2010 Christopher Aillon <caillon@redhat.com> 3.1-0.2.rc2
