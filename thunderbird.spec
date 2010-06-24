@@ -25,20 +25,19 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.1
-Release:        0.1.rc2%{?dist}
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 %if %{official_branding}
-#%define tarball thunderbird-%{version}.source.tar.bz2
-%define tarball thunderbird-3.1rc2.source.tar.bz2
+%define tarball thunderbird-%{version}.source.tar.bz2
 %else
 %define tarball thunderbird-3.0b2-source.tar.bz2
 %endif
 Source0:        %{tarball}
 %if %{build_langpacks}
 # Language package archive is build by RH
-Source1:        thunderbird-langpacks-%{version}rc2-20100621.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20100624.tar.bz2
 %endif
 # Config file for compilation
 Source10:       thunderbird-mozconfig
@@ -101,7 +100,6 @@ BuildRequires:  alsa-lib-devel
 BuildRequires:  autoconf213
 BuildRequires:  desktop-file-utils
 BuildRequires:  libcurl-devel
-BuildRequires:  wireless-tools-devel
 Requires:       mozilla-filesystem
 Requires:       nspr >= %{nspr_version}
 Requires:       nss >= %{nss_version}
@@ -438,6 +436,9 @@ fi
 #===============================================================================
 
 %changelog
+* Thu Jun 24 2010 Jan Horak <jhorak@redhat.com> - 3.1-1
+- Thunderbird 3.1
+
 * Mon Jun 21 2010 Jan Horak <jhorak@redhat.com> - 3.1-0.1.rc2
 - Update to 3.1 RC2
 
