@@ -17,14 +17,14 @@
 %define tarballdir comm-1.9.2
 
 %define official_branding 1
-%define include_debuginfo 0
+%define enable_mozilla_crashreporter 0
 
 %define version_internal  3.1
 %define mozappdir         %{_libdir}/%{name}-%{version_internal}
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        3.1
+Version:        3.1.1
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
@@ -37,7 +37,7 @@ Group:          Applications/Internet
 Source0:        %{tarball}
 %if %{build_langpacks}
 # Language package archive is build by RH
-Source1:        thunderbird-langpacks-%{version}-20100624.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20100720.tar.bz2
 %endif
 # Config file for compilation
 Source10:       thunderbird-mozconfig
@@ -64,6 +64,9 @@ Patch1:         mozilla-jemalloc.patch
 Patch2:         thunderbird-shared-error.patch
 # Fixes gcc complain that nsFrame::delete is protected
 Patch4:         xulrunner-1.9.2.1-build.patch
+# Fix missing includes for crash reporter, remove in 3.1 final
+Patch5:         xulrunner-missing-headers.patch
+Patch6:         remove-static.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -156,6 +159,8 @@ sed -e 's/__RPM_VERSION_INTERNAL__/%{version_internal}/' %{P:%%PATCH0} \
 %patch1 -p0 -b .jemalloc
 %patch2 -p1 -b .shared-error
 %patch4 -p1 -b .protected
+%patch5 -p0 -b .stat
+%patch6 -p1 -b .static
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -170,7 +175,7 @@ sed -e 's/__RPM_VERSION_INTERNAL__/%{version_internal}/' %{P:%%PATCH0} \
 %if %{official_branding}
 %{__cat} %{SOURCE11} >> .mozconfig
 %endif
-%if %{include_debuginfo}
+%if %{enable_mozilla_crashreporter}
 %{__cat} %{SOURCE13} >> .mozconfig
 %endif
 
@@ -202,7 +207,7 @@ export MAKE="gmake %{moz_make_flags}"
 make -f client.mk build
 
 # create debuginfo for crash-stats.mozilla.com
-%if %{include_debuginfo}
+%if %{enable_mozilla_crashreporter}
 cd %{moz_objdir}
 make buildsymbols
 %endif
@@ -337,9 +342,9 @@ touch $RPM_BUILD_ROOT%{mozappdir}/components/xpti.dat
 
 
 # Add debuginfo for crash-stats.mozilla.com 
-%if %{include_debuginfo}
-mkdir -p $RPM_BUILD_ROOT%{_libdir}/debug%{mozappdir}
-cp %{moz_objdir}/mozilla/dist/thunderbird-%{version}.en-US.linux-*.crashreporter-symbols.zip $RPM_BUILD_ROOT%{_libdir}/debug%{mozappdir}
+%if %{enable_mozilla_crashreporter}
+mkdir -p $RPM_BUILD_ROOT%{_exec_prefix}/lib/debug%{mozappdir}
+cp %{moz_objdir}/mozilla/dist/thunderbird-%{version}.en-US.linux-*.crashreporter-symbols.zip $RPM_BUILD_ROOT%{_exec_prefix}/lib/debug%{mozappdir}
 %endif
 
 #===============================================================================
@@ -418,7 +423,7 @@ fi
 %{_datadir}/icons/hicolor/256x256/apps/thunderbird.png
 %{_datadir}/icons/hicolor/32x32/apps/thunderbird.png
 %{_datadir}/icons/hicolor/48x48/apps/thunderbird.png
-%if %{include_debuginfo}
+%if %{enable_mozilla_crashreporter}
 %{mozappdir}/crashreporter
 %{mozappdir}/crashreporter.ini
 %{mozappdir}/Throbber-small.gif
@@ -436,6 +441,9 @@ fi
 #===============================================================================
 
 %changelog
+* Tue Jul 20 2010 Jan Horak <jhorak@redhat.com> - 3.1.1-1
+- Update to 3.1.1
+
 * Thu Jun 24 2010 Jan Horak <jhorak@redhat.com> - 3.1-1
 - Thunderbird 3.1
 
