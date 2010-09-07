@@ -24,7 +24,7 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        3.1.2
+Version:        3.1.3
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
@@ -37,7 +37,7 @@ Group:          Applications/Internet
 Source0:        %{tarball}
 %if %{build_langpacks}
 # Language package archive is build by RH
-Source1:        thunderbird-langpacks-%{version}-20100803.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20100907.tar.bz2
 %endif
 # Config file for compilation
 Source10:       thunderbird-mozconfig
@@ -65,7 +65,6 @@ Patch2:         thunderbird-shared-error.patch
 # Fixes gcc complain that nsFrame::delete is protected
 Patch4:         xulrunner-1.9.2.1-build.patch
 # Fix missing includes for crash reporter, remove in 3.1 final
-Patch5:         xulrunner-missing-headers.patch
 Patch6:         remove-static.patch
 
 %if %{official_branding}
@@ -159,7 +158,6 @@ sed -e 's/__RPM_VERSION_INTERNAL__/%{version_internal}/' %{P:%%PATCH0} \
 %patch1 -p0 -b .jemalloc
 %patch2 -p1 -b .shared-error
 %patch4 -p1 -b .protected
-%patch5 -p0 -b .stat
 %patch6 -p1 -b .static
 
 %if %{official_branding}
@@ -435,6 +433,9 @@ fi
 #===============================================================================
 
 %changelog
+* Tue Sep  7 2010 Jan Horak <jhorak@redhat.com> - 3.1.3-1
+- Update to 3.1.3
+
 * Fri Aug  6 2010 Jan Horak <jhorak@redhat.com> - 3.1.2-1
 - Update to 3.1.2
 - Disable updater
