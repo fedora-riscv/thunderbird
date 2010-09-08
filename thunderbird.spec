@@ -24,7 +24,7 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        3.1.2
+Version:        3.1.3
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
@@ -37,7 +37,7 @@ Group:          Applications/Internet
 Source0:        %{tarball}
 %if %{build_langpacks}
 # Language package archive is build by RH
-Source1:        thunderbird-langpacks-%{version}-20100803.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20100907.tar.bz2
 %endif
 # Config file for compilation
 Source10:       thunderbird-mozconfig
@@ -389,6 +389,9 @@ fi
 #===============================================================================
 
 %changelog
+* Tue Sep  7 2010 Jan Horak <jhorak@redhat.com> - 3.1.3-1
+- Update to 3.1.3
+
 * Fri Aug  6 2010 Jan Horak <jhorak@redhat.com> - 3.1.2-1
 - Update to 3.1.2
 - Disable updater
