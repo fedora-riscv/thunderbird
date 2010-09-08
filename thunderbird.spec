@@ -65,7 +65,6 @@ Patch2:         thunderbird-shared-error.patch
 # Fixes gcc complain that nsFrame::delete is protected
 Patch4:         xulrunner-1.9.2.1-build.patch
 # Fix missing includes for crash reporter, remove in 3.1 final
-Patch5:         xulrunner-missing-headers.patch
 
 Patch6:         mozilla-libjpeg-turbo.patch
 Patch7:         mozilla-missing-cflags.patch
@@ -130,7 +129,6 @@ sed -e 's/__RPM_VERSION_INTERNAL__/%{version_internal}/' %{P:%%PATCH0} \
 %patch1 -p0 -b .jemalloc
 %patch2 -p1 -b .shared-error
 %patch4 -p1 -b .protected
-%patch5 -p0 -b .stat
 %patch6 -p1 -b .turbo
 %patch7 -p1 -b .mozcflags
 
