@@ -25,7 +25,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.1.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -68,6 +68,7 @@ Patch4:         xulrunner-1.9.2.1-build.patch
 
 Patch6:         mozilla-libjpeg-turbo.patch
 Patch7:         mozilla-missing-cflags.patch
+Patch8:         mozilla-build-s390.patch
 %if %{official_branding}
 # Required by Mozilla Corporation
 
@@ -131,6 +132,9 @@ sed -e 's/__RPM_VERSION_INTERNAL__/%{version_internal}/' %{P:%%PATCH0} \
 %patch4 -p1 -b .protected
 %patch6 -p1 -b .turbo
 %patch7 -p1 -b .mozcflags
+%ifarch s390
+%patch8 -p0 -b .s390
+%endif
 
 
 %if %{official_branding}
@@ -389,6 +393,9 @@ fi
 #===============================================================================
 
 %changelog
+* Thu Sep 16 2010 Dan Horák <dan[at]danny.cz> - 3.1.3-2
+- fix build on s390
+
 * Tue Sep  7 2010 Jan Horak <jhorak@redhat.com> - 3.1.3-1
 - Update to 3.1.3
 
