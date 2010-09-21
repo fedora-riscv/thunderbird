@@ -24,7 +24,7 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        3.1.3
+Version:        3.1.4
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
@@ -37,7 +37,7 @@ Group:          Applications/Internet
 Source0:        %{tarball}
 %if %{build_langpacks}
 # Language package archive is build by RH
-Source1:        thunderbird-langpacks-%{version}-20100907.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20100921.tar.bz2
 %endif
 # Config file for compilation
 Source10:       thunderbird-mozconfig
@@ -197,7 +197,7 @@ export LIBDIR='%{_libdir}'
 %ifarch ppc ppc64 s390 s390x
 %define moz_make_flags -j1
 %else
-%define moz_make_flags %{?_smp_mflags}
+%define moz_make_flags -j4
 %endif
 
 export LDFLAGS="-Wl,-rpath,%{mozappdir}"
@@ -433,6 +433,9 @@ fi
 #===============================================================================
 
 %changelog
+* Tue Sep 21 2010 Martin Stransky <stransky@redhat.com> - 3.1.4-1
+- Update to 3.1.4
+
 * Tue Sep  7 2010 Jan Horak <jhorak@redhat.com> - 3.1.3-1
 - Update to 3.1.3
 
