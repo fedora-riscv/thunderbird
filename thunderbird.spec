@@ -1,5 +1,5 @@
 %define nspr_version 4.8
-%define nss_version 3.12.3.99
+%define nss_version 3.12.8
 %define cairo_version 1.6.0
 %define freetype_version 2.1.9
 %define sqlite_version 3.6.14
@@ -24,8 +24,8 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        3.1.3
-Release:        2%{?dist}
+Version:        3.1.5
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -37,7 +37,7 @@ Group:          Applications/Internet
 Source0:        %{tarball}
 %if %{build_langpacks}
 # Language package archive is build by RH
-Source1:        thunderbird-langpacks-%{version}-20100907.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20101019.tar.bz2
 %endif
 # Config file for compilation
 Source10:       thunderbird-mozconfig
@@ -391,6 +391,9 @@ fi
 #===============================================================================
 
 %changelog
+* Tue Oct 19 2010 Jan Horak <jhorak@redhat.com> - 3.1.5-1
+- Update to 3.1.5
+
 * Thu Sep 16 2010 Dan Horák <dan[at]danny.cz> - 3.1.3-2
 - fix build on s390
 
