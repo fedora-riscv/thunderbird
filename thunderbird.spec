@@ -176,6 +176,9 @@ sed -e 's/__RPM_VERSION_INTERNAL__/%{version_internal}/' %{P:%%PATCH0} \
 %if %{enable_mozilla_crashreporter}
 %{__cat} %{SOURCE13} >> .mozconfig
 %endif
+%if %{with_lightning_extension}
+echo "ac_add_options --enable-calendar" >> .mozconfig
+%endif
 
 #===============================================================================
 
