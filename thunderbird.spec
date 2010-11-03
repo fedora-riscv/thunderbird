@@ -430,9 +430,6 @@ fi
 %{mozappdir}/crashreporter.ini
 %{mozappdir}/Throbber-small.gif
 %endif
-%exclude %{mozappdir}/libfreebl3.chk
-%exclude %{mozappdir}/libnssdbm3.chk
-%exclude %{mozappdir}/libsoftokn3.chk
 
 %if %{with_lightning_extension}
 %files -n thunderbird-lightning
