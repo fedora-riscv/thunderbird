@@ -29,7 +29,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.1.6
-Release:        2%{?dist}
+Release:        3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -68,11 +68,13 @@ Patch1:         mozilla-jemalloc.patch
 Patch2:         thunderbird-shared-error.patch
 # Fixes gcc complain that nsFrame::delete is protected
 Patch4:         xulrunner-1.9.2.1-build.patch
-# Fix missing includes for crash reporter, remove in 3.1 final
-
 Patch6:         mozilla-libjpeg-turbo.patch
 Patch7:         mozilla-missing-cflags.patch
 Patch8:         mozilla-build-s390.patch
+# Remove static build option from crashreporter to remove dependency on static libraries
+Patch9:         crashreporter-remove-static.patch
+Patch10         mozilla-notify.patch
+
 %if %{official_branding}
 # Required by Mozilla Corporation
 
@@ -108,8 +110,6 @@ BuildRequires:  alsa-lib-devel
 BuildRequires:  autoconf213
 BuildRequires:  desktop-file-utils
 BuildRequires:  libcurl-devel
-BuildRequires:  glibc-static
-BuildRequires:  libstdc++-static
 Requires:       mozilla-filesystem
 Requires:       nspr >= %{nspr_version}
 Requires:       nss >= %{nss_version}
@@ -158,6 +158,8 @@ sed -e 's/__RPM_VERSION_INTERNAL__/%{version_internal}/' %{P:%%PATCH0} \
 %ifarch s390
 %patch8 -p0 -b .s390
 %endif
+%patch9 -p1 -b .static
+%patch10 -p1 -b .libnotify
 
 
 %if %{official_branding}
@@ -442,6 +444,10 @@ fi
 #===============================================================================
 
 %changelog
+* Mon Nov  8 2010 Jan Horak <jhorak@redhat.com> - 3.1.6-3
+- Added libnotify patch
+- Removed dependency on static libraries
+
 * Fri Oct 29 2010 Jan Horak <jhorak@redhat.com> - 3.1.6-2
 - Move thunderbird-lightning extension from Sunbird package to Thunderbird
 
