@@ -73,7 +73,7 @@ Patch7:         mozilla-missing-cflags.patch
 Patch8:         mozilla-build-s390.patch
 # Remove static build option from crashreporter to remove dependency on static libraries
 Patch9:         crashreporter-remove-static.patch
-Patch10         mozilla-notify.patch
+Patch10:        mozilla-notify.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
