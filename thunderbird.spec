@@ -29,7 +29,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.1.6
-Release:        4%{?dist}
+Release:        5%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -444,6 +444,9 @@ fi
 #===============================================================================
 
 %changelog
+* Mon Nov 22 2010 Jan Horak <jhorak@redhat.com> - 3.1.6-5
+- Added x-scheme-handler/mailto to thunderbird.desktop file
+
 * Mon Nov  8 2010 Jan Horak <jhorak@redhat.com> - 3.1.6-4
 - Added libnotify patch
 - Removed dependency on static libraries
