@@ -8,7 +8,7 @@
 %define moz_objdir objdir-tb
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
 %define with_lightning_extension 1
-%define lightning_release 0.35.b2pre
+%define lightning_release 0.36.b2pre
 %define lightning_extname %{_libdir}/mozilla/extensions/{3550f703-e582-4d05-9a08-453d09bdfdc6}/{e2fda1a4-762b-4020-b5ad-a41df1933103}
 %define gdata_extname %{_libdir}/mozilla/extensions/{3550f703-e582-4d05-9a08-453d09bdfdc6}/{a62ef8ec-5fdc-40c2-873c-223b8a6925cc}
 
@@ -29,7 +29,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.1.6
-Release:        6%{?dist}
+Release:        7%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -444,7 +444,7 @@ fi
 #===============================================================================
 
 %changelog
-* Mon Nov 22 2010 Jan Horak <jhorak@redhat.com> - 3.1.6-6
+* Mon Nov 22 2010 Jan Horak <jhorak@redhat.com> - 3.1.6-7
 - Added x-scheme-handler/mailto to thunderbird.desktop file
 
 * Mon Nov  8 2010 Jan Horak <jhorak@redhat.com> - 3.1.6-4
