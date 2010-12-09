@@ -1,14 +1,15 @@
 %define nspr_version 4.8
 %define nss_version 3.12.8
-%define cairo_version 1.6.0
+%define cairo_version 1.8.8
 %define freetype_version 2.1.9
 %define sqlite_version 3.6.14
 %define libnotify_version 0.4
 %define build_langpacks 1
+%define thunderbird_version 3.1.7
 %define moz_objdir objdir-tb
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
 %define with_lightning_extension 1
-%define lightning_release 0.33.b2pre
+%define lightning_release 0.34.b3pre
 %define lightning_extname %{_libdir}/mozilla/extensions/{3550f703-e582-4d05-9a08-453d09bdfdc6}/{e2fda1a4-762b-4020-b5ad-a41df1933103}
 %define gdata_extname %{_libdir}/mozilla/extensions/{3550f703-e582-4d05-9a08-453d09bdfdc6}/{a62ef8ec-5fdc-40c2-873c-223b8a6925cc}
 
@@ -28,8 +29,8 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        3.1.6
-Release:        2%{?dist}
+Version:        %{thunderbird_version}
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -41,7 +42,7 @@ Group:          Applications/Internet
 Source0:        %{tarball}
 %if %{build_langpacks}
 # Language package archive is build by RH
-Source1:        thunderbird-langpacks-%{version}-20101027.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20101209.tar.bz2
 %endif
 # Config file for compilation
 Source10:       thunderbird-mozconfig
@@ -124,7 +125,7 @@ Summary:        The calendar extension to Thunderbird
 Version:        1.0
 Release:        %{lightning_release}%{?dist}
 Group:          Applications/Productivity
-Requires:       thunderbird >= %{version}
+Requires:       thunderbird >= %{thunderbird_version}
 Obsoletes:      thunderbird-lightning-wcap <= 0.8
 Provides:       thunderbird-lightning-wcap = %{version}-%{release}
 AutoProv: 0
@@ -369,10 +370,6 @@ cp %{moz_objdir}/mozilla/dist/thunderbird-%{version}.en-US.linux-*.crashreporter
 %endif
 
 %if %{with_lightning_extension}
-mkdir -p $RPM_BUILD_ROOT%{progdir}/extensions/%{gdata_extname}
-touch $RPM_BUILD_ROOT%{progdir}/extensions/%{gdata_extname}/chrome.manifest
-unzip -qod $RPM_BUILD_ROOT%{progdir}/extensions/%{gdata_extname} \
-        objdir-tb/mozilla/dist/xpi-stage/gdata-provider.xpi
 # Avoid "Chrome Registration Failed" message on first startup and extension installation
 mkdir -p $RPM_BUILD_ROOT%{lightning_extname}
 touch $RPM_BUILD_ROOT%{lightning_extname}/chrome.manifest
@@ -483,6 +480,15 @@ fi
 #===============================================================================
 
 %changelog
+* Thu Dec  9 2010 Jan Horak <jhorak@redhat.com> - 3.1.7-1
+- Update to 3.1.7
+
+* Sat Nov 27 2010 Remi Collet <fedora@famillecollet.com> - 3.1.6-3
+- fix cairo + nspr required version
+- lightning: fix thunderbird version required
+- lightning: fix release (b3pre)
+- lightning: clean install
+
 * Wed Nov  3 2010 Jan Horak <jhorak@redhat.com> - 3.1.6-2
 - Move thunderbird-lightning extension from Sunbird package to Thunderbird
 - Removed dependency on static libraries
