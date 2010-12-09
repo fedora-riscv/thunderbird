@@ -9,7 +9,7 @@
 %define moz_objdir objdir-tb
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
 %define with_lightning_extension 1
-%define lightning_release 0.34.b3pre
+%define lightning_release 0.35.b3pre
 %define lightning_extname %{_libdir}/mozilla/extensions/{3550f703-e582-4d05-9a08-453d09bdfdc6}/{e2fda1a4-762b-4020-b5ad-a41df1933103}
 %define gdata_extname %{_libdir}/mozilla/extensions/{3550f703-e582-4d05-9a08-453d09bdfdc6}/{a62ef8ec-5fdc-40c2-873c-223b8a6925cc}
 
@@ -30,7 +30,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        %{thunderbird_version}
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -289,7 +289,7 @@ install -Dm755 %{SOURCE30} $RPM_BUILD_ROOT/%{mozappdir}/open-browser.sh
 %{__sed} -i -e 's|LIBDIR|%{_libdir}|g' $RPM_BUILD_ROOT/%{mozappdir}/open-browser.sh
 
 # set up our default preferences
-%{__cat} %{SOURCE12} | %{__sed} -e 's,THUNDERBIRD_RPM_VR,%{version}-%{release},g' \
+%{__cat} %{SOURCE12} | %{__sed} -e 's,THUNDERBIRD_RPM_VR,%{thunderbird_version}-%{release},g' \
                                 -e 's,COMMAND,%{mozappdir}/open-browser.sh,g' > \
         $RPM_BUILD_ROOT/rh-default-prefs
 %{__install} -D $RPM_BUILD_ROOT/rh-default-prefs $RPM_BUILD_ROOT/%{mozappdir}/greprefs/all-redhat.js
@@ -366,7 +366,7 @@ touch $RPM_BUILD_ROOT%{mozappdir}/components/xpti.dat
 # Add debuginfo for crash-stats.mozilla.com 
 %if %{enable_mozilla_crashreporter}
 mkdir -p $RPM_BUILD_ROOT%{_exec_prefix}/lib/debug%{mozappdir}
-cp %{moz_objdir}/mozilla/dist/thunderbird-%{version}.en-US.linux-*.crashreporter-symbols.zip $RPM_BUILD_ROOT%{_exec_prefix}/lib/debug%{mozappdir}
+cp %{moz_objdir}/mozilla/dist/thunderbird-%{thunderbird_version}.en-US.linux-*.crashreporter-symbols.zip $RPM_BUILD_ROOT%{_exec_prefix}/lib/debug%{mozappdir}
 %endif
 
 %if %{with_lightning_extension}
@@ -480,6 +480,9 @@ fi
 #===============================================================================
 
 %changelog
+* Thu Dec  9 2010 Jan Horak <jhorak@redhat.com> - 3.1.7-2
+- Fixed useragent
+
 * Thu Dec  9 2010 Jan Horak <jhorak@redhat.com> - 3.1.7-1
 - Update to 3.1.7
 
