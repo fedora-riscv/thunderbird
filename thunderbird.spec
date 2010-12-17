@@ -35,7 +35,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        %{thunderbird_version}
-Release:        3%{?dist}
+Release:        4%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -448,7 +448,7 @@ fi
 #===============================================================================
 
 %changelog
-* Wed Dec 15 2010 Jan Horak <jhorak@redhat.com> - 3.1.7-3
+* Wed Dec 15 2010 Jan Horak <jhorak@redhat.com> - 3.1.7-4
 - Mozilla crash reporter enabled
 
 * Thu Dec  9 2010 Jan Horak <jhorak@redhat.com> - 3.1.7-2
