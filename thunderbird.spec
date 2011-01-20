@@ -23,7 +23,7 @@
 
 %define official_branding 1
 # enable crash reporter only for iX86
-%ifarch %{ix86}
+%ifarch %{ix86} x86_64
 %define enable_mozilla_crashreporter 1
 %else
 %define enable_mozilla_crashreporter 0
