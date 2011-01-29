@@ -89,7 +89,6 @@ Patch10:        mozilla-notify.patch
 
 %endif
 
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  nspr-devel >= %{nspr_version}
 BuildRequires:  nss-devel >= %{nss_version}
 BuildRequires:  cairo-devel >= %{cairo_version}
@@ -224,7 +223,6 @@ make buildsymbols
 #===============================================================================
 
 %install
-%{__rm} -rf $RPM_BUILD_ROOT
 cd %{tarballdir}
 
 INTERNAL_GECKO=%{version_internal}
@@ -358,11 +356,6 @@ unzip -qod $RPM_BUILD_ROOT%{lightning_extname} objdir-tb/mozilla/dist/xpi-stage/
 unzip -qod $RPM_BUILD_ROOT%{gdata_extname} objdir-tb/mozilla/dist/xpi-stage/gdata-provider.xpi
 
 %endif
-#===============================================================================
-
-%clean
-%{__rm} -rf $RPM_BUILD_ROOT
-
 #===============================================================================
 
 %post
