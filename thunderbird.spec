@@ -264,8 +264,6 @@ cd -
 
 desktop-file-install --vendor mozilla \
   --dir $RPM_BUILD_ROOT%{_datadir}/applications \
-  --add-category Network \
-  --add-category Email \
   %{SOURCE20}
 
 
