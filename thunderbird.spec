@@ -35,7 +35,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        %{thunderbird_version}
-Release:        4%{?dist}
+Release:        5%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -58,8 +58,9 @@ Source30:       thunderbird-open-browser.sh
 Source100:      find-external-requires
 
 Patch0:         thunderbird-version.patch
-Patch1:         mozilla-jemalloc.patch
-Patch2:         thunderbird-shared-error.patch
+Patch1:         thunderbird-default.patch
+Patch2:         mozilla-jemalloc.patch
+Patch3:         thunderbird-shared-error.patch
 Patch4:         xulrunner-1.9.2.1-build.patch
 Patch6:         mozilla-libjpeg-turbo.patch
 Patch7:         mozilla-missing-cflags.patch
@@ -141,8 +142,10 @@ sed -e 's/__RPM_VERSION_INTERNAL__/%{version_internal}/' %{P:%%PATCH0} \
     > version.patch
 %{__patch} -p1 -b --suffix .version --fuzz=0 < version.patch
 
-%patch1 -p0 -b .jemalloc
-%patch2 -p1 -b .shared-error
+%patch1 -p1 -b .default-application
+
+%patch2 -p0 -b .jemalloc
+%patch3 -p1 -b .shared-error
 %patch4 -p1 -b .protected
 %patch6 -p1 -b .turbo
 %patch7 -p1 -b .mozcflags
@@ -151,7 +154,6 @@ sed -e 's/__RPM_VERSION_INTERNAL__/%{version_internal}/' %{P:%%PATCH0} \
 %endif
 %patch9 -p1 -b .static
 %patch10 -p1 -b .libnotify
-
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -432,6 +434,9 @@ fi
 #===============================================================================
 
 %changelog
+* Mon Feb  7 2011 Christopher Aillon <caillon@redhat.com> - 3.1.7-5
+- Bring back the default mailer check but fix up the directory
+
 * Wed Dec 15 2010 Jan Horak <jhorak@redhat.com> - 3.1.7-4
 - Mozilla crash reporter enabled
 
