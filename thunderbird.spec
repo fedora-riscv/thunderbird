@@ -67,6 +67,7 @@ Patch5:         mozilla-missing-cflags.patch
 Patch6:         mozilla-build-s390.patch
 Patch7:         crashreporter-remove-static.patch
 Patch8:         mozilla-notify.patch
+Patch9:         xulrunner-2.0-os2cc.patch
 
 # Thunderbird patches
 Patch50:        thunderbird-shared-error.patch
@@ -157,6 +158,7 @@ cd mozilla
 %endif
 %patch7 -p2 -b .static
 %patch8 -p2 -b .libnotify
+%patch9 -p1 -b .os2cc
 cd ..
 
 # Thunderbird patches
