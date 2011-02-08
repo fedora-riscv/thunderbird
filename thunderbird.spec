@@ -57,16 +57,19 @@ Source21:       thunderbird.sh.in
 Source30:       thunderbird-open-browser.sh
 Source100:      find-external-requires
 
+# Mozilla (XULRunner) patches
 Patch0:         thunderbird-version.patch
 Patch1:         thunderbird-default.patch
 Patch2:         mozilla-jemalloc.patch
-Patch3:         thunderbird-shared-error.patch
-Patch4:         xulrunner-1.9.2.1-build.patch
-Patch6:         mozilla-libjpeg-turbo.patch
-Patch7:         mozilla-missing-cflags.patch
-Patch8:         mozilla-build-s390.patch
-Patch9:         crashreporter-remove-static.patch
-Patch10:        mozilla-notify.patch
+Patch3:         xulrunner-1.9.2.1-build.patch
+Patch4:         mozilla-libjpeg-turbo.patch
+Patch5:         mozilla-missing-cflags.patch
+Patch6:         mozilla-build-s390.patch
+Patch7:         crashreporter-remove-static.patch
+Patch8:         mozilla-notify.patch
+
+# Thunderbird patches
+Patch50:        thunderbird-shared-error.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -142,18 +145,22 @@ sed -e 's/__RPM_VERSION_INTERNAL__/%{version_internal}/' %{P:%%PATCH0} \
     > version.patch
 %{__patch} -p1 -b --suffix .version --fuzz=0 < version.patch
 
-%patch1 -p1 -b .default-application
-
-%patch2 -p0 -b .jemalloc
-%patch3 -p1 -b .shared-error
-%patch4 -p1 -b .protected
-%patch6 -p1 -b .turbo
-%patch7 -p1 -b .mozcflags
+# Mozilla (XULRunner) patches
+cd mozilla
+%patch1 -p2 -b .default-application
+%patch2 -p1 -b .jemalloc
+%patch3 -p2 -b .protected
+%patch4 -p2 -b .turbo
+%patch5 -p2 -b .mozcflags
 %ifarch s390
-%patch8 -p0 -b .s390
+%patch6 -p1 -b .s390
 %endif
-%patch9 -p1 -b .static
-%patch10 -p1 -b .libnotify
+%patch7 -p2 -b .static
+%patch8 -p2 -b .libnotify
+cd ..
+
+# Thunderbird patches
+%patch50 -p1 -b .shared-error
 
 %if %{official_branding}
 # Required by Mozilla Corporation
