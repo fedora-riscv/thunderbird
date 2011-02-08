@@ -1,3 +1,5 @@
+Our build ends up in this path and fails otherwise...
+
 diff -up comm-central/mail/installer/Makefile.in.shared-error comm-central/mail/installer/Makefile.in
 --- comm-central/mail/installer/Makefile.in.shared-error	2009-09-16 13:47:43.000000000 +0200
 +++ comm-central/mail/installer/Makefile.in	2009-09-16 13:48:25.000000000 +0200

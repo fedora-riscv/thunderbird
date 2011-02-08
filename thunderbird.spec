@@ -46,38 +46,24 @@ Group:          Applications/Internet
 %endif
 Source0:        %{tarball}
 %if %{build_langpacks}
-# Language package archive is build by RH
 Source1:        thunderbird-langpacks-%{version}-20101209.tar.bz2
 %endif
-# Config file for compilation
 Source10:       thunderbird-mozconfig
-# Config file for branded compilation
 Source11:       thunderbird-mozconfig-branded
-# Default preferences for Thunderbird
 Source12:       thunderbird-redhat-default-prefs.js
-# Config file for debug builds
 Source13:       thunderbird-mozconfig-debuginfo
-# Desktop file
 Source20:       thunderbird.desktop
-# TB execute script
 Source21:       thunderbird.sh.in
-# Script called when user click on link in message
 Source30:       thunderbird-open-browser.sh
-# Finds requirements provided outside of the current file set
 Source100:      find-external-requires
 
-# Fix for version issues
 Patch0:         thunderbird-version.patch
-# Fix for jemalloc
 Patch1:         mozilla-jemalloc.patch
-# Fix for installation fail when building with dynamic linked libraries
 Patch2:         thunderbird-shared-error.patch
-# Fixes gcc complain that nsFrame::delete is protected
 Patch4:         xulrunner-1.9.2.1-build.patch
 Patch6:         mozilla-libjpeg-turbo.patch
 Patch7:         mozilla-missing-cflags.patch
 Patch8:         mozilla-build-s390.patch
-# Remove static build option from crashreporter to remove dependency on static libraries
 Patch9:         crashreporter-remove-static.patch
 Patch10:        mozilla-notify.patch
 
