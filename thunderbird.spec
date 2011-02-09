@@ -8,10 +8,6 @@
 %define thunderbird_version 3.1.7
 %define moz_objdir objdir-tb
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
-%define with_lightning_extension 1
-%define lightning_release 0.40.b3pre
-%define lightning_extname %{_libdir}/mozilla/extensions/{3550f703-e582-4d05-9a08-453d09bdfdc6}/{e2fda1a4-762b-4020-b5ad-a41df1933103}
-%define gdata_extname %{_libdir}/mozilla/extensions/{3550f703-e582-4d05-9a08-453d09bdfdc6}/{a62ef8ec-5fdc-40c2-873c-223b8a6925cc}
 
 # The tarball is pretty inconsistent with directory structure.
 # Sometimes there is a top level directory.  That goes here.
@@ -35,7 +31,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        %{thunderbird_version}
-Release:        5%{?dist}
+Release:        6%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -118,25 +114,6 @@ AutoProv: 0
 %description
 Mozilla Thunderbird is a standalone mail and newsgroup client.
 
-%if %{with_lightning_extension}
-%package -n thunderbird-lightning
-Summary:        The calendar extension to Thunderbird
-Version:        1.0
-Release:        %{lightning_release}%{?dist}
-Group:          Applications/Productivity
-Requires:       thunderbird >= %{thunderbird_version}
-Obsoletes:      thunderbird-lightning-wcap <= 0.8
-Provides:       thunderbird-lightning-wcap = %{version}-%{release}
-AutoProv: 0
-
-%description -n thunderbird-lightning
-Lightning brings the Sunbird calendar to the popular email client,
-Mozilla Thunderbird. Since it's an extension, Lightning is tightly
-integrated with Thunderbird, allowing it to easily perform email-related
-calendaring tasks.
-
-%endif
-
 
 %prep
 %setup -q -c
@@ -179,9 +156,6 @@ cd ..
 %endif
 %if %{enable_mozilla_crashreporter}
 %{__cat} %{SOURCE13} >> .mozconfig
-%endif
-%if %{with_lightning_extension}
-echo "ac_add_options --enable-calendar" >> .mozconfig
 %endif
 
 #===============================================================================
@@ -346,18 +320,6 @@ mkdir -p $RPM_BUILD_ROOT$DEBUG_LIB_DIR/debug%{mozappdir}
 cp objdir-tb/mozilla/dist/%{name}-%{thunderbird_version}*.crashreporter-symbols.zip $RPM_BUILD_ROOT$DEBUG_LIB_DIR/debug%{mozappdir}
 %endif
 
-%if %{with_lightning_extension}
-# Avoid "Chrome Registration Failed" message on first startup and extension installation
-mkdir -p $RPM_BUILD_ROOT%{lightning_extname}
-touch $RPM_BUILD_ROOT%{lightning_extname}/chrome.manifest
-mkdir -p $RPM_BUILD_ROOT%{gdata_extname}
-touch $RPM_BUILD_ROOT%{gdata_extname}/chrome.manifest
-
-# Lightning and GData provider for it
-unzip -qod $RPM_BUILD_ROOT%{lightning_extname} objdir-tb/mozilla/dist/xpi-stage/lightning.xpi
-unzip -qod $RPM_BUILD_ROOT%{gdata_extname} objdir-tb/mozilla/dist/xpi-stage/gdata-provider.xpi
-
-%endif
 #===============================================================================
 
 %post
@@ -432,17 +394,12 @@ fi
 %{mozappdir}/Throbber-small.gif
 %endif
 
-%if %{with_lightning_extension}
-%files -n thunderbird-lightning
-%doc %{tarballdir}/mozilla/LEGAL %{tarballdir}/mozilla/LICENSE %{tarballdir}/mozilla/README.txt
-%defattr(-,root,root,-)
-%{lightning_extname}
-%{gdata_extname}
-%endif
-
 #===============================================================================
 
 %changelog
+* Wed Feb  9 2011 Christopher Aillon <caillon@redhat.com> - 3.1.7-6
+- Drop the -lightning subpackage, it needs to be in its own SRPM
+
 * Mon Feb  7 2011 Christopher Aillon <caillon@redhat.com> - 3.1.7-5
 - Bring back the default mailer check but fix up the directory
 
