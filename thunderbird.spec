@@ -5,10 +5,10 @@
 %define sqlite_version 3.6.14
 %define libnotify_version 0.4
 %define build_langpacks 1
-%define thunderbird_version 3.1.7
+%define thunderbird_version 3.1.8
 %define moz_objdir objdir-tb
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
-%define with_lightning_extension 1
+%define with_lightning_extension 0
 %define lightning_release 0.35.b3pre
 %define lightning_extname %{_libdir}/mozilla/extensions/{3550f703-e582-4d05-9a08-453d09bdfdc6}/{e2fda1a4-762b-4020-b5ad-a41df1933103}
 %define gdata_extname %{_libdir}/mozilla/extensions/{3550f703-e582-4d05-9a08-453d09bdfdc6}/{a62ef8ec-5fdc-40c2-873c-223b8a6925cc}
@@ -30,7 +30,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        %{thunderbird_version}
-Release:        2%{?dist}
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -42,7 +42,7 @@ Group:          Applications/Internet
 Source0:        %{tarball}
 %if %{build_langpacks}
 # Language package archive is build by RH
-Source1:        thunderbird-langpacks-%{version}-20101209.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20110301.tar.bz2
 %endif
 # Config file for compilation
 Source10:       thunderbird-mozconfig
@@ -480,6 +480,9 @@ fi
 #===============================================================================
 
 %changelog
+* Tue Mar  1 2011 Jan Horak <jhorak@redhat.com> - 3.1.8-1
+- Update to 3.1.8
+
 * Thu Dec  9 2010 Jan Horak <jhorak@redhat.com> - 3.1.7-2
 - Fixed useragent
 
