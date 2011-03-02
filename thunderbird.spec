@@ -5,7 +5,7 @@
 %define sqlite_version 3.6.14
 %define libnotify_version 0.4
 %define build_langpacks 1
-%define thunderbird_version 3.1.7
+%define thunderbird_version 3.1.8
 %define moz_objdir objdir-tb
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
 
@@ -31,7 +31,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        %{thunderbird_version}
-Release:        6%{?dist}
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -42,7 +42,7 @@ Group:          Applications/Internet
 %endif
 Source0:        %{tarball}
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20101209.tar.bz2
+Source1:        thunderbird-langpacks-%{version}-20110301.tar.bz2
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -64,9 +64,6 @@ Patch6:         mozilla-build-s390.patch
 Patch7:         crashreporter-remove-static.patch
 Patch8:         mozilla-notify.patch
 Patch9:         xulrunner-2.0-os2cc.patch
-
-# Thunderbird patches
-Patch50:        thunderbird-shared-error.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -137,9 +134,6 @@ cd mozilla
 %patch8 -p2 -b .libnotify
 %patch9 -p1 -b .os2cc
 cd ..
-
-# Thunderbird patches
-%patch50 -p1 -b .shared-error
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -397,6 +391,9 @@ fi
 #===============================================================================
 
 %changelog
+* Tue Mar  1 2011 Jan Horak <jhorak@redhat.com> - 3.1.8-1
+- Update to 3.1.8
+
 * Wed Feb  9 2011 Christopher Aillon <caillon@redhat.com> - 3.1.7-6
 - Drop the -lightning subpackage, it needs to be in its own SRPM
 
