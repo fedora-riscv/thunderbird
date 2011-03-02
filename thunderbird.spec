@@ -22,7 +22,12 @@
 %define tarballdir comm-1.9.2
 
 %define official_branding 1
+# enable crash reporter only for iX86
+%ifarch %{ix86} x86_64
+%define enable_mozilla_crashreporter 1
+%else
 %define enable_mozilla_crashreporter 0
+%endif
 
 %define version_internal  3.1
 %define mozappdir         %{_libdir}/%{name}-%{version_internal}
@@ -365,8 +370,10 @@ touch $RPM_BUILD_ROOT%{mozappdir}/components/xpti.dat
 
 # Add debuginfo for crash-stats.mozilla.com 
 %if %{enable_mozilla_crashreporter}
-mkdir -p $RPM_BUILD_ROOT%{_exec_prefix}/lib/debug%{mozappdir}
-cp %{moz_objdir}/mozilla/dist/thunderbird-%{thunderbird_version}.en-US.linux-*.crashreporter-symbols.zip $RPM_BUILD_ROOT%{_exec_prefix}/lib/debug%{mozappdir}
+# Debug symbols are stored in /usr/lib even in x86_64 arch
+DEBUG_LIB_DIR=`echo %{_libdir}|sed -e "s/lib64/lib/"`
+mkdir -p $RPM_BUILD_ROOT$DEBUG_LIB_DIR/debug%{mozappdir}
+cp objdir-tb/mozilla/dist/%{name}-%{thunderbird_version}*.crashreporter-symbols.zip $RPM_BUILD_ROOT$DEBUG_LIB_DIR/debug%{mozappdir}
 %endif
 
 %if %{with_lightning_extension}
