@@ -35,7 +35,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        %{thunderbird_version}
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -487,7 +487,7 @@ fi
 #===============================================================================
 
 %changelog
-* Tue Mar  1 2011 Jan Horak <jhorak@redhat.com> - 3.1.8-1
+* Tue Mar  2 2011 Jan Horak <jhorak@redhat.com> - 3.1.8-2
 - Update to 3.1.8
 
 * Thu Dec  9 2010 Jan Horak <jhorak@redhat.com> - 3.1.7-2
