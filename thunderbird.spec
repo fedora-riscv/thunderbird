@@ -9,7 +9,7 @@
 %define moz_objdir objdir-tb
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
 %define with_lightning_extension 1
-%define lightning_release 0.36.b3pre
+%define lightning_release 0.37.b3pre
 %define lightning_extname %{_libdir}/mozilla/extensions/{3550f703-e582-4d05-9a08-453d09bdfdc6}/{e2fda1a4-762b-4020-b5ad-a41df1933103}
 %define gdata_extname %{_libdir}/mozilla/extensions/{3550f703-e582-4d05-9a08-453d09bdfdc6}/{a62ef8ec-5fdc-40c2-873c-223b8a6925cc}
 
@@ -35,7 +35,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        %{thunderbird_version}
-Release:        2%{?dist}
+Release:        3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -484,7 +484,7 @@ fi
 #===============================================================================
 
 %changelog
-* Tue Mar  2 2011 Jan Horak <jhorak@redhat.com> - 3.1.8-2
+* Tue Mar  2 2011 Jan Horak <jhorak@redhat.com> - 3.1.8-3
 - Update to 3.1.8
 
 * Thu Dec  9 2010 Jan Horak <jhorak@redhat.com> - 3.1.7-2
