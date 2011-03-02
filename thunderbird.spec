@@ -70,8 +70,6 @@ Source100:      find-external-requires
 Patch0:         thunderbird-version.patch
 # Fix for jemalloc
 Patch1:         mozilla-jemalloc.patch
-# Fix for installation fail when building with dynamic linked libraries
-Patch2:         thunderbird-shared-error.patch
 # Fixes gcc complain that nsFrame::delete is protected
 Patch4:         xulrunner-1.9.2.1-build.patch
 # Remove static build option from crashreporter to remove dependency on static libraries
@@ -184,7 +182,6 @@ sed -e 's/__RPM_VERSION_INTERNAL__/%{version_internal}/' %{P:%%PATCH0} \
 %{__patch} -p1 -b --suffix .version --fuzz=0 < version.patch
 
 %patch1 -p0 -b .jemalloc
-%patch2 -p1 -b .shared-error
 %patch4 -p1 -b .protected
 %patch6 -p1 -b .static
 
