@@ -31,7 +31,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        %{thunderbird_version}
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -391,6 +391,9 @@ fi
 #===============================================================================
 
 %changelog
+* Wed Mar  9 2011 Jan Horak <jhorak@redhat.com> - 3.1.9-2
+- Disabled gnomevfs, enabled gio
+
 * Mon Mar  7 2011 Jan Horak <jhorak@redhat.com> - 3.1.9-1
 - Update to 3.1.9
 
