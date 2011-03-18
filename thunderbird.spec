@@ -31,7 +31,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        %{thunderbird_version}
-Release:        2%{?dist}
+Release:        3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -84,9 +84,6 @@ BuildRequires:  bzip2-devel
 BuildRequires:  zlib-devel
 BuildRequires:  libIDL-devel
 BuildRequires:  gtk2-devel
-BuildRequires:  gnome-vfs2-devel
-BuildRequires:  libgnome-devel
-BuildRequires:  libgnomeui-devel
 BuildRequires:  krb5-devel
 BuildRequires:  pango-devel
 BuildRequires:  freetype-devel >= %{freetype_version}
@@ -391,6 +388,9 @@ fi
 #===============================================================================
 
 %changelog
+* Fri Mar 18 2011 Jan Horak <jhorak@redhat.com> - 3.1.9-3
+- Removed gnome-vfs2, libgnomeui and libgnome from build requires
+
 * Wed Mar  9 2011 Jan Horak <jhorak@redhat.com> - 3.1.9-2
 - Disabled gnomevfs, enabled gio
 
