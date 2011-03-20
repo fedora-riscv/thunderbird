@@ -31,7 +31,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        %{thunderbird_version}
-Release:        3%{?dist}
+Release:        4%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -388,6 +388,9 @@ fi
 #===============================================================================
 
 %changelog
+* Sun Mar 20 2011 Dan Horák <dan[at]danny.cz> - 3.1.9-4
+- updated the s390 build patch
+
 * Fri Mar 18 2011 Jan Horak <jhorak@redhat.com> - 3.1.9-3
 - Removed gnome-vfs2, libgnomeui and libgnome from build requires
 
