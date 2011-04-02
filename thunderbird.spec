@@ -30,7 +30,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.1.9
-Release:        4%{?dist}
+Release:        5%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -387,6 +387,9 @@ fi
 #===============================================================================
 
 %changelog
+* Fri Apr  1 2011 Orion Poplawski <orion@cora.nwra.com> - 3.1.9-5
+- Enable startup notification
+
 * Sun Mar 20 2011 Dan Horák <dan[at]danny.cz> - 3.1.9-4
 - updated the s390 build patch
 
