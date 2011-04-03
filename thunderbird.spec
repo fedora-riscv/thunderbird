@@ -83,6 +83,9 @@ BuildRequires:  bzip2-devel
 BuildRequires:  zlib-devel
 BuildRequires:  libIDL-devel
 BuildRequires:  gtk2-devel
+BuildRequires:  gnome-vfs2-devel
+BuildRequires:  libgnome-devel
+BuildRequires:  libgnomeui-devel
 BuildRequires:  krb5-devel
 BuildRequires:  pango-devel
 BuildRequires:  freetype-devel >= %{freetype_version}
