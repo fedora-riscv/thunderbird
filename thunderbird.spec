@@ -30,7 +30,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.1.9
-Release:        5%{?dist}
+Release:        6%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -390,6 +390,9 @@ fi
 #===============================================================================
 
 %changelog
+* Sat Apr  2 2011 Christopher Aillon <caillon@redhat.com> - 3.1.9-6
+- Drop gio support: the code hooks don't exist yet for TB 3.1.x
+
 * Fri Apr  1 2011 Orion Poplawski <orion@cora.nwra.com> - 3.1.9-5
 - Enable startup notification
 
