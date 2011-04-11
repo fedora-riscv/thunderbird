@@ -968,7 +968,7 @@ fi
 
 * Wed May 05 2004 David Hill <djh[at]ii.net> 0.6-0.fdr.2
 - include Enigmail, re-add release notes
-- delete %{_libdir}/thunderbird in %%pre
+- delete %%{_libdir}/thunderbird in %%pre
 
 * Mon May 03 2004 David Hill <djh[at]ii.net> 0.6-0.fdr.1
 - update to Thunderbird 0.6
