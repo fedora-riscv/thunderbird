@@ -49,7 +49,6 @@ Source12:       thunderbird-redhat-default-prefs.js
 Source13:       thunderbird-mozconfig-debuginfo
 Source20:       thunderbird.desktop
 Source21:       thunderbird.sh.in
-Source30:       thunderbird-open-browser.sh
 Source100:      find-external-requires
 
 # Mozilla (XULRunner) patches
@@ -237,12 +236,8 @@ rm -f $RPM_BUILD_ROOT/%{_bindir}/thunderbird
   $RPM_BUILD_ROOT%{_bindir}/thunderbird
 %{__chmod} 755 $RPM_BUILD_ROOT/%{_bindir}/thunderbird
 
-install -Dm755 %{SOURCE30} $RPM_BUILD_ROOT/%{mozappdir}/open-browser.sh
-%{__sed} -i -e 's|LIBDIR|%{_libdir}|g' $RPM_BUILD_ROOT/%{mozappdir}/open-browser.sh
-
 # set up our default preferences
-%{__cat} %{SOURCE12} | %{__sed} -e 's,THUNDERBIRD_RPM_VR,%{version}-%{release},g' \
-                                -e 's,COMMAND,%{mozappdir}/open-browser.sh,g' > \
+%{__cat} %{SOURCE12} | %{__sed} -e 's,THUNDERBIRD_RPM_VR,%{version}-%{release},g' > \
         $RPM_BUILD_ROOT/rh-default-prefs
 %{__install} -D $RPM_BUILD_ROOT/rh-default-prefs $RPM_BUILD_ROOT/%{mozappdir}/greprefs/all-redhat.js
 %{__install} -D $RPM_BUILD_ROOT/rh-default-prefs $RPM_BUILD_ROOT/%{mozappdir}/defaults/pref/all-redhat.js
@@ -357,7 +352,6 @@ fi
 %{mozappdir}/greprefs
 %{mozappdir}/isp
 %{mozappdir}/mozilla-xremote-client
-%{mozappdir}/open-browser.sh
 %{mozappdir}/res
 %{mozappdir}/run-mozilla.sh
 %{mozappdir}/thunderbird-bin
