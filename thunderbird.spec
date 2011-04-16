@@ -202,9 +202,9 @@ MOZ_APP_DIR=%{_libdir}/${INTERNAL_APP_NAME}
 
 cd %{moz_objdir}
 DESTDIR=$RPM_BUILD_ROOT make install
+cd -
 
 # install icons
-cd -
 %{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/16x16/apps
 %{__cp} other-licenses/branding/%{name}/mailicon16.png \
         $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/16x16/apps/thunderbird.png
