@@ -207,8 +207,8 @@ cd -
 # install icons
 for s in 16 22 24 32 48 256; do
     %{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/${s}x${s}/apps
-    %{__cp} other-licenses/branding/%{name}/mailicon${s}.png \
-            $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/${s}x${s}/apps/thunderbird.png
+    %{__cp} -p other-licenses/branding/%{name}/mailicon${s}.png \
+               $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/${s}x${s}/apps/thunderbird.png
 done
 
 
