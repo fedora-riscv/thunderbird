@@ -205,24 +205,11 @@ DESTDIR=$RPM_BUILD_ROOT make install
 cd -
 
 # install icons
-%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/16x16/apps
-%{__cp} other-licenses/branding/%{name}/mailicon16.png \
-        $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/16x16/apps/thunderbird.png
-%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/22x22/apps
-%{__cp} other-licenses/branding/%{name}/mailicon22.png \
-        $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/22x22/apps/thunderbird.png
-%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/24x24/apps
-%{__cp} other-licenses/branding/%{name}/mailicon24.png \
-        $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/24x24/apps/thunderbird.png
-%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/32x32/apps
-%{__cp} other-licenses/branding/%{name}/mailicon32.png \
-        $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/32x32/apps/thunderbird.png
-%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/48x48/apps
-%{__cp} other-licenses/branding/%{name}/mailicon48.png \
-        $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/48x48/apps/thunderbird.png
-%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/256x256/apps
-%{__cp} other-licenses/branding/%{name}/mailicon256.png \
-        $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/256x256/apps/thunderbird.png
+for s in 16 22 24 32 48 256; do
+    %{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/${s}x${s}/apps
+    %{__cp} other-licenses/branding/%{name}/mailicon${s}.png \
+            $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/${s}x${s}/apps/thunderbird.png
+done
 
 
 desktop-file-install --vendor mozilla \
