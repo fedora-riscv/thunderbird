@@ -29,7 +29,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.1.9
-Release:        6%{?dist}
+Release:        7%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -382,6 +382,11 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Thu Apr 21 2011 Christopher Aillon <caillon@redhat.com> - 3.1.9-7
+- Make gvfs-open launch a compose window (salimma)
+- Spec file cleanups (salimma, caillon)
+- Split out mozilla crashreporter symbols to its own debuginfo package (caillon)
+
 * Sat Apr  2 2011 Christopher Aillon <caillon@redhat.com> - 3.1.9-6
 - Drop gio support: the code hooks don't exist yet for TB 3.1.x
 
