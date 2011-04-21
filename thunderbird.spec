@@ -5,7 +5,6 @@
 %define sqlite_version 3.6.14
 %define libnotify_version 0.4
 %define build_langpacks 1
-%define moz_objdir objdir-tb
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
 
 # The tarball is pretty inconsistent with directory structure.
@@ -30,7 +29,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        3.1.9
-Release:        6%{?dist}
+Release:        7%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -109,6 +108,25 @@ AutoProv: 0
 %description
 Mozilla Thunderbird is a standalone mail and newsgroup client.
 
+%if %{enable_mozilla_crashreporter}
+%global moz_debug_prefix %{_prefix}/lib/debug
+%global moz_debug_dir %{moz_debug_prefix}%{mozappdir}
+%global uname_m %(uname -m)
+%global symbols_file_name %{name}-%{version}.en-US.%{_os}-%{uname_m}.crashreporter-symbols.zip
+%global symbols_file_path %{moz_debug_dir}/%{symbols_file_name}
+%global _find_debuginfo_opts -p %{symbols_file_path} -o debugcrashreporter.list
+%global crashreporter_pkg_name mozilla-crashreporter-%{name}-debuginfo
+%package -n %{crashreporter_pkg_name}
+Summary: Debugging symbols used by Mozilla's crash reporter servers
+Group: Development/Debug
+%description -n %{crashreporter_pkg_name}
+This package provides debug information for XULRunner, for use by
+Mozilla's crash reporter servers.  If you are trying to locally
+debug %{name}, you want to install %{name}-debuginfo instead.
+%files -n %{crashreporter_pkg_name} -f debugcrashreporter.list
+%defattr(-,root,root)
+%endif
+
 
 %prep
 %setup -q -c
@@ -186,7 +204,6 @@ make -f client.mk build
 
 # create debuginfo for crash-stats.mozilla.com
 %if %{enable_mozilla_crashreporter}
-cd %{moz_objdir}
 make buildsymbols
 %endif
 
@@ -200,29 +217,14 @@ INTERNAL_GECKO=%{version_internal}
 INTERNAL_APP_NAME=%{name}-${INTERNAL_GECKO}
 MOZ_APP_DIR=%{_libdir}/${INTERNAL_APP_NAME}
 
-cd %{moz_objdir}
 DESTDIR=$RPM_BUILD_ROOT make install
 
 # install icons
-cd -
-%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/16x16/apps
-%{__cp} other-licenses/branding/%{name}/mailicon16.png \
-        $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/16x16/apps/thunderbird.png
-%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/22x22/apps
-%{__cp} other-licenses/branding/%{name}/mailicon22.png \
-        $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/22x22/apps/thunderbird.png
-%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/24x24/apps
-%{__cp} other-licenses/branding/%{name}/mailicon24.png \
-        $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/24x24/apps/thunderbird.png
-%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/32x32/apps
-%{__cp} other-licenses/branding/%{name}/mailicon32.png \
-        $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/32x32/apps/thunderbird.png
-%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/48x48/apps
-%{__cp} other-licenses/branding/%{name}/mailicon48.png \
-        $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/48x48/apps/thunderbird.png
-%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/256x256/apps
-%{__cp} other-licenses/branding/%{name}/mailicon256.png \
-        $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/256x256/apps/thunderbird.png
+for s in 16 22 24 32 48 256; do
+    %{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/${s}x${s}/apps
+    %{__cp} -p other-licenses/branding/%{name}/mailicon${s}.png \
+               $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/${s}x${s}/apps/thunderbird.png
+done
 
 
 desktop-file-install --vendor mozilla \
@@ -302,29 +304,25 @@ touch $RPM_BUILD_ROOT%{mozappdir}/components/xpti.dat
 
 # Add debuginfo for crash-stats.mozilla.com 
 %if %{enable_mozilla_crashreporter}
-# Debug symbols are stored in /usr/lib even in x86_64 arch
-DEBUG_LIB_DIR=`echo %{_libdir}|sed -e "s/lib64/lib/"`
-mkdir -p $RPM_BUILD_ROOT$DEBUG_LIB_DIR/debug%{mozappdir}
-cp objdir-tb/mozilla/dist/%{name}-%{version}*.crashreporter-symbols.zip $RPM_BUILD_ROOT$DEBUG_LIB_DIR/debug%{mozappdir}
+%{__mkdir_p} $RPM_BUILD_ROOT/%{moz_debug_dir}
+%{__cp} dist/%{symbols_file_name} $RPM_BUILD_ROOT/%{moz_debug_dir}
 %endif
 
 #===============================================================================
 
 %post
 update-desktop-database &> /dev/null || :
-touch --no-create %{_datadir}/icons/hicolor
-if [ -x %{_bindir}/gtk-update-icon-cache ]; then
-  %{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor || :
-fi
-
-#===============================================================================
+touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 
 %postun
 update-desktop-database &> /dev/null || :
-touch --no-create %{_datadir}/icons/hicolor
-if [ -x %{_bindir}/gtk-update-icon-cache ]; then
-  %{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor || :
+if [ $1 -eq 0 ] ; then
+    touch --no-create %{_datadir}/icons/hicolor &>/dev/null
+    gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 fi
+
+%posttrans
+gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 #===============================================================================
 
@@ -384,6 +382,11 @@ fi
 #===============================================================================
 
 %changelog
+* Thu Apr 21 2011 Christopher Aillon <caillon@redhat.com> - 3.1.9-7
+- Make gvfs-open launch a compose window (salimma)
+- Spec file cleanups (salimma, caillon)
+- Split out mozilla crashreporter symbols to its own debuginfo package (caillon)
+
 * Sat Apr  2 2011 Christopher Aillon <caillon@redhat.com> - 3.1.9-6
 - Drop gio support: the code hooks don't exist yet for TB 3.1.x
 
