@@ -140,37 +140,7 @@ integrated with Thunderbird, allowing it to easily perform email-related
 calendaring tasks.
 
 %endif
-#%package devel
-#Summary: Development files for Thunderbird
-#Group: Development/Libraries
-#Provides: thunderbird-devel = %{version}
-#
-#Requires: thunderbird = %{version}-%{release}
-#Requires: nspr-devel >= %{nspr_version}
-#Requires: nss-devel >= %{nss_version}
-#Requires: cairo-devel >= %{cairo_version}
-#Requires: libjpeg-devel
-#Requires: bzip2-devel
-#Requires: zlib-devel
-#Requires: libIDL-devel
-#Requires: gtk2-devel
-#Requires: gnome-vfs2-devel
-#Requires: libgnome-devel
-#Requires: libgnomeui-devel
-#Requires: krb5-devel
-#Requires: pango-devel
-#Requires: freetype-devel >= %{freetype_version}
-#Requires: libXt-devel
-#Requires: libXrender-devel
-#Requires: hunspell-devel
-#Requires: sqlite-devel
-#Requires: startup-notification-devel
-#Requires: alsa-lib-devel
-#Requires: libnotify-devel
 
-#%description devel
-#Thunderbird development files.
-#
 #===============================================================================
 
 %prep
@@ -355,16 +325,6 @@ ln -s %{_datadir}/myspell $RPM_BUILD_ROOT%{mozappdir}/dictionaries
 touch $RPM_BUILD_ROOT%{mozappdir}/components/compreg.dat
 touch $RPM_BUILD_ROOT%{mozappdir}/components/xpti.dat
 
-# Devel package - sdk
-#%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/idl/thunderbird-%{version_internal}
-#%{__cp} %{moz_objdir}/mozilla/dist/sdk/idl/* $RPM_BUILD_ROOT%{_datadir}/idl/thunderbird-%{version_internal}
-
-#%{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/include/thunderbird-%{version_internal}
-#%{__cp} %{moz_objdir}/mozilla/dist/sdk/include/* $RPM_BUILD_ROOT%{_datadir}/include/thunderbird-%{version_internal}
-
-#%{__cp} %{moz_objdir}/mozilla/dist/sdk/bin/* $RPM_BUILD_ROOT%{mozappdir}/
-
-
 # Add debuginfo for crash-stats.mozilla.com 
 %if %{enable_mozilla_crashreporter}
 # Debug symbols are stored in /usr/lib even in x86_64 arch
@@ -471,15 +431,6 @@ fi
 %{lightning_extname}
 %{gdata_extname}
 %endif
-
-# TODO: devel package
-#%files devel 
-#%defattr(-,root,root,-) 
-#%{_datadir}/idl/thunderbird-%{version_internal}
-#%{_datadir}/include/thunderbird-%{version_internal}
-#%{mozappdir}/xpidl
-#%{mozappdir}/xpt_dump
-#%{mozappdir}/xpt_link
 
 #===============================================================================
 
