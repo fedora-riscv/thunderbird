@@ -5,7 +5,6 @@
 %define sqlite_version 3.6.14
 %define libnotify_version 0.4
 %define build_langpacks 1
-%define moz_objdir objdir-tb
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
 
 # The tarball is pretty inconsistent with directory structure.
@@ -186,7 +185,6 @@ make -f client.mk build
 
 # create debuginfo for crash-stats.mozilla.com
 %if %{enable_mozilla_crashreporter}
-cd %{moz_objdir}
 make buildsymbols
 %endif
 
@@ -200,9 +198,7 @@ INTERNAL_GECKO=%{version_internal}
 INTERNAL_APP_NAME=%{name}-${INTERNAL_GECKO}
 MOZ_APP_DIR=%{_libdir}/${INTERNAL_APP_NAME}
 
-cd %{moz_objdir}
 DESTDIR=$RPM_BUILD_ROOT make install
-cd -
 
 # install icons
 for s in 16 22 24 32 48 256; do
@@ -292,7 +288,7 @@ touch $RPM_BUILD_ROOT%{mozappdir}/components/xpti.dat
 # Debug symbols are stored in /usr/lib even in x86_64 arch
 DEBUG_LIB_DIR=`echo %{_libdir}|sed -e "s/lib64/lib/"`
 mkdir -p $RPM_BUILD_ROOT$DEBUG_LIB_DIR/debug%{mozappdir}
-cp objdir-tb/mozilla/dist/%{name}-%{version}*.crashreporter-symbols.zip $RPM_BUILD_ROOT$DEBUG_LIB_DIR/debug%{mozappdir}
+cp dist/%{name}-%{version}*.crashreporter-symbols.zip $RPM_BUILD_ROOT$DEBUG_LIB_DIR/debug%{mozappdir}
 %endif
 
 #===============================================================================
