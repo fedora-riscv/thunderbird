@@ -108,6 +108,25 @@ AutoProv: 0
 %description
 Mozilla Thunderbird is a standalone mail and newsgroup client.
 
+%if %{enable_mozilla_crashreporter}
+%global moz_debug_prefix %{_prefix}/lib/debug
+%global moz_debug_dir %{moz_debug_prefix}%{mozappdir}
+%global uname_m %(uname -m)
+%global symbols_file_name %{name}-%{version}.en-US.%{_os}-%{uname_m}.crashreporter-symbols.zip
+%global symbols_file_path %{moz_debug_dir}/%{symbols_file_name}
+%global _find_debuginfo_opts -p %{symbols_file_path} -o debugcrashreporter.list
+%global crashreporter_pkg_name mozilla-crashreporter-%{name}-debuginfo
+%package -n %{crashreporter_pkg_name}
+Summary: Debugging symbols used by Mozilla's crash reporter servers
+Group: Development/Debug
+%description -n %{crashreporter_pkg_name}
+This package provides debug information for XULRunner, for use by
+Mozilla's crash reporter servers.  If you are trying to locally
+debug %{name}, you want to install %{name}-debuginfo instead.
+%files -n %{crashreporter_pkg_name} -f debugcrashreporter.list
+%defattr(-,root,root)
+%endif
+
 
 %prep
 %setup -q -c
@@ -285,10 +304,8 @@ touch $RPM_BUILD_ROOT%{mozappdir}/components/xpti.dat
 
 # Add debuginfo for crash-stats.mozilla.com 
 %if %{enable_mozilla_crashreporter}
-# Debug symbols are stored in /usr/lib even in x86_64 arch
-DEBUG_LIB_DIR=`echo %{_libdir}|sed -e "s/lib64/lib/"`
-mkdir -p $RPM_BUILD_ROOT$DEBUG_LIB_DIR/debug%{mozappdir}
-cp dist/%{name}-%{version}*.crashreporter-symbols.zip $RPM_BUILD_ROOT$DEBUG_LIB_DIR/debug%{mozappdir}
+%{__mkdir_p} $RPM_BUILD_ROOT/%{moz_debug_dir}
+%{__cp} dist/%{symbols_file_name} $RPM_BUILD_ROOT/%{moz_debug_dir}
 %endif
 
 #===============================================================================
