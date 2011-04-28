@@ -254,7 +254,7 @@ install -Dm755 %{SOURCE30} $RPM_BUILD_ROOT/%{mozappdir}/open-browser.sh
 touch %{name}.lang
 %if %{build_langpacks}
 %{__mkdir_p} $RPM_BUILD_ROOT%{mozappdir}/langpacks
-%{__tar} xjf %{SOURCE1}
+%{__tar} xf %{SOURCE1}
 for langpack in `ls thunderbird-langpacks/*.xpi`; do
   language=`basename $langpack .xpi`
   extensiondir=$RPM_BUILD_ROOT%{mozappdir}/langpacks/langpack-$language@thunderbird.mozilla.org
