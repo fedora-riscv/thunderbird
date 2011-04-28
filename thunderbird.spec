@@ -43,7 +43,7 @@ Group:          Applications/Internet
 Source0:        %{tarball}
 %if %{build_langpacks}
 # Language package archive is build by RH
-Source1:        thunderbird-langpacks-%{version}-20110307.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20110428.tar.xz
 %endif
 # Config file for compilation
 Source10:       thunderbird-mozconfig
