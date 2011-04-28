@@ -5,7 +5,7 @@
 %define sqlite_version 3.6.14
 %define libnotify_version 0.4
 %define build_langpacks 1
-%define thunderbird_version 3.1.9
+%define thunderbird_version 3.1.10
 %define moz_objdir objdir-tb
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
 
@@ -31,7 +31,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        %{thunderbird_version}
-Release:        2%{?dist}
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -387,6 +387,9 @@ fi
 #===============================================================================
 
 %changelog
+* Thu Apr 28 2011 Jan Horak <jhorak@redhat.com> - 3.1.10-1
+- Update to 3.1.10
+
 * Wed Apr 20 2011 Christopher Aillon <caillon@redhat.com> - 3.1.9-2
 - Drop the -lightning subpackage, it needs to be in its own SRPM
 
