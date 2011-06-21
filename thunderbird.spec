@@ -28,8 +28,8 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        3.1.10
-Release:        2%{?dist}
+Version:        3.1.11
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -40,7 +40,7 @@ Group:          Applications/Internet
 %endif
 Source0:        %{tarball}
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20110428.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20110621.tar.xz
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -380,6 +380,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Jun 21 2011 Jan Horak <jhorak@redhat.com> - 3.1.11-1
+- Update to 3.1.11
+
 * Wed May 25 2011 Caolán McNamara <caolanm@redhat.com> - 3.1.10-2
 - rebuild for new hunspell
 
