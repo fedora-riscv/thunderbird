@@ -5,7 +5,7 @@
 %define sqlite_version 3.6.14
 %define libnotify_version 0.4
 %define build_langpacks 1
-%define thunderbird_version 3.1.10
+%define thunderbird_version 3.1.11
 %define moz_objdir objdir-tb
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
 
@@ -30,7 +30,7 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        3.1.11%{thunderbird_version}
+Version:        %{thunderbird_version}
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
