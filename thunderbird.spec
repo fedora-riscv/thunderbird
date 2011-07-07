@@ -13,7 +13,7 @@
 # IMPORTANT: If there is no top level directory, this should be 
 # set to the cwd, ie: '.'
 #%define tarballdir .
-%define tarballdir comm-1.9.2
+%define tarballdir comm-miramar
 
 %define official_branding 1
 # enable crash reporter only for iX86
@@ -23,12 +23,19 @@
 %define enable_mozilla_crashreporter 0
 %endif
 
-%define version_internal  3.1
+%if 0%{?fedora} >= 16
+# Disable mozilla crash reporter temporary for rawhide because new libcurl-devel
+# does not include curl/types.h file which is required by google breakpad 
+# Issue has been reported to: http://code.google.com/p/google-breakpad/issues/detail?id=431
+%define enable_mozilla_crashreporter 0
+%endif
+
+%define version_internal  5.0
 %define mozappdir         %{_libdir}/%{name}-%{version_internal}
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        3.1.11
+Version:        5.0
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
@@ -40,7 +47,7 @@ Group:          Applications/Internet
 %endif
 Source0:        %{tarball}
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20110621.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20110628.tar.xz
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -52,14 +59,8 @@ Source100:      find-external-requires
 
 # Mozilla (XULRunner) patches
 Patch0:         thunderbird-version.patch
-Patch1:         thunderbird-default.patch
-Patch2:         mozilla-jemalloc.patch
-Patch3:         xulrunner-1.9.2.1-build.patch
-Patch4:         mozilla-libjpeg-turbo.patch
-Patch5:         mozilla-missing-cflags.patch
 Patch6:         mozilla-build-s390.patch
 Patch7:         crashreporter-remove-static.patch
-Patch9:         xulrunner-2.0-os2cc.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -95,6 +96,8 @@ BuildRequires:  alsa-lib-devel
 BuildRequires:  autoconf213
 BuildRequires:  desktop-file-utils
 BuildRequires:  libcurl-devel
+BuildRequires:  yasm
+BuildRequires:  mesa-libGL-devel
 Requires:       mozilla-filesystem
 Requires:       nspr >= %{nspr_version}
 Requires:       nss >= %{nss_version}
@@ -137,16 +140,10 @@ sed -e 's/__RPM_VERSION_INTERNAL__/%{version_internal}/' %{P:%%PATCH0} \
 
 # Mozilla (XULRunner) patches
 cd mozilla
-%patch1 -p2 -b .default-application
-%patch2 -p1 -b .jemalloc
-%patch3 -p2 -b .protected
-%patch4 -p2 -b .turbo
-%patch5 -p2 -b .mozcflags
 %ifarch s390
 %patch6 -p1 -b .s390
 %endif
 %patch7 -p2 -b .static
-%patch9 -p1 -b .os2cc
 cd ..
 
 %if %{official_branding}
@@ -264,21 +261,7 @@ for langpack in `ls thunderbird-langpacks/*.xpi`; do
   %{__mkdir_p} $extensiondir
   unzip $langpack -d $extensiondir
   find $extensiondir -type f | xargs chmod 644
-
-  tmpdir=`mktemp -d %{name}.XXXXXXXX`
-  langtmp=$tmpdir/%{name}/langpack-$language
-  %{__mkdir_p} $langtmp
-  jarfile=$extensiondir/chrome/$language.jar
-  unzip $jarfile -d $langtmp
-
-  find $langtmp -type f | xargs chmod 644
-  %{__rm} -rf $jarfile
-  cd $langtmp
-  zip -r -D $jarfile locale
-  %{__rm} -rf locale
-  cd -
-  %{__rm} -rf $tmpdir
-
+  
   language=`echo $language | sed -e 's/-/_/g'`
   extensiondir=`echo $extensiondir | sed -e "s,^$RPM_BUILD_ROOT,,"`
   echo "%%lang($language) $extensiondir" >> %{name}.lang
@@ -336,10 +319,11 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %dir %{mozappdir}/components
 %ghost %{mozappdir}/components/compreg.dat
 %ghost %{mozappdir}/components/xpti.dat
-%{mozappdir}/components/components.list
-%{mozappdir}/components/*.so
-%{mozappdir}/components/*.xpt
-%attr(644,root,root) %{mozappdir}/components/*.js
+%{mozappdir}/components/binary.manifest
+%{mozappdir}/components/libdbusservice.so
+%{mozappdir}/components/libmozgnome.so
+%{mozappdir}/omni.jar
+%{mozappdir}/plugin-container
 %{mozappdir}/defaults
 %{mozappdir}/dictionaries
 %dir %{mozappdir}/extensions
@@ -348,18 +332,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{mozappdir}/greprefs
 %{mozappdir}/isp
 %{mozappdir}/mozilla-xremote-client
-%{mozappdir}/res
 %{mozappdir}/run-mozilla.sh
 %{mozappdir}/thunderbird-bin
 %{mozappdir}/thunderbird
 %{mozappdir}/*.so
-%dir %{mozappdir}/modules
-%{mozappdir}/modules/*.jsm
-%{mozappdir}/modules/*.js
-%dir %{mozappdir}/modules/gloda
-%{mozappdir}/modules/gloda/*.js
-%dir %{mozappdir}/modules/activity
-%{mozappdir}/modules/activity/*.js
 %{mozappdir}/README.txt
 %{mozappdir}/platform.ini
 %{mozappdir}/application.ini
@@ -376,10 +352,17 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{mozappdir}/crashreporter.ini
 %{mozappdir}/Throbber-small.gif
 %endif
+%exclude %{_datadir}/idl/%{name}-%{version_internal}
+%exclude %{_includedir}/%{name}-%{version_internal}
+%exclude %{_libdir}/%{name}-devel-%{version_internal}
+%{mozappdir}/chrome.manifest
 
 #===============================================================================
 
 %changelog
+* Tue Jun 28 2011 Jan Horak <jhorak@redhat.com> - 5.0-1
+- Update to 5.0
+
 * Tue Jun 21 2011 Jan Horak <jhorak@redhat.com> - 3.1.11-1
 - Update to 3.1.11
 
