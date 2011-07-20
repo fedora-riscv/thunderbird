@@ -36,7 +36,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        5.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -59,8 +59,10 @@ Source100:      find-external-requires
 
 # Mozilla (XULRunner) patches
 Patch0:         thunderbird-version.patch
-Patch6:         mozilla-build-s390.patch
 Patch7:         crashreporter-remove-static.patch
+# secondary arch patches inherited from xulrunner
+Patch8:         xulrunner-2.0-secondary-jit.patch
+Patch9:         xulrunner-5.0-secondary-ipc.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -140,10 +142,9 @@ sed -e 's/__RPM_VERSION_INTERNAL__/%{version_internal}/' %{P:%%PATCH0} \
 
 # Mozilla (XULRunner) patches
 cd mozilla
-%ifarch s390
-%patch6 -p1 -b .s390
-%endif
 %patch7 -p2 -b .static
+%patch8 -p2 -b .secondary-jit
+%patch9 -p2 -b .secondary-ipc
 cd ..
 
 %if %{official_branding}
@@ -360,6 +361,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Wed Jul 20 2011 Dan Horák <dan[at]danny.cz> - 5.0-2
+- add xulrunner patches for secondary arches
+
 * Tue Jun 28 2011 Jan Horak <jhorak@redhat.com> - 5.0-1
 - Update to 5.0
 
