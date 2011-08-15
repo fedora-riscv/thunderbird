@@ -36,7 +36,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        5.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -361,6 +361,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Mon Aug 15 2011 Jan Horak <jhorak@redhat.com> - 5.0-3
+- Rebuild due to rhbz#728707
+
 * Wed Jul 20 2011 Dan Horák <dan[at]danny.cz> - 5.0-2
 - add xulrunner patches for secondary arches
 
