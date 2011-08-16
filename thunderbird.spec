@@ -13,7 +13,7 @@
 # IMPORTANT: If there is no top level directory, this should be 
 # set to the cwd, ie: '.'
 #%define tarballdir .
-%define tarballdir comm-miramar
+%define tarballdir comm-release
 
 %define official_branding 1
 # enable crash reporter only for iX86
@@ -35,8 +35,8 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        5.0
-Release:        3%{?dist}
+Version:        6.0
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -47,7 +47,7 @@ Group:          Applications/Internet
 %endif
 Source0:        %{tarball}
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20110628.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20110816.tar.xz
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -60,9 +60,6 @@ Source100:      find-external-requires
 # Mozilla (XULRunner) patches
 Patch0:         thunderbird-version.patch
 Patch7:         crashreporter-remove-static.patch
-# secondary arch patches inherited from xulrunner
-Patch8:         xulrunner-2.0-secondary-jit.patch
-Patch9:         xulrunner-5.0-secondary-ipc.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -143,8 +140,6 @@ sed -e 's/__RPM_VERSION_INTERNAL__/%{version_internal}/' %{P:%%PATCH0} \
 # Mozilla (XULRunner) patches
 cd mozilla
 %patch7 -p2 -b .static
-%patch8 -p2 -b .secondary-jit
-%patch9 -p2 -b .secondary-ipc
 cd ..
 
 %if %{official_branding}
@@ -258,14 +253,11 @@ touch %{name}.lang
 %{__tar} xf %{SOURCE1}
 for langpack in `ls thunderbird-langpacks/*.xpi`; do
   language=`basename $langpack .xpi`
-  extensiondir=$RPM_BUILD_ROOT%{mozappdir}/langpacks/langpack-$language@thunderbird.mozilla.org
-  %{__mkdir_p} $extensiondir
-  unzip $langpack -d $extensiondir
-  find $extensiondir -type f | xargs chmod 644
+  extensionID=langpack-$language@thunderbird.mozilla.org
   
   language=`echo $language | sed -e 's/-/_/g'`
-  extensiondir=`echo $extensiondir | sed -e "s,^$RPM_BUILD_ROOT,,"`
-  echo "%%lang($language) $extensiondir" >> %{name}.lang
+  %{__install} -m 644 ${langpack} $RPM_BUILD_ROOT%{mozappdir}/langpacks/${extensionID}.xpi
+  echo "%%lang($language) %{mozappdir}/langpacks/${extensionID}.xpi" >> %{name}.lang
 done
 %{__rm} -rf thunderbird-langpacks
 %endif # build_langpacks
@@ -361,6 +353,12 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Aug 16 2011 Jan Horak <jhorak@redhat.com> - 6.0-1
+- Update to 6.0
+
+* Sun Aug 16 2011 Remi Collet <remi@fedoraproject.org> 5.0-4
+- Don't unzip the langpacks
+
 * Mon Aug 15 2011 Jan Horak <jhorak@redhat.com> - 5.0-3
 - Rebuild due to rhbz#728707
 
