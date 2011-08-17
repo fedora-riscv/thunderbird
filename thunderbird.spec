@@ -5,7 +5,7 @@
 %define sqlite_version 3.6.14
 %define libnotify_version 0.4
 %define build_langpacks 1
-%define thunderbird_version 3.1.11
+%define thunderbird_version 3.1.12
 %define moz_objdir objdir-tb
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
 
@@ -43,7 +43,7 @@ Group:          Applications/Internet
 Source0:        %{tarball}
 %if %{build_langpacks}
 # Language package archive is build by RH
-Source1:        thunderbird-langpacks-%{version}-20110621.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20110817.tar.xz
 %endif
 # Config file for compilation
 Source10:       thunderbird-mozconfig
@@ -397,6 +397,9 @@ fi
 #===============================================================================
 
 %changelog
+* Wed Aug 17 2011 Jan Horak <jhorak@redhat.com> - 3.1.12-1
+- Update to 3.1.12
+
 * Tue Jun 21 2011 Jan Horak <jhorak@redhat.com> - 3.1.11-1
 - Update to 3.1.11
 
