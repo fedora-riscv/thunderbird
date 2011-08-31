@@ -31,7 +31,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        %{thunderbird_version}
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -73,6 +73,7 @@ Patch7:         mozilla-missing-cflags.patch
 Patch8:         mozilla-build-s390.patch
 # Remove static build option from crashreporter to remove dependency on static libraries
 Patch9:         crashreporter-remove-static.patch
+Patch10:        xulrunner-diginotar.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -138,7 +139,9 @@ sed -e 's/__RPM_VERSION_INTERNAL__/%{version_internal}/' %{P:%%PATCH0} \
 %patch8 -p0 -b .s390
 %endif
 %patch9 -p1 -b .static
-
+cd mozilla
+%patch10 -p1 -b .diginotar
+cd -
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -397,6 +400,9 @@ fi
 #===============================================================================
 
 %changelog
+* Wed Aug 31 2011 Jan Horak <jhorak@redhat.com> - 3.1.12-2
+- Distrust a specific Certificate Authority
+
 * Wed Aug 17 2011 Jan Horak <jhorak@redhat.com> - 3.1.12-1
 - Update to 3.1.12
 
