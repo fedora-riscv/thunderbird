@@ -36,7 +36,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        6.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -60,6 +60,7 @@ Source100:      find-external-requires
 # Mozilla (XULRunner) patches
 Patch0:         thunderbird-version.patch
 Patch7:         crashreporter-remove-static.patch
+Patch8:         xulrunner-diginotar.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -140,6 +141,7 @@ sed -e 's/__RPM_VERSION_INTERNAL__/%{version_internal}/' %{P:%%PATCH0} \
 # Mozilla (XULRunner) patches
 cd mozilla
 %patch7 -p2 -b .static
+%patch8 -p1 -b .diginotar
 cd ..
 
 %if %{official_branding}
@@ -353,6 +355,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Wed Aug 31 2011 Jan Horak <jhorak@redhat.com> - 6.0-2
+- Distrust a specific Certificate Authority
+
 * Tue Aug 16 2011 Jan Horak <jhorak@redhat.com> - 6.0-1
 - Update to 6.0
 

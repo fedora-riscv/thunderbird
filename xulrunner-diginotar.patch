@@ -1,0 +1,324 @@
+
+# HG changeset patch
+# User Kai Engert <kaie@kuix.de>
+# Date 1314714745 14400
+# Node ID d172106979730bdd967073f2c1e6188e708ca911
+# Parent  078215b4d425df355ae87f0ec47d66261ad58c5a
+Bug 682927 - Dis-trust DigiNotar root certificate, all parts together; r=bsmith
+
+diff --git a/security/manager/ssl/src/nsIdentityChecking.cpp b/security/manager/ssl/src/nsIdentityChecking.cpp
+--- a/security/manager/ssl/src/nsIdentityChecking.cpp
++++ b/security/manager/ssl/src/nsIdentityChecking.cpp
+@@ -118,28 +118,16 @@ static struct nsMyTrustedEVInfo myTruste
+     SEC_OID_UNKNOWN,
+     "5F:43:E5:B1:BF:F8:78:8C:AC:1C:C7:CA:4A:9A:C6:22:2B:CC:34:C6",
+     "MDsxGDAWBgNVBAoTD0N5YmVydHJ1c3QsIEluYzEfMB0GA1UEAxMWQ3liZXJ0cnVz"
+     "dCBHbG9iYWwgUm9vdA==",
+     "BAAAAAABD4WqLUg=",
+     nsnull
+   },
+   {
+-    // E=info@diginotar.nl,CN=DigiNotar Root CA,O=DigiNotar,C=NL
+-    "2.16.528.1.1001.1.1.1.12.6.1.1.1",
+-    "DigiNotar EV OID",
+-    SEC_OID_UNKNOWN,
+-    "C0:60:ED:44:CB:D8:81:BD:0E:F8:6C:0B:A2:87:DD:CF:81:67:47:8C",
+-    "MF8xCzAJBgNVBAYTAk5MMRIwEAYDVQQKEwlEaWdpTm90YXIxGjAYBgNVBAMTEURp"
+-    "Z2lOb3RhciBSb290IENBMSAwHgYJKoZIhvcNAQkBFhFpbmZvQGRpZ2lub3Rhci5u"
+-    "bA==",
+-    "DHbanJEMTiye/hXQWJM8TA==",
+-    nsnull
+-  },
+-  {
+     // CN=SwissSign Gold CA - G2,O=SwissSign AG,C=CH
+     "2.16.756.1.89.1.2.1.1",
+     "SwissSign EV OID",
+     SEC_OID_UNKNOWN,
+     "D8:C5:38:8A:B7:30:1B:1B:6E:D4:7A:E6:45:25:3A:6F:9F:1A:27:61",
+     "MEUxCzAJBgNVBAYTAkNIMRUwEwYDVQQKEwxTd2lzc1NpZ24gQUcxHzAdBgNVBAMT"
+     "FlN3aXNzU2lnbiBHb2xkIENBIC0gRzI=",
+     "ALtAHEP1Xk+w",
+
+diff --git a/security/manager/ssl/src/nsNSSCallbacks.cpp b/security/manager/ssl/src/nsNSSCallbacks.cpp
+--- a/security/manager/ssl/src/nsNSSCallbacks.cpp
++++ b/security/manager/ssl/src/nsNSSCallbacks.cpp
+@@ -1029,16 +1029,63 @@ static struct nsSerialBinaryBlacklistEnt
+   { 16, "\x3e\x75\xce\xd4\x6b\x69\x30\x21\x21\x88\x30\xae\x86\xa8\x2a\x71" },
+   { 17, "\x00\xe9\x02\x8b\x95\x78\xe4\x15\xdc\x1a\x71\x0a\x2b\x88\x15\x44\x47" },
+   { 17, "\x00\xd7\x55\x8f\xda\xf5\xf1\x10\x5b\xb2\x13\x28\x2b\x70\x77\x29\xa3" },
+   { 16, "\x04\x7e\xcb\xe9\xfc\xa5\x5f\x7b\xd0\x9e\xae\x36\xe1\x0c\xae\x1e" },
+   { 17, "\x00\xf5\xc8\x6a\xf3\x61\x62\xf1\x3a\x64\xf5\x4f\x6d\xc9\x58\x7c\x06" },
+   { 0, 0 } // end marker
+ };
+ 
++// Bug 682927: Do not trust any DigiNotar-issued certificates.
++// We do this check after normal certificate validation because we do not
++// want to override a "revoked" OCSP response.
++PRErrorCode
++PSM_SSL_BlacklistDigiNotar(CERTCertificate * serverCert,
++                           CERTCertList * serverCertChain)
++{
++  PRBool isDigiNotarIssuedCert = PR_FALSE;
++
++  for (CERTCertListNode *node = CERT_LIST_HEAD(serverCertChain);
++       !CERT_LIST_END(node, serverCertChain);
++       node = CERT_LIST_NEXT(node)) {
++    if (!node->cert->issuerName)
++      continue;
++
++    if (strstr(node->cert->issuerName, "CN=DigiNotar")) {
++      isDigiNotarIssuedCert = PR_TRUE;
++      // Do not let the user override the error if the cert was
++      // chained from the "DigiNotar Root CA" cert and the cert was issued
++      // within the time window in which we think the mis-issuance(s) occurred.
++      if (strstr(node->cert->issuerName, "CN=DigiNotar Root CA")) {
++        PRTime cutoff = 0, notBefore = 0, notAfter = 0;
++        PRStatus status = PR_ParseTimeString("01-JUL-2011 00:00", PR_TRUE, &cutoff);
++        NS_ASSERTION(status == PR_SUCCESS, "PR_ParseTimeString failed");
++        if (status != PR_SUCCESS ||
++           CERT_GetCertTimes(serverCert, &notBefore, &notAfter) != SECSuccess ||
++           notBefore >= cutoff) {
++          return SEC_ERROR_REVOKED_CERTIFICATE;
++        }
++      }
++    }
++
++    // By request of the Dutch government
++    if (!strcmp(node->cert->issuerName,
++                "CN=Staat der Nederlanden Root CA,O=Staat der Nederlanden,C=NL") &&
++        CERT_LIST_END(CERT_LIST_NEXT(node), serverCertChain)) {
++      return 0;
++    }
++  }
++
++  if (isDigiNotarIssuedCert)
++    return SEC_ERROR_UNTRUSTED_ISSUER; // user can override this
++  else
++    return 0; // No DigiNotor cert => carry on as normal
++}
++
++
+ SECStatus PR_CALLBACK AuthCertificateCallback(void* client_data, PRFileDesc* fd,
+                                               PRBool checksig, PRBool isServer) {
+   nsNSSShutDownPreventionLock locker;
+ 
+   CERTCertificate *serverCert = SSL_PeerCertificate(fd);
+   CERTCertificateCleaner serverCertCleaner(serverCert);
+ 
+   if (serverCert && 
+@@ -1074,40 +1121,54 @@ SECStatus PR_CALLBACK AuthCertificateCal
+ 
+       if (server_cert_comparison_len == locked_cert_comparison_len &&
+           !memcmp(server_cert_comparison_start, locked_cert_comparison_start, locked_cert_comparison_len)) {
+         PR_SetError(SEC_ERROR_REVOKED_CERTIFICATE, 0);
+         return SECFailure;
+       }
+     }
+   }
+-  
++
+   SECStatus rv = PSM_SSL_PKIX_AuthCertificate(fd, serverCert, checksig, isServer);
+ 
+   // We want to remember the CA certs in the temp db, so that the application can find the
+   // complete chain at any time it might need it.
+   // But we keep only those CA certs in the temp db, that we didn't already know.
+ 
+   if (serverCert) {
+     nsNSSSocketInfo* infoObject = (nsNSSSocketInfo*) fd->higher->secret;
+     nsRefPtr<nsSSLStatus> status = infoObject->SSLStatus();
+     nsRefPtr<nsNSSCertificate> nsc;
+ 
+     if (!status || !status->mServerCert) {
+       nsc = nsNSSCertificate::Create(serverCert);
+     }
+ 
+-    if (SECSuccess == rv) {
++    CERTCertList *certList = nsnull;
++    if (rv == SECSuccess) {
++      certList = CERT_GetCertChainFromCert(serverCert, PR_Now(), certUsageSSLCA);
++      if (!certList) {
++        rv = SECFailure;
++      } else {
++        PRErrorCode blacklistErrorCode = PSM_SSL_BlacklistDigiNotar(serverCert,
++                                                                    certList);
++        if (blacklistErrorCode != 0) {
++          infoObject->SetCertIssuerBlacklisted();
++          PORT_SetError(blacklistErrorCode);
++          rv = SECFailure;
++        }
++      }
++    }
++
++    if (rv == SECSuccess) {
+       if (nsc) {
+         PRBool dummyIsEV;
+         nsc->GetIsExtendedValidation(&dummyIsEV); // the nsc object will cache the status
+       }
+     
+-      CERTCertList *certList = CERT_GetCertChainFromCert(serverCert, PR_Now(), certUsageSSLCA);
+-
+       nsCOMPtr<nsINSSComponent> nssComponent;
+       
+       for (CERTCertListNode *node = CERT_LIST_HEAD(certList);
+            !CERT_LIST_END(node, certList);
+            node = CERT_LIST_NEXT(node)) {
+ 
+         if (node->cert->slot) {
+           // This cert was found on a token, no need to remember it in the temp db.
+@@ -1133,16 +1194,19 @@ SECStatus PR_CALLBACK AuthCertificateCal
+             PK11_ImportCert(slot, node->cert, CK_INVALID_HANDLE, 
+                             nickname, PR_FALSE);
+             PK11_FreeSlot(slot);
+           }
+         }
+         PR_FREEIF(nickname);
+       }
+ 
++    }
++
++    if (certList) {
+       CERT_DestroyCertList(certList);
+     }
+ 
+     // The connection may get terminated, for example, if the server requires
+     // a client cert. Let's provide a minimal SSLStatus
+     // to the caller that contains at least the cert and its status.
+     if (!status) {
+       status = new nsSSLStatus();
+diff --git a/security/manager/ssl/src/nsNSSCallbacks.h b/security/manager/ssl/src/nsNSSCallbacks.h
+--- a/security/manager/ssl/src/nsNSSCallbacks.h
++++ b/security/manager/ssl/src/nsNSSCallbacks.h
+@@ -50,16 +50,19 @@
+ 
+ char* PR_CALLBACK
+ PK11PasswordPrompt(PK11SlotInfo *slot, PRBool retry, void* arg);
+ 
+ void PR_CALLBACK HandshakeCallback(PRFileDesc *fd, void *client_data);
+ SECStatus PR_CALLBACK AuthCertificateCallback(void* client_data, PRFileDesc* fd,
+                                               PRBool checksig, PRBool isServer);
+ 
++PRErrorCode PSM_SSL_BlacklistDigiNotar(CERTCertificate * serverCert,
++                                       CERTCertList * serverCertChain);
++
+ SECStatus RegisterMyOCSPAIAInfoCallback();
+ SECStatus UnregisterMyOCSPAIAInfoCallback();
+ 
+ class nsHTTPListener : public nsIStreamLoaderObserver
+ {
+ private:
+   // For XPCOM implementations that are not a base class for some other
+   // class, it is good practice to make the destructor non-virtual and
+diff --git a/security/manager/ssl/src/nsNSSIOLayer.cpp b/security/manager/ssl/src/nsNSSIOLayer.cpp
+--- a/security/manager/ssl/src/nsNSSIOLayer.cpp
++++ b/security/manager/ssl/src/nsNSSIOLayer.cpp
+@@ -221,17 +221,18 @@ nsNSSSocketInfo::nsNSSSocketInfo()
+     mForSTARTTLS(PR_FALSE),
+     mHandshakePending(PR_TRUE),
+     mCanceled(PR_FALSE),
+     mHasCleartextPhase(PR_FALSE),
+     mHandshakeInProgress(PR_FALSE),
+     mAllowTLSIntoleranceTimeout(PR_TRUE),
+     mRememberClientAuthCertificate(PR_FALSE),
+     mHandshakeStartTime(0),
+-    mPort(0)
++    mPort(0),
++    mIsCertIssuerBlacklisted(PR_FALSE)
+ {
+   mThreadData = new nsSSLSocketThreadData;
+ }
+ 
+ nsNSSSocketInfo::~nsNSSSocketInfo()
+ {
+   delete mThreadData;
+ 
+@@ -3437,16 +3438,20 @@ nsNSSBadCertHandler(void *arg, PRFileDes
+       cvout[0].value.pointer.log = verify_log;
+       cvout[1].type = cert_po_end;
+ 
+       srv = CERT_PKIXVerifyCert(peerCert, certificateUsageSSLServer,
+                                 survivingParams->GetRawPointerForNSS(),
+                                 cvout, (void*)infoObject);
+     }
+ 
++    if (infoObject->IsCertIssuerBlacklisted()) {
++      collected_errors |= nsICertOverrideService::ERROR_UNTRUSTED;
++    }
++
+     // We ignore the result code of the cert verification.
+     // Either it is a failure, which is expected, and we'll process the
+     //                         verify log below.
+     // Or it is a success, then a domain mismatch is the only 
+     //                     possible failure. 
+ 
+     CERTVerifyLogNode *i_node;
+     for (i_node = verify_log->head; i_node; i_node = i_node->next)
+diff --git a/security/manager/ssl/src/nsNSSIOLayer.h b/security/manager/ssl/src/nsNSSIOLayer.h
+--- a/security/manager/ssl/src/nsNSSIOLayer.h
++++ b/security/manager/ssl/src/nsNSSIOLayer.h
+@@ -197,16 +197,22 @@ public:
+ 
+   /* Set SSL Status values */
+   nsresult SetSSLStatus(nsSSLStatus *aSSLStatus);
+   nsSSLStatus* SSLStatus() { return mSSLStatus; }
+   PRBool hasCertErrors();
+   
+   PRStatus CloseSocketAndDestroy();
+   
++  PRBool IsCertIssuerBlacklisted() const {
++    return mIsCertIssuerBlacklisted;
++  }
++  void SetCertIssuerBlacklisted() {
++    mIsCertIssuerBlacklisted = PR_TRUE;
++  }
+ protected:
+   nsCOMPtr<nsIInterfaceRequestor> mCallbacks;
+   PRFileDesc* mFd;
+   nsCOMPtr<nsIX509Cert> mCert;
+   nsCOMPtr<nsIX509Cert> mPreviousCert; // DocShellDependent
+   enum { 
+     blocking_state_unknown, is_nonblocking_socket, is_blocking_socket 
+   } mBlockingState;
+@@ -224,16 +230,17 @@ protected:
+   PRPackedBool mCanceled;
+   PRPackedBool mHasCleartextPhase;
+   PRPackedBool mHandshakeInProgress;
+   PRPackedBool mAllowTLSIntoleranceTimeout;
+   PRPackedBool mRememberClientAuthCertificate;
+   PRIntervalTime mHandshakeStartTime;
+   PRInt32 mPort;
+   nsXPIDLCString mHostName;
++  PRErrorCode mIsCertIssuerBlacklisted;
+ 
+   /* SSL Status */
+   nsRefPtr<nsSSLStatus> mSSLStatus;
+ 
+   nsresult ActivateSSL();
+ 
+   nsSSLSocketThreadData *mThreadData;
+ 
+
+diff --git a/security/nss/lib/ckfw/builtins/nssckbi.h b/security/nss/lib/ckfw/builtins/nssckbi.h
+--- a/security/nss/lib/ckfw/builtins/nssckbi.h
++++ b/security/nss/lib/ckfw/builtins/nssckbi.h
+@@ -72,18 +72,18 @@
+  *     ...
+  *   - NSS 3.29 branch: 250-255
+  *
+  * NSS_BUILTINS_LIBRARY_VERSION_MINOR is a CK_BYTE.  It's not clear
+  * whether we may use its full range (0-255) or only 0-99 because
+  * of the comment in the CK_VERSION type definition.
+  */
+ #define NSS_BUILTINS_LIBRARY_VERSION_MAJOR 1
+-#define NSS_BUILTINS_LIBRARY_VERSION_MINOR 83
+-#define NSS_BUILTINS_LIBRARY_VERSION "1.83"
++#define NSS_BUILTINS_LIBRARY_VERSION_MINOR 85
++#define NSS_BUILTINS_LIBRARY_VERSION "1.85"
+ 
+ /* These version numbers detail the semantic changes to the ckfw engine. */
+ #define NSS_BUILTINS_HARDWARE_VERSION_MAJOR 1
+ #define NSS_BUILTINS_HARDWARE_VERSION_MINOR 0
+ 
+ /* These version numbers detail the semantic changes to ckbi itself 
+  * (new PKCS #11 objects), etc. */
+ #define NSS_BUILTINS_FIRMWARE_VERSION_MAJOR 1
+
