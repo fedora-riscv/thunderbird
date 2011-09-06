@@ -61,7 +61,6 @@ Source100:      find-external-requires
 Patch0:         thunderbird-version.patch
 Patch7:         crashreporter-remove-static.patch
 Patch8:         xulrunner-6.0-secondary-ipc.patch
-Patch9:         xulrunner-diginotar.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -143,7 +142,6 @@ sed -e 's/__RPM_VERSION_INTERNAL__/%{version_internal}/' %{P:%%PATCH0} \
 cd mozilla
 %patch7 -p2 -b .static
 %patch8 -p2 -b .secondary-ipc
-%patch9 -p1 -b .diginotar
 cd ..
 
 %if %{official_branding}
