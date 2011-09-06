@@ -30,13 +30,13 @@
 %define enable_mozilla_crashreporter 0
 %endif
 
-%define version_internal  5.0
+%define version_internal  6.0
 %define mozappdir         %{_libdir}/%{name}-%{version_internal}
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        6.0
-Release:        3%{?dist}
+Version:        6.0.2
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -47,7 +47,7 @@ Group:          Applications/Internet
 %endif
 Source0:        %{tarball}
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20110816.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20110906.tar.xz
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -61,7 +61,6 @@ Source100:      find-external-requires
 Patch0:         thunderbird-version.patch
 Patch7:         crashreporter-remove-static.patch
 Patch8:         xulrunner-6.0-secondary-ipc.patch
-Patch9:         xulrunner-diginotar.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -143,7 +142,6 @@ sed -e 's/__RPM_VERSION_INTERNAL__/%{version_internal}/' %{P:%%PATCH0} \
 cd mozilla
 %patch7 -p2 -b .static
 %patch8 -p2 -b .secondary-ipc
-%patch9 -p1 -b .diginotar
 cd ..
 
 %if %{official_branding}
@@ -357,6 +355,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Sep  6 2011 Jan Horak <jhorak@redhat.com> - 6.0.2-1
+- Update to 6.0.2
+
 * Wed Aug 31 2011 Jan Horak <jhorak@redhat.com> - 6.0-3
 - Distrust a specific Certificate Authority
 
