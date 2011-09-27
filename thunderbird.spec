@@ -12,7 +12,6 @@
 #
 # IMPORTANT: If there is no top level directory, this should be 
 # set to the cwd, ie: '.'
-#%define tarballdir .
 %define tarballdir comm-release
 
 %define official_branding 1
@@ -30,12 +29,11 @@
 %define enable_mozilla_crashreporter 0
 %endif
 
-%define version_internal  6.0
-%define mozappdir         %{_libdir}/%{name}-%{version_internal}
+%define mozappdir         %{_libdir}/%{name}
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        6.0.2
+Version:        7.0
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
@@ -47,7 +45,7 @@ Group:          Applications/Internet
 %endif
 Source0:        %{tarball}
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20110906.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20110927.tar.xz
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -58,7 +56,7 @@ Source21:       thunderbird.sh.in
 Source100:      find-external-requires
 
 # Mozilla (XULRunner) patches
-Patch0:         thunderbird-version.patch
+Patch0:         thunderbird-install-dir.patch
 Patch7:         crashreporter-remove-static.patch
 Patch8:         xulrunner-6.0-secondary-ipc.patch
 
@@ -134,10 +132,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %setup -q -c
 cd %{tarballdir}
 
-sed -e 's/__RPM_VERSION_INTERNAL__/%{version_internal}/' %{P:%%PATCH0} \
-    > version.patch
-%{__patch} -p1 -b --suffix .version --fuzz=0 < version.patch
-
+%patch0  -p2 -b .dir
 # Mozilla (XULRunner) patches
 cd mozilla
 %patch7 -p2 -b .static
@@ -148,7 +143,7 @@ cd ..
 # Required by Mozilla Corporation
 
 %else
-# Not yet approved by Mozillla Corporation
+# Not yet approved by Mozilla Corporation
 
 %endif
 
@@ -165,9 +160,6 @@ cd ..
 
 %build
 cd %{tarballdir}
-
-INTERNAL_GECKO=%{version_internal}
-MOZ_APP_DIR=%{mozappdir}
 
 # -fpermissive is needed to build with gcc 4.6+ which has become stricter
 #
@@ -205,11 +197,6 @@ make buildsymbols
 %install
 cd %{tarballdir}
 
-INTERNAL_GECKO=%{version_internal}
-
-INTERNAL_APP_NAME=%{name}-${INTERNAL_GECKO}
-MOZ_APP_DIR=%{_libdir}/${INTERNAL_APP_NAME}
-
 DESTDIR=$RPM_BUILD_ROOT make install
 
 # install icons
@@ -227,8 +214,7 @@ desktop-file-install --vendor mozilla \
 
 # set up the thunderbird start script
 rm -f $RPM_BUILD_ROOT/%{_bindir}/thunderbird
-%{__cat} %{SOURCE21} | %{__sed} -e 's,TBIRD_VERSION,%{version_internal},g' > \
-  $RPM_BUILD_ROOT%{_bindir}/thunderbird
+%{__cat} %{SOURCE21}  > $RPM_BUILD_ROOT%{_bindir}/thunderbird
 %{__chmod} 755 $RPM_BUILD_ROOT/%{_bindir}/thunderbird
 
 # set up our default preferences
@@ -342,19 +328,23 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/icons/hicolor/256x256/apps/thunderbird.png
 %{_datadir}/icons/hicolor/32x32/apps/thunderbird.png
 %{_datadir}/icons/hicolor/48x48/apps/thunderbird.png
+%{mozappdir}/hyphenation
 %if %{enable_mozilla_crashreporter}
 %{mozappdir}/crashreporter
 %{mozappdir}/crashreporter.ini
 %{mozappdir}/Throbber-small.gif
 %endif
-%exclude %{_datadir}/idl/%{name}-%{version_internal}
-%exclude %{_includedir}/%{name}-%{version_internal}
-%exclude %{_libdir}/%{name}-devel-%{version_internal}
+%exclude %{_datadir}/idl/%{name}-%{version}
+%exclude %{_includedir}/%{name}-%{version}
+%exclude %{_libdir}/%{name}-devel-%{version}
 %{mozappdir}/chrome.manifest
 
 #===============================================================================
 
 %changelog
+* Tue Sep 27 2011 Jan Horak <jhorak@redhat.com> - 7.0-1
+- Update to 7.0
+
 * Tue Sep  6 2011 Jan Horak <jhorak@redhat.com> - 6.0.2-1
 - Update to 6.0.2
 
