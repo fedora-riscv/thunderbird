@@ -214,6 +214,8 @@ desktop-file-install --vendor mozilla \
 
 # set up the thunderbird start script
 rm -f $RPM_BUILD_ROOT/%{_bindir}/thunderbird
+%{__cat} %{SOURCE21}  > $RPM_BUILD_ROOT%{_bindir}/thunderbird
+%{__chmod} 755 $RPM_BUILD_ROOT/%{_bindir}/thunderbird
 
 # set up our default preferences
 %{__cat} %{SOURCE12} | %{__sed} -e 's,THUNDERBIRD_RPM_VR,%{version}-%{release},g' > \
@@ -326,14 +328,15 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/icons/hicolor/256x256/apps/thunderbird.png
 %{_datadir}/icons/hicolor/32x32/apps/thunderbird.png
 %{_datadir}/icons/hicolor/48x48/apps/thunderbird.png
+%{mozappdir}/hyphenation
 %if %{enable_mozilla_crashreporter}
 %{mozappdir}/crashreporter
 %{mozappdir}/crashreporter.ini
 %{mozappdir}/Throbber-small.gif
 %endif
-%exclude %{_datadir}/idl/%{name}
-%exclude %{_includedir}/%{name}
-%exclude %{_libdir}/%{name}-devel
+%exclude %{_datadir}/idl/%{name}-%{version}
+%exclude %{_includedir}/%{name}-%{version}
+%exclude %{_libdir}/%{name}-devel-%{version}
 %{mozappdir}/chrome.manifest
 
 #===============================================================================
