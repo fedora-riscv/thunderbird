@@ -33,7 +33,7 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        7.0
+Version:        7.0.1
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
@@ -45,7 +45,7 @@ Group:          Applications/Internet
 %endif
 Source0:        %{tarball}
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20110927.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20110930.tar.xz
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -342,6 +342,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Fri Sep 30 2011 Jan Horak <jhorak@redhat.com> - 7.0.1-1
+- Update to 7.0.1
+
 * Tue Sep 27 2011 Jan Horak <jhorak@redhat.com> - 7.0-1
 - Update to 7.0
 
