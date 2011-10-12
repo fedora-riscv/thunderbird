@@ -34,7 +34,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        7.0.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -59,6 +59,9 @@ Source100:      find-external-requires
 Patch0:         thunderbird-install-dir.patch
 Patch7:         crashreporter-remove-static.patch
 Patch8:         xulrunner-6.0-secondary-ipc.patch
+Patch9:         mozilla-670719.patch
+# backport from 8.0beta
+Patch10:        xulrunner-7.0.1-yarr-jit.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -137,6 +140,8 @@ cd %{tarballdir}
 cd mozilla
 %patch7 -p2 -b .static
 %patch8 -p2 -b .secondary-ipc
+%patch9 -p1 -b .moz670719
+%patch10 -p2 -b .yarr-jit
 cd ..
 
 %if %{official_branding}
@@ -342,6 +347,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Wed Oct 12 2011 Dan Horák <dan[at]danny.cz> - 7.0.1-2
+- fix build on secondary arches (copied from xulrunner)
+
 * Fri Sep 30 2011 Jan Horak <jhorak@redhat.com> - 7.0.1-1
 - Update to 7.0.1
 
