@@ -1,0 +1,44 @@
+diff -up xulrunner-7.0.1/mozilla-release/js/src/jsregexpinlines.h.yarr-jit xulrunner-7.0.1/mozilla-release/js/src/jsregexpinlines.h
+--- xulrunner-7.0.1/mozilla-release/js/src/jsregexpinlines.h.yarr-jit	2011-09-28 22:24:50.000000000 +0200
++++ xulrunner-7.0.1/mozilla-release/js/src/jsregexpinlines.h	2011-10-11 17:35:10.000000000 +0200
+@@ -491,7 +491,9 @@ RegExp::compileHelper(JSContext *cx, JSL
+     }
+ #endif
+ 
++#if ENABLE_YARR_JIT
+     codeBlock.setFallBack(true);
++#endif
+     byteCode = JSC::Yarr::byteCompile(yarrPattern, cx->compartment->regExpAllocator).get();
+ 
+     return true;
+diff -up xulrunner-7.0.1/mozilla-release/js/src/yarr/wtfbridge.h.yarr-jit xulrunner-7.0.1/mozilla-release/js/src/yarr/wtfbridge.h
+--- xulrunner-7.0.1/mozilla-release/js/src/yarr/wtfbridge.h.yarr-jit	2011-09-28 22:24:52.000000000 +0200
++++ xulrunner-7.0.1/mozilla-release/js/src/yarr/wtfbridge.h	2011-10-11 17:35:10.000000000 +0200
+@@ -50,7 +50,9 @@
+ #include "jstl.h"
+ #include "vm/String.h"
+ #include "assembler/wtf/Platform.h"
++#if ENABLE_YARR_JIT
+ #include "assembler/jit/ExecutableAllocator.h"
++#endif
+ 
+ namespace JSC { namespace Yarr {
+ 
+@@ -261,6 +263,8 @@ deleteAllValues(Vector<T, N> &v) {
+     v.deleteAllValues();
+ }
+ 
++#if ENABLE_YARR_JIT
++
+ /*
+  * Minimal JSGlobalData. This used by Yarr to get the allocator.
+  */
+@@ -272,6 +276,8 @@ class JSGlobalData {
+      : regexAllocator(regexAllocator) { }
+ };
+ 
++#endif
++
+ /*
+  * Sentinel value used in Yarr.
+  */
