@@ -34,7 +34,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        7.0.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -60,8 +60,11 @@ Patch0:         thunderbird-install-dir.patch
 Patch7:         crashreporter-remove-static.patch
 Patch8:         xulrunner-6.0-secondary-ipc.patch
 Patch9:         mozilla-670719.patch
+Patch10:        xulrunner-2.0-network-link-service.patch
+Patch11:        xulrunner-2.0-NetworkManager09.patch
+
 # backport from 8.0beta
-Patch10:        xulrunner-7.0.1-yarr-jit.patch
+Patch100:        xulrunner-7.0.1-yarr-jit.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -141,7 +144,9 @@ cd mozilla
 %patch7 -p2 -b .static
 %patch8 -p2 -b .secondary-ipc
 %patch9 -p1 -b .moz670719
-%patch10 -p2 -b .yarr-jit
+%patch10 -p1 -b .link-service
+%patch11 -p1 -b .NetworkManager09
+%patch100 -p2 -b .yarr-jit
 cd ..
 
 %if %{official_branding}
@@ -181,16 +186,17 @@ export CXXFLAGS=$MOZ_OPT_FLAGS
 export PREFIX='%{_prefix}'
 export LIBDIR='%{_libdir}'
 
-%define moz_make_flags -j1
-%ifarch ppc ppc64 s390 s390x
-%define moz_make_flags -j1
-%else
-%define moz_make_flags %{?_smp_mflags}
+MOZ_SMP_FLAGS=-j1
+# On x86 architectures, Mozilla can build up to 4 jobs at once in parallel,
+# however builds tend to fail on other arches when building in parallel.
+%ifarch %{ix86} x86_64
+[ -z "$RPM_BUILD_NCPUS" ] && \
+     RPM_BUILD_NCPUS="`/usr/bin/getconf _NPROCESSORS_ONLN`"
+[ "$RPM_BUILD_NCPUS" -ge 2 ] && MOZ_SMP_FLAGS=-j2
+[ "$RPM_BUILD_NCPUS" -ge 4 ] && MOZ_SMP_FLAGS=-j4
 %endif
 
-export LDFLAGS="-Wl,-rpath,%{mozappdir}"
-export MAKE="gmake %{moz_make_flags}"
-make -f client.mk build
+make -f client.mk build STRIP="/bin/true" MOZ_MAKE_FLAGS="$MOZ_SMP_FLAGS"
 
 # create debuginfo for crash-stats.mozilla.com
 %if %{enable_mozilla_crashreporter}
@@ -347,6 +353,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Oct 18 2012 Martin Stransky <stransky@redhat.com> - 7.0.1-3
+- Added NM patches (mozbz#627672, mozbz#639959)
+
 * Wed Oct 12 2011 Dan Horák <dan[at]danny.cz> - 7.0.1-2
 - fix build on secondary arches (copied from xulrunner)
 
