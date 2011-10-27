@@ -349,7 +349,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 * Thu Oct 27 2011 Jan Horak <jhorak@redhat.com> - 7.0.1-4
 - Enable crashreporter again for F16 and rawhide
 
-* Tue Oct 18 2011 Martin Stransky <stransky@redhat.com> - 7.0.1-3
+* Tue Oct 18 2012 Martin Stransky <stransky@redhat.com> - 7.0.1-3
 - Added NM patches (mozbz#627672, mozbz#639959)
 
 * Wed Oct 12 2011 Dan Horák <dan[at]danny.cz> - 7.0.1-2
