@@ -22,19 +22,12 @@
 %define enable_mozilla_crashreporter 0
 %endif
 
-%if 0%{?fedora} >= 16
-# Disable mozilla crash reporter temporary for rawhide because new libcurl-devel
-# does not include curl/types.h file which is required by google breakpad 
-# Issue has been reported to: http://code.google.com/p/google-breakpad/issues/detail?id=431
-%define enable_mozilla_crashreporter 0
-%endif
-
 %define mozappdir         %{_libdir}/%{name}
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        7.0.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -353,6 +346,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Thu Oct 27 2011 Jan Horak <jhorak@redhat.com> - 7.0.1-4
+- Enable crashreporter again for F16 and rawhide
+
 * Tue Oct 18 2012 Martin Stransky <stransky@redhat.com> - 7.0.1-3
 - Added NM patches (mozbz#627672, mozbz#639959)
 
