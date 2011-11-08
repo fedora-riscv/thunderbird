@@ -328,7 +328,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{mozappdir}/thunderbird-bin
 %{mozappdir}/thunderbird
 %{mozappdir}/*.so
-%{mozappdir}/README.txt
 %{mozappdir}/platform.ini
 %{mozappdir}/application.ini
 %{mozappdir}/blocklist.xml
