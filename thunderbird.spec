@@ -33,8 +33,8 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        7.0.1
-Release:        3%{?dist}
+Version:        8.0
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -45,7 +45,7 @@ Group:          Applications/Internet
 %endif
 Source0:        %{tarball}
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20110930.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20111108.tar.xz
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -63,8 +63,8 @@ Patch9:         mozilla-670719.patch
 Patch10:        xulrunner-2.0-network-link-service.patch
 Patch11:        xulrunner-2.0-NetworkManager09.patch
 
-# backport from 8.0beta
-Patch100:        xulrunner-7.0.1-yarr-jit.patch
+# Build patches
+Patch100:       xulrunner-install.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -146,7 +146,7 @@ cd mozilla
 %patch9 -p1 -b .moz670719
 %patch10 -p1 -b .link-service
 %patch11 -p1 -b .NetworkManager09
-%patch100 -p2 -b .yarr-jit
+%patch100 -p2 -b .install
 cd ..
 
 %if %{official_branding}
@@ -328,7 +328,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{mozappdir}/thunderbird-bin
 %{mozappdir}/thunderbird
 %{mozappdir}/*.so
-%{mozappdir}/README.txt
 %{mozappdir}/platform.ini
 %{mozappdir}/application.ini
 %{mozappdir}/blocklist.xml
@@ -353,7 +352,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
-* Tue Oct 18 2012 Martin Stransky <stransky@redhat.com> - 7.0.1-3
+* Tue Nov  8 2011 Jan Horak <jhorak@redhat.com> - 8.0-1
+- Update to 8.0
+
+* Tue Oct 18 2011 Martin Stransky <stransky@redhat.com> - 7.0.1-3
 - Added NM patches (mozbz#627672, mozbz#639959)
 
 * Wed Oct 12 2011 Dan Horák <dan[at]danny.cz> - 7.0.1-2
