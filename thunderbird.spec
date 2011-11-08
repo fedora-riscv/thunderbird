@@ -63,6 +63,9 @@ Patch9:         mozilla-670719.patch
 Patch10:        xulrunner-2.0-network-link-service.patch
 Patch11:        xulrunner-2.0-NetworkManager09.patch
 
+# Build patches
+Patch100:       xulrunner-install.patch
+
 %if %{official_branding}
 # Required by Mozilla Corporation
 
@@ -143,6 +146,7 @@ cd mozilla
 %patch9 -p1 -b .moz670719
 %patch10 -p1 -b .link-service
 %patch11 -p1 -b .NetworkManager09
+%patch100 -p2 -b .install
 cd ..
 
 %if %{official_branding}
