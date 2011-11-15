@@ -22,19 +22,12 @@
 %define enable_mozilla_crashreporter 0
 %endif
 
-%if 0%{?fedora} >= 16
-# Disable mozilla crash reporter temporary for rawhide because new libcurl-devel
-# does not include curl/types.h file which is required by google breakpad 
-# Issue has been reported to: http://code.google.com/p/google-breakpad/issues/detail?id=431
-%define enable_mozilla_crashreporter 0
-%endif
-
 %define mozappdir         %{_libdir}/%{name}
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        8.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -65,6 +58,9 @@ Patch11:        xulrunner-2.0-NetworkManager09.patch
 
 # Build patches
 Patch100:       xulrunner-install.patch
+
+# Linux specific
+Patch200:       thunderbird-8.0-enable-addons.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -148,6 +144,8 @@ cd mozilla
 %patch11 -p1 -b .NetworkManager09
 %patch100 -p2 -b .install
 cd ..
+
+%patch200 -p1 -b .addons
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -352,6 +350,11 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Thu Nov 10 2011 Jan Horak <jhorak@redhat.com> - 8.0-2
+- Enable Mozilla's crash reporter again for all archs
+- Temporary workaround for langpacks
+- Disabled addon check UI (#753551)
+
 * Tue Nov  8 2011 Jan Horak <jhorak@redhat.com> - 8.0-1
 - Update to 8.0
 
