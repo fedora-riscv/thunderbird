@@ -27,7 +27,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        8.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -55,6 +55,7 @@ Patch8:         xulrunner-6.0-secondary-ipc.patch
 Patch9:         mozilla-670719.patch
 Patch10:        xulrunner-2.0-network-link-service.patch
 Patch11:        xulrunner-2.0-NetworkManager09.patch
+Patch12:        mozilla-696393.patch
 
 # Build patches
 Patch100:       xulrunner-install.patch
@@ -142,6 +143,7 @@ cd mozilla
 %patch9 -p1 -b .moz670719
 %patch10 -p1 -b .link-service
 %patch11 -p1 -b .NetworkManager09
+%patch12 -p1 -b .696393
 %patch100 -p2 -b .install
 cd ..
 
@@ -350,6 +352,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Nov 29 2011 Jan Horak <jhorak@redhat.com> - 8.0-3
+- Fixed s390x issues
+
 * Thu Nov 10 2011 Jan Horak <jhorak@redhat.com> - 8.0-2
 - Enable Mozilla's crash reporter again for all archs
 - Temporary workaround for langpacks
