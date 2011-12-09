@@ -27,7 +27,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        8.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -352,6 +352,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Fri Dec 9 2011 Martin Stransky <stransky@redhat.com> - 8.0-4
+- enabled gio support (#760644)
+
 * Tue Nov 29 2011 Jan Horak <jhorak@redhat.com> - 8.0-3
 - Fixed s390x issues
 
