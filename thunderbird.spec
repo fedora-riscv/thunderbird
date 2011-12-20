@@ -1,11 +1,17 @@
-%define nspr_version 4.8
-%define nss_version 3.12.10
+%define nspr_version 4.8.8
+%define nss_version 3.13.1
 %define cairo_version 1.8.8
 %define freetype_version 2.1.9
-%define sqlite_version 3.6.14
+%define sqlite_version 3.7.7.1
 %define libnotify_version 0.4
 %define build_langpacks 1
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
+
+%if 0%{?fedora} <= 15
+%define system_sqlite 0
+%else
+%define system_sqlite 1
+%endif
 
 # The tarball is pretty inconsistent with directory structure.
 # Sometimes there is a top level directory.  That goes here.
@@ -26,8 +32,8 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        8.0
-Release:        4%{?dist}
+Version:        9.0
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -38,7 +44,7 @@ Group:          Applications/Internet
 %endif
 Source0:        %{tarball}
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20111108.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20111220.tar.xz
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -51,14 +57,12 @@ Source100:      find-external-requires
 # Mozilla (XULRunner) patches
 Patch0:         thunderbird-install-dir.patch
 Patch7:         crashreporter-remove-static.patch
-Patch8:         xulrunner-6.0-secondary-ipc.patch
-Patch9:         mozilla-670719.patch
+Patch8:         xulrunner-9.0-secondary-ipc.patch
 Patch10:        xulrunner-2.0-network-link-service.patch
 Patch11:        xulrunner-2.0-NetworkManager09.patch
 Patch12:        mozilla-696393.patch
 
 # Build patches
-Patch100:       xulrunner-install.patch
 
 # Linux specific
 Patch200:       thunderbird-8.0-enable-addons.patch
@@ -91,7 +95,9 @@ BuildRequires:  freetype-devel >= %{freetype_version}
 BuildRequires:  libXt-devel
 BuildRequires:  libXrender-devel
 BuildRequires:  hunspell-devel
+%if %{?system_sqlite}
 BuildRequires:  sqlite-devel >= %{sqlite_version}
+%endif
 BuildRequires:  startup-notification-devel
 BuildRequires:  alsa-lib-devel
 BuildRequires:  autoconf213
@@ -102,7 +108,9 @@ BuildRequires:  mesa-libGL-devel
 Requires:       mozilla-filesystem
 Requires:       nspr >= %{nspr_version}
 Requires:       nss >= %{nss_version}
+%if %{?system_sqlite}
 Requires:       sqlite >= %{sqlite_version}
+%endif
 
 AutoProv: 0
 %define _use_internal_dependency_generator 0
@@ -140,11 +148,9 @@ cd %{tarballdir}
 cd mozilla
 %patch7 -p2 -b .static
 %patch8 -p2 -b .secondary-ipc
-%patch9 -p1 -b .moz670719
 %patch10 -p1 -b .link-service
 %patch11 -p1 -b .NetworkManager09
-%patch12 -p1 -b .696393
-%patch100 -p2 -b .install
+%patch12 -p2 -b .696393
 cd ..
 
 %patch200 -p1 -b .addons
@@ -164,6 +170,12 @@ cd ..
 %endif
 %if %{enable_mozilla_crashreporter}
 %{__cat} %{SOURCE13} >> .mozconfig
+%endif
+
+%if %{?system_sqlite}
+echo "ac_add_options --enable-system-sqlite"  >> .mozconfig
+%else
+echo "ac_add_options --disable-system-sqlite" >> .mozconfig
 %endif
 
 #===============================================================================
@@ -348,10 +360,14 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %exclude %{_includedir}/%{name}-%{version}
 %exclude %{_libdir}/%{name}-devel-%{version}
 %{mozappdir}/chrome.manifest
+%{mozappdir}/distribution/extensions
 
 #===============================================================================
 
 %changelog
+* Tue Dec 20 2011 Jan Horak <jhorak@redhat.com> - 9.0-1
+- Update to 9.0
+
 * Fri Dec 9 2011 Martin Stransky <stransky@redhat.com> - 8.0-4
 - enabled gio support (#760644)
 
