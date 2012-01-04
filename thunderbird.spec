@@ -33,7 +33,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        9.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -61,6 +61,8 @@ Patch8:         xulrunner-9.0-secondary-ipc.patch
 Patch10:        xulrunner-2.0-network-link-service.patch
 Patch11:        xulrunner-2.0-NetworkManager09.patch
 Patch12:        mozilla-696393.patch
+# # cherry-picked from 13afcd4c097c
+Patch13:        xulrunner-9.0-secondary-build-fix.patch
 
 # Build patches
 
@@ -151,6 +153,7 @@ cd mozilla
 %patch10 -p1 -b .link-service
 %patch11 -p1 -b .NetworkManager09
 %patch12 -p2 -b .696393
+%patch13 -p2 -b .secondary-build
 cd ..
 
 %patch200 -p1 -b .addons
@@ -365,6 +368,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Wed Jan 04 2012 Dan Horák <dan[at]danny.cz> - 9.0-5
+- fix build on secondary arches (cherry-picked from 13afcd4c097c)
+
 * Thu Dec 22 2011 Jan Horak <jhorak@redhat.com> - 9.0-4
 - Update to 9.0
 
