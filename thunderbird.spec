@@ -33,7 +33,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        9.0
-Release:        5%{?dist}
+Release:        6%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -173,6 +173,11 @@ cd ..
 %endif
 %if %{enable_mozilla_crashreporter}
 %{__cat} %{SOURCE13} >> .mozconfig
+%endif
+
+# s390(x) fails to start with jemalloc enabled
+%ifarch s390 s390x
+echo "ac_add_options --disable-jemalloc" >> .mozconfig
 %endif
 
 %if %{?system_sqlite}
@@ -368,6 +373,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Thu Jan 05 2012 Dan Horák <dan[at]danny.cz> - 9.0-6
+- disable jemalloc on s390(x) (taken from xulrunner)
+
 * Wed Jan 04 2012 Dan Horák <dan[at]danny.cz> - 9.0-5
 - fix build on secondary arches (cherry-picked from 13afcd4c097c)
 
