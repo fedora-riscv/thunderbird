@@ -1,4 +1,4 @@
-%define nspr_version 4.8.8
+%define nspr_version 4.8.9
 %define nss_version 3.13.1
 %define cairo_version 1.8.8
 %define freetype_version 2.1.9
