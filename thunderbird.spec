@@ -32,8 +32,8 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        9.0
-Release:        7%{?dist}
+Version:        10.0
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -44,7 +44,7 @@ Group:          Applications/Internet
 %endif
 Source0:        %{tarball}
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20111222.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20120131.tar.xz
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -57,10 +57,7 @@ Source100:      find-external-requires
 # Mozilla (XULRunner) patches
 Patch0:         thunderbird-install-dir.patch
 Patch7:         crashreporter-remove-static.patch
-Patch8:         xulrunner-9.0-secondary-ipc.patch
-Patch10:        xulrunner-2.0-network-link-service.patch
-Patch11:        xulrunner-2.0-NetworkManager09.patch
-Patch12:        mozilla-696393.patch
+Patch8:         xulrunner-10.0-secondary-ipc.patch
 # # cherry-picked from 13afcd4c097c
 Patch13:        xulrunner-9.0-secondary-build-fix.patch
 
@@ -149,10 +146,7 @@ cd %{tarballdir}
 # Mozilla (XULRunner) patches
 cd mozilla
 %patch7 -p2 -b .static
-%patch8 -p2 -b .secondary-ipc
-%patch10 -p1 -b .link-service
-%patch11 -p1 -b .NetworkManager09
-%patch12 -p2 -b .696393
+%patch8 -p3 -b .secondary-ipc
 %patch13 -p2 -b .secondary-build
 cd ..
 
@@ -334,7 +328,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{mozappdir}/components/binary.manifest
 %{mozappdir}/components/libdbusservice.so
 %{mozappdir}/components/libmozgnome.so
-%{mozappdir}/omni.jar
+%{mozappdir}/omni.ja
 %{mozappdir}/plugin-container
 %{mozappdir}/defaults
 %{mozappdir}/dictionaries
@@ -358,7 +352,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/icons/hicolor/256x256/apps/thunderbird.png
 %{_datadir}/icons/hicolor/32x32/apps/thunderbird.png
 %{_datadir}/icons/hicolor/48x48/apps/thunderbird.png
-%{mozappdir}/hyphenation
 %if %{enable_mozilla_crashreporter}
 %{mozappdir}/crashreporter
 %{mozappdir}/crashreporter.ini
@@ -368,11 +361,14 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %exclude %{_includedir}/%{name}-%{version}
 %exclude %{_libdir}/%{name}-devel-%{version}
 %{mozappdir}/chrome.manifest
-%{mozappdir}/distribution/extensions
+%{mozappdir}/searchplugins
 
 #===============================================================================
 
 %changelog
+* Tue Jan 31 2012 Jan Horak <jhorak@redhat.com> - 10.0-1
+- Update to 10.0
+
 * Sat Jan 14 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 9.0-7
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
 
