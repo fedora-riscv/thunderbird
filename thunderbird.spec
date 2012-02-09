@@ -32,8 +32,8 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        10.0
-Release:        2%{?dist}
+Version:        10.0.1
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -44,7 +44,7 @@ Group:          Applications/Internet
 %endif
 Source0:        %{tarball}
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20120131.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20120209.tar.xz
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -370,6 +370,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Thu Feb  9 2012 Jan Horak <jhorak@redhat.com> - 10.0.1-1
+- Update to 10.0.1
+
 * Mon Feb 6 2012 Martin Stransky <stransky@redhat.com> - 10.0-2
 - gcc 4.7 build fixes
 
