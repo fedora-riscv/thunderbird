@@ -33,7 +33,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        10.0.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -60,6 +60,7 @@ Patch7:         crashreporter-remove-static.patch
 Patch8:         xulrunner-10.0-secondary-ipc.patch
 # # cherry-picked from 13afcd4c097c
 Patch13:        xulrunner-9.0-secondary-build-fix.patch
+Patch14:        mozilla-727401.patch
 
 # Build patches
 Patch100:       xulrunner-10.0-gcc47.patch
@@ -149,6 +150,7 @@ cd mozilla
 %patch7 -p2 -b .static
 %patch8 -p3 -b .secondary-ipc
 %patch13 -p2 -b .secondary-build
+%patch14 -p1 -b .727401
 %if 0%{?fedora} >= 17
 %patch100 -p1 -b .gcc47
 %endif
@@ -370,6 +372,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Thu Feb 16 2012 Martin Stransky <stransky@redhat.com> - 10.0.1-2
+- Added fix for mozbz#727401
+
 * Thu Feb  9 2012 Jan Horak <jhorak@redhat.com> - 10.0.1-1
 - Update to 10.0.1
 
