@@ -33,7 +33,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        10.0.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -61,6 +61,7 @@ Patch8:         xulrunner-10.0-secondary-ipc.patch
 # # cherry-picked from 13afcd4c097c
 Patch13:        xulrunner-9.0-secondary-build-fix.patch
 Patch14:        mozilla-727401.patch
+Patch15:        mozilla-682832-proxy.patch
 
 # Build patches
 Patch100:       xulrunner-10.0-gcc47.patch
@@ -151,6 +152,7 @@ cd mozilla
 %patch8 -p3 -b .secondary-ipc
 %patch13 -p2 -b .secondary-build
 %patch14 -p1 -b .727401
+%patch15 -p2 -b .682832
 %if 0%{?fedora} >= 17
 %patch100 -p1 -b .gcc47
 %endif
@@ -372,6 +374,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Thu Feb 23 2012 Jan Horak <jhorak@redhat.com> - 10.0.1-3
+- Added fix for proxy settings mozbz#682832
+
 * Thu Feb 16 2012 Martin Stransky <stransky@redhat.com> - 10.0.1-2
 - Added fix for mozbz#727401
 
