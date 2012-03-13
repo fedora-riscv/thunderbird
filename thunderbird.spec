@@ -1,17 +1,22 @@
-%define nspr_version 4.8.9
-%define nss_version 3.13.1
-%define cairo_version 1.8.8
-%define freetype_version 2.1.9
-%define sqlite_version 3.7.7.1
-%define libnotify_version 0.4
-%define build_langpacks 1
-%define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
+# Build as a debug package?
+%define debug_build       0
 
 %if 0%{?fedora} <= 15
 %define system_sqlite 0
 %else
 %define system_sqlite 1
 %endif
+
+%define build_langpacks 1
+
+%define nspr_version 4.9
+%define nss_version 3.13.3
+%define cairo_version 1.8.8
+%define freetype_version 2.1.9
+%define sqlite_version 3.7.7.1
+%define libnotify_version 0.4
+
+%define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
 
 # The tarball is pretty inconsistent with directory structure.
 # Sometimes there is a top level directory.  That goes here.
@@ -32,8 +37,8 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        10.0.1
-Release:        3%{?dist}
+Version:        11.0
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -58,10 +63,6 @@ Source100:      find-external-requires
 Patch0:         thunderbird-install-dir.patch
 Patch7:         crashreporter-remove-static.patch
 Patch8:         xulrunner-10.0-secondary-ipc.patch
-# # cherry-picked from 13afcd4c097c
-Patch13:        xulrunner-9.0-secondary-build-fix.patch
-Patch14:        mozilla-727401.patch
-Patch15:        mozilla-682832-proxy.patch
 
 # Build patches
 Patch100:       xulrunner-10.0-gcc47.patch
@@ -150,9 +151,6 @@ cd %{tarballdir}
 cd mozilla
 %patch7 -p2 -b .static
 %patch8 -p3 -b .secondary-ipc
-%patch13 -p2 -b .secondary-build
-%patch14 -p1 -b .727401
-%patch15 -p2 -b .682832
 %if 0%{?fedora} >= 17
 %patch100 -p1 -b .gcc47
 %endif
@@ -188,6 +186,14 @@ echo "ac_add_options --enable-system-sqlite"  >> .mozconfig
 echo "ac_add_options --disable-system-sqlite" >> .mozconfig
 %endif
 
+%if %{?debug_build}
+echo "ac_add_options --enable-debug" >> .mozconfig
+echo "ac_add_options --disable-optimize" >> .mozconfig
+%else
+echo "ac_add_options --disable-debug" >> .mozconfig
+echo "ac_add_options --enable-optimize" >> .mozconfig
+%endif
+
 #===============================================================================
 
 %build
@@ -202,6 +208,9 @@ cd %{tarballdir}
 # 
 MOZ_OPT_FLAGS=$(echo "$RPM_OPT_FLAGS -fpermissive" | \
                       %{__sed} -e 's/-Wall//' -e 's/-fexceptions/-fno-exceptions/g')
+%if %{?debug_build}
+MOZ_OPT_FLAGS=$(echo "$MOZ_OPT_FLAGS" | %{__sed} -e 's/-O2//')
+%endif
 export CFLAGS=$MOZ_OPT_FLAGS
 export CXXFLAGS=$MOZ_OPT_FLAGS
 
@@ -374,6 +383,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Mar 13 2012 Martin Stransky <stransky@redhat.com> - 11.0-1
+- Update to 11.0
+
 * Thu Feb 23 2012 Jan Horak <jhorak@redhat.com> - 10.0.1-3
 - Added fix for proxy settings mozbz#682832
 
