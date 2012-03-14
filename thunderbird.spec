@@ -15,6 +15,7 @@
 %define freetype_version 2.1.9
 %define sqlite_version 3.7.7.1
 %define libnotify_version 0.4
+%global libvpx_version 1.0.0
 
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
 
@@ -38,7 +39,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        11.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -66,6 +67,7 @@ Patch8:         xulrunner-10.0-secondary-ipc.patch
 
 # Build patches
 Patch100:       xulrunner-10.0-gcc47.patch
+Patch101:       mozilla-722127.patch
 
 # Linux specific
 Patch200:       thunderbird-8.0-enable-addons.patch
@@ -106,14 +108,15 @@ BuildRequires:  alsa-lib-devel
 BuildRequires:  autoconf213
 BuildRequires:  desktop-file-utils
 BuildRequires:  libcurl-devel
-BuildRequires:  yasm
 BuildRequires:  mesa-libGL-devel
+BuildRequires:  libvpx-devel >= %{libvpx_version}
 Requires:       mozilla-filesystem
 Requires:       nspr >= %{nspr_version}
 Requires:       nss >= %{nss_version}
 %if %{?system_sqlite}
 Requires:       sqlite >= %{sqlite_version}
 %endif
+Requires:       libvpx-devel >= %{libvpx_version}
 
 AutoProv: 0
 %define _use_internal_dependency_generator 0
@@ -153,6 +156,7 @@ cd mozilla
 %patch8 -p3 -b .secondary-ipc
 %if 0%{?fedora} >= 17
 %patch100 -p1 -b .gcc47
+%patch101 -p2 -b .722127
 %endif
 cd ..
 
@@ -225,6 +229,7 @@ MOZ_SMP_FLAGS=-j1
      RPM_BUILD_NCPUS="`/usr/bin/getconf _NPROCESSORS_ONLN`"
 [ "$RPM_BUILD_NCPUS" -ge 2 ] && MOZ_SMP_FLAGS=-j2
 [ "$RPM_BUILD_NCPUS" -ge 4 ] && MOZ_SMP_FLAGS=-j4
+[ "$RPM_BUILD_NCPUS" -ge 8 ] && MOZ_SMP_FLAGS=-j8
 %endif
 
 make -f client.mk build STRIP="/bin/true" MOZ_MAKE_FLAGS="$MOZ_SMP_FLAGS"
@@ -383,6 +388,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Wed Mar 14 2012 Martin Stransky <stransky@redhat.com> - 11.0-2
+- Build with system libvpx
+
 * Tue Mar 13 2012 Martin Stransky <stransky@redhat.com> - 11.0-1
 - Update to 11.0
 
