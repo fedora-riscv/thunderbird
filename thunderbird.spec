@@ -156,8 +156,8 @@ cd mozilla
 %patch8 -p3 -b .secondary-ipc
 %if 0%{?fedora} >= 17
 %patch100 -p1 -b .gcc47
-%patch101 -p2 -b .722127
 %endif
+%patch101 -p2 -b .722127
 cd ..
 
 %patch200 -p1 -b .addons
