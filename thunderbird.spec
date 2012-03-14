@@ -39,7 +39,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        11.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -116,7 +116,7 @@ Requires:       nss >= %{nss_version}
 %if %{?system_sqlite}
 Requires:       sqlite >= %{sqlite_version}
 %endif
-Requires:       libvpx-devel >= %{libvpx_version}
+Requires:       libvpx >= %{libvpx_version}
 
 AutoProv: 0
 %define _use_internal_dependency_generator 0
@@ -388,7 +388,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
-* Wed Mar 14 2012 Martin Stransky <stransky@redhat.com> - 11.0-2
+* Wed Mar 14 2012 Martin Stransky <stransky@redhat.com> - 11.0-3
 - Build with system libvpx
 
 * Tue Mar 13 2012 Martin Stransky <stransky@redhat.com> - 11.0-1
