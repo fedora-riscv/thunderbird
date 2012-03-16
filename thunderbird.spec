@@ -68,7 +68,7 @@ Patch8:         xulrunner-10.0-secondary-ipc.patch
 # Build patches
 Patch100:       xulrunner-10.0-gcc47.patch
 Patch101:       mozilla-722127.patch
-Patch102:       mozilla-733867.patch
+Patch102:       mozilla-733867-x.patch
 
 # Linux specific
 Patch200:       thunderbird-8.0-enable-addons.patch
@@ -160,7 +160,7 @@ cd mozilla
 %endif
 %patch101 -p2 -b .722127
 cd ..
-%patch102 -p1 -b .gcc47
+%patch102 -p2 -b .733867
 
 %patch200 -p1 -b .addons
 
