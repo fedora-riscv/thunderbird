@@ -39,7 +39,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        11.0
-Release:        5%{?dist}
+Release:        6%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -394,6 +394,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Thu Mar 22 2012 Jan Horak <jhorak@redhat.com> - 11.0-6
+- Added translations to thunderbird.desktop file
+
 * Fri Mar 16 2012 Martin Stransky <stransky@redhat.com> - 11.0-5
 - gcc 4.7 build fixes
 
