@@ -38,14 +38,14 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        11.0
-Release:        6%{?dist}
+Version:        11.0.1
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.bz2
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20120313.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20120329.tar.xz
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -389,6 +389,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Thu Mar 29 2012 Jan Horak <jhorak@redhat.com> - 11.0.1-1
+- Update to 11.0.1
+
 * Thu Mar 22 2012 Jan Horak <jhorak@redhat.com> - 11.0-6
 - Added translations to thunderbird.desktop file
 
