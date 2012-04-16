@@ -39,7 +39,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        11.0.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -68,6 +68,8 @@ Patch102:       mozilla-733867-x.patch
 # Linux specific
 Patch200:       thunderbird-8.0-enable-addons.patch
 
+# ARM Specific 
+Patch210: 	mozilla-724615.patch
 %if %{official_branding}
 # Required by Mozilla Corporation
 
@@ -158,6 +160,7 @@ cd ..
 %patch102 -p2 -b .733867
 
 %patch200 -p1 -b .addons
+%patch210 -p1 -b .724615
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -389,6 +392,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Mon Apr 16 2012 Peter Robinson <pbrobinson@fedoraproject.org> - 11.0.1-2
+- Add upstream patch to fix FTBFS on ARM
+
 * Thu Mar 29 2012 Jan Horak <jhorak@redhat.com> - 11.0.1-1
 - Update to 11.0.1
 
