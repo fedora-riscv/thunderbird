@@ -1,7 +1,7 @@
 # Build as a debug package?
 %define debug_build       0
 
-%if 0%{?fedora} <= 15
+%if 0%{?fedora} <= 16
 %define system_sqlite 0
 %else
 %define system_sqlite 1
@@ -13,7 +13,7 @@
 %define nss_version 3.13.3
 %define cairo_version 1.8.8
 %define freetype_version 2.1.9
-%define sqlite_version 3.7.7.1
+%define sqlite_version 3.7.10
 %define libnotify_version 0.4
 %global libvpx_version 1.0.0
 
@@ -38,14 +38,14 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        11.0.1
+Version:        12.0
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.bz2
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20120329.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20120424.tar.xz
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -61,8 +61,6 @@ Patch7:         crashreporter-remove-static.patch
 Patch8:         xulrunner-10.0-secondary-ipc.patch
 
 # Build patches
-Patch100:       xulrunner-10.0-gcc47.patch
-Patch101:       mozilla-722127.patch
 Patch102:       mozilla-733867-x.patch
 
 # Linux specific
@@ -150,12 +148,8 @@ cd %{tarballdir}
 cd mozilla
 %patch7 -p2 -b .static
 %patch8 -p3 -b .secondary-ipc
-%if 0%{?fedora} >= 17
-%patch100 -p1 -b .gcc47
-%endif
-%patch101 -p2 -b .722127
 cd ..
-%patch102 -p2 -b .733867
+%patch102 -p1 -b .733867
 
 %patch200 -p1 -b .addons
 
@@ -385,10 +379,14 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %exclude %{_libdir}/%{name}-devel-%{version}
 %{mozappdir}/chrome.manifest
 %{mozappdir}/searchplugins
+%{mozappdir}/distribution/extensions
 
 #===============================================================================
 
 %changelog
+* Tue Apr 24 2012 Jan Horak <jhorak@redhat.com> - 12.0-1
+- Update to 12.0
+
 * Thu Mar 29 2012 Jan Horak <jhorak@redhat.com> - 11.0.1-1
 - Update to 11.0.1
 
