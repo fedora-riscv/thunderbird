@@ -1,6 +1,6 @@
 diff -up comm-release/mailnews/base/search/src/nsMsgSearchAdapter.cpp.733867 comm-release/mailnews/base/search/src/nsMsgSearchAdapter.cpp
 --- comm-release/mailnews/base/search/src/nsMsgSearchAdapter.cpp.733867	2012-04-21 00:32:39.000000000 +0200
-+++ comm-release/mailnews/base/search/src/nsMsgSearchAdapter.cpp	2012-04-24 09:02:03.295311592 +0200
++++ comm-release/mailnews/base/search/src/nsMsgSearchAdapter.cpp	2012-04-25 10:51:32.343536178 +0200
 @@ -688,7 +688,7 @@ nsresult nsMsgSearchAdapter::EncodeImapV
      PL_strcat(encoding, "{");
      lengthStr.AppendInt((PRInt32) strlen(value));
@@ -12,7 +12,7 @@ diff -up comm-release/mailnews/base/search/src/nsMsgSearchAdapter.cpp.733867 com
    }
 diff -up comm-release/mailnews/base/src/nsMsgFolderCompactor.cpp.733867 comm-release/mailnews/base/src/nsMsgFolderCompactor.cpp
 --- comm-release/mailnews/base/src/nsMsgFolderCompactor.cpp.733867	2012-04-21 00:32:39.000000000 +0200
-+++ comm-release/mailnews/base/src/nsMsgFolderCompactor.cpp	2012-04-24 09:02:03.295311592 +0200
++++ comm-release/mailnews/base/src/nsMsgFolderCompactor.cpp	2012-04-25 10:51:33.208535909 +0200
 @@ -758,7 +758,7 @@ nsFolderCompactState::OnDataAvailable(ns
            }
          }
@@ -33,7 +33,7 @@ diff -up comm-release/mailnews/base/src/nsMsgFolderCompactor.cpp.733867 comm-rel
        }
 diff -up comm-release/mailnews/compose/src/nsSmtpProtocol.cpp.733867 comm-release/mailnews/compose/src/nsSmtpProtocol.cpp
 --- comm-release/mailnews/compose/src/nsSmtpProtocol.cpp.733867	2012-04-21 00:32:39.000000000 +0200
-+++ comm-release/mailnews/compose/src/nsSmtpProtocol.cpp	2012-04-24 09:02:03.873310511 +0200
++++ comm-release/mailnews/compose/src/nsSmtpProtocol.cpp	2012-04-25 10:51:33.365535861 +0200
 @@ -1722,7 +1722,7 @@ PRInt32 nsSmtpProtocol::SendQuit()
  {
    m_sendDone = true;
@@ -59,7 +59,7 @@ diff -up comm-release/mailnews/compose/src/nsSmtpProtocol.cpp.733867 comm-releas
 -
 diff -up comm-release/mailnews/imap/src/nsImapMailFolder.cpp.733867 comm-release/mailnews/imap/src/nsImapMailFolder.cpp
 --- comm-release/mailnews/imap/src/nsImapMailFolder.cpp.733867	2012-04-21 00:32:39.000000000 +0200
-+++ comm-release/mailnews/imap/src/nsImapMailFolder.cpp	2012-04-24 09:02:03.878310501 +0200
++++ comm-release/mailnews/imap/src/nsImapMailFolder.cpp	2012-04-25 10:51:33.367535861 +0200
 @@ -8309,7 +8309,7 @@ nsImapMailFolder::CopyFileToOfflineStore
            bool needMoreData = false;
            char * newLine = nsnull;
@@ -71,7 +71,7 @@ diff -up comm-release/mailnews/imap/src/nsImapMailFolder.cpp.733867 comm-release
            do
 diff -up comm-release/mailnews/imap/src/nsImapProtocol.cpp.733867 comm-release/mailnews/imap/src/nsImapProtocol.cpp
 --- comm-release/mailnews/imap/src/nsImapProtocol.cpp.733867	2012-04-21 00:32:39.000000000 +0200
-+++ comm-release/mailnews/imap/src/nsImapProtocol.cpp	2012-04-24 09:07:04.801246261 +0200
++++ comm-release/mailnews/imap/src/nsImapProtocol.cpp	2012-04-25 10:51:33.370535858 +0200
 @@ -1409,7 +1409,7 @@ void nsImapProtocol::HandleIdleResponses
  {
    // PRInt32 oldRecent = GetServerStateParser().NumberOfRecentMessages();
@@ -193,7 +193,7 @@ diff -up comm-release/mailnews/imap/src/nsImapProtocol.cpp.733867 comm-release/m
    {
 diff -up comm-release/mailnews/imap/src/nsImapServerResponseParser.cpp.733867 comm-release/mailnews/imap/src/nsImapServerResponseParser.cpp
 --- comm-release/mailnews/imap/src/nsImapServerResponseParser.cpp.733867	2012-04-21 00:32:39.000000000 +0200
-+++ comm-release/mailnews/imap/src/nsImapServerResponseParser.cpp	2012-04-24 09:02:03.884310490 +0200
++++ comm-release/mailnews/imap/src/nsImapServerResponseParser.cpp	2012-04-25 10:51:33.374535858 +0200
 @@ -185,7 +185,7 @@ void nsImapServerResponseParser::ParseIM
    
    NS_ASSERTION(aCurrentCommand && *aCurrentCommand != '\r' && 
@@ -205,7 +205,7 @@ diff -up comm-release/mailnews/imap/src/nsImapServerResponseParser.cpp.733867 co
  
 diff -up comm-release/mailnews/local/src/nsPop3Protocol.cpp.733867 comm-release/mailnews/local/src/nsPop3Protocol.cpp
 --- comm-release/mailnews/local/src/nsPop3Protocol.cpp.733867	2012-04-21 00:32:40.000000000 +0200
-+++ comm-release/mailnews/local/src/nsPop3Protocol.cpp	2012-04-24 09:02:03.885310488 +0200
++++ comm-release/mailnews/local/src/nsPop3Protocol.cpp	2012-04-25 10:51:33.375535858 +0200
 @@ -2483,7 +2483,7 @@ PRInt32 nsPop3Protocol::SendList()
          return(MK_OUT_OF_MEMORY);
      m_pop3ConData->next_state_after_response = POP3_GET_LIST;
@@ -217,7 +217,7 @@ diff -up comm-release/mailnews/local/src/nsPop3Protocol.cpp.733867 comm-release/
  
 diff -up comm-release/mailnews/mime/src/mimedrft.cpp.733867 comm-release/mailnews/mime/src/mimedrft.cpp
 --- comm-release/mailnews/mime/src/mimedrft.cpp.733867	2012-04-21 00:32:40.000000000 +0200
-+++ comm-release/mailnews/mime/src/mimedrft.cpp	2012-04-24 09:02:03.886310486 +0200
++++ comm-release/mailnews/mime/src/mimedrft.cpp	2012-04-25 10:51:33.376535858 +0200
 @@ -1473,7 +1473,7 @@ mime_parse_stream_complete (nsMIMESessio
                  *newbody = 0;
                  PL_strcatn(newbody, newbodylen, "<PRE>");
@@ -229,7 +229,7 @@ diff -up comm-release/mailnews/mime/src/mimedrft.cpp.733867 comm-release/mailnew
                }
 diff -up comm-release/mailnews/mime/src/mimemult.cpp.733867 comm-release/mailnews/mime/src/mimemult.cpp
 --- comm-release/mailnews/mime/src/mimemult.cpp.733867	2012-04-21 00:32:40.000000000 +0200
-+++ comm-release/mailnews/mime/src/mimemult.cpp	2012-04-24 09:05:56.522197836 +0200
++++ comm-release/mailnews/mime/src/mimemult.cpp	2012-04-25 10:52:45.835512632 +0200
 @@ -280,7 +280,7 @@ MimeMultipart_parse_line (const char *li
              MimeWriteAString(obj, NS_LITERAL_CSTRING(MSG_LINEBREAK));
              MimeWriteAString(obj, NS_LITERAL_CSTRING("Content-Disposition: attachment; filename=\""));
@@ -252,12 +252,14 @@ diff -up comm-release/mailnews/mime/src/mimemult.cpp.733867 comm-release/mailnew
            }
            nsCString result;
            char timeBuffer[128];
-@@ -307,7 +307,7 @@ MimeMultipart_parse_line (const char *li
+@@ -306,8 +306,8 @@ MimeMultipart_parse_line (const char *li
+                                  "%a %b %d %H:%M:%S %Y",
                                   &now);
            MimeWriteAString(obj, nsDependentCString(timeBuffer));
-           MimeWriteAString(obj, NS_LITERAL_CSTRING("\""MSG_LINEBREAK));
+-          MimeWriteAString(obj, NS_LITERAL_CSTRING("\""MSG_LINEBREAK));
 -          MimeWriteAString(obj, NS_LITERAL_CSTRING(MSG_LINEBREAK"You deleted an attachment from this message. The original MIME headers for the attachment were:"MSG_LINEBREAK));
-+          MimeWriteAString(obj, NS_LITERAL_CSTRING(MSG_LINEBREAK "You deleted an attachment from this message. The original MIME headers for the attachment were:"MSG_LINEBREAK));
++          MimeWriteAString(obj, NS_LITERAL_CSTRING("\"" MSG_LINEBREAK));
++          MimeWriteAString(obj, NS_LITERAL_CSTRING(MSG_LINEBREAK "You deleted an attachment from this message. The original MIME headers for the attachment were:" MSG_LINEBREAK));
            MimeHeaders_write_raw_headers(mult->hdrs, obj->options, false);
          }
          PRInt32 old_nchildren = container->nchildren;
