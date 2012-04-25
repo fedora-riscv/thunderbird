@@ -1,7 +1,7 @@
 # Build as a debug package?
 %define debug_build       0
 
-%if 0%{?fedora} <= 16
+%if 0%{?fedora} <= 17
 %define system_sqlite 0
 %else
 %define system_sqlite 1
@@ -62,6 +62,7 @@ Patch8:         xulrunner-10.0-secondary-ipc.patch
 
 # Build patches
 Patch102:       mozilla-733867-x.patch
+Patch103:       mozilla-file.patch
 
 # Linux specific
 Patch200:       thunderbird-8.0-enable-addons.patch
@@ -150,6 +151,7 @@ cd %{tarballdir}
 cd mozilla
 %patch7 -p2 -b .static
 %patch8 -p3 -b .secondary-ipc
+%patch103 -p1 -b .mozilla-file
 cd ..
 %patch102 -p1 -b .733867
 
