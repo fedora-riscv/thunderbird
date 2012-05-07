@@ -39,7 +39,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        12.0.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -77,6 +77,7 @@ Patch210: 	mozilla-724615.patch
 
 %endif
 
+BuildRequires:  nss-static
 BuildRequires:  nspr-devel >= %{nspr_version}
 BuildRequires:  nss-devel >= %{nss_version}
 BuildRequires:  cairo-devel >= %{cairo_version}
@@ -390,6 +391,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Mon May 7 2012 Martin Stransky <stransky@redhat.com> - 12.0.1-2
+- Fixed #717245 - adhere Static Library Packaging Guidelines
+
 * Mon Apr 30 2012 Jan Horak <jhorak@redhat.com> - 12.0.1-1
 - Update to 12.0.1
 
