@@ -386,6 +386,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{mozappdir}/chrome.manifest
 %{mozappdir}/searchplugins
 %{mozappdir}/distribution/extensions
+%{mozappdir}/dependentlibs.list
 
 #===============================================================================
 
