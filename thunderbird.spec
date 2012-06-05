@@ -16,6 +16,7 @@
 %define sqlite_version 3.7.10
 %define libnotify_version 0.4
 %global libvpx_version 1.0.0
+%define _default_patch_fuzz 2
 
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
 
