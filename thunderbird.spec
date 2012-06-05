@@ -38,14 +38,14 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        12.0.1
-Release:        2%{?dist}
+Version:        13.0
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.bz2
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20120430.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20120605.tar.xz
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -61,14 +61,12 @@ Patch7:         crashreporter-remove-static.patch
 Patch8:         xulrunner-10.0-secondary-ipc.patch
 
 # Build patches
-Patch102:       mozilla-733867-x.patch
-Patch103:       mozilla-file.patch
 Patch104:       xulrunner-10.0-gcc47.patch
+Patch105:       xulrunner-prtime.patch
+
 # Linux specific
 Patch200:       thunderbird-8.0-enable-addons.patch
 
-# ARM Specific 
-Patch210: 	mozilla-724615.patch
 %if %{official_branding}
 # Required by Mozilla Corporation
 
@@ -152,13 +150,11 @@ cd %{tarballdir}
 cd mozilla
 %patch7 -p2 -b .static
 %patch8 -p3 -b .secondary-ipc
-%patch103 -p1 -b .mozilla-file
 %patch104 -p1 -b .gcc47
+%patch105 -p1 -b .prtime
 cd ..
-%patch102 -p1 -b .733867
 
 %patch200 -p1 -b .addons
-%patch210 -p1 -b .724615
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -238,15 +234,17 @@ make -f client.mk build STRIP="/bin/true" MOZ_MAKE_FLAGS="$MOZ_SMP_FLAGS"
 
 # create debuginfo for crash-stats.mozilla.com
 %if %{enable_mozilla_crashreporter}
-make buildsymbols
+make -C objdir buildsymbols
 %endif
 
 #===============================================================================
 
 %install
-cd %{tarballdir}
+cd %{tarballdir}/objdir
 
 DESTDIR=$RPM_BUILD_ROOT make install
+
+cd ..
 
 # install icons
 for s in 16 22 24 32 48 256; do
@@ -316,7 +314,7 @@ touch $RPM_BUILD_ROOT%{mozappdir}/components/xpti.dat
 # Add debuginfo for crash-stats.mozilla.com 
 %if %{enable_mozilla_crashreporter}
 %{__mkdir_p} $RPM_BUILD_ROOT/%{moz_debug_dir}
-%{__cp} mozilla/dist/%{symbols_file_name} $RPM_BUILD_ROOT/%{moz_debug_dir}
+%{__cp} objdir/mozilla/dist/%{symbols_file_name} $RPM_BUILD_ROOT/%{moz_debug_dir}
 %endif
 
 #===============================================================================
@@ -391,6 +389,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Jun  5 2012 Jan Horak <jhorak@redhat.com> - 13.0-1
+- Update to 13.0
+
 * Mon May 7 2012 Martin Stransky <stransky@redhat.com> - 12.0.1-2
 - Fixed #717245 - adhere Static Library Packaging Guidelines
 
