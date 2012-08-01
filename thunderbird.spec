@@ -391,6 +391,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %changelog
 * Wed Aug 1 2012 Martin Stransky <stransky@redhat.com> - 14.0-3
 - removed StartupWMClass (rhbz#844863)
+- Fixed -g parameter
 
 * Sat Jul 21 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 14.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
