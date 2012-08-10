@@ -40,7 +40,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        14.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -296,6 +296,9 @@ done
 %{__rm} -rf thunderbird-langpacks
 %endif # build_langpacks
 
+# Get rid of devel package and its debugsymbols
+%{__rm} -rf $RPM_BUILD_ROOT%{_libdir}/%{name}-devel-%{version}
+
 # Copy over the LICENSE
 cd mozilla
 install -c -m 644 LICENSE $RPM_BUILD_ROOT%{mozappdir}
@@ -380,7 +383,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 %exclude %{_datadir}/idl/%{name}-%{version}
 %exclude %{_includedir}/%{name}-%{version}
-%exclude %{_libdir}/%{name}-devel-%{version}
 %{mozappdir}/chrome.manifest
 %{mozappdir}/searchplugins
 %{mozappdir}/distribution/extensions
@@ -389,9 +391,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
-* Wed Aug 1 2012 Martin Stransky <stransky@redhat.com> - 14.0-3
-- removed StartupWMClass (rhbz#844863)
+* Wed Aug 1 2012 Martin Stransky <stransky@redhat.com> - 14.0-4
+- Removed StartupWMClass (rhbz#844863)
 - Fixed -g parameter
+- Removed thunderbird-devel before packing to avoid debugsymbols duplicities (rhbz#823940)
 
 * Sat Jul 21 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 14.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
