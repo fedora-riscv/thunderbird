@@ -39,14 +39,14 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        14.0
-Release:        4%{?dist}
+Version:        15.0
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.bz2
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20120717.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20120827.tar.xz
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -58,7 +58,6 @@ Source100:      find-external-requires
 
 # Mozilla (XULRunner) patches
 Patch0:         thunderbird-install-dir.patch
-Patch7:         crashreporter-remove-static.patch
 Patch8:         xulrunner-10.0-secondary-ipc.patch
 
 # Build patches
@@ -148,7 +147,6 @@ cd %{tarballdir}
 %patch0  -p2 -b .dir
 # Mozilla (XULRunner) patches
 cd mozilla
-%patch7 -p2 -b .static
 %patch8 -p3 -b .secondary-ipc
 %patch104 -p1 -b .gcc47
 cd ..
@@ -391,6 +389,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Mon Aug 27 2012 Jan Horak <jhorak@redhat.com> - 15.0-1
+- Update to 15.0
+
 * Wed Aug 1 2012 Martin Stransky <stransky@redhat.com> - 14.0-4
 - Removed StartupWMClass (rhbz#844863)
 - Fixed -g parameter
