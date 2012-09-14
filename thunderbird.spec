@@ -40,7 +40,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        15.0.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -214,8 +214,16 @@ MOZ_OPT_FLAGS=$(echo "$RPM_OPT_FLAGS -fpermissive" | \
 %if %{?debug_build}
 MOZ_OPT_FLAGS=$(echo "$MOZ_OPT_FLAGS" | %{__sed} -e 's/-O2//')
 %endif
+%ifarch s390 s390x
+MOZ_OPT_FLAGS=$(echo "$RPM_OPT_FLAGS" | %{__sed} -e 's/-g/-g1')
+%endif
+%ifarch s390 %{arm} ppc
+MOZ_LINK_FLAGS="-Wl,--no-keep-memory -Wl,--reduce-memory-overheads"
+%endif
+
 export CFLAGS=$MOZ_OPT_FLAGS
 export CXXFLAGS=$MOZ_OPT_FLAGS
+export LDFLAGS=$MOZ_LINK_FLAGS
 
 export PREFIX='%{_prefix}'
 export LIBDIR='%{_libdir}'
@@ -393,6 +401,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Fri Sep 14 2012 Martin Stransky <stransky@redhat.com> - 15.0.1-2
+- Added build flags for second arches
+
 * Tue Sep 11 2012 Jan Horak <jhorak@redhat.com> - 15.0.1-1
 - Update to 15.0.1
 
