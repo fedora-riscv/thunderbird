@@ -40,7 +40,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        15.0.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -68,6 +68,7 @@ Patch200:       thunderbird-8.0-enable-addons.patch
 
 # PPC fixes
 Patch300:       xulrunner-852698.patch
+Patch301:       rhbz-855923.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -156,6 +157,7 @@ cd ..
 
 %patch200 -p1 -b .addons
 %patch300 -p1 -b .852698
+%patch301 -p1 -b .855923
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -401,6 +403,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Sep 18 2012 Dan Horák <dan[at]danny.cz> - 15.0.1-3
+- Added fix for rhbz#855923 - TB freezes on Fedora 18 for PPC64
+
 * Fri Sep 14 2012 Martin Stransky <stransky@redhat.com> - 15.0.1-2
 - Added build flags for second arches
 
