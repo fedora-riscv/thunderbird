@@ -39,14 +39,14 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        15.0.1
-Release:        3%{?dist}
+Version:        16.0
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.bz2
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20120911.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20121009.tar.xz
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -403,6 +403,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Oct  9 2012 Jan Horak <jhorak@redhat.com> - 16.0-1
+- Update to 16.0
+
 * Tue Sep 18 2012 Dan Horák <dan[at]danny.cz> - 15.0.1-3
 - Added fix for rhbz#855923 - TB freezes on Fedora 18 for PPC64
 
