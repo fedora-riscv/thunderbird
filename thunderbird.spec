@@ -1,3 +1,6 @@
+# Use system nspr/nss?
+%define system_nss        1
+
 # Build as a debug package?
 %define debug_build       0
 
@@ -9,11 +12,15 @@
 
 %define build_langpacks 1
 
+%if %{?system_nss}
 %define nspr_version 4.9
 %define nss_version 3.13.3
+%endif
 %define cairo_version 1.8.8
 %define freetype_version 2.1.9
+%if %{?system_sqlite}
 %define sqlite_version 3.7.10
+%endif
 %define libnotify_version 0.4
 %global libvpx_version 1.0.0
 %define _default_patch_fuzz 2
@@ -78,9 +85,11 @@ Patch301:       rhbz-855923.patch
 
 %endif
 
-BuildRequires:  nss-static
+%if %{?system_nss}
+BuildRequires:  nss-static >= %{nss_version}
 BuildRequires:  nspr-devel >= %{nspr_version}
 BuildRequires:  nss-devel >= %{nss_version}
+%endif
 BuildRequires:  cairo-devel >= %{cairo_version}
 BuildRequires:  libnotify-devel >= %{libnotify_version}
 BuildRequires:  libpng-devel
@@ -110,8 +119,10 @@ BuildRequires:  libcurl-devel
 BuildRequires:  mesa-libGL-devel
 BuildRequires:  libvpx-devel >= %{libvpx_version}
 Requires:       mozilla-filesystem
+%if %{?system_nss}
 Requires:       nspr >= %{nspr_version}
 Requires:       nss >= %{nss_version}
+%endif
 %if %{?system_sqlite}
 Requires:       sqlite >= %{sqlite_version}
 %endif
@@ -174,6 +185,14 @@ cd ..
 %endif
 %if %{enable_mozilla_crashreporter}
 %{__cat} %{SOURCE13} >> .mozconfig
+%endif
+
+%if %{?system_nss}
+echo "ac_add_options --with-system-nspr" >> .mozconfig
+echo "ac_add_options --with-system-nss" >> .mozconfig
+%else
+echo "ac_add_options --without-system-nspr" >> .mozconfig
+echo "ac_add_options --without-system-nss" >> .mozconfig
 %endif
 
 # s390(x) fails to start with jemalloc enabled
@@ -392,6 +411,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{mozappdir}/crashreporter
 %{mozappdir}/crashreporter.ini
 %{mozappdir}/Throbber-small.gif
+%endif
+%if !%{?system_nss}
+%{mozappdir}/*.chk
 %endif
 %exclude %{_datadir}/idl/%{name}-%{version}
 %exclude %{_includedir}/%{name}-%{version}
