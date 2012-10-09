@@ -74,7 +74,7 @@ Patch104:       xulrunner-10.0-gcc47.patch
 Patch200:       thunderbird-8.0-enable-addons.patch
 
 # PPC fixes
-Patch300:       xulrunner-852698.patch
+Patch300:       xulrunner-16.0-jemalloc-ppc.patch
 Patch301:       rhbz-855923.patch
 
 %if %{official_branding}
