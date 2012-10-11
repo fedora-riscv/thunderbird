@@ -236,7 +236,7 @@ MOZ_OPT_FLAGS=$(echo "$RPM_OPT_FLAGS -fpermissive" | \
 MOZ_OPT_FLAGS=$(echo "$MOZ_OPT_FLAGS" | %{__sed} -e 's/-O2//')
 %endif
 %ifarch s390
-MOZ_OPT_FLAGS=$(echo "$RPM_OPT_FLAGS" | %{__sed} -e 's/-g/-g1')
+MOZ_OPT_FLAGS=$(echo "$RPM_OPT_FLAGS" | %{__sed} -e 's/-g/-g1/')
 %endif
 %ifarch s390 %{arm} ppc
 MOZ_LINK_FLAGS="-Wl,--no-keep-memory -Wl,--reduce-memory-overheads"
