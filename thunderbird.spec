@@ -13,14 +13,19 @@
 %define build_langpacks 1
 
 %if %{?system_nss}
-%define nspr_version 4.9
-%define nss_version 3.13.3
+%global nspr_version %(pkg-config --silence-errors --modversion nspr 2>/dev/null || echo 65536)
+%global nss_version %(pkg-config --silence-errors --modversion nss 2>/dev/null || echo 65536)
 %endif
+
 %define cairo_version 1.8.8
 %define freetype_version 2.1.9
+
 %if %{?system_sqlite}
-%define sqlite_version 3.7.10
+%define sqlite_version 3.7.13
+# The actual sqlite version (see #480989):
+%global sqlite_build_version %(pkg-config --silence-errors --modversion sqlite3 2>/dev/null || echo 65536)
 %endif
+
 %define libnotify_version 0.4
 %global libvpx_version 1.0.0
 %define _default_patch_fuzz 2
@@ -47,7 +52,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        16.0.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -109,7 +114,7 @@ BuildRequires:  libXt-devel
 BuildRequires:  libXrender-devel
 BuildRequires:  hunspell-devel
 %if %{?system_sqlite}
-BuildRequires:  sqlite-devel >= %{sqlite_version}
+BuildRequires:  sqlite-devel >= %{sqlite_build_version}
 %endif
 BuildRequires:  startup-notification-devel
 BuildRequires:  alsa-lib-devel
@@ -124,7 +129,7 @@ Requires:       nspr >= %{nspr_version}
 Requires:       nss >= %{nss_version}
 %endif
 %if %{?system_sqlite}
-Requires:       sqlite >= %{sqlite_version}
+Requires:       sqlite >= %{sqlite_build_version}
 %endif
 Requires:       libvpx >= %{libvpx_version}
 
@@ -221,6 +226,17 @@ echo "ac_add_options --disable-elf-hack" >> .mozconfig
 #===============================================================================
 
 %build
+%if %{?system_sqlite}
+# Do not proceed with build if the sqlite require would be broken:
+# make sure the minimum requirement is non-empty, ...
+sqlite_version=$(expr "%{sqlite_version}" : '\([0-9]*\.\)[0-9]*\.') || exit 1
+# ... and that major number of the computed build-time version matches:
+case "%{sqlite_build_version}" in
+  "$sqlite_version"*) ;;
+  *) exit 1 ;;
+esac
+%endif
+
 cd %{tarballdir}
 
 # -fpermissive is needed to build with gcc 4.6+ which has become stricter
@@ -425,6 +441,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Oct 16 2012 Jan Horak <jhorak@redhat.com> - 16.0.1-2
+- Fixed nss and nspr versions
+
 * Thu Oct 11 2012 Jan Horak <jhorak@redhat.com> - 16.0.1-1
 - Update to 16.0.1
 
