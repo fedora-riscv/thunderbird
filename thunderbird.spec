@@ -116,7 +116,7 @@ BuildRequires:  libXt-devel
 BuildRequires:  libXrender-devel
 BuildRequires:  hunspell-devel
 %if %{?system_sqlite}
-BuildRequires:  sqlite-devel >= %{sqlite_build_version}
+BuildRequires:  sqlite-devel >= %{sqlite_version}
 %endif
 BuildRequires:  startup-notification-devel
 BuildRequires:  alsa-lib-devel
