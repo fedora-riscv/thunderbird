@@ -13,8 +13,10 @@
 %define build_langpacks 1
 
 %if %{?system_nss}
-%global nspr_version %(pkg-config --silence-errors --modversion nspr 2>/dev/null || echo 65536)
-%global nss_version %(pkg-config --silence-errors --modversion nss 2>/dev/null || echo 65536)
+%global nspr_version 4.9.2
+%global nspr_build_version %(pkg-config --silence-errors --modversion nspr 2>/dev/null || echo 65536)
+%global nss_version 3.13.5
+%global nss_build_version %(pkg-config --silence-errors --modversion nss 2>/dev/null || echo 65536)
 %endif
 
 %define cairo_version 1.8.8
@@ -125,8 +127,8 @@ BuildRequires:  mesa-libGL-devel
 BuildRequires:  libvpx-devel >= %{libvpx_version}
 Requires:       mozilla-filesystem
 %if %{?system_nss}
-Requires:       nspr >= %{nspr_version}
-Requires:       nss >= %{nss_version}
+Requires:       nspr >= %{nspr_build_version}
+Requires:       nss >= %{nss_build_version}
 %endif
 %if %{?system_sqlite}
 Requires:       sqlite >= %{sqlite_build_version}
