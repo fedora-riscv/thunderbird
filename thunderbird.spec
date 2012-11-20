@@ -166,7 +166,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %setup -q -c
 cd %{tarballdir}
 
-%patch0  -p2 -b .dir
+%patch0  -p1 -b .dir
 # Mozilla (XULRunner) patches
 cd mozilla
 %patch8 -p3 -b .secondary-ipc
@@ -249,7 +249,7 @@ cd %{tarballdir}
 # Disable C++ exceptions since Mozilla code is not exception-safe
 # 
 MOZ_OPT_FLAGS=$(echo "$RPM_OPT_FLAGS -fpermissive" | \
-                      %{__sed} -e 's/-Wall//' -e 's/-fexceptions/-fno-exceptions/g')
+                      %{__sed} -e 's/-Wall//')
 %if %{?debug_build}
 MOZ_OPT_FLAGS=$(echo "$MOZ_OPT_FLAGS" | %{__sed} -e 's/-O2//')
 %endif
