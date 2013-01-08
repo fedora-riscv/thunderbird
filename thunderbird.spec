@@ -225,7 +225,7 @@ echo "ac_add_options --enable-optimize" >> .mozconfig
 echo "ac_add_options --disable-elf-hack" >> .mozconfig
 %endif
 
-%ifnarch %{ix86} x86_64 %{arm}
+%ifnarch %{ix86} x86_64
 echo "ac_add_options --disable-webrtc" >> .mozconfig
 %endif
 
