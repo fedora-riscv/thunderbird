@@ -83,6 +83,7 @@ Patch200:       thunderbird-8.0-enable-addons.patch
 # PPC fixes
 Patch300:       xulrunner-16.0-jemalloc-ppc.patch
 Patch301:       rhbz-855923.patch
+Patch302:       mozilla-746112.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -171,6 +172,7 @@ cd %{tarballdir}
 cd mozilla
 %patch8 -p3 -b .secondary-ipc
 %patch104 -p1 -b .gcc47
+%patch302 -p2 -b .746112
 cd ..
 
 %patch200 -p1 -b .addons
