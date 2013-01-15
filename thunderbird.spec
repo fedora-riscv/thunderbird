@@ -15,7 +15,7 @@
 %if %{?system_nss}
 %global nspr_version 4.9.2
 %global nspr_build_version %(pkg-config --silence-errors --modversion nspr 2>/dev/null || echo 65536)
-%global nss_version 3.13.5
+%global nss_version 3.13.6
 %global nss_build_version %(pkg-config --silence-errors --modversion nss 2>/dev/null || echo 65536)
 %endif
 
@@ -54,7 +54,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        17.0.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -449,6 +449,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Jan 15 2013 Jan Horak <jhorak@redhat.com> - 17.0.2-2
+- Added mozilla-746112 patch to fix crash on ppc(64)
+
 * Thu Jan 10 2013 Jan Horak <jhorak@redhat.com> - 17.0.2-1
 - Update to 17.0.2
 
