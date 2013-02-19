@@ -39,7 +39,7 @@
 #
 # IMPORTANT: If there is no top level directory, this should be 
 # set to the cwd, ie: '.'
-%define tarballdir comm-release
+%define tarballdir comm-esr17
 
 %define official_branding 1
 # enable crash reporter only for iX86
@@ -53,14 +53,14 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        17.0.2
-Release:        4%{?dist}
+Version:        17.0.3
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.bz2
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20130110.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20130219.tar.xz
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -451,6 +451,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Feb 19 2013 Jan Horak <jhorak@redhat.com> - 17.0.3-1
+- Update to 17.0.3
+
 * Fri Feb 15 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 17.0.2-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
 
