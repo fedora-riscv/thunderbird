@@ -54,7 +54,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        17.0.6
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -85,6 +85,9 @@ Patch200:       thunderbird-8.0-enable-addons.patch
 Patch300:       xulrunner-16.0-jemalloc-ppc.patch
 Patch301:       rhbz-855923.patch
 Patch302:       mozilla-746112.patch
+
+# Fedora specific patches
+Patch400:       rhbz-966424.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -172,6 +175,7 @@ cd mozilla
 %patch9 -p1 -b .791626
 %patch104 -p1 -b .gcc47
 %patch302 -p2 -b .746112
+%patch400 -p1 -b .966424
 cd ..
 
 %patch200 -p1 -b .addons
@@ -448,6 +452,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Wed Jun 12 2013 Jan Horak <jhorak@redhat.com> - 17.0.6-2
+- Fixed rhbz#973371 - unable to install addons
+
 * Tue May 14 2013 Jan Horak <jhorak@redhat.com> - 17.0.6-1
 - Update to 17.0.6
 
