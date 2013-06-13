@@ -54,7 +54,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        17.0.6
-Release:        2%{?dist}
+Release:        3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -65,7 +65,6 @@ Source1:        thunderbird-langpacks-%{version}-20130514.tar.xz
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
 Source12:       thunderbird-redhat-default-prefs.js
-Source13:       thunderbird-mozconfig-debuginfo
 Source20:       thunderbird.desktop
 Source21:       thunderbird.sh.in
 Source100:      find-external-requires
@@ -194,9 +193,6 @@ cd ..
 %{__cp} %{SOURCE10} .mozconfig
 %if %{official_branding}
 %{__cat} %{SOURCE11} >> .mozconfig
-%endif
-%if %{enable_mozilla_crashreporter}
-%{__cat} %{SOURCE13} >> .mozconfig
 %endif
 
 %if %{?system_nss}
