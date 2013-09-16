@@ -39,7 +39,7 @@
 #
 # IMPORTANT: If there is no top level directory, this should be 
 # set to the cwd, ie: '.'
-%define tarballdir comm-esr17
+%define tarballdir comm-esr24
 
 %define official_branding 1
 # enable crash reporter only for iX86
@@ -53,14 +53,14 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        17.0.8
+Version:        24.0
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.bz2
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20130805.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20130916.tar.xz
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -72,7 +72,6 @@ Source100:      find-external-requires
 # Mozilla (XULRunner) patches
 Patch0:         thunderbird-install-dir.patch
 Patch8:         xulrunner-10.0-secondary-ipc.patch
-Patch9:         mozilla-791626.patch
 
 # Build patches
 Patch104:       xulrunner-10.0-gcc47.patch
@@ -81,9 +80,7 @@ Patch104:       xulrunner-10.0-gcc47.patch
 Patch200:       thunderbird-8.0-enable-addons.patch
 
 # PPC fixes
-Patch300:       xulrunner-16.0-jemalloc-ppc.patch
-Patch301:       rhbz-855923.patch
-Patch302:       mozilla-746112.patch
+Patch300:       xulrunner-24.0-jemalloc-ppc.patch
 
 # Fedora specific patches
 Patch400:       rhbz-966424.patch
@@ -171,15 +168,12 @@ cd %{tarballdir}
 # Mozilla (XULRunner) patches
 cd mozilla
 %patch8 -p3 -b .secondary-ipc
-%patch9 -p1 -b .791626
 %patch104 -p1 -b .gcc47
-%patch302 -p2 -b .746112
+%patch300 -p2 -b .852698
 %patch400 -p1 -b .966424
 cd ..
 
 %patch200 -p1 -b .addons
-%patch300 -p1 -b .852698
-%patch301 -p1 -b .855923
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -448,6 +442,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Mon Sep 16 2013 Jan Horak <jhorak@redhat.com> - 24.0-1
+- Update to 24.0
+
 * Mon Aug  5 2013 Jan Horak <jhorak@redhat.com> - 17.0.8-1
 - Update to 17.0.8
 
