@@ -397,7 +397,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %dir %{mozappdir}/components
 %ghost %{mozappdir}/components/compreg.dat
 %ghost %{mozappdir}/components/xpti.dat
-%{mozappdir}/components/binary.manifest
 %{mozappdir}/components/libdbusservice.so
 %{mozappdir}/components/libmozgnome.so
 %{mozappdir}/omni.ja
@@ -436,7 +435,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %exclude %{_includedir}/%{name}-%{version}
 %{mozappdir}/chrome.manifest
 %{mozappdir}/searchplugins
-%{mozappdir}/distribution/extensions
 %{mozappdir}/dependentlibs.list
 
 #===============================================================================
