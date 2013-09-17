@@ -54,7 +54,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        24.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -72,6 +72,7 @@ Source100:      find-external-requires
 # Mozilla (XULRunner) patches
 Patch0:         thunderbird-install-dir.patch
 Patch8:         xulrunner-10.0-secondary-ipc.patch
+Patch9:         mozilla-build-arm.patch
 
 # Build patches
 Patch104:       xulrunner-10.0-gcc47.patch
@@ -168,6 +169,7 @@ cd %{tarballdir}
 # Mozilla (XULRunner) patches
 cd mozilla
 %patch8 -p3 -b .secondary-ipc
+%patch9 -p2 -b .arm
 %patch104 -p1 -b .gcc47
 %patch300 -p2 -b .852698
 %patch400 -p1 -b .966424
@@ -440,6 +442,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Wed Sep 18 2013 Martin Stransky <stransky@redhat.com> - 24.0-2
+- Added arm build fix
+
 * Mon Sep 16 2013 Jan Horak <jhorak@redhat.com> - 24.0-1
 - Update to 24.0
 
