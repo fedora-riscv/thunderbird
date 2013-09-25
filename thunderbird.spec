@@ -4,7 +4,7 @@
 # Build as a debug package?
 %define debug_build       0
 
-%if 0%{?fedora} <= 17
+%if 0%{?fedora} <= 18
 %define system_sqlite 0
 %else
 %define system_sqlite 1
@@ -23,7 +23,7 @@
 %define freetype_version 2.1.9
 
 %if %{?system_sqlite}
-%define sqlite_version 3.7.13
+%define sqlite_version 3.7.17
 # The actual sqlite version (see #480989):
 %global sqlite_build_version %(pkg-config --silence-errors --modversion sqlite3 2>/dev/null || echo 65536)
 %endif
@@ -39,7 +39,7 @@
 #
 # IMPORTANT: If there is no top level directory, this should be 
 # set to the cwd, ie: '.'
-%define tarballdir comm-esr17
+%define tarballdir comm-esr24
 
 %define official_branding 1
 # enable crash reporter only for iX86
@@ -53,14 +53,15 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        17.0.9
-Release:        1%{?dist}
+Version:        24.0
+Release:        3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
-Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}esr.source.tar.bz2
+ExcludeArch:    armv7hl
+Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.bz2
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}esr-20130923.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20130916.tar.xz
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -72,7 +73,7 @@ Source100:      find-external-requires
 # Mozilla (XULRunner) patches
 Patch0:         thunderbird-install-dir.patch
 Patch8:         xulrunner-10.0-secondary-ipc.patch
-Patch9:         mozilla-791626.patch
+Patch9:         mozilla-build-arm.patch
 
 # Build patches
 Patch104:       xulrunner-10.0-gcc47.patch
@@ -81,9 +82,7 @@ Patch104:       xulrunner-10.0-gcc47.patch
 Patch200:       thunderbird-8.0-enable-addons.patch
 
 # PPC fixes
-Patch300:       xulrunner-16.0-jemalloc-ppc.patch
-Patch301:       rhbz-855923.patch
-Patch302:       mozilla-746112.patch
+Patch300:       xulrunner-24.0-jemalloc-ppc.patch
 
 # Fedora specific patches
 Patch400:       rhbz-966424.patch
@@ -171,15 +170,13 @@ cd %{tarballdir}
 # Mozilla (XULRunner) patches
 cd mozilla
 %patch8 -p3 -b .secondary-ipc
-%patch9 -p1 -b .791626
+%patch9 -p2 -b .arm
 %patch104 -p1 -b .gcc47
-%patch302 -p2 -b .746112
+%patch300 -p2 -b .852698
 %patch400 -p1 -b .966424
 cd ..
 
 %patch200 -p1 -b .addons
-%patch300 -p1 -b .852698
-%patch301 -p1 -b .855923
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -390,7 +387,6 @@ fi
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 #===============================================================================
-
 %files -f %{tarballdir}/%{name}.lang
 %defattr(-,root,root,-)
 %attr(755,root,root) %{_bindir}/thunderbird
@@ -403,7 +399,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %dir %{mozappdir}/components
 %ghost %{mozappdir}/components/compreg.dat
 %ghost %{mozappdir}/components/xpti.dat
-%{mozappdir}/components/binary.manifest
+%{mozappdir}/components/components.manifest
 %{mozappdir}/components/libdbusservice.so
 %{mozappdir}/components/libmozgnome.so
 %{mozappdir}/omni.ja
@@ -442,12 +438,14 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %exclude %{_includedir}/%{name}-%{version}
 %{mozappdir}/chrome.manifest
 %{mozappdir}/searchplugins
-%{mozappdir}/distribution/extensions
 %{mozappdir}/dependentlibs.list
 
 #===============================================================================
 
 %changelog
+* Wed Sep 25 2013 Jan Horak <jhorak@redhat.com> - 24.0-3
+- Update to 24.0
+
 * Mon Sep 23 2013 Jan Horak <jhorak@redhat.com> - 17.0.9-1
 - Update to 17.0.9 ESR
 
