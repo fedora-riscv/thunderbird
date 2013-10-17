@@ -54,7 +54,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        24.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -443,6 +443,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Thu Oct 17 2013 Martin Stransky <stransky@redhat.com> - 24.0-4
+- Fixed rhbz#1005611 - BEAST workaround not enabled in Firefox
+
 * Wed Sep 25 2013 Jan Horak <jhorak@redhat.com> - 24.0-3
 - Update to 24.0
 
