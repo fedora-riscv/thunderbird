@@ -53,15 +53,15 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        24.0
-Release:        4%{?dist}
+Version:        24.1.0
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 ExcludeArch:    armv7hl
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.bz2
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20130916.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20131030.tar.xz
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -443,6 +443,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Wed Oct 30 2013 Jan Horak <jhorak@redhat.com> - 24.1.0-1
+- Update to 24.1.0
+
 * Thu Oct 17 2013 Martin Stransky <stransky@redhat.com> - 24.0-4
 - Fixed rhbz#1005611 - BEAST workaround not enabled in Firefox
 
