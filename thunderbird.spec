@@ -54,7 +54,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        24.2.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -85,6 +85,7 @@ Patch300:       xulrunner-24.0-jemalloc-ppc.patch
 
 # Fedora specific patches
 Patch400:       rhbz-966424.patch
+Patch401:       revert-removal-of-native-notifications.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -173,6 +174,7 @@ cd mozilla
 %patch104 -p1 -b .gcc47
 %patch300 -p2 -b .852698
 %patch400 -p1 -b .966424
+%patch401 -p2 -b .notifications
 cd ..
 
 %patch200 -p1 -b .addons
@@ -442,6 +444,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Wed Dec 11 2013 Martin Stransky <stransky@redhat.com> - 24.2.0-2
+- rhbz#1001998 - added a workaround for system notifications
+
 * Mon Dec  9 2013 Jan Horak <jhorak@redhat.com> - 24.2.0-1
 - Update to 24.2.0
 
