@@ -643,7 +643,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 * Tue Aug 16 2011 Jan Horak <jhorak@redhat.com> - 6.0-1
 - Update to 6.0
 
-* Sun Aug 16 2011 Remi Collet <remi@fedoraproject.org> 5.0-4
+* Tue Aug 16 2011 Remi Collet <remi@fedoraproject.org> 5.0-4
 - Don't unzip the langpacks
 
 * Mon Aug 15 2011 Jan Horak <jhorak@redhat.com> - 5.0-3
