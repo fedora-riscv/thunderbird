@@ -54,7 +54,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        24.2.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -253,6 +253,8 @@ cd %{tarballdir}
 # 
 MOZ_OPT_FLAGS=$(echo "$RPM_OPT_FLAGS -fpermissive" | \
                       %{__sed} -e 's/-Wall//')
+#rhbz#1037353
+MOZ_OPT_FLAGS="$MOZ_OPT_FLAGS -Wformat-security -Wformat -Werror=format-security"
 %if %{?debug_build}
 MOZ_OPT_FLAGS=$(echo "$MOZ_OPT_FLAGS" | %{__sed} -e 's/-O2//')
 %endif
@@ -444,6 +446,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Fri Dec 13 2013 Martin Stransky <stransky@redhat.com> - 24.2.0-3
+- Build with -Werror=format-security (rhbz#1037353)
+
 * Wed Dec 11 2013 Martin Stransky <stransky@redhat.com> - 24.2.0-2
 - rhbz#1001998 - added a workaround for system notifications
 
