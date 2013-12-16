@@ -54,7 +54,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        24.2.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -446,6 +446,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Mon Dec 16 2013 Martin Stransky <stransky@redhat.com> - 24.2.0-4
+- Fixed rhbz#1024232 - thunderbird: squiggly lines used 
+  for spelling correction disappear randomly
+
 * Fri Dec 13 2013 Martin Stransky <stransky@redhat.com> - 24.2.0-3
 - Build with -Werror=format-security (rhbz#1037353)
 
