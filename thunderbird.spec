@@ -53,14 +53,14 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        24.3.0
+Version:        24.4.0
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.bz2
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20140203.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20140318.tar.xz
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -446,6 +446,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Mar 18 2014 Jan Horak <jhorak@redhat.com> - 24.4.0-1
+- Update to 24.4.0
+
 * Mon Feb  3 2014 Jan Horak <jhorak@redhat.com> - 24.3.0-1
 - Update to 24.3.0
 
