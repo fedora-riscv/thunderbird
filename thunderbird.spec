@@ -12,11 +12,21 @@
 
 %define build_langpacks 1
 
+%if 0%{?rhel}
+%if %{?system_nss}
+%global nspr_version 4.10
+%global nspr_build_version %(pkg-config --silence-errors --modversion nspr 2>/dev/null || echo 65536)
+%global nss_version 3.15.2
+%global nss_build_version %(pkg-config --silence-errors --modversion nss 2>/dev/null || echo 65536)
+%endif
+%else
 %if %{?system_nss}
 %global nspr_version 4.10.2
 %global nspr_build_version %(pkg-config --silence-errors --modversion nspr 2>/dev/null || echo 65536)
 %global nss_version 3.15.2
 %global nss_build_version %(pkg-config --silence-errors --modversion nss 2>/dev/null || echo 65536)
+%endif
+
 %endif
 
 %define cairo_version 1.8.8
