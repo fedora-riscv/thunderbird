@@ -54,7 +54,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        24.4.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -449,6 +449,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Apr 22 2014 Jan Horak <jhorak@redhat.com> - 24.4.0-2
+- Added support for ppc64le
+
 * Tue Mar 18 2014 Jan Horak <jhorak@redhat.com> - 24.4.0-1
 - Update to 24.4.0
 
