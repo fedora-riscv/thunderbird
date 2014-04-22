@@ -82,7 +82,7 @@ Patch200:       thunderbird-8.0-enable-addons.patch
 
 # PPC fixes
 Patch300:       xulrunner-24.0-jemalloc-ppc.patch
-
+Patch301:       mozilla-ppc64le.patch
 # Fedora specific patches
 Patch400:       rhbz-966424.patch
 Patch401:       revert-removal-of-native-notifications.patch
@@ -178,6 +178,9 @@ cd mozilla
 cd ..
 
 %patch200 -p1 -b .addons
+%if 0%{?fedora} > 20
+%patch301 -p1 -b .ppc64le
+%endif
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -275,7 +278,7 @@ export LIBDIR='%{_libdir}'
 MOZ_SMP_FLAGS=-j1
 # On x86 architectures, Mozilla can build up to 4 jobs at once in parallel,
 # however builds tend to fail on other arches when building in parallel.
-%ifarch %{ix86} x86_64 ppc ppc64
+%ifarch %{ix86} x86_64 ppc ppc64 ppc64le
 [ -z "$RPM_BUILD_NCPUS" ] && \
      RPM_BUILD_NCPUS="`/usr/bin/getconf _NPROCESSORS_ONLN`"
 [ "$RPM_BUILD_NCPUS" -ge 2 ] && MOZ_SMP_FLAGS=-j2
