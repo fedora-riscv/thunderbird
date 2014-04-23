@@ -75,7 +75,6 @@ Patch8:         xulrunner-10.0-secondary-ipc.patch
 Patch9:         mozilla-build-arm.patch
 
 # Build patches
-Patch104:       xulrunner-10.0-gcc47.patch
 
 # Linux specific
 Patch200:       thunderbird-8.0-enable-addons.patch
@@ -171,7 +170,6 @@ cd %{tarballdir}
 cd mozilla
 %patch8 -p3 -b .secondary-ipc
 %patch9 -p2 -b .arm
-%patch104 -p1 -b .gcc47
 %patch300 -p2 -b .852698
 %patch400 -p1 -b .966424
 %patch401 -p2 -b .notifications
