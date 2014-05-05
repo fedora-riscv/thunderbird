@@ -133,10 +133,7 @@ Requires:       sqlite >= %{sqlite_build_version}
 %endif
 Requires:       libvpx >= %{libvpx_version}
 
-AutoProv: 0
 %define _use_internal_dependency_generator 0
-%define __requires_exclude ^lib.*$
-
 %description
 Mozilla Thunderbird is a standalone mail and newsgroup client.
 
