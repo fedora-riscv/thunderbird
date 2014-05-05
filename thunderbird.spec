@@ -67,7 +67,6 @@ Source11:       thunderbird-mozconfig-branded
 Source12:       thunderbird-redhat-default-prefs.js
 Source20:       thunderbird.desktop
 Source21:       thunderbird.sh.in
-Source100:      find-external-requires
 
 # Mozilla (XULRunner) patches
 Patch0:         thunderbird-install-dir.patch
@@ -136,7 +135,7 @@ Requires:       libvpx >= %{libvpx_version}
 
 AutoProv: 0
 %define _use_internal_dependency_generator 0
-%define __find_requires %{SOURCE100}
+%define __requires_exclude ^lib.*$
 
 %description
 Mozilla Thunderbird is a standalone mail and newsgroup client.
