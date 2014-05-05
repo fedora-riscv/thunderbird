@@ -54,7 +54,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        24.5.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -446,6 +446,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Mon May  5 2014 Jan Horak <jhorak@redhat.com> - 24.5.0-2
+- Fixed find requires
+
 * Mon Apr 28 2014 Jan Horak <jhorak@redhat.com> - 24.5.0-1
 - Update to 24.5.0
 
