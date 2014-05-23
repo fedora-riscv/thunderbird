@@ -54,7 +54,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        24.5.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -81,6 +81,8 @@ Patch200:       thunderbird-8.0-enable-addons.patch
 # PPC fixes
 Patch300:       xulrunner-24.0-jemalloc-ppc.patch
 Patch301:       mozilla-ppc64le.patch
+Patch304:       mozilla-973977.patch
+
 # Fedora specific patches
 Patch400:       rhbz-966424.patch
 Patch401:       revert-removal-of-native-notifications.patch
@@ -173,6 +175,9 @@ cd ..
 %patch200 -p1 -b .addons
 %if 0%{?fedora} > 20
 %patch301 -p1 -b .ppc64le
+%endif
+%ifarch ppc64
+%patch304 -p1 -b .973977
 %endif
 
 %if %{official_branding}
@@ -442,6 +447,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Fri May 23 2014 Martin Stransky <stransky@redhat.com> - 24.5.0-4
+- Added a build fix for ppc64 - rhbz#1100495
+
 * Mon May  5 2014 Jan Horak <jhorak@redhat.com> - 24.5.0-3
 - Fixed find requires
 
