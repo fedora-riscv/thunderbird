@@ -54,7 +54,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        24.5.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -170,14 +170,14 @@ cd mozilla
 %patch300 -p2 -b .852698
 %patch400 -p1 -b .966424
 %patch401 -p2 -b .notifications
+%ifarch ppc64
+%patch304 -p1 -b .973977
+%endif
 cd ..
 
 %patch200 -p1 -b .addons
 %if 0%{?fedora} > 20
 %patch301 -p1 -b .ppc64le
-%endif
-%ifarch ppc64
-%patch304 -p1 -b .973977
 %endif
 
 %if %{official_branding}
@@ -447,6 +447,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Fri May 23 2014 Brent Baude <baude@us.ibm.com> - 24.5.0-5
+- Moving the ppc64 conditional up before the cd so it will
+- apply cleanly
+
 * Fri May 23 2014 Martin Stransky <stransky@redhat.com> - 24.5.0-4
 - Added a build fix for ppc64 - rhbz#1100495
 
