@@ -14,9 +14,9 @@
 %define build_langpacks 1
 
 %if %{?system_nss}
-%global nspr_version 4.10.2
+%global nspr_version 4.10.6
 %global nspr_build_version %(pkg-config --silence-errors --modversion nspr 2>/dev/null || echo 65536)
-%global nss_version 3.15.2
+%global nss_version 3.16.2
 %global nss_build_version %(pkg-config --silence-errors --modversion nss 2>/dev/null || echo 65536)
 %endif
 
@@ -24,13 +24,13 @@
 %define freetype_version 2.1.9
 
 %if %{?system_sqlite}
-%define sqlite_version 3.7.17
+%define sqlite_version 3.8
 # The actual sqlite version (see #480989):
 %global sqlite_build_version %(pkg-config --silence-errors --modversion sqlite3 2>/dev/null || echo 65536)
 %endif
 
 %define libnotify_version 0.4
-%global libvpx_version 1.0.0
+%global libvpx_version 1.3.0
 %define _default_patch_fuzz 2
 
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
@@ -40,7 +40,7 @@
 #
 # IMPORTANT: If there is no top level directory, this should be 
 # set to the cwd, ie: '.'
-%define tarballdir comm-esr24
+%define tarballdir comm-esr31
 
 %define official_branding 1
 # enable crash reporter only for iX86
@@ -54,14 +54,14 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        24.7.0
+Version:        31.0
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.bz2
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20140722.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20140729.tar.xz
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -71,22 +71,18 @@ Source21:       thunderbird.sh.in
 
 # Mozilla (XULRunner) patches
 Patch0:         thunderbird-install-dir.patch
-Patch8:         xulrunner-10.0-secondary-ipc.patch
 Patch9:         mozilla-build-arm.patch
 
 # Build patches
 
 # Linux specific
-Patch200:       thunderbird-8.0-enable-addons.patch
+Patch200:       thunderbird-enable-addons.patch
 
 # PPC fixes
 Patch300:       xulrunner-24.0-jemalloc-ppc.patch
-Patch301:       mozilla-ppc64le.patch
-Patch304:       mozilla-973977.patch
 
 # Fedora specific patches
 Patch400:       rhbz-966424.patch
-Patch401:       revert-removal-of-native-notifications.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -163,23 +159,14 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %setup -q -c
 cd %{tarballdir}
 
-%patch0  -p1 -b .dir
+%patch0  -p2 -b .dir
 # Mozilla (XULRunner) patches
 cd mozilla
-%patch8 -p3 -b .secondary-ipc
-%patch9 -p2 -b .arm
+%patch9   -p2 -b .arm
 %patch300 -p2 -b .852698
 %patch400 -p1 -b .966424
-%patch401 -p2 -b .notifications
-%ifarch ppc64
-%patch304 -p1 -b .973977
-%endif
 cd ..
-
 %patch200 -p1 -b .addons
-%if 0%{?fedora} > 20
-%patch301 -p1 -b .ppc64le
-%endif
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -448,6 +435,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Jul 29 2014 Martin Stransky <stransky@redhat.com> - 31.0-1
+- Update to 31.0
+
 * Tue Jul 22 2014 Jan Horak <jhorak@redhat.com> - 24.7.0-1
 - Update to 24.7.0
 
