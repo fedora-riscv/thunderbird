@@ -179,7 +179,7 @@ cd mozilla
 %endif
 
 %if 0%{?rhel} > 6
-%patch500 -p1 -b .nss-ver
+%patch500 -p2 -b .nss-ver
 %endif
 cd ..
 
