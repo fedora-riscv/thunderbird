@@ -56,7 +56,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        31.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -85,6 +85,7 @@ Patch300:       xulrunner-24.0-jemalloc-ppc.patch
 
 # Fedora specific patches
 Patch400:       rhbz-966424.patch
+Patch401:       mozilla-858919.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -167,6 +168,7 @@ cd mozilla
 %patch9   -p2 -b .arm
 %patch300 -p2 -b .852698
 %patch400 -p1 -b .966424
+%patch401 -p1 -b .858919
 cd ..
 %patch200 -p1 -b .addons
 
@@ -333,7 +335,7 @@ touch %{name}.lang
 for langpack in `ls thunderbird-langpacks/*.xpi`; do
   language=`basename $langpack .xpi`
   extensionID=langpack-$language@thunderbird.mozilla.org
-  
+
   language=`echo $language | sed -e 's/-/_/g'`
   %{__install} -m 644 ${langpack} $RPM_BUILD_ROOT%{mozappdir}/langpacks/${extensionID}.xpi
   echo "%%lang($language) %{mozappdir}/langpacks/${extensionID}.xpi" >> %{name}.lang
@@ -437,6 +439,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Wed Jul 30 2014 Martin Stransky <stransky@redhat.com> - 31.0-2
+- Added patch for mozbz#858919
+
 * Tue Jul 29 2014 Martin Stransky <stransky@redhat.com> - 31.0-1
 - Update to 31.0
 
