@@ -97,6 +97,8 @@ Patch400:       rhbz-966424.patch
 BuildRequires:  nss-static >= %{nss_version}
 BuildRequires:  nspr-devel >= %{nspr_version}
 BuildRequires:  nss-devel >= %{nss_version}
+Requires:       nspr >= %{nspr_build_version}
+Requires:       nss >= %{nss_build_version}
 %endif
 BuildRequires:  cairo-devel >= %{cairo_version}
 BuildRequires:  libnotify-devel >= %{libnotify_version}
@@ -115,6 +117,7 @@ BuildRequires:  libXrender-devel
 BuildRequires:  hunspell-devel
 %if %{?system_sqlite}
 BuildRequires:  sqlite-devel >= %{sqlite_version}
+Requires:       sqlite >= %{sqlite_build_version}
 %endif
 BuildRequires:  startup-notification-devel
 BuildRequires:  alsa-lib-devel
@@ -123,15 +126,10 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  libcurl-devel
 BuildRequires:  mesa-libGL-devel
 BuildRequires:  libvpx-devel >= %{libvpx_version}
-Requires:       mozilla-filesystem
-%if %{?system_nss}
-Requires:       nspr >= %{nspr_build_version}
-Requires:       nss >= %{nss_build_version}
-%endif
-%if %{?system_sqlite}
-Requires:       sqlite >= %{sqlite_build_version}
-%endif
 Requires:       libvpx >= %{libvpx_version}
+BuildRequires:  pulseaudio-libs-devel
+BuildRequires:  libicu-devel
+Requires:       mozilla-filesystem
 
 %description
 Mozilla Thunderbird is a standalone mail and newsgroup client.
