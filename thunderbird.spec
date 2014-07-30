@@ -5,7 +5,7 @@
 # Build as a debug package?
 %define debug_build       0
 
-%if 0%{?fedora} <= 18
+%if 0%{?fedora} < 20
 %define system_sqlite 0
 %else
 %define system_sqlite 1
@@ -24,7 +24,7 @@
 %define freetype_version 2.1.9
 
 %if %{?system_sqlite}
-%define sqlite_version 3.7.13
+%define sqlite_version 3.8.4.2
 # The actual sqlite version (see #480989):
 %global sqlite_build_version %(pkg-config --silence-errors --modversion sqlite3 2>/dev/null || echo 65536)
 %endif
