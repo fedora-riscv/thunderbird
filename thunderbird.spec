@@ -40,7 +40,9 @@
 #
 # IMPORTANT: If there is no top level directory, this should be 
 # set to the cwd, ie: '.'
-%define tarballdir comm-esr31
+%define tarballdir   comm-esr31
+%define objdir       objdir
+%define mozappdir    %{_libdir}/%{name}
 
 %define official_branding 1
 # enable crash reporter only for iX86
@@ -50,7 +52,6 @@
 %define enable_mozilla_crashreporter 0
 %endif
 
-%define mozappdir         %{_libdir}/%{name}
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
@@ -272,17 +273,17 @@ MOZ_SMP_FLAGS=-j1
 [ "$RPM_BUILD_NCPUS" -ge 8 ] && MOZ_SMP_FLAGS=-j8
 %endif
 
-make -f client.mk build STRIP="/bin/true" MOZ_MAKE_FLAGS="$MOZ_SMP_FLAGS"
+make -f client.mk build STRIP="/bin/true" MOZ_MAKE_FLAGS="$MOZ_SMP_FLAGS" MOZ_OBJDIR="%{objdir}"
 
 # create debuginfo for crash-stats.mozilla.com
 %if %{enable_mozilla_crashreporter}
-make -C objdir buildsymbols
+make -C %{objdir} buildsymbols
 %endif
 
 #===============================================================================
 
 %install
-cd %{tarballdir}/objdir
+cd %{tarballdir}/%{objdir}
 
 DESTDIR=$RPM_BUILD_ROOT make install
 
@@ -359,7 +360,7 @@ touch $RPM_BUILD_ROOT%{mozappdir}/components/xpti.dat
 # Add debuginfo for crash-stats.mozilla.com 
 %if %{enable_mozilla_crashreporter}
 %{__mkdir_p} $RPM_BUILD_ROOT/%{moz_debug_dir}
-%{__cp} objdir/mozilla/dist/%{symbols_file_name} $RPM_BUILD_ROOT/%{moz_debug_dir}
+%{__cp} %{objdir}/mozilla/dist/%{symbols_file_name} $RPM_BUILD_ROOT/%{moz_debug_dir}
 %endif
 
 #===============================================================================
