@@ -75,6 +75,7 @@ Patch0:         thunderbird-install-dir.patch
 Patch9:         mozilla-build-arm.patch
 
 # Build patches
+Patch100:       thunderbird-objdir.patch
 
 # Linux specific
 Patch200:       thunderbird-enable-addons.patch
@@ -158,7 +159,9 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %setup -q -c
 cd %{tarballdir}
 
-%patch0  -p2 -b .dir
+%patch0   -p2 -b .dir
+%patch100 -p2 -b .objdir
+
 # Mozilla (XULRunner) patches
 cd mozilla
 %patch9   -p2 -b .arm
