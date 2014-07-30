@@ -88,6 +88,9 @@ Patch304:       mozilla-973977.patch
 Patch400:       rhbz-966424.patch
 Patch401:       revert-removal-of-native-notifications.patch
 
+# Epel patches:
+Patch500:       firefox-system-nss-3.15.3.patch
+
 %if %{official_branding}
 # Required by Mozilla Corporation
 
@@ -173,6 +176,10 @@ cd mozilla
 %patch401 -p2 -b .notifications
 %ifarch ppc64
 %patch304 -p1 -b .973977
+%endif
+
+%if %{?epel}
+%patch500 -p1 -b .nss-ver
 %endif
 cd ..
 
