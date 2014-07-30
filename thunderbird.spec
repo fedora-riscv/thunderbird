@@ -178,7 +178,7 @@ cd mozilla
 %patch304 -p1 -b .973977
 %endif
 
-%if %{?epel}
+%if 0%{?rhel} > 6
 %patch500 -p1 -b .nss-ver
 %endif
 cd ..
