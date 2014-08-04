@@ -5,7 +5,7 @@
 # Build as a debug package?
 %define debug_build       0
 
-%if 0%{?fedora} <= 18
+%if 0%{?fedora} < 20
 %define system_sqlite 0
 %else
 %define system_sqlite 1
@@ -14,9 +14,9 @@
 %define build_langpacks 1
 
 %if %{?system_nss}
-%global nspr_version 4.10.2
+%global nspr_version 4.10.6
 %global nspr_build_version %(pkg-config --silence-errors --modversion nspr 2>/dev/null || echo 65536)
-%global nss_version 3.15.2
+%global nss_version 3.16.2
 %global nss_build_version %(pkg-config --silence-errors --modversion nss 2>/dev/null || echo 65536)
 %endif
 
@@ -24,13 +24,13 @@
 %define freetype_version 2.1.9
 
 %if %{?system_sqlite}
-%define sqlite_version 3.7.17
+%define sqlite_version 3.8.4.2
 # The actual sqlite version (see #480989):
 %global sqlite_build_version %(pkg-config --silence-errors --modversion sqlite3 2>/dev/null || echo 65536)
 %endif
 
 %define libnotify_version 0.4
-%global libvpx_version 1.0.0
+%global libvpx_version 1.3.0
 %define _default_patch_fuzz 2
 
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
@@ -40,7 +40,9 @@
 #
 # IMPORTANT: If there is no top level directory, this should be 
 # set to the cwd, ie: '.'
-%define tarballdir comm-esr24
+%define tarballdir   comm-esr31
+%define objdir       objdir
+%define mozappdir    %{_libdir}/%{name}
 
 %define official_branding 1
 # enable crash reporter only for iX86
@@ -50,18 +52,17 @@
 %define enable_mozilla_crashreporter 0
 %endif
 
-%define mozappdir         %{_libdir}/%{name}
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        24.7.0
-Release:        1%{?dist}
+Version:        31.0
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.bz2
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20140722.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20140729.tar.xz
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -71,22 +72,20 @@ Source21:       thunderbird.sh.in
 
 # Mozilla (XULRunner) patches
 Patch0:         thunderbird-install-dir.patch
-Patch8:         xulrunner-10.0-secondary-ipc.patch
 Patch9:         mozilla-build-arm.patch
 
 # Build patches
+Patch100:       thunderbird-objdir.patch
 
 # Linux specific
-Patch200:       thunderbird-8.0-enable-addons.patch
+Patch200:       thunderbird-enable-addons.patch
 
 # PPC fixes
 Patch300:       xulrunner-24.0-jemalloc-ppc.patch
-Patch301:       mozilla-ppc64le.patch
-Patch304:       mozilla-973977.patch
 
 # Fedora specific patches
 Patch400:       rhbz-966424.patch
-Patch401:       revert-removal-of-native-notifications.patch
+Patch401:       mozilla-858919.patch
 
 # Epel patches:
 Patch500:       firefox-system-nss-3.16.2.patch
@@ -103,6 +102,8 @@ Patch500:       firefox-system-nss-3.16.2.patch
 BuildRequires:  nss-static >= %{nss_version}
 BuildRequires:  nspr-devel >= %{nspr_version}
 BuildRequires:  nss-devel >= %{nss_version}
+Requires:       nspr >= %{nspr_build_version}
+Requires:       nss >= %{nss_build_version}
 %endif
 BuildRequires:  cairo-devel >= %{cairo_version}
 BuildRequires:  libnotify-devel >= %{libnotify_version}
@@ -121,6 +122,7 @@ BuildRequires:  libXrender-devel
 BuildRequires:  hunspell-devel
 %if %{?system_sqlite}
 BuildRequires:  sqlite-devel >= %{sqlite_version}
+Requires:       sqlite >= %{sqlite_build_version}
 %endif
 BuildRequires:  startup-notification-devel
 BuildRequires:  alsa-lib-devel
@@ -129,15 +131,10 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  libcurl-devel
 BuildRequires:  mesa-libGL-devel
 BuildRequires:  libvpx-devel >= %{libvpx_version}
-Requires:       mozilla-filesystem
-%if %{?system_nss}
-Requires:       nspr >= %{nspr_build_version}
-Requires:       nss >= %{nss_build_version}
-%endif
-%if %{?system_sqlite}
-Requires:       sqlite >= %{sqlite_build_version}
-%endif
 Requires:       libvpx >= %{libvpx_version}
+BuildRequires:  pulseaudio-libs-devel
+BuildRequires:  libicu-devel
+Requires:       mozilla-filesystem
 
 %description
 Mozilla Thunderbird is a standalone mail and newsgroup client.
@@ -166,14 +163,15 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %setup -q -c
 cd %{tarballdir}
 
-%patch0  -p1 -b .dir
+%patch0   -p2 -b .dir
+%patch100 -p2 -b .objdir
+
 # Mozilla (XULRunner) patches
 cd mozilla
-%patch8 -p3 -b .secondary-ipc
-%patch9 -p2 -b .arm
+%patch9   -p2 -b .arm
 %patch300 -p2 -b .852698
 %patch400 -p1 -b .966424
-%patch401 -p2 -b .notifications
+%patch401 -p1 -b .858919
 %ifarch ppc64
 %patch304 -p1 -b .973977
 %endif
@@ -182,11 +180,7 @@ cd mozilla
 %patch500 -p2 -b .nss-ver
 %endif
 cd ..
-
 %patch200 -p1 -b .addons
-%if 0%{?fedora} > 20
-%patch301 -p1 -b .ppc64le
-%endif
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -296,13 +290,13 @@ make -f client.mk build STRIP="/bin/true" MOZ_MAKE_FLAGS="$MOZ_SMP_FLAGS"
 
 # create debuginfo for crash-stats.mozilla.com
 %if %{enable_mozilla_crashreporter}
-make -C objdir buildsymbols
+make -C %{objdir} buildsymbols
 %endif
 
 #===============================================================================
 
 %install
-cd %{tarballdir}/objdir
+cd %{tarballdir}/%{objdir}
 
 DESTDIR=$RPM_BUILD_ROOT make install
 
@@ -351,7 +345,7 @@ touch %{name}.lang
 for langpack in `ls thunderbird-langpacks/*.xpi`; do
   language=`basename $langpack .xpi`
   extensionID=langpack-$language@thunderbird.mozilla.org
-  
+
   language=`echo $language | sed -e 's/-/_/g'`
   %{__install} -m 644 ${langpack} $RPM_BUILD_ROOT%{mozappdir}/langpacks/${extensionID}.xpi
   echo "%%lang($language) %{mozappdir}/langpacks/${extensionID}.xpi" >> %{name}.lang
@@ -379,7 +373,7 @@ touch $RPM_BUILD_ROOT%{mozappdir}/components/xpti.dat
 # Add debuginfo for crash-stats.mozilla.com 
 %if %{enable_mozilla_crashreporter}
 %{__mkdir_p} $RPM_BUILD_ROOT/%{moz_debug_dir}
-%{__cp} objdir/mozilla/dist/%{symbols_file_name} $RPM_BUILD_ROOT/%{moz_debug_dir}
+%{__cp} %{objdir}/mozilla/dist/%{symbols_file_name} $RPM_BUILD_ROOT/%{moz_debug_dir}
 %endif
 
 #===============================================================================
@@ -455,6 +449,12 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Wed Jul 30 2014 Martin Stransky <stransky@redhat.com> - 31.0-2
+- Added patch for mozbz#858919
+
+* Tue Jul 29 2014 Martin Stransky <stransky@redhat.com> - 31.0-1
+- Update to 31.0
+
 * Tue Jul 22 2014 Jan Horak <jhorak@redhat.com> - 24.7.0-1
 - Update to 24.7.0
 

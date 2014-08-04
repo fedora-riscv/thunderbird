@@ -1,34 +1,34 @@
 # HG changeset patch
-# Parent 36da3cb921935478b6a37936b18b5c85a33d5617
-# User Chris Coulson <chris.coulson@canonical.com>
+# Parent b17cad2d1e5e6bcb5a10096d51d07ea8a79b6921
+# User Martin Stransky <stransky@redhat.com>
+Bug 858919 - Add support for libnotify calls which was removed for new notification API. r=karlt
 
-diff --git a/mozilla/toolkit/system/gnome/moz.build b/mozilla/toolkit/system/gnome/moz.build
---- a/mozilla/toolkit/system/gnome/moz.build
-+++ b/mozilla/toolkit/system/gnome/moz.build
-@@ -3,16 +3,18 @@
+diff --git a/toolkit/system/gnome/moz.build b/toolkit/system/gnome/moz.build
+--- a/toolkit/system/gnome/moz.build
++++ b/toolkit/system/gnome/moz.build
+@@ -1,15 +1,17 @@
+ # -*- Mode: python; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 40 -*-
+ # vim: set filetype=python:
  # This Source Code Form is subject to the terms of the Mozilla Public
  # License, v. 2.0. If a copy of the MPL was not distributed with this
  # file, You can obtain one at http://mozilla.org/MPL/2.0/.
  
- MODULE = 'mozgnome'
- 
- CPP_SOURCES += [
+ SOURCES += [
++    'nsAlertsIconListener.cpp',
++    'nsAlertsService.cpp',
      'nsGnomeModule.cpp',
-+    'nsSystemAlertsService.cpp',
-+    'nsAlertsIconListener.cpp'
  ]
  
  if CONFIG['MOZ_ENABLE_GCONF']:
-     CPP_SOURCES += [
+     SOURCES += [
          'nsGConfService.cpp',
      ]
  
- if CONFIG['MOZ_ENABLE_GNOMEVFS']:
-diff --git a/mozilla/toolkit/system/gnome/nsAlertsIconListener.h b/mozilla/toolkit/system/gnome/nsAlertsIconListener.h
+diff --git a/toolkit/system/gnome/nsAlertsIconListener.h b/toolkit/system/gnome/nsAlertsIconListener.h
 new file mode 100644
 --- /dev/null
-+++ b/mozilla/toolkit/system/gnome/nsAlertsIconListener.h
-@@ -0,0 +1,88 @@
++++ b/toolkit/system/gnome/nsAlertsIconListener.h
+@@ -0,0 +1,89 @@
 +/* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 +/* This Source Code Form is subject to the terms of the Mozilla Public
 + * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -59,7 +59,6 @@ new file mode 100644
 +  NS_DECL_NSIOBSERVER
 +
 +  nsAlertsIconListener();
-+  virtual ~nsAlertsIconListener();
 +
 +  nsresult InitAlertAsync(const nsAString & aImageUrl,
 +                          const nsAString & aAlertTitle, 
@@ -72,6 +71,8 @@ new file mode 100644
 +  void SendClosed();
 +
 +protected:
++  virtual ~nsAlertsIconListener();
++
 +  nsresult OnStopRequest(imgIRequest* aRequest);
 +  nsresult OnStopFrame(imgIRequest* aRequest);
 +
@@ -117,10 +118,100 @@ new file mode 100644
 +};
 +
 +#endif
-diff --git a/mozilla/toolkit/system/gnome/nsGnomeModule.cpp b/mozilla/toolkit/system/gnome/nsGnomeModule.cpp
---- a/mozilla/toolkit/system/gnome/nsGnomeModule.cpp
-+++ b/mozilla/toolkit/system/gnome/nsGnomeModule.cpp
-@@ -17,53 +17,59 @@ NS_GENERIC_FACTORY_CONSTRUCTOR_INIT(nsGC
+diff --git a/toolkit/system/gnome/nsAlertsService.cpp b/toolkit/system/gnome/nsAlertsService.cpp
+new file mode 100644
+--- /dev/null
++++ b/toolkit/system/gnome/nsAlertsService.cpp
+@@ -0,0 +1,53 @@
++/* -*- Mode: C++; tab-width: 2; indent-tabs-mode:nil; c-basic-offset: 2 -*- */
++/* This Source Code Form is subject to the terms of the Mozilla Public
++ * License, v. 2.0. If a copy of the MPL was not distributed with this
++ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
++
++#include "nsXULAppAPI.h"
++#include "nsAlertsService.h"
++#include "nsAlertsIconListener.h"
++#include "nsAutoPtr.h"
++
++NS_IMPL_ADDREF(nsAlertsService)
++NS_IMPL_RELEASE(nsAlertsService)
++
++NS_INTERFACE_MAP_BEGIN(nsAlertsService)
++   NS_INTERFACE_MAP_ENTRY_AMBIGUOUS(nsISupports, nsIAlertsService)
++   NS_INTERFACE_MAP_ENTRY(nsIAlertsService)
++NS_INTERFACE_MAP_END_THREADSAFE
++
++nsAlertsService::nsAlertsService()
++{
++}
++
++nsAlertsService::~nsAlertsService()
++{}
++
++nsresult
++nsAlertsService::Init()
++{
++  return NS_OK;
++}
++
++NS_IMETHODIMP nsAlertsService::ShowAlertNotification(const nsAString & aImageUrl, const nsAString & aAlertTitle, 
++                                                     const nsAString & aAlertText, bool aAlertTextClickable,
++                                                     const nsAString & aAlertCookie,
++                                                     nsIObserver * aAlertListener,
++                                                     const nsAString & aAlertName,
++                                                     const nsAString & aBidi,
++                                                     const nsAString & aLang,
++                                                     nsIPrincipal * aPrincipal)
++{
++  nsRefPtr<nsAlertsIconListener> alertListener = new nsAlertsIconListener();
++  if (!alertListener)
++    return NS_ERROR_OUT_OF_MEMORY;
++
++  return alertListener->InitAlertAsync(aImageUrl, aAlertTitle, aAlertText, aAlertTextClickable,
++                                       aAlertCookie, aAlertListener);
++}
++
++NS_IMETHODIMP nsAlertsService::CloseAlert(const nsAString& aAlertName,
++                                          nsIPrincipal* aPrincipal)
++{
++  return NS_ERROR_NOT_IMPLEMENTED;
++}
+diff --git a/toolkit/system/gnome/nsAlertsService.h b/toolkit/system/gnome/nsAlertsService.h
+new file mode 100644
+--- /dev/null
++++ b/toolkit/system/gnome/nsAlertsService.h
+@@ -0,0 +1,27 @@
++/* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
++/* This Source Code Form is subject to the terms of the Mozilla Public
++ * License, v. 2.0. If a copy of the MPL was not distributed with this
++ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
++
++#ifndef nsAlertsService_h__
++#define nsAlertsService_h__
++
++#include "nsIAlertsService.h"
++#include "nsCOMPtr.h"
++
++class nsAlertsService : public nsIAlertsService
++{
++public:
++  NS_DECL_NSIALERTSSERVICE
++  NS_DECL_ISUPPORTS
++
++  nsAlertsService();
++
++  nsresult Init();
++
++protected:
++  virtual ~nsAlertsService();
++
++};
++
++#endif /* nsAlertsService_h__ */
+diff --git a/toolkit/system/gnome/nsGnomeModule.cpp b/toolkit/system/gnome/nsGnomeModule.cpp
+--- a/toolkit/system/gnome/nsGnomeModule.cpp
++++ b/toolkit/system/gnome/nsGnomeModule.cpp
+@@ -17,53 +17,58 @@ NS_GENERIC_FACTORY_CONSTRUCTOR_INIT(nsGC
  NS_GENERIC_FACTORY_CONSTRUCTOR_INIT(nsGnomeVFSService, Init)
  #endif
  #ifdef MOZ_ENABLE_GIO
@@ -129,8 +220,8 @@ diff --git a/mozilla/toolkit/system/gnome/nsGnomeModule.cpp b/mozilla/toolkit/sy
  NS_GENERIC_FACTORY_CONSTRUCTOR(nsGIOService)
  NS_GENERIC_FACTORY_CONSTRUCTOR_INIT(nsGSettingsService, Init)
  #endif
-+#include "nsSystemAlertsService.h"
-+NS_GENERIC_FACTORY_CONSTRUCTOR_INIT(nsSystemAlertsService, Init)
++#include "nsAlertsService.h"
++NS_GENERIC_FACTORY_CONSTRUCTOR_INIT(nsAlertsService, Init)
  
  #ifdef MOZ_ENABLE_GCONF
  NS_DEFINE_NAMED_CID(NS_GCONFSERVICE_CID);
@@ -143,21 +234,20 @@ diff --git a/mozilla/toolkit/system/gnome/nsGnomeModule.cpp b/mozilla/toolkit/sy
  NS_DEFINE_NAMED_CID(NS_GSETTINGSSERVICE_CID);
  #endif
 +NS_DEFINE_NAMED_CID(NS_SYSTEMALERTSSERVICE_CID);
-+
  
  static const mozilla::Module::CIDEntry kGnomeCIDs[] = {
  #ifdef MOZ_ENABLE_GCONF
-   { &kNS_GCONFSERVICE_CID, false, NULL, nsGConfServiceConstructor },
+   { &kNS_GCONFSERVICE_CID, false, nullptr, nsGConfServiceConstructor },
  #endif
  #ifdef MOZ_ENABLE_GNOMEVFS
-   { &kNS_GNOMEVFSSERVICE_CID, false, NULL, nsGnomeVFSServiceConstructor },
+   { &kNS_GNOMEVFSSERVICE_CID, false, nullptr, nsGnomeVFSServiceConstructor },
  #endif
  #ifdef MOZ_ENABLE_GIO
-   { &kNS_GIOSERVICE_CID, false, NULL, nsGIOServiceConstructor },
-   { &kNS_GSETTINGSSERVICE_CID, false, NULL, nsGSettingsServiceConstructor },
+   { &kNS_GIOSERVICE_CID, false, nullptr, nsGIOServiceConstructor },
+   { &kNS_GSETTINGSSERVICE_CID, false, nullptr, nsGSettingsServiceConstructor },
  #endif
-+  { &kNS_SYSTEMALERTSSERVICE_CID, false, NULL, nsSystemAlertsServiceConstructor },
-   { NULL }
++  { &kNS_SYSTEMALERTSSERVICE_CID, false, nullptr, nsAlertsServiceConstructor },
+   { nullptr }
  };
  
  static const mozilla::Module::ContractIDEntry kGnomeContracts[] = {
@@ -172,7 +262,7 @@ diff --git a/mozilla/toolkit/system/gnome/nsGnomeModule.cpp b/mozilla/toolkit/sy
    { NS_GSETTINGSSERVICE_CONTRACTID, &kNS_GSETTINGSSERVICE_CID },
  #endif
 +  { NS_SYSTEMALERTSERVICE_CONTRACTID, &kNS_SYSTEMALERTSSERVICE_CID },
-   { NULL }
+   { nullptr }
  };
  
  static nsresult
@@ -180,94 +270,3 @@ diff --git a/mozilla/toolkit/system/gnome/nsGnomeModule.cpp b/mozilla/toolkit/sy
  {
    g_type_init();
    return NS_OK;
-diff --git a/mozilla/toolkit/system/gnome/nsSystemAlertsService.cpp b/mozilla/toolkit/system/gnome/nsSystemAlertsService.cpp
-new file mode 100644
---- /dev/null
-+++ b/mozilla/toolkit/system/gnome/nsSystemAlertsService.cpp
-@@ -0,0 +1,54 @@
-+/* -*- Mode: C++; tab-width: 2; indent-tabs-mode:nil; c-basic-offset: 2 -*- */
-+/* This Source Code Form is subject to the terms of the Mozilla Public
-+ * License, v. 2.0. If a copy of the MPL was not distributed with this
-+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
-+
-+#include "nsSystemAlertsService.h"
-+#include "nsAlertsIconListener.h"
-+#include "nsAutoPtr.h"
-+
-+NS_IMPL_THREADSAFE_ADDREF(nsSystemAlertsService)
-+NS_IMPL_THREADSAFE_RELEASE(nsSystemAlertsService)
-+
-+NS_INTERFACE_MAP_BEGIN(nsSystemAlertsService)
-+   NS_INTERFACE_MAP_ENTRY_AMBIGUOUS(nsISupports, nsIAlertsService)
-+   NS_INTERFACE_MAP_ENTRY(nsIAlertsService)
-+NS_INTERFACE_MAP_END_THREADSAFE
-+
-+nsSystemAlertsService::nsSystemAlertsService()
-+{}
-+
-+nsSystemAlertsService::~nsSystemAlertsService()
-+{}
-+
-+nsresult
-+nsSystemAlertsService::Init()
-+{
-+  return NS_OK;
-+}
-+
-+NS_IMETHODIMP
-+nsSystemAlertsService::ShowAlertNotification(const nsAString & aImageUrl,
-+                                             const nsAString & aAlertTitle, 
-+                                             const nsAString & aAlertText,
-+                                             bool aAlertTextClickable,
-+                                             const nsAString & aAlertCookie,
-+                                             nsIObserver * aAlertListener,
-+                                             const nsAString & aAlertName,
-+                                             const nsAString & aBidi,
-+                                             const nsAString & aLang)
-+{
-+  nsRefPtr<nsAlertsIconListener> alertListener = new nsAlertsIconListener();
-+  if (!alertListener)
-+    return NS_ERROR_OUT_OF_MEMORY;
-+
-+  return alertListener->InitAlertAsync(aImageUrl, aAlertTitle, aAlertText, aAlertTextClickable,
-+                                       aAlertCookie, aAlertListener);
-+}
-+
-+NS_IMETHODIMP
-+nsSystemAlertsService::CloseAlert(const nsAString & aAlertName)
-+{
-+  return NS_ERROR_NOT_IMPLEMENTED;
-+}
-+
-diff --git a/mozilla/toolkit/system/gnome/nsSystemAlertsService.h b/mozilla/toolkit/system/gnome/nsSystemAlertsService.h
-new file mode 100644
---- /dev/null
-+++ b/mozilla/toolkit/system/gnome/nsSystemAlertsService.h
-@@ -0,0 +1,27 @@
-+/* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
-+/* This Source Code Form is subject to the terms of the Mozilla Public
-+ * License, v. 2.0. If a copy of the MPL was not distributed with this
-+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
-+
-+#ifndef nsSystemAlertsService_h__
-+#define nsSystemAlertsService_h__
-+
-+#include "nsIAlertsService.h"
-+#include "nsCOMPtr.h"
-+
-+class nsSystemAlertsService : public nsIAlertsService
-+{
-+public:
-+  NS_DECL_NSIALERTSSERVICE
-+  NS_DECL_ISUPPORTS
-+
-+  nsSystemAlertsService();
-+  virtual ~nsSystemAlertsService();
-+
-+  nsresult Init();
-+
-+protected:
-+
-+};
-+
-+#endif /* nsSystemAlertsService_h__ */
