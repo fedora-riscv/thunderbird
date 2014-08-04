@@ -7,8 +7,10 @@
 
 %if 0%{?fedora} < 20
 %define system_sqlite 0
+%define system_ffi    0
 %else
 %define system_sqlite 1
+%define system_ffi    1
 %endif
 
 %define build_langpacks 1
@@ -56,7 +58,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        31.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -123,6 +125,9 @@ BuildRequires:  hunspell-devel
 %if %{?system_sqlite}
 BuildRequires:  sqlite-devel >= %{sqlite_version}
 Requires:       sqlite >= %{sqlite_build_version}
+%endif
+%if %{?system_ffi}
+BuildRequires:  libffi-devel
 %endif
 BuildRequires:  startup-notification-devel
 BuildRequires:  alsa-lib-devel
@@ -215,6 +220,10 @@ echo "ac_add_options --enable-system-sqlite"  >> .mozconfig
 echo "ac_add_options --disable-system-sqlite" >> .mozconfig
 %endif
 
+%if %{?system_ffi}
+echo "ac_add_options --enable-system-ffi" >> .mozconfig
+%endif
+
 %if %{?debug_build}
 echo "ac_add_options --enable-debug" >> .mozconfig
 echo "ac_add_options --disable-optimize" >> .mozconfig
@@ -247,6 +256,9 @@ esac
 
 cd %{tarballdir}
 
+# Update the various config.guess to upstream release for aarch64 support
+find ./ -name config.guess -exec cp /usr/lib/rpm/config.guess {} ';'
+
 # -fpermissive is needed to build with gcc 4.6+ which has become stricter
 #
 # Mozilla builds with -Wall with exception of a few warnings which show up
@@ -264,7 +276,7 @@ MOZ_OPT_FLAGS=$(echo "$MOZ_OPT_FLAGS" | %{__sed} -e 's/-O2//')
 %ifarch s390
 MOZ_OPT_FLAGS=$(echo "$RPM_OPT_FLAGS" | %{__sed} -e 's/-g/-g1/')
 %endif
-%ifarch s390 %{arm} ppc
+%ifarch s390 %{arm} ppc aarch64
 MOZ_LINK_FLAGS="-Wl,--no-keep-memory -Wl,--reduce-memory-overheads"
 %endif
 
@@ -278,7 +290,7 @@ export LIBDIR='%{_libdir}'
 MOZ_SMP_FLAGS=-j1
 # On x86 architectures, Mozilla can build up to 4 jobs at once in parallel,
 # however builds tend to fail on other arches when building in parallel.
-%ifarch %{ix86} x86_64 ppc ppc64 ppc64le
+%ifarch %{ix86} x86_64 ppc %{power64} aarch64
 [ -z "$RPM_BUILD_NCPUS" ] && \
      RPM_BUILD_NCPUS="`/usr/bin/getconf _NPROCESSORS_ONLN`"
 [ "$RPM_BUILD_NCPUS" -ge 2 ] && MOZ_SMP_FLAGS=-j2
@@ -449,6 +461,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Mon Aug  4 2014 Peter Robinson <pbrobinson@fedoraproject.org> 31.0-3
+- Build with system FFI as per firefox/xulrunner (fixes aarch64)
+
 * Wed Jul 30 2014 Martin Stransky <stransky@redhat.com> - 31.0-2
 - Added patch for mozbz#858919
 
