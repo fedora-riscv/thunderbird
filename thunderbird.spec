@@ -58,7 +58,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        31.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -177,9 +177,6 @@ cd mozilla
 %patch300 -p2 -b .852698
 %patch400 -p1 -b .966424
 %patch401 -p1 -b .858919
-%ifarch ppc64
-%patch304 -p1 -b .973977
-%endif
 
 %if 0%{?rhel} > 6
 %patch500 -p2 -b .nss-ver
@@ -461,6 +458,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Aug 26 2014 Karsten Hopp <karsten@redhat.com> 31.0-5
+- ppc64 patch 304 got removed and isn't required anymore (mozbz#973977)
+
 * Mon Aug 18 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 31.0-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 
