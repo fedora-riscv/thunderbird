@@ -58,7 +58,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        31.1.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -458,6 +458,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Wed Oct 1 2014 Martin Stransky <stransky@redhat.com> - 31.1.1-2
+- Sync prefs with Firefox
+
 * Thu Sep 11 2014 Jan Horak <jhorak@redhat.com> - 31.1.1-1
 - Update to 31.1.1
 
