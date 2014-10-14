@@ -54,7 +54,6 @@
 %define enable_mozilla_crashreporter 0
 %endif
 
-
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        31.2.0
