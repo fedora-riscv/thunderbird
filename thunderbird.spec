@@ -57,14 +57,14 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        31.2.0
+Version:        31.3.0
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.bz2
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20141014.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20141201.tar.xz
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -458,6 +458,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Mon Dec  1 2014 Jan Horak <jhorak@redhat.com> - 31.3.0-1
+- Update to 31.3.0
+
 * Tue Oct 14 2014 Jan Horak <jhorak@redhat.com> - 31.2.0-1
 - Update to 31.2.0
 
