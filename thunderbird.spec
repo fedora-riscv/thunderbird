@@ -89,9 +89,6 @@ Patch300:       xulrunner-24.0-jemalloc-ppc.patch
 Patch400:       rhbz-966424.patch
 Patch401:       mozilla-858919.patch
 
-# Epel patches:
-Patch500:       firefox-system-nss-3.16.2.patch
-
 %if %{official_branding}
 # Required by Mozilla Corporation
 
@@ -178,9 +175,6 @@ cd mozilla
 %patch400 -p1 -b .966424
 %patch401 -p1 -b .858919
 
-%if 0%{?rhel} > 6
-%patch500 -p2 -b .nss-ver
-%endif
 cd ..
 %patch200 -p1 -b .addons
 
