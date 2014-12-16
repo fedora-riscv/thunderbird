@@ -75,6 +75,7 @@ Source21:       thunderbird.sh.in
 # Mozilla (XULRunner) patches
 Patch0:         thunderbird-install-dir.patch
 Patch9:         mozilla-build-arm.patch
+Patch10:        mozilla-1097550-dict-fix.patch
 
 # Build patches
 Patch100:       thunderbird-objdir.patch
@@ -171,6 +172,7 @@ cd %{tarballdir}
 # Mozilla (XULRunner) patches
 cd mozilla
 %patch9   -p2 -b .arm
+%patch10  -p2 -b .dict-fix
 %patch300 -p2 -b .852698
 %patch400 -p1 -b .966424
 %patch401 -p1 -b .858919

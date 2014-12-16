@@ -1,7 +1,7 @@
-diff -up mozilla-release/editor/composer/nsEditorSpellCheck.cpp.1097550-dict-fix mozilla-release/editor/composer/nsEditorSpellCheck.cpp
---- mozilla-release/editor/composer/nsEditorSpellCheck.cpp.1097550-dict-fix	2014-11-26 03:17:14.000000000 +0100
-+++ mozilla-release/editor/composer/nsEditorSpellCheck.cpp	2014-12-04 16:45:07.192923283 +0100
-@@ -103,6 +103,23 @@ GetLoadContext(nsIEditor* aEditor)
+diff -up comm-esr31/mozilla/editor/composer/src/nsEditorSpellCheck.cpp.dict-fix comm-esr31/mozilla/editor/composer/src/nsEditorSpellCheck.cpp
+--- comm-esr31/mozilla/editor/composer/src/nsEditorSpellCheck.cpp.dict-fix	2014-11-27 23:16:41.000000000 +0100
++++ comm-esr31/mozilla/editor/composer/src/nsEditorSpellCheck.cpp	2014-12-11 13:06:02.679106492 +0100
+@@ -102,6 +102,23 @@ GetLoadContext(nsIEditor* aEditor)
  }
  
  /**
@@ -25,7 +25,7 @@ diff -up mozilla-release/editor/composer/nsEditorSpellCheck.cpp.1097550-dict-fix
   * Fetches the dictionary stored in content prefs and maintains state during the
   * fetch, which is asynchronous.
   */
-@@ -606,8 +623,8 @@ nsEditorSpellCheck::SetCurrentDictionary
+@@ -603,8 +620,8 @@ nsEditorSpellCheck::SetCurrentDictionary
      } else {
        langCode.Assign(aDictionary);
      }
@@ -36,20 +36,7 @@ diff -up mozilla-release/editor/composer/nsEditorSpellCheck.cpp.1097550-dict-fix
        // When user sets dictionary manually, we store this value associated
        // with editor url.
        StoreCurrentDictionary(mEditor, aDictionary);
-@@ -763,12 +780,6 @@ nsEditorSpellCheck::DictionaryFetched(Di
- 
-   // otherwise, get language from preferences
-   nsAutoString preferedDict(Preferences::GetLocalizedString("spellchecker.dictionary"));
--  // Replace '_' with '-' in case the user has an underscore stored in their
--  // pref, see bug 992118 for how this could have happened.
--  int32_t underScore = preferedDict.FindChar('_');
--  if (underScore != -1) {
--    preferedDict.Replace(underScore, 1, '-');
--  }
-   if (dictName.IsEmpty()) {
-     dictName.Assign(preferedDict);
-   }
-@@ -807,8 +818,8 @@ nsEditorSpellCheck::DictionaryFetched(Di
+@@ -790,8 +807,8 @@ nsEditorSpellCheck::DictionaryFetched(Di
  
        // try dictionary.spellchecker preference if it starts with langCode (and
        // if we haven't tried it already)
@@ -60,7 +47,7 @@ diff -up mozilla-release/editor/composer/nsEditorSpellCheck.cpp.1097550-dict-fix
          rv = SetCurrentDictionary(preferedDict);
        }
  
-@@ -836,8 +847,7 @@ nsEditorSpellCheck::DictionaryFetched(Di
+@@ -819,8 +836,7 @@ nsEditorSpellCheck::DictionaryFetched(Di
              // We have already tried it
              continue;
            }
