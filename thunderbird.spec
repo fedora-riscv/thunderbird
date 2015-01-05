@@ -139,6 +139,10 @@ BuildRequires:  pulseaudio-libs-devel
 BuildRequires:  libicu-devel
 Requires:       mozilla-filesystem
 
+%if 0%{?epel}
+ExcludeArch:    ppc64
+%endif
+
 %description
 Mozilla Thunderbird is a standalone mail and newsgroup client.
 
@@ -454,6 +458,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Mon Jan  5 2015 Jan Horak <jhorak@redhat.com> - 31.3.0-2
+- Exclude ppc64 arch for epel7
+
 * Mon Dec  1 2014 Jan Horak <jhorak@redhat.com> - 31.3.0-1
 - Update to 31.3.0
 
