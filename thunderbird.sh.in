@@ -55,6 +55,11 @@ GNOME_DISABLE_CRASH_DIALOG=1
 export GNOME_DISABLE_CRASH_DIALOG
 
 ##
+## Disable the SLICE allocator (rhbz#1014858)
+##
+export G_SLICE=always-malloc
+
+##
 ## To disable the use of Firefox localization, set MOZ_DISABLE_LANGPACKS=1
 ## in your environment before launching Firefox.
 ##
