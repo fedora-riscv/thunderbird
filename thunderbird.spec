@@ -58,7 +58,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        31.4.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -89,6 +89,7 @@ Patch300:       xulrunner-24.0-jemalloc-ppc.patch
 # Fedora specific patches
 Patch400:       rhbz-966424.patch
 Patch401:       mozilla-858919.patch
+Patch402:       rhbz-1014858.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -180,6 +181,7 @@ cd mozilla
 %patch300 -p2 -b .852698
 %patch400 -p1 -b .966424
 %patch401 -p1 -b .858919
+%patch402 -p1 -b .rhbz-1014858
 
 cd ..
 %patch200 -p1 -b .addons
@@ -458,6 +460,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Fri Feb 20 2015 Martin Stransky <stransky@redhat.com> - 31.4.0-2
+- Fixed rhbz#1187746 - GLib allocation error
+  when starting thunderbird
+
 * Wed Jan 14 2015 Jan Horak <jhorak@redhat.com> - 31.4.0-1
 - Update to 31.4.0
 
