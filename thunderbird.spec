@@ -57,14 +57,14 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        31.4.0
-Release:        2%{?dist}
+Version:        31.5.0
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.bz2
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20150114.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20150224.tar.xz
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -75,7 +75,7 @@ Source21:       thunderbird.sh.in
 # Mozilla (XULRunner) patches
 Patch0:         thunderbird-install-dir.patch
 Patch9:         mozilla-build-arm.patch
-Patch10:        mozilla-1097550-dict-fix.patch
+Patch10:        mozilla-1129859-dictfix2.patch
 
 # Build patches
 Patch100:       thunderbird-objdir.patch
@@ -177,7 +177,7 @@ cd %{tarballdir}
 # Mozilla (XULRunner) patches
 cd mozilla
 %patch9   -p2 -b .arm
-%patch10  -p2 -b .dict-fix
+%patch10  -p1 -b .dict-fix
 %patch300 -p2 -b .852698
 %patch400 -p1 -b .966424
 %patch401 -p1 -b .858919
@@ -279,7 +279,7 @@ MOZ_OPT_FLAGS=$(echo "$RPM_OPT_FLAGS" | %{__sed} -e 's/-g/-g1/')
 MOZ_LINK_FLAGS="-Wl,--no-keep-memory -Wl,--reduce-memory-overheads"
 %endif
 
-export CFLAGS=$MOZ_OPT_FLAGS
+export CFLAGS=`echo $MOZ_OPT_FLAGS |sed -e 's/-fpermissive//g'`
 export CXXFLAGS=$MOZ_OPT_FLAGS
 export LDFLAGS=$MOZ_LINK_FLAGS
 
@@ -460,6 +460,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Feb 24 2015 Jan Horak <jhorak@redhat.com> - 31.5.0-1
+- Update to 31.5.0
+
 * Fri Feb 20 2015 Martin Stransky <stransky@redhat.com> - 31.4.0-2
 - Fixed rhbz#1187746 - GLib allocation error
   when starting thunderbird
