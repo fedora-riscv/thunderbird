@@ -58,7 +58,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        31.6.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -508,6 +508,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Mon Apr  6 2015 Tom Callaway <spot@fedoraproject.org> - 31.6.0-2
+- rebuild for libvpx 1.4.0
+
 * Tue Mar 31 2015 Jan Horak <jhorak@redhat.com> - 31.6.0-1
 - Update to 31.6.0
 
