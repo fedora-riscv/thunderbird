@@ -184,7 +184,7 @@ cd mozilla
 %patch400 -p1 -b .966424
 %patch401 -p1 -b .858919
 %patch402 -p1 -b .rhbz-1014858
-%patch403 -p1 -b .modern
+%patch403 -p2 -b .modern
 
 cd ..
 %patch200 -p1 -b .addons

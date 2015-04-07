@@ -1,6 +1,6 @@
-diff -up thunderbird-31.6.0/comm-esr31/mozilla/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp8/vp8_impl.cc.modern thunderbird-31.6.0/comm-esr31/mozilla/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp8/vp8_impl.cc
---- thunderbird-31.6.0/comm-esr31/mozilla/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp8/vp8_impl.cc.modern	2015-04-07 14:30:05.525960513 -0400
-+++ thunderbird-31.6.0/comm-esr31/mozilla/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp8/vp8_impl.cc	2015-04-07 14:32:22.478199058 -0400
+diff -up comm-esr31/mozilla/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp8/vp8_impl.cc.modern comm-esr31/mozilla/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp8/vp8_impl.cc
+--- comm-esr31/mozilla/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp8/vp8_impl.cc.modern	2015-04-07 14:30:05.525960513 -0400
++++ comm-esr31/mozilla/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp8/vp8_impl.cc	2015-04-07 14:32:22.478199058 -0400
 @@ -180,7 +180,7 @@ int VP8EncoderImpl::InitEncode(const Vid
    // Creating a wrapper to the image - setting image data to NULL. Actual
    // pointer will be set in encode. Setting align to 1, as it is meaningless
