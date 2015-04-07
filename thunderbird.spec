@@ -90,6 +90,8 @@ Patch300:       xulrunner-24.0-jemalloc-ppc.patch
 Patch400:       rhbz-966424.patch
 Patch401:       mozilla-858919.patch
 Patch402:       rhbz-1014858.patch
+# libvpx no longer has compat defines, use the current ones
+Patch403:	thunderbird-31.6.0-libvpx-modern.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -182,6 +184,7 @@ cd mozilla
 %patch400 -p1 -b .966424
 %patch401 -p1 -b .858919
 %patch402 -p1 -b .rhbz-1014858
+%patch403 -p1 -b .modern
 
 cd ..
 %patch200 -p1 -b .addons
@@ -510,6 +513,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %changelog
 * Mon Apr  6 2015 Tom Callaway <spot@fedoraproject.org> - 31.6.0-2
 - rebuild for libvpx 1.4.0
+- stop using compat defines, they went away in libvpx 1.4.0
 
 * Tue Mar 31 2015 Jan Horak <jhorak@redhat.com> - 31.6.0-1
 - Update to 31.6.0
