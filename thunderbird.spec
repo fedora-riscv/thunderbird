@@ -57,14 +57,14 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        31.6.0
-Release:        2%{?dist}
+Version:        31.7.0
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.bz2
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20150331.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20150512.tar.xz
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -533,6 +533,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue May 12 2015 Martin Stransky <stransky@redhat.com> - 31.7.0-1
+- Update to 31.7.0
+
 * Mon Apr  6 2015 Tom Callaway <spot@fedoraproject.org> - 31.6.0-2
 - rebuild for libvpx 1.4.0
 - stop using compat defines, they went away in libvpx 1.4.0
