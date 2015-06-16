@@ -42,7 +42,7 @@
 #
 # IMPORTANT: If there is no top level directory, this should be 
 # set to the cwd, ie: '.'
-%define tarballdir   comm-esr31
+%define tarballdir   comm-esr38
 %define objdir       objdir
 %define mozappdir    %{_libdir}/%{name}
 
@@ -57,14 +57,14 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        31.7.0
+Version:        38.0.1
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.bz2
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20150512.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20150609.tar.xz
 %endif
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -75,10 +75,11 @@ Source21:       thunderbird.sh.in
 # Mozilla (XULRunner) patches
 Patch0:         thunderbird-install-dir.patch
 Patch9:         mozilla-build-arm.patch
-Patch10:        mozilla-1129859-dictfix2.patch
 
 # Build patches
 Patch100:       thunderbird-objdir.patch
+Patch101:        build-nspr-prbool.patch
+Patch102:        build-werror.patch
 
 # Linux specific
 Patch200:       thunderbird-enable-addons.patch
@@ -88,10 +89,8 @@ Patch300:       xulrunner-24.0-jemalloc-ppc.patch
 
 # Fedora specific patches
 Patch400:       rhbz-966424.patch
-Patch401:       mozilla-858919.patch
 Patch402:       rhbz-1014858.patch
 # libvpx no longer has compat defines, use the current ones
-Patch403:	thunderbird-31.6.0-libvpx-modern.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -173,18 +172,17 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %setup -q -c
 cd %{tarballdir}
 
-%patch0   -p2 -b .dir
+%patch0   -p1 -b .dir
 %patch100 -p2 -b .objdir
 
 # Mozilla (XULRunner) patches
 cd mozilla
 %patch9   -p2 -b .arm
-%patch10  -p1 -b .dict-fix
 %patch300 -p2 -b .852698
+%patch102 -p2 -b .build-werror
+%patch101 -p1 -b .nspr-prbool
 %patch400 -p1 -b .966424
-%patch401 -p1 -b .858919
 %patch402 -p1 -b .rhbz-1014858
-%patch403 -p2 -b .modern
 
 cd ..
 %patch200 -p1 -b .addons
@@ -321,6 +319,7 @@ MOZ_SMP_FLAGS=-j1
 [ "$RPM_BUILD_NCPUS" -ge 4 ] && MOZ_SMP_FLAGS=-j4
 [ "$RPM_BUILD_NCPUS" -ge 8 ] && MOZ_SMP_FLAGS=-j8
 %endif
+MOZ_SMP_FLAGS=-j1
 
 make -f client.mk build STRIP="/bin/true" MOZ_MAKE_FLAGS="$MOZ_SMP_FLAGS"
 
@@ -409,7 +408,7 @@ touch $RPM_BUILD_ROOT%{mozappdir}/components/xpti.dat
 # Add debuginfo for crash-stats.mozilla.com 
 %if %{enable_mozilla_crashreporter}
 %{__mkdir_p} $RPM_BUILD_ROOT/%{moz_debug_dir}
-%{__cp} %{objdir}/mozilla/dist/%{symbols_file_name} $RPM_BUILD_ROOT/%{moz_debug_dir}
+%{__cp} %{objdir}/dist/%{symbols_file_name} $RPM_BUILD_ROOT/%{moz_debug_dir}
 %endif
 
 # Register as an application to be visible in the software center
@@ -501,7 +500,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %dir %{mozappdir}/langpacks
 %{mozappdir}/greprefs
 %{mozappdir}/isp
-%{mozappdir}/mozilla-xremote-client
 %{mozappdir}/run-mozilla.sh
 %{mozappdir}/thunderbird-bin
 %{mozappdir}/thunderbird
@@ -533,6 +531,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Jun  9 2015 Jan Horak <jhorak@redhat.com> - 38.0.1-1
+- Update to 38.0.1
+
 * Tue May 12 2015 Martin Stransky <stransky@redhat.com> - 31.7.0-1
 - Update to 31.7.0
 

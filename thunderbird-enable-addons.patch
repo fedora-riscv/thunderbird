@@ -13,14 +13,26 @@ diff -up comm-esr31/mail/app/profile/all-thunderbird.js.addons comm-esr31/mail/a
 diff -up comm-esr31/mozilla/toolkit/mozapps/extensions/internal/XPIProvider.jsm.addons comm-esr31/mozilla/toolkit/mozapps/extensions/internal/XPIProvider.jsm
 --- comm-esr31/mozilla/toolkit/mozapps/extensions/internal/XPIProvider.jsm.addons	2014-07-29 15:29:11.951728146 +0200
 +++ comm-esr31/mozilla/toolkit/mozapps/extensions/internal/XPIProvider.jsm	2014-07-29 15:30:51.879030210 +0200
-@@ -1894,8 +1894,8 @@ this.XPIProvider = {
-         this.showUpgradeUI();
-         flushCaches = true;
-       }
--      else if (aAppChanged === undefined) {
+@@ -2102,11 +2102,7 @@ this.XPIProvider = {
+ 
+       AddonManagerPrivate.markProviderSafe(this);
+ 
+-      if (aAppChanged === undefined) {
 -        // For new profiles we will never need to show the add-on selection UI
-+      else {
-+        // For all profiles we will never need to show the add-on selection UI
-         Services.prefs.setBoolPref(PREF_SHOWN_SELECTION_UI, true);
+-        Services.prefs.setBoolPref(PREF_SHOWN_SELECTION_UI, true);
+-      }
+-      else if (aAppChanged && !this.allAppGlobal &&
++      if (aAppChanged && !this.allAppGlobal &&
+                Preferences.get(PREF_EM_SHOW_MISMATCH_UI, true)) {
+         if (!Preferences.get(PREF_SHOWN_SELECTION_UI, false)) {
+           // Flip a flag to indicate that we interrupted startup with an interactive prompt
+@@ -2126,6 +2122,9 @@ this.XPIProvider = {
+             flushCaches = true;
+           }
+         }
++      } else {
++        // For new profiles we will never need to show the add-on selection UI
++        Services.prefs.setBoolPref(PREF_SHOWN_SELECTION_UI, true);
        }
  
+       if (flushCaches) {

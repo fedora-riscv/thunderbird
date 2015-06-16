@@ -1,0 +1,66 @@
+diff -up mozilla-beta/media/webrtc/trunk/webrtc/base/nssidentity.h.prbool-fix mozilla-beta/media/webrtc/trunk/webrtc/base/nssidentity.h
+--- mozilla-beta/media/webrtc/trunk/webrtc/base/nssidentity.h.prbool-fix	2015-04-07 10:29:51.919137851 +0200
++++ mozilla-beta/media/webrtc/trunk/webrtc/base/nssidentity.h	2015-04-07 10:33:06.886532753 +0200
+@@ -15,6 +15,7 @@
+ 
+ #include "cert.h"
+ #include "nspr.h"
++#include "prtypes.h"
+ #include "hasht.h"
+ #include "keythi.h"
+ 
+diff -up mozilla-beta/modules/libmar/sign/nss_secutil.h.prbool-fix mozilla-beta/modules/libmar/sign/nss_secutil.h
+--- mozilla-beta/modules/libmar/sign/nss_secutil.h.prbool-fix	2015-04-07 10:33:13.079513533 +0200
++++ mozilla-beta/modules/libmar/sign/nss_secutil.h	2015-04-07 10:33:16.101504154 +0200
+@@ -11,6 +11,7 @@
+ #include "nss.h"
+ #include "pk11pub.h"
+ #include "cryptohi.h"
++#include "prtypes.h"
+ #include "hasht.h"
+ #include "cert.h"
+ #include "key.h"
+diff -up mozilla-beta/security/certverifier/ExtendedValidation.cpp.prbool-fix mozilla-beta/security/certverifier/ExtendedValidation.cpp
+--- mozilla-beta/security/certverifier/ExtendedValidation.cpp.prbool-fix	2015-04-07 10:36:42.693902941 +0200
++++ mozilla-beta/security/certverifier/ExtendedValidation.cpp	2015-04-07 10:36:45.925893606 +0200
+@@ -9,6 +9,7 @@
+ #include "cert.h"
+ #include "certdb.h"
+ #include "base64.h"
++#include "prtypes.h"
+ #include "hasht.h"
+ #include "pkix/stdkeywords.h"
+ #include "pkix/pkixtypes.h"
+diff -up mozilla-beta/security/certverifier/OCSPCache.h.prbool-fix mozilla-beta/security/certverifier/OCSPCache.h
+--- mozilla-beta/security/certverifier/OCSPCache.h.prbool-fix	2015-04-07 10:36:34.106927741 +0200
++++ mozilla-beta/security/certverifier/OCSPCache.h	2015-04-07 10:36:35.940922444 +0200
+@@ -25,6 +25,7 @@
+ #ifndef mozilla_psm_OCSPCache_h
+ #define mozilla_psm_OCSPCache_h
+ 
++#include "prtypes.h"
+ #include "hasht.h"
+ #include "mozilla/Mutex.h"
+ #include "mozilla/Vector.h"
+diff -up mozilla-beta/security/manager/ssl/src/nsCryptoHash.h.prbool-fix mozilla-beta/security/manager/ssl/src/nsCryptoHash.h
+--- mozilla-beta/security/manager/ssl/src/nsCryptoHash.h.prbool-fix	2015-04-07 10:36:15.887980360 +0200
++++ mozilla-beta/security/manager/ssl/src/nsCryptoHash.h	2015-04-07 10:36:18.124973899 +0200
+@@ -10,6 +10,7 @@
+ #include "nsICryptoHash.h"
+ #include "nsICryptoHMAC.h"
+ #include "nsNSSShutDown.h"
++#include "prtypes.h"
+ #include "hasht.h"
+ #include "secmodt.h"
+ 
+diff -up mozilla-beta/security/manager/ssl/tests/unit/tlsserver/cmd/ClientAuthServer.cpp.prbool-fix mozilla-beta/security/manager/ssl/tests/unit/tlsserver/cmd/ClientAuthServer.cpp
+--- mozilla-beta/security/manager/ssl/tests/unit/tlsserver/cmd/ClientAuthServer.cpp.prbool-fix	2015-04-07 10:36:25.065953853 +0200
++++ mozilla-beta/security/manager/ssl/tests/unit/tlsserver/cmd/ClientAuthServer.cpp	2015-04-07 10:36:27.319947343 +0200
+@@ -15,6 +15,7 @@
+ 
+ #include <stdio.h>
+ 
++#include "prtypes.h"
+ #include "hasht.h"
+ #include "ScopedNSSTypes.h"
+ #include "ssl.h"
