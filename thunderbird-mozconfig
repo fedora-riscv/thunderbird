@@ -29,6 +29,7 @@ ac_add_options --enable-startup-notification
 ac_add_options --enable-gio
 ac_add_options --disable-gnomevfs
 ac_add_options --disable-gstreamer
+ac_add_options --enable-calendar
 
 export BUILD_OFFICIAL=1
 export MOZILLA_OFFICIAL=1
