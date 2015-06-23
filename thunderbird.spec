@@ -58,7 +58,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        38.0.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -140,7 +140,7 @@ Requires:       libvpx >= %{libvpx_version}
 BuildRequires:  pulseaudio-libs-devel
 BuildRequires:  libicu-devel
 Requires:       mozilla-filesystem
-Obsoletes:      thunderbird-lightning
+Obsoletes:      thunderbird-lightning thunderbird-lightning-gdata
 %if 0%{?epel}
 ExcludeArch:    ppc64
 %endif
@@ -531,7 +531,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
-* Thu Jun 18 2015 Jan Horak <jhorak@redhat.com> - 38.0.1-2
+* Thu Jun 18 2015 Jan Horak <jhorak@redhat.com> - 38.0.1-3
 - Bundling calendar extension
 
 * Tue Jun  9 2015 Jan Horak <jhorak@redhat.com> - 38.0.1-1
