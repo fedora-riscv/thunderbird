@@ -60,14 +60,14 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        38.0.1
-Release:        3%{?dist}
+Version:        38.1.0
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.bz2
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20150609.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20150709.tar.xz
 %endif
 # Locales for lightning
 Source2:        l10n-lightning-%{version}.tar.xz
@@ -584,6 +584,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Thu Jul  9 2015 Jan Horak <jhorak@redhat.com> - 38.1.0-1
+- Update to 38.1.0
+
 * Thu Jun 18 2015 Jan Horak <jhorak@redhat.com> - 38.0.1-3
 - Bundling calendar extension
 
