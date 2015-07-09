@@ -87,6 +87,7 @@ Patch9:         mozilla-build-arm.patch
 Patch100:       thunderbird-objdir.patch
 Patch101:        build-nspr-prbool.patch
 Patch102:        build-werror.patch
+Patch103:       rhbz-1219542-s390-build.patch
 
 # Linux specific
 Patch200:       thunderbird-enable-addons.patch
@@ -202,6 +203,9 @@ cd mozilla
 %patch300 -p2 -b .852698
 %patch102 -p2 -b .build-werror
 %patch101 -p1 -b .nspr-prbool
+%ifarch s390
+%patch103 -p1 -b .rhbz-1219542-s390-build
+%endif
 %patch400 -p1 -b .966424
 %patch402 -p1 -b .rhbz-1014858
 
@@ -322,6 +326,10 @@ MOZ_OPT_FLAGS=$(echo "$MOZ_OPT_FLAGS" | %{__sed} -e 's/-O2//')
 %endif
 %ifarch s390
 MOZ_OPT_FLAGS=$(echo "$MOZ_OPT_FLAGS" | %{__sed} -e 's/-g/-g1/')
+# If MOZ_DEBUG_FLAGS is empty, firefox's build will default it to "-g" which
+# overrides the -g1 from line above and breaks building on s390
+# (OOM when linking, rhbz#1238225)
+export MOZ_DEBUG_FLAGS=" "
 %endif
 %ifarch s390 %{arm} ppc aarch64 i686
 MOZ_LINK_FLAGS="-Wl,--no-keep-memory -Wl,--reduce-memory-overheads"
