@@ -36,6 +36,9 @@
 %define _default_patch_fuzz 2
 
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
+# Bump one with each minor lightning release
+%define gdata_version 1.9
+%global gdata_extname %{_libdir}/mozilla/extensions/{3550f703-e582-4d05-9a08-453d09bdfdc6}/{a62ef8ec-5fdc-40c2-873c-223b8a6925cc}
 
 # The tarball is pretty inconsistent with directory structure.
 # Sometimes there is a top level directory.  That goes here.
@@ -66,6 +69,10 @@ Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_
 %if %{build_langpacks}
 Source1:        thunderbird-langpacks-%{version}-20150609.tar.xz
 %endif
+# Locales for lightning
+Source2:        l10n-lightning-%{version}.tar.xz
+Source3:        mklangsource.sh
+
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
 Source12:       thunderbird-redhat-default-prefs.js
@@ -140,7 +147,7 @@ Requires:       libvpx >= %{libvpx_version}
 BuildRequires:  pulseaudio-libs-devel
 BuildRequires:  libicu-devel
 Requires:       mozilla-filesystem
-Obsoletes:      thunderbird-lightning thunderbird-lightning-gdata
+Obsoletes:      thunderbird-lightning
 %if 0%{?epel}
 ExcludeArch:    ppc64
 %endif
@@ -166,6 +173,20 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %files -n %{crashreporter_pkg_name} -f debugcrashreporter.list
 %defattr(-,root,root)
 %endif
+
+%global tb_version %{version}
+
+%package lightning-gdata
+Summary:        Lightning data provider for Google Calendar
+Version:        %{gdata_version}
+Requires:       %{name}%{?_isa} = %{tb_version}-%{release}
+
+%description lightning-gdata
+This extension allows Lightning to read and write events to a Google Calendar.
+
+Please read http://wiki.mozilla.org/Calendar:GDATA_Provider for more details
+and before filing a bug. Also, be sure to visit the dicussion forums, maybe
+your bug already has a solution!
 
 
 %prep
@@ -262,6 +283,10 @@ echo "ac_add_options --disable-ion" >> .mozconfig
 echo "ac_add_options --disable-yarr-jit" >> .mozconfig
 %endif
 
+# install lightning langpacks
+cd ..
+%{__tar} xf %{SOURCE2}
+cd -
 #===============================================================================
 
 %build
@@ -322,6 +347,16 @@ MOZ_SMP_FLAGS=-j1
 
 make -f client.mk build STRIP="/bin/true" MOZ_MAKE_FLAGS="$MOZ_SMP_FLAGS"
 
+# Package l10n files
+cd %{objdir}/calendar/lightning
+grep -v 'osx' ../../../calendar/locales/shipped-locales | while read lang x
+do
+   make AB_CD=en-US L10N_XPI_NAME=lightning libs-$lang
+done
+# install l10n files
+make tools
+cd -
+
 # create debuginfo for crash-stats.mozilla.com
 %if %{enable_mozilla_crashreporter}
 make -C %{objdir} buildsymbols
@@ -355,7 +390,7 @@ rm -f $RPM_BUILD_ROOT/%{_bindir}/thunderbird
 %{__chmod} 755 $RPM_BUILD_ROOT/%{_bindir}/thunderbird
 
 # set up our default preferences
-%{__cat} %{SOURCE12} | %{__sed} -e 's,THUNDERBIRD_RPM_VR,%{version}-%{release},g' > \
+%{__cat} %{SOURCE12} | %{__sed} -e 's,THUNDERBIRD_RPM_VR,%{tb_version}-%{release},g' > \
         $RPM_BUILD_ROOT/rh-default-prefs
 %{__install} -D $RPM_BUILD_ROOT/rh-default-prefs $RPM_BUILD_ROOT/%{mozappdir}/greprefs/all-redhat.js
 %{__install} -D $RPM_BUILD_ROOT/rh-default-prefs $RPM_BUILD_ROOT/%{mozappdir}/defaults/pref/all-redhat.js
@@ -388,7 +423,7 @@ done
 %endif # build_langpacks
 
 # Get rid of devel package and its debugsymbols
-%{__rm} -rf $RPM_BUILD_ROOT%{_libdir}/%{name}-devel-%{version}
+%{__rm} -rf $RPM_BUILD_ROOT%{_libdir}/%{name}-devel-%{tb_version}
 
 # Copy over the LICENSE
 cd mozilla
@@ -457,6 +492,12 @@ SentUpstream: 2014-09-22
 </application>
 EOF
 
+# lightning-gdata
+mkdir -p $RPM_BUILD_ROOT%{gdata_extname}
+touch $RPM_BUILD_ROOT%{gdata_extname}/chrome.manifest
+
+unzip -qod $RPM_BUILD_ROOT%{gdata_extname} %{objdir}/dist/xpi-stage/gdata-provider-%{gdata_version}.en-US.linux-*.xpi
+
 #===============================================================================
 
 %post
@@ -473,6 +514,10 @@ fi
 %posttrans
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
+# lightning-gdata files=========================================================
+%files lightning-gdata
+%doc %{tarballdir}/mozilla/LEGAL %{tarballdir}/mozilla/LICENSE %{tarballdir}/mozilla/README.txt
+%{gdata_extname}
 #===============================================================================
 %files -f %{tarballdir}/%{name}.lang
 %defattr(-,root,root,-)
@@ -521,8 +566,8 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %if !%{?system_nss}
 %{mozappdir}/*.chk
 %endif
-%exclude %{_datadir}/idl/%{name}-%{version}
-%exclude %{_includedir}/%{name}-%{version}
+%exclude %{_datadir}/idl/%{name}-%{tb_version}
+%exclude %{_includedir}/%{name}-%{tb_version}
 %{mozappdir}/chrome.manifest
 %{mozappdir}/searchplugins
 %{mozappdir}/dependentlibs.list

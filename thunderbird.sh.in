@@ -77,11 +77,8 @@ FEDORA_LANGPACK_CONFIG="$MOZ_EXTENSIONS_PROFILE_DIR/.fedora-langpack-install"
 # MOZ_DISABLE_LANGPACKS disables language packs completelly
 MOZILLA_DOWN=0
 if ! [ $MOZ_DISABLE_LANGPACKS ] || [ $MOZ_DISABLE_LANGPACKS -eq 0 ]; then
-    if [ -x $MOZ_DIST_BIN/mozilla-xremote-client ]; then
-        # Is thunderbird running?
-        $MOZ_DIST_BIN/mozilla-xremote-client -a thunderbird 'ping()' > /dev/null 2>&1
-        MOZILLA_DOWN=$?
-    fi
+    pidof thunderbird > /dev/null 2>&1
+    MOZILLA_DOWN=$?
 fi
 
 # Modify language pack configuration only when thunderbird is not running 
