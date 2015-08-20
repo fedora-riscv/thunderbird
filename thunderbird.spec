@@ -37,7 +37,7 @@
 
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
 # Bump one with each minor lightning release
-%define gdata_version 1.9-1
+%define gdata_version 1.9.0.1
 %global gdata_extname %{_libdir}/mozilla/extensions/{3550f703-e582-4d05-9a08-453d09bdfdc6}/{a62ef8ec-5fdc-40c2-873c-223b8a6925cc}
 
 # The tarball is pretty inconsistent with directory structure.
