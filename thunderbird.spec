@@ -62,7 +62,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        38.2.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -150,9 +150,8 @@ BuildRequires:  pulseaudio-libs-devel
 BuildRequires:  libicu-devel
 Requires:       mozilla-filesystem
 Obsoletes:      thunderbird-lightning
-%if 0%{?epel}
-ExcludeArch:    ppc64
-%endif
+Provides:       thunderbird-lightning
+
 
 %description
 Mozilla Thunderbird is a standalone mail and newsgroup client.
@@ -585,6 +584,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Thu Aug 20 2015 Jan Horak <jhorak@redhat.com> - 38.2.0-2
+- Thunderbird provides thunderbird-lightning now
+
 * Wed Aug 19 2015 Jan Horak <jhorak@redhat.com> - 38.2.0-1
 - Update to 38.2.0
 
