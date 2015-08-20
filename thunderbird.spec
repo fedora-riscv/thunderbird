@@ -37,7 +37,8 @@
 
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
 # Bump one with each minor lightning release
-%define gdata_version 1.9.0.1
+%define gdata_version 1.9
+%define gdata_version_internal 0.1
 %global gdata_extname %{_libdir}/mozilla/extensions/{3550f703-e582-4d05-9a08-453d09bdfdc6}/{a62ef8ec-5fdc-40c2-873c-223b8a6925cc}
 
 # The tarball is pretty inconsistent with directory structure.
@@ -179,7 +180,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 
 %package lightning-gdata
 Summary:        Lightning data provider for Google Calendar
-Version:        %{gdata_version}
+Version:        %{gdata_version}.%{gdata_version_internal}
 Requires:       %{name}%{?_isa} = %{tb_version}-%{release}
 
 %description lightning-gdata
