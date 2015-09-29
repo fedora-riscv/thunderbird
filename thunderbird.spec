@@ -38,7 +38,7 @@
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
 # Bump one with each minor lightning release
 %define gdata_version 1.9
-%define gdata_version_internal 0.2
+%define gdata_version_internal 0.3
 %global gdata_extname %{_libdir}/mozilla/extensions/{3550f703-e582-4d05-9a08-453d09bdfdc6}/{a62ef8ec-5fdc-40c2-873c-223b8a6925cc}
 
 # The tarball is pretty inconsistent with directory structure.
@@ -61,14 +61,14 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        38.2.0
-Release:        2%{?dist}
+Version:        38.3.0
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.bz2
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20150819.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20150929.tar.xz
 %endif
 # Locales for lightning
 Source2:        l10n-lightning-%{version}.tar.xz
@@ -179,7 +179,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 
 %package lightning-gdata
 Summary:        Lightning data provider for Google Calendar
-Version:        %{gdata_version}.%{gdata_version_internal}
+Version:        38.3.0%{gdata_version}.%{gdata_version_internal}
 Requires:       %{name}%{?_isa} = %{tb_version}-%{release}
 
 %description lightning-gdata
@@ -584,6 +584,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Sep 29 2015 Jan Horak <jhorak@redhat.com> - 38.3.0-1
+- Update to 38.3.0
+
 * Thu Aug 20 2015 Jan Horak <jhorak@redhat.com> - 38.2.0-2
 - Thunderbird provides thunderbird-lightning now
 
