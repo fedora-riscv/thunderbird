@@ -62,7 +62,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        38.3.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -489,11 +489,9 @@ SentUpstream: 2014-09-22
     </ul>
   </description>
   <url type="homepage">http://www.mozilla.org/thunderbird/</url>
-  <!--
   <screenshots>
     <screenshot type="default">https://raw.githubusercontent.com/hughsie/fedora-appstream/master/screenshots-extra/mozilla-thunderbird/a.png</screenshot>
   </screenshots>
-  -->
   <!-- FIXME: change this to an upstream email address for spec updates
   <updatecontact>someone_who_cares@upstream_project.org</updatecontact>
    -->
@@ -584,6 +582,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Fri Oct 16 2015 Kalev Lember <klember@redhat.com> - 38.3.0-2
+- Fix accidentally commented out AppData screenshot
+
 * Tue Sep 29 2015 Jan Horak <jhorak@redhat.com> - 38.3.0-1
 - Update to 38.3.0
 
