@@ -1,9 +1,11 @@
 # Use system nspr/nss?
-
 %define system_nss        1
 
 # Build as a debug package?
 %define debug_build       0
+
+# Hardened build?
+%define hardened_build    1
 
 %if 0%{?fedora} < 20
 %define system_sqlite 0
@@ -62,7 +64,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        38.3.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -321,6 +323,10 @@ MOZ_OPT_FLAGS=$(echo "$RPM_OPT_FLAGS -fpermissive" | \
                       %{__sed} -e 's/-Wall//')
 #rhbz#1037353
 MOZ_OPT_FLAGS="$MOZ_OPT_FLAGS -Wformat-security -Wformat -Werror=format-security"
+# Use hardened build?
+%if %{?hardened_build}
+MOZ_OPT_FLAGS="$MOZ_OPT_FLAGS -fPIC -Wl,-z,relro -Wl,-z,now"
+%endif
 %if %{?debug_build}
 MOZ_OPT_FLAGS=$(echo "$MOZ_OPT_FLAGS" | %{__sed} -e 's/-O2//')
 %endif
@@ -582,6 +588,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Fri Nov 27 2015 Martin Stransky <stransky@redhat.com> - 31.3.0-3
+- Enabled hardened builds (rhbz#1283945)
+
 * Fri Oct 16 2015 Kalev Lember <klember@redhat.com> - 38.3.0-2
 - Fix accidentally commented out AppData screenshot
 
