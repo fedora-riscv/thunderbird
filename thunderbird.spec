@@ -88,10 +88,10 @@ Patch9:         mozilla-build-arm.patch
 
 # Build patches
 Patch100:       thunderbird-objdir.patch
-Patch101:        build-nspr-prbool.patch
-Patch102:        build-werror.patch
+Patch101:       build-nspr-prbool.patch
+Patch102:       build-werror.patch
 Patch103:       rhbz-1219542-s390-build.patch
-
+Patch104:       firefox-gcc-6.0.patch
 # Linux specific
 Patch200:       thunderbird-enable-addons.patch
 
@@ -208,6 +208,7 @@ cd mozilla
 %ifarch s390
 %patch103 -p1 -b .rhbz-1219542-s390-build
 %endif
+%patch104 -p1 -b .gcc6
 %patch400 -p1 -b .966424
 %patch402 -p1 -b .rhbz-1014858
 
