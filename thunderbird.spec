@@ -63,14 +63,14 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        38.5.0
-Release:        2%{?dist}
+Version:        38.6.0
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.bz2
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20160104.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20160216.tar.xz
 %endif
 # Locales for lightning
 Source2:        l10n-lightning-%{version}.tar.xz
@@ -181,7 +181,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 
 %package lightning-gdata
 Summary:        Lightning data provider for Google Calendar
-Version:        38.5.0%{gdata_version}.%{gdata_version_internal}
+Version:        38.6.0%{gdata_version}.%{gdata_version_internal}
 Requires:       %{name}%{?_isa} = %{tb_version}-%{release}
 
 %description lightning-gdata
@@ -589,6 +589,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Feb 16 2016 Jan Horak <jhorak@redhat.com> - 38.6.0-1
+- Update to 38.6.0
+
 * Fri Feb 05 2016 Fedora Release Engineering <releng@fedoraproject.org> - 38.5.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
