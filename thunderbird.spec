@@ -64,7 +64,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        38.6.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -288,6 +288,11 @@ echo "ac_add_options --with-float-abi=soft" >> .mozconfig
 echo "ac_add_options --disable-elf-hack" >> .mozconfig
 echo "ac_add_options --disable-ion" >> .mozconfig
 echo "ac_add_options --disable-yarr-jit" >> .mozconfig
+%endif
+
+#Workarounf for mozbz#1245783
+%if 0%{?fedora} > 23
+echo "ac_add_options --disable-ion" >> .mozconfig
 %endif
 
 # install lightning langpacks
@@ -589,6 +594,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Mon Feb 22 2016 Martin Stransky <stransky@redhat.com> - 38.6.0-2
+- Added workarounf for mozbz#1245783 - gcc6 JIT crashes
+
 * Tue Feb 16 2016 Jan Horak <jhorak@redhat.com> - 38.6.0-1
 - Update to 38.6.0
 
