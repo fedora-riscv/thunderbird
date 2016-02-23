@@ -11,7 +11,7 @@
 %define system_sqlite 0
 %define system_ffi    0
 %else
-%define system_sqlite 1
+%define system_sqlite 0
 %define system_ffi    1
 %endif
 
@@ -64,7 +64,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        38.6.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -594,6 +594,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Feb 23 2016 Martin Stransky <stransky@redhat.com> - 38.6.0-3
+- Disabled system sqlite due to rhbz#1311032
+
 * Mon Feb 22 2016 Martin Stransky <stransky@redhat.com> - 38.6.0-2
 - Added workarounf for mozbz#1245783 - gcc6 JIT crashes
 
