@@ -64,7 +64,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        38.6.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -329,6 +329,8 @@ MOZ_OPT_FLAGS=$(echo "$RPM_OPT_FLAGS -fpermissive" | \
                       %{__sed} -e 's/-Wall//')
 #rhbz#1037353
 MOZ_OPT_FLAGS="$MOZ_OPT_FLAGS -Wformat-security -Wformat -Werror=format-security"
+# Disable null pointer gcc6 optimization (rhbz#1311886)
+MOZ_OPT_FLAGS="$MOZ_OPT_FLAGS -fno-delete-null-pointer-checks"
 # Use hardened build?
 %if %{?hardened_build}
 MOZ_OPT_FLAGS="$MOZ_OPT_FLAGS -fPIC -Wl,-z,relro -Wl,-z,now"
@@ -594,6 +596,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Feb 25 2016 Martin Stransky <stransky@redhat.com> - 38.6.0-4
+- Disabled gcc6 NULL pointer optimization (rhbz#1311886)
+
 * Tue Feb 23 2016 Martin Stransky <stransky@redhat.com> - 38.6.0-3
 - Disabled system sqlite due to rhbz#1311032
 
