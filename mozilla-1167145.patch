@@ -1,0 +1,34 @@
+# HG changeset patch
+# User Jonathan Kew <jkew@mozilla.com>
+# Date 1432227274 -3600
+#      Thu May 21 17:54:34 2015 +0100
+# Node ID 383fdad2853cd3dfc7c17e8a86ff4c29dce128bf
+# Parent  4858f16b05179f87f41cdbf5a8cc3b33b540513a
+Bug 1167145 - Check result of PrevInFlow() before trying to call a method on it.
+
+diff --git a/layout/generic/nsBlockFrame.cpp b/layout/generic/nsBlockFrame.cpp
+--- a/layout/generic/nsBlockFrame.cpp
++++ b/layout/generic/nsBlockFrame.cpp
+@@ -6142,18 +6142,20 @@ nsBlockFrame::ReflowPushedFloats(nsBlock
+       next = f->GetNextSibling();
+       prev = f;
+     } // else: we did push |f| so |prev|'s new next-sibling is next.
+     f = next;
+   }
+ 
+   // If there are continued floats, then we may need to continue BR clearance
+   if (0 != aState.ClearFloats(0, NS_STYLE_CLEAR_BOTH)) {
+-    aState.mFloatBreakType = static_cast<nsBlockFrame*>(GetPrevInFlow())
+-                               ->FindTrailingClear();
++    nsBlockFrame* prevBlock = static_cast<nsBlockFrame*>(GetPrevInFlow());
++    if (prevBlock) {
++      aState.mFloatBreakType = prevBlock->FindTrailingClear();
++    }
+   }
+ }
+ 
+ void
+ nsBlockFrame::RecoverFloats(nsFloatManager& aFloatManager, WritingMode aWM,
+                             nscoord aContainerWidth)
+ {
+   // Recover our own floats

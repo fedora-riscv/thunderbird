@@ -64,7 +64,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        38.6.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -92,6 +92,7 @@ Patch101:       build-nspr-prbool.patch
 Patch102:       build-werror.patch
 Patch103:       rhbz-1219542-s390-build.patch
 Patch104:       firefox-gcc-6.0.patch
+Patch105:       mozilla-1167145.patch
 # Linux specific
 Patch200:       thunderbird-enable-addons.patch
 
@@ -209,6 +210,7 @@ cd mozilla
 %patch103 -p1 -b .rhbz-1219542-s390-build
 %endif
 %patch104 -p1 -b .gcc6
+%patch105 -p1 -b .1167145
 %patch400 -p1 -b .966424
 %patch402 -p1 -b .rhbz-1014858
 
@@ -329,8 +331,6 @@ MOZ_OPT_FLAGS=$(echo "$RPM_OPT_FLAGS -fpermissive" | \
                       %{__sed} -e 's/-Wall//')
 #rhbz#1037353
 MOZ_OPT_FLAGS="$MOZ_OPT_FLAGS -Wformat-security -Wformat -Werror=format-security"
-# Disable null pointer gcc6 optimization (rhbz#1311886)
-MOZ_OPT_FLAGS="$MOZ_OPT_FLAGS -fno-delete-null-pointer-checks"
 # Use hardened build?
 %if %{?hardened_build}
 MOZ_OPT_FLAGS="$MOZ_OPT_FLAGS -fPIC -Wl,-z,relro -Wl,-z,now"
@@ -596,6 +596,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Thu Feb 25 2016 Martin Stransky <stransky@redhat.com> - 38.6.0-5
+- Added upstream gcc6 fix (mozbz#1167145)
+
 * Thu Feb 25 2016 Martin Stransky <stransky@redhat.com> - 38.6.0-4
 - Disabled gcc6 NULL pointer optimization (rhbz#1311886)
 
