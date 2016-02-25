@@ -596,7 +596,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
-* Tue Feb 25 2016 Martin Stransky <stransky@redhat.com> - 38.6.0-4
+* Thu Feb 25 2016 Martin Stransky <stransky@redhat.com> - 38.6.0-4
 - Disabled gcc6 NULL pointer optimization (rhbz#1311886)
 
 * Tue Feb 23 2016 Martin Stransky <stransky@redhat.com> - 38.6.0-3
