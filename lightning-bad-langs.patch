@@ -1,0 +1,19 @@
+diff -up thunderbird-45.0/calendar/locales/shipped-locales.bad-langs thunderbird-45.0/calendar/locales/shipped-locales
+--- thunderbird-45.0/calendar/locales/shipped-locales.bad-langs	2016-04-07 23:14:23.000000000 +0200
++++ thunderbird-45.0/calendar/locales/shipped-locales	2016-04-14 13:14:16.853967318 +0200
+@@ -15,7 +15,6 @@ fy-NL
+ ga-IE
+ gd
+ hu
+-id
+ is
+ it
+ ja linux win32
+@@ -24,7 +23,6 @@ lt
+ nb-NO
+ nl
+ nn-NO
+-pa-IN
+ pl
+ pt-PT
+ ru

@@ -39,7 +39,7 @@
 
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
 # Bump one with each minor lightning release
-%define gdata_version 1.9
+%define gdata_version 2.6
 %define gdata_version_internal 0.3
 %global gdata_extname %{_libdir}/mozilla/extensions/{3550f703-e582-4d05-9a08-453d09bdfdc6}/{a62ef8ec-5fdc-40c2-873c-223b8a6925cc}
 
@@ -48,9 +48,9 @@
 #
 # IMPORTANT: If there is no top level directory, this should be 
 # set to the cwd, ie: '.'
-%define tarballdir   comm-esr38
 %define objdir       objdir
 %define mozappdir    %{_libdir}/%{name}
+%define tarballdir   thunderbird-45.0
 
 %define official_branding 1
 # enable crash reporter only for iX86
@@ -63,14 +63,14 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        38.7.1
+Version:        45.0
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
-Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.bz2
+Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20160324.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20160412.tar.xz
 %endif
 # Locales for lightning
 Source2:        l10n-lightning-%{version}.tar.xz
@@ -92,7 +92,7 @@ Patch101:       build-nspr-prbool.patch
 Patch102:       build-werror.patch
 Patch103:       rhbz-1219542-s390-build.patch
 Patch104:       firefox-gcc-6.0.patch
-Patch105:       mozilla-1167145.patch
+Patch105:       lightning-bad-langs.patch
 # Linux specific
 Patch200:       thunderbird-enable-addons.patch
 
@@ -111,6 +111,7 @@ Patch402:       rhbz-1014858.patch
 # Not yet approved by Mozillla Corporation
 
 %endif
+
 
 %if %{?system_nss}
 BuildRequires:  nss-static >= %{nss_version}
@@ -182,7 +183,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 
 %package lightning-gdata
 Summary:        Lightning data provider for Google Calendar
-Version:        38.7.1%{gdata_version}.%{gdata_version_internal}
+Version:        45.0%{gdata_version}.%{gdata_version_internal}
 Requires:       %{name}%{?_isa} = %{tb_version}-%{release}
 
 %description lightning-gdata
@@ -204,17 +205,18 @@ cd %{tarballdir}
 cd mozilla
 %patch9   -p2 -b .arm
 %patch300 -p2 -b .852698
-%patch102 -p2 -b .build-werror
-%patch101 -p1 -b .nspr-prbool
+#%patch102 -p2 -b .build-werror
+#%patch101 -p1 -b .nspr-prbool
 %ifarch s390
 %patch103 -p1 -b .rhbz-1219542-s390-build
 %endif
 %patch104 -p1 -b .gcc6
-%patch105 -p1 -b .1167145
 %patch400 -p1 -b .966424
-%patch402 -p1 -b .rhbz-1014858
+#%patch402 -p1 -b .rhbz-1014858 FIXME musi byt
 
 cd ..
+
+%patch105 -p1 -b .bad-langs
 %patch200 -p1 -b .addons
 
 %if %{official_branding}
@@ -554,15 +556,12 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %dir %{mozappdir}/components
 %ghost %{mozappdir}/components/compreg.dat
 %ghost %{mozappdir}/components/xpti.dat
-%{mozappdir}/components/components.manifest
-%{mozappdir}/components/libdbusservice.so
-%{mozappdir}/components/libmozgnome.so
 %{mozappdir}/omni.ja
 %{mozappdir}/plugin-container
 %{mozappdir}/defaults
 %{mozappdir}/dictionaries
 %dir %{mozappdir}/extensions
-%{mozappdir}/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}
+%{mozappdir}/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}.xpi
 %dir %{mozappdir}/langpacks
 %{mozappdir}/greprefs
 %{mozappdir}/isp
@@ -590,14 +589,15 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 %exclude %{_datadir}/idl/%{name}-%{tb_version}
 %exclude %{_includedir}/%{name}-%{tb_version}
-%{mozappdir}/chrome.manifest
-%{mozappdir}/searchplugins
 %{mozappdir}/dependentlibs.list
 %{mozappdir}/distribution
 
 #===============================================================================
 
 %changelog
+* Tue Apr 12 2016 Jan Horak <jhorak@redhat.com> - 45.0-1
+- Update to 45.0
+
 * Thu Mar 24 2016 Jan Horak <jhorak@redhat.com> - 38.7.1-1
 - Update to 38.7.1
 
