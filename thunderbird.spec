@@ -152,6 +152,7 @@ BuildRequires:  libvpx-devel >= %{libvpx_version}
 Requires:       libvpx >= %{libvpx_version}
 BuildRequires:  pulseaudio-libs-devel
 BuildRequires:  libicu-devel
+BuildRequires:  GConf2-devel
 Requires:       mozilla-filesystem
 Obsoletes:      thunderbird-lightning
 Provides:       thunderbird-lightning
