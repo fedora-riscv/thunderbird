@@ -34,8 +34,14 @@
 %endif
 
 %define libnotify_version 0.4
-%global libvpx_version 1.3.0
 %define _default_patch_fuzz 2
+
+# Use system libvpx?
+%if 0%{?fedora} > 22
+%define system_libvpx      1
+%else
+%define system_libvpx      0
+%endif
 
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
 # Bump one with each minor lightning release
@@ -154,6 +160,7 @@ BuildRequires:  pulseaudio-libs-devel
 BuildRequires:  libicu-devel
 BuildRequires:  GConf2-devel
 Requires:       mozilla-filesystem
+BuildRequires:  yasm
 Obsoletes:      thunderbird-lightning
 Provides:       thunderbird-lightning
 
@@ -298,6 +305,12 @@ echo "ac_add_options --disable-yarr-jit" >> .mozconfig
 #Workarounf for mozbz#1245783
 %if 0%{?fedora} > 23
 echo "ac_add_options --disable-ion" >> .mozconfig
+%endif
+
+%if %{?system_libvpx}
+echo "ac_add_options --with-system-libvpx" >> .mozconfig
+%else
+echo "ac_add_options --without-system-libvpx" >> .mozconfig
 %endif
 
 # install lightning langpacks
