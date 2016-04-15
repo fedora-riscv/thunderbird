@@ -104,6 +104,8 @@ Patch200:       thunderbird-enable-addons.patch
 
 # PPC fixes
 Patch300:       xulrunner-24.0-jemalloc-ppc.patch
+Patch301:       mozilla-1228540-1.patch
+Patch302:       mozilla-1228540.patch
 
 # Fedora specific patches
 Patch400:       rhbz-966424.patch
@@ -213,6 +215,8 @@ cd %{tarballdir}
 cd mozilla
 %patch9   -p2 -b .arm
 %patch300 -p2 -b .852698
+%patch302 -p1 -b .mozbz-1228540
+%patch301 -p1 -b .mozbz-1228540-1
 #%patch102 -p2 -b .build-werror
 #%patch101 -p1 -b .nspr-prbool
 %ifarch s390
