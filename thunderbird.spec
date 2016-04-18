@@ -70,7 +70,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        45.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -615,7 +615,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
-* Tue Apr 12 2016 Jan Horak <jhorak@redhat.com> - 45.0-1
+* Tue Apr 12 2016 Jan Horak <jhorak@redhat.com> - 45.0-2
 - Update to 45.0
 
 * Thu Mar 24 2016 Jan Horak <jhorak@redhat.com> - 38.7.1-1
