@@ -70,7 +70,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        45.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -275,7 +275,11 @@ echo "ac_add_options --enable-debug" >> .mozconfig
 echo "ac_add_options --disable-optimize" >> .mozconfig
 %else
 echo "ac_add_options --disable-debug" >> .mozconfig
+%ifarch ppc64le aarch64
+echo 'ac_add_options --enable-optimize="-g -O2"' >> .mozconfig
+%else
 echo "ac_add_options --enable-optimize" >> .mozconfig
+%endif
 %endif
 
 %ifarch %{arm}
@@ -615,6 +619,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Wed Apr 27 2016 Peter Robinson <pbrobinson@fedoraproject.org> 45.0-4
+- Added fix for rhbz#1315225 - ppc64le/aarch64 build fixes
+
 * Mon Apr 18 2016 Caolán McNamara <caolanm@redhat.com> - 45.0-3
 - rebuild for hunspell 1.4.0
 
