@@ -56,7 +56,7 @@
 # set to the cwd, ie: '.'
 %define objdir       objdir
 %define mozappdir    %{_libdir}/%{name}
-%define tarballdir   thunderbird-45.0
+%define tarballdir   thunderbird-45.1.0
 
 %define official_branding 1
 # enable crash reporter only for iX86
@@ -69,14 +69,14 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        45.0
-Release:        4%{?dist}
+Version:        45.1.0
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20160412.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20160517.tar.xz
 %endif
 # Locales for lightning
 Source2:        l10n-lightning-%{version}.tar.xz
@@ -194,7 +194,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 
 %package lightning-gdata
 Summary:        Lightning data provider for Google Calendar
-Version:        45.0%{gdata_version}.%{gdata_version_internal}
+Version:        45.1.0%{gdata_version}.%{gdata_version_internal}
 Requires:       %{name}%{?_isa} = %{tb_version}-%{release}
 
 %description lightning-gdata
@@ -619,6 +619,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue May 17 2016 Jan Horak <jhorak@redhat.com> - 45.1.0-1
+- Update to 45.1.0
+
 * Wed Apr 27 2016 Peter Robinson <pbrobinson@fedoraproject.org> 45.0-4
 - Added fix for rhbz#1315225 - ppc64le/aarch64 build fixes
 
