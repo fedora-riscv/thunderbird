@@ -37,7 +37,7 @@
 %define _default_patch_fuzz 2
 
 # Use system libvpx?
-%if 0%{?fedora} > 22
+%if 0%{?fedora} > 23
 %define system_libvpx      1
 %else
 %define system_libvpx      0
