@@ -70,7 +70,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        45.1.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -194,8 +194,9 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 
 %package lightning-gdata
 Summary:        Lightning data provider for Google Calendar
-Version:        45.1.0%{gdata_version}.%{gdata_version_internal}
+Version:        %{gdata_version}.%{gdata_version_internal}
 Requires:       %{name}%{?_isa} = %{tb_version}-%{release}
+Epoch:          1
 
 %description lightning-gdata
 This extension allows Lightning to read and write events to a Google Calendar.
@@ -619,7 +620,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
-* Tue May 17 2016 Jan Horak <jhorak@redhat.com> - 45.1.0-1
+* Tue May 17 2016 Jan Horak <jhorak@redhat.com> - 45.1.0-2
 - Update to 45.1.0
 
 * Wed Apr 27 2016 Peter Robinson <pbrobinson@fedoraproject.org> 45.0-4

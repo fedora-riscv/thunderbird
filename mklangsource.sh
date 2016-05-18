@@ -22,13 +22,25 @@ do
     pushd $lang
     hg pull
     hg update $tag
+    #hg update
     popd
   else
     hg clone -u $tag http://hg.mozilla.org/releases/l10n/mozilla-release/$lang
+    #hg clone http://hg.mozilla.org/l10n-central/$lang
   fi
 done
+cd ..
+# Need to merge by compare-locale tool
+
+# Make copy to merge with
+rm -rf l10n-merged
+cp -R l10n l10n-merged
+for lang in $(<$locales)
+do
+  compare-locales --merge l10n-merged/$lang $PWD/thunderbird-${tbver}/${branch}/calendar/locales/l10n.ini l10n $lang
+done
+
 
 # Tar up, minus the mercurial files
-cd ..
 rm -f l10n-${lver}.tar.xz
-tar caf l10n-lightning-${tbver}.tar.xz --exclude='.hg*'  l10n
+tar caf l10n-lightning-${tbver}.tar.xz --exclude='.hg*'  l10n-merged
