@@ -70,7 +70,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        45.1.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -311,11 +311,6 @@ echo "ac_add_options --with-float-abi=soft" >> .mozconfig
 echo "ac_add_options --disable-elf-hack" >> .mozconfig
 echo "ac_add_options --disable-ion" >> .mozconfig
 echo "ac_add_options --disable-yarr-jit" >> .mozconfig
-%endif
-
-#Workarounf for mozbz#1245783
-%if 0%{?fedora} > 23
-echo "ac_add_options --disable-ion" >> .mozconfig
 %endif
 
 %if %{?system_libvpx}
@@ -620,6 +615,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Fri May 20 2016 Jan Horak <jhorak@redhat.com> - 45.1.0-3
+- Enabled JIT again
+
 * Tue May 17 2016 Jan Horak <jhorak@redhat.com> - 45.1.0-2
 - Update to 45.1.0
 

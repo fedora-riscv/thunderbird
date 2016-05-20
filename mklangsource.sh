@@ -31,6 +31,8 @@ do
 done
 cd ..
 # Need to merge by compare-locale tool
+# More info here: https://developer.mozilla.org/en-US/docs/Mozilla/Projects/compare-locales
+# how to get compare-locales: sudo easy_install -U compare-locales
 
 # Make copy to merge with
 rm -rf l10n-merged
