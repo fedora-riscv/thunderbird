@@ -285,6 +285,7 @@ echo "ac_add_options --enable-optimize" >> .mozconfig
 
 %ifarch %{arm}
 echo "ac_add_options --disable-elf-hack" >> .mozconfig
+echo "ac_add_options --disable-ion" >> .mozconfig
 %endif
 
 %ifnarch %{ix86} x86_64
