@@ -70,7 +70,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        45.1.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -102,11 +102,12 @@ Patch105:       lightning-bad-langs.patch
 # Linux specific
 Patch200:       thunderbird-enable-addons.patch
 
-# PPC fixes
+# PPC fix
 Patch300:       xulrunner-24.0-jemalloc-ppc.patch
 Patch301:       mozilla-1228540-1.patch
 Patch302:       mozilla-1228540.patch
 Patch303:       mozilla-1253216.patch
+Patch304:       mozilla-1245783.patch
 
 # Fedora specific patches
 Patch400:       rhbz-966424.patch
@@ -228,6 +229,7 @@ cd mozilla
 %patch104 -p1 -b .gcc6
 %patch400 -p1 -b .966424
 #%patch402 -p1 -b .rhbz-1014858 FIXME musi byt
+%patch304 -p1 -b .1245783
 
 cd ..
 
@@ -616,7 +618,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
-* Fri May 20 2016 Jan Horak <jhorak@redhat.com> - 45.1.0-3
+* Fri May 20 2016 Jan Horak <jhorak@redhat.com> - 45.1.0-4
 - Enabled JIT again
 
 * Tue May 17 2016 Jan Horak <jhorak@redhat.com> - 45.1.0-2
