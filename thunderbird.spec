@@ -24,7 +24,6 @@
 %global nss_build_version %(pkg-config --silence-errors --modversion nss 2>/dev/null || echo 65536)
 %endif
 
-%define cairo_version 1.8.8
 %define freetype_version 2.1.9
 
 %if %{?system_sqlite}
@@ -130,7 +129,6 @@ BuildRequires:  nss-devel >= %{nss_version}
 Requires:       nspr >= %{nspr_build_version}
 Requires:       nss >= %{nss_build_version}
 %endif
-BuildRequires:  cairo-devel >= %{cairo_version}
 BuildRequires:  libnotify-devel >= %{libnotify_version}
 BuildRequires:  libpng-devel
 BuildRequires:  libjpeg-devel
@@ -618,6 +616,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Thu Sep 22 2016 Jan Horak <jhorak@redhat.com> - 45.3.0-2
+- Removed dependency on cairo (bz#1377910)
+
 * Thu Sep  1 2016 Jan Horak <jhorak@redhat.com> - 45.3.0-1
 - Update to 45.3.0
 
