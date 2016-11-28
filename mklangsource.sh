@@ -2,11 +2,14 @@
 # This checks out and builds the language sources.  The lightning source needs
 # to already be unpacked
 #lver=`awk '/^%global *lightning_ver/ { print $3; exit }' thunderbird.spec`
-tbver=`awk '/^Version:/ { print $2; exit }' thunderbird.spec`
+set -x
+#tbver=`awk '/^Version:/ { print $2; exit }' thunderbird.spec`
+tbver=`rpmspec -P thunderbird.spec |awk '/^Version:/ { print $2; exit }'`
 #tag=CALENDAR_${lver//./_}_RELEASE
 tag=THUNDERBIRD_${tbver//./_}_RELEASE
-branch=`awk '/^%define *tarballdir/ { print $3; exit }' thunderbird.spec`
-locales=$PWD/thunderbird-${tbver}/${branch}/calendar/locales/shipped-locales
+branch=`rpmspec -P thunderbird.spec | awk '/^%define *tarballdir/ { print $3; exit }'`
+#locales=$PWD/thunderbird-${tbver}/${branch}/calendar/locales/shipped-locales
+locales=$PWD/thunderbird-${tbver}/thunderbird-${tbver}/calendar/locales/shipped-locales
 #locales=$PWD/shipped-locales
 if [ ! -f $locales ]
 then
@@ -39,7 +42,7 @@ rm -rf l10n-merged
 cp -R l10n l10n-merged
 for lang in $(<$locales)
 do
-  compare-locales --merge l10n-merged/$lang $PWD/thunderbird-${tbver}/${branch}/calendar/locales/l10n.ini l10n $lang
+  compare-locales --merge l10n-merged/$lang $PWD/thunderbird-${tbver}/thunderbird-${tbver}/calendar/locales/l10n.ini l10n $lang
 done
 
 
