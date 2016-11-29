@@ -167,6 +167,7 @@ BuildRequires:  libicu-devel
 BuildRequires:  GConf2-devel
 Requires:       mozilla-filesystem
 BuildRequires:  yasm
+BuildRequires:  dbus-glib-devel
 Obsoletes:      thunderbird-lightning
 Provides:       thunderbird-lightning
 
