@@ -621,7 +621,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
-* The Dec 13 2016 Caolán McNamara <caolanm@redhat.com> - 45.5.1-2
+* Tue Dec 13 2016 Caolán McNamara <caolanm@redhat.com> - 45.5.1-2
 - rebuild for hunspell-1.5.4
 
 * Thu Dec  1 2016 Jan Horak <jhorak@redhat.com> - 45.5.1-1
