@@ -42,9 +42,8 @@
 %define system_libvpx      0
 %endif
 
-%define tb_version 45.5.0
-
-%define tarballdir   thunderbird-45.5.1
+%define tb_version   45.6.0
+%define tarballdir   thunderbird-45.6.0
 
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
 # Bump one with each minor lightning release
@@ -72,14 +71,14 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        45.5.1
-Release:        2%{?dist}
+Version:        45.6.0
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20161201.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20161216.tar.xz
 %endif
 # Locales for lightning
 Source2:        l10n-lightning-%{version}.tar.xz
@@ -621,6 +620,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Fri Dec 16 2016 Martin Stransky <stransky@redhat.com> - 45.6.0-1
+- New upstream (45.6.0)
+
 * Tue Dec 13 2016 Caolán McNamara <caolanm@redhat.com> - 45.5.1-2
 - rebuild for hunspell-1.5.4
 
