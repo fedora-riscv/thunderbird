@@ -49,7 +49,7 @@
 # Bump one with each minor lightning release
 %define gdata_version 2.6
 # BUMP VERSION THERE:
-%define gdata_version_internal 0.10
+%define gdata_version_internal 0.11
 %global gdata_extname %{_libdir}/mozilla/extensions/{3550f703-e582-4d05-9a08-453d09bdfdc6}/{a62ef8ec-5fdc-40c2-873c-223b8a6925cc}
 
 # The tarball is pretty inconsistent with directory structure.
@@ -72,7 +72,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        45.6.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -620,6 +620,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Mon Dec 19 2016 Jan Horak <jhorak@redhat.com> - 45.6.0-2
+- Bump gdata subpackage version
+
 * Fri Dec 16 2016 Martin Stransky <stransky@redhat.com> - 45.6.0-1
 - New upstream (45.6.0)
 
