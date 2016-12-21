@@ -7,13 +7,8 @@
 # Hardened build?
 %define hardened_build    1
 
-%if 0%{?fedora} < 20
-%define system_sqlite 0
-%define system_ffi    0
-%else
 %define system_sqlite 0
 %define system_ffi    1
-%endif
 
 %define build_langpacks 1
 
