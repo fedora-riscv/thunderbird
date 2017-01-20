@@ -109,6 +109,7 @@ Patch402:       rhbz-1014858.patch
 
 # NSS 3.28.1 patch
 Patch500:       mozilla-1290037.patch
+Patch501:       mozilla-1329272.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -156,8 +157,7 @@ BuildRequires:  mesa-libGL-devel
 BuildRequires:  libvpx-devel >= %{libvpx_version}
 Requires:       libvpx >= %{libvpx_version}
 BuildRequires:  pulseaudio-libs-devel
-# Disabled due to build failure
-#BuildRequires:  libicu-devel
+BuildRequires:  libicu-devel
 BuildRequires:  GConf2-devel
 Requires:       mozilla-filesystem
 BuildRequires:  yasm
@@ -229,6 +229,7 @@ cd mozilla
 %patch304 -p1 -b .1245783
 # NSS 3.28.1 patch
 %patch500 -p1 -b .1290037
+%patch501 -p1 -b .1329272
 cd ..
 
 %patch105 -p1 -b .bad-langs
@@ -617,10 +618,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
-* Fri Jan 20 2017 Martin Stransky <stransky@redhat.com> - 45.6.0-5
-- Disabled system ICU due to build errors.
-
-* Fri Jan 20 2017 Martin Stransky <stransky@redhat.com> - 45.6.0-4
+* Fri Jan 20 2017 Martin Stransky <stransky@redhat.com> - 45.6.0-6
 - Rebuilt for new nss 3.28.1 (mozbz#1290037)
 
 * Fri Jan  6 2017 Jan Horak <jhorak@redhat.com> - 45.6.0-3
