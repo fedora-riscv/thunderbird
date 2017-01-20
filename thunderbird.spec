@@ -63,7 +63,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        45.6.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -106,6 +106,9 @@ Patch304:       mozilla-1245783.patch
 Patch400:       rhbz-966424.patch
 Patch402:       rhbz-1014858.patch
 # libvpx no longer has compat defines, use the current ones
+
+# NSS 3.28.1 patch
+Patch500:       mozilla-1290037.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -223,11 +226,13 @@ cd mozilla
 %patch400 -p1 -b .966424
 #%patch402 -p1 -b .rhbz-1014858 FIXME musi byt
 %patch304 -p1 -b .1245783
-
+# NSS 3.28.1 patch
+%patch500 -p1 -b .1290037
 cd ..
 
 %patch105 -p1 -b .bad-langs
 %patch200 -p1 -b .addons
+
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -611,6 +616,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Fri Jan 20 2017 Martin Stransky <stransky@redhat.com> - 45.6.0-4
+- Rebuilt for new nss 3.28.1 (mozbz#1290037)
+
 * Fri Jan  6 2017 Jan Horak <jhorak@redhat.com> - 45.6.0-3
 - Fixed calendar locales: rhbz#1410740
 
