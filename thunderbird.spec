@@ -63,7 +63,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        45.6.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -156,7 +156,8 @@ BuildRequires:  mesa-libGL-devel
 BuildRequires:  libvpx-devel >= %{libvpx_version}
 Requires:       libvpx >= %{libvpx_version}
 BuildRequires:  pulseaudio-libs-devel
-BuildRequires:  libicu-devel
+# Disabled due to build failure
+#BuildRequires:  libicu-devel
 BuildRequires:  GConf2-devel
 Requires:       mozilla-filesystem
 BuildRequires:  yasm
@@ -616,6 +617,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Fri Jan 20 2017 Martin Stransky <stransky@redhat.com> - 45.6.0-5
+- Disabled system ICU due to build errors.
+
 * Fri Jan 20 2017 Martin Stransky <stransky@redhat.com> - 45.6.0-4
 - Rebuilt for new nss 3.28.1 (mozbz#1290037)
 
