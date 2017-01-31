@@ -34,13 +34,13 @@
 %define system_libvpx      1
 
 %define tb_version   45.6.0
-%define tarballdir   thunderbird-45.6.0
+%define tarballdir   thunderbird-45.7.0
 
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
 # Bump one with each minor lightning release
 %define gdata_version 2.6
 # BUMP VERSION THERE:
-%define gdata_version_internal 0.11
+%define gdata_version_internal 0.12
 %global gdata_extname %{_libdir}/mozilla/extensions/{3550f703-e582-4d05-9a08-453d09bdfdc6}/{a62ef8ec-5fdc-40c2-873c-223b8a6925cc}
 
 # The tarball is pretty inconsistent with directory structure.
@@ -62,14 +62,14 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        45.6.0
-Release:        5%{?dist}
+Version:        45.7.0
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20161216.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20170131.tar.xz
 %endif
 # Locales for lightning
 Source2:        l10n-lightning-%{version}.tar.xz
@@ -106,10 +106,6 @@ Patch304:       mozilla-1245783.patch
 Patch400:       rhbz-966424.patch
 Patch402:       rhbz-1014858.patch
 # libvpx no longer has compat defines, use the current ones
-
-# NSS 3.28.1 patch
-Patch500:       mozilla-1290037.patch
-Patch501:       mozilla-1329272.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -227,9 +223,6 @@ cd mozilla
 %patch400 -p1 -b .966424
 #%patch402 -p1 -b .rhbz-1014858 FIXME musi byt
 %patch304 -p1 -b .1245783
-# NSS 3.28.1 patch
-%patch500 -p1 -b .1290037
-%patch501 -p1 -b .1329272
 cd ..
 
 %patch105 -p1 -b .bad-langs
@@ -618,6 +611,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Jan 31 2017 Jan Horak <jhorak@redhat.com> - 45.7.0-1
+- Update to 45.7.0
+
 * Fri Jan 20 2017 Martin Stransky <stransky@redhat.com> - 45.6.0-6
 - Rebuilt for new nss 3.28.1 (mozbz#1290037)
 
