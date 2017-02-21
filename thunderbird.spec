@@ -63,7 +63,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        45.7.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -101,6 +101,7 @@ Patch301:       mozilla-1228540-1.patch
 Patch302:       mozilla-1228540.patch
 Patch303:       mozilla-1253216.patch
 Patch304:       mozilla-1245783.patch
+Patch305:       mozilla-1269171-badalloc.patch
 
 # Fedora specific patches
 Patch400:       rhbz-966424.patch
@@ -223,6 +224,7 @@ cd mozilla
 %patch400 -p1 -b .966424
 #%patch402 -p1 -b .rhbz-1014858 FIXME musi byt
 %patch304 -p1 -b .1245783
+%patch305 -p1 -b .mozilla-1269171-badalloc
 cd ..
 
 %patch105 -p1 -b .bad-langs
@@ -611,6 +613,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Feb 21 2017 Jan Horak <jhorak@redhat.com> - 45.7.0-3
+- Added patch for gcc7 from icecat package
+
 * Sat Feb 11 2017 Fedora Release Engineering <releng@fedoraproject.org> - 45.7.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 
