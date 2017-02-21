@@ -280,7 +280,7 @@ echo "ac_add_options --enable-optimize" >> .mozconfig
 %endif
 %endif
 
-%ifarch %{arm}
+%ifarch %{arm} aarch64
 echo "ac_add_options --disable-elf-hack" >> .mozconfig
 echo "ac_add_options --disable-ion" >> .mozconfig
 %endif
