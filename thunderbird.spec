@@ -161,6 +161,7 @@ BuildRequires:  yasm
 BuildRequires:  dbus-glib-devel
 Obsoletes:      thunderbird-lightning
 Provides:       thunderbird-lightning
+ExcludeArch:    aarch64
 
 
 %description
