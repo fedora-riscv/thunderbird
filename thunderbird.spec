@@ -42,6 +42,14 @@
 %define system_libicu      0
 %endif
 
+# Big endian platforms
+%ifarch ppc64 s390x
+# Javascript Intl API is not supported on big endian platforms right now:
+# https://bugzilla.mozilla.org/show_bug.cgi?id=1322212
+%define big_endian              1
+%endif
+
+
 %define build_with_rust    0
 
 %if 0%{?fedora} > 23
@@ -102,6 +110,7 @@ Source21:       thunderbird.sh.in
 Patch0:         thunderbird-install-dir.patch
 Patch9:         mozilla-build-arm.patch
 Patch10:        firefox-build-prbool.patch
+Patch26:        build-icu-big-endian.patch
 
 # Build patches
 Patch100:       thunderbird-objdir.patch
@@ -179,6 +188,10 @@ BuildRequires:  yasm
 BuildRequires:  dbus-glib-devel
 Obsoletes:      thunderbird-lightning
 Provides:       thunderbird-lightning
+%if %{?build_with_rust}
+BuildRequires:  rust
+BuildRequires:  cargo
+%endif
 ExcludeArch:    aarch64
 
 
@@ -244,7 +257,12 @@ cd mozilla
 %patch400 -p1 -b .966424
 #%patch402 -p1 -b .rhbz-1014858 FIXME musi byt
 %patch304 -p1 -b .1245783
+# Patch for big endian platforms only
+%if 0%{?big_endian}
+%patch26 -p1 -b .icu
+%endif
 cd ..
+
 %patch305 -p1 -b .fix-dupes
 %patch105 -p1 -b .bad-langs
 %patch200 -p1 -b .addons
@@ -381,6 +399,13 @@ esac
 %endif
 
 cd %{tarballdir}
+
+echo "Generate big endian version of config/external/icu/data/icud58l.dat"
+%if 0%{?big_endian}
+  ./mach python intl/icu_sources_data.py .
+  ls -l config/external/icu/data
+  rm -f config/external/icu/data/icudt*l.dat
+%endif
 
 # Update the various config.guess to upstream release for aarch64 support
 find ./ -name config.guess -exec cp /usr/lib/rpm/config.guess {} ';'
