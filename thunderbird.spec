@@ -9,6 +9,7 @@
 
 %define system_sqlite 0
 %define system_ffi    1
+%define use_gtk3      0
 
 %define build_langpacks 1
 
@@ -46,9 +47,12 @@
 %ifarch ppc64 s390x
 # Javascript Intl API is not supported on big endian platforms right now:
 # https://bugzilla.mozilla.org/show_bug.cgi?id=1322212
-%define big_endian              1
+%define big_endian         1
 %endif
 
+%if 0%{?fedora} >= 26
+%define use_gtk3           1
+%endif
 
 %define build_with_rust    0
 
@@ -158,7 +162,11 @@ BuildRequires:  zip
 BuildRequires:  bzip2-devel
 BuildRequires:  zlib-devel
 BuildRequires:  libIDL-devel
+%if %{?use_gtk3}
+BuildRequires:  gtk3-devel
+%else
 BuildRequires:  gtk2-devel
+%endif
 BuildRequires:  krb5-devel
 BuildRequires:  pango-devel
 BuildRequires:  freetype-devel >= %{freetype_version}
@@ -306,15 +314,29 @@ echo "ac_add_options --enable-system-ffi" >> .mozconfig
 %endif
 
 %if %{?debug_build}
-echo "ac_add_options --enable-debug" >> .mozconfig
-echo "ac_add_options --disable-optimize" >> .mozconfig
+  echo "ac_add_options --enable-debug" >> .mozconfig
+  echo "ac_add_options --disable-optimize" >> .mozconfig
 %else
-echo "ac_add_options --disable-debug" >> .mozconfig
-%ifarch ppc64le aarch64
-echo 'ac_add_options --enable-optimize="-g -O2"' >> .mozconfig
-%else
-echo "ac_add_options --enable-optimize" >> .mozconfig
-%endif
+  %define optimize_flags "none"
+  # Fedora 26 (gcc7) needs to disable default build flags (mozbz#1342344)
+  %if 0%{?fedora} > 25
+    %ifnarch s390 s390x
+      %define optimize_flags "-g -O2"
+    %endif
+  %endif
+  %ifarch armv7hl
+    # ARMv7 need that (rhbz#1426850)
+    %define optimize_flags "-g -O2 -fno-schedule-insns"
+  %endif
+  %ifarch ppc64le aarch64
+    %define optimize_flags "-g -O2"
+  %endif
+  %if %{optimize_flags} != "none"
+    echo 'ac_add_options --enable-optimize=%{?optimize_flags}' >> .mozconfig
+  %else
+    echo 'ac_add_options --enable-optimize' >> .mozconfig
+  %endif
+  echo "ac_add_options --disable-debug" >> .mozconfig
 %endif
 
 %ifarch %{arm} aarch64
@@ -379,6 +401,11 @@ echo "ac_add_options --with-system-libvpx" >> .mozconfig
 %else
 echo "ac_add_options --without-system-libvpx" >> .mozconfig
 %endif
+%if %{?use_gtk3}
+  echo "ac_add_options --enable-default-toolkit=cairo-gtk3" >> .mozconfig
+%else
+  echo "ac_add_options --enable-default-toolkit=cairo-gtk2" >> .mozconfig
+%endif
 
 # install lightning langpacks
 cd ..
@@ -402,9 +429,11 @@ cd %{tarballdir}
 
 echo "Generate big endian version of config/external/icu/data/icud58l.dat"
 %if 0%{?big_endian}
+  cd mozilla
   ./mach python intl/icu_sources_data.py .
   ls -l config/external/icu/data
   rm -f config/external/icu/data/icudt*l.dat
+  cd -
 %endif
 
 # Update the various config.guess to upstream release for aarch64 support
@@ -684,7 +713,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 %{mozappdir}/fonts
 %{mozappdir}/chrome.manifest
-
+%if %{?use_gtk3}
+%{mozappdir}/gtk2/libmozgtk.so
+%endif
 
 #===============================================================================
 
