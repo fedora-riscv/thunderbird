@@ -163,10 +163,9 @@ BuildRequires:  bzip2-devel
 BuildRequires:  zlib-devel
 BuildRequires:  libIDL-devel
 %if %{?use_gtk3}
-BuildRequires:  gtk3-devel
-%else
-BuildRequires:  gtk2-devel
+BuildRequires:  pkgconfig(gtk+-3.0)
 %endif
+BuildRequires:  pkgconfig(gtk+-2.0)
 BuildRequires:  krb5-devel
 BuildRequires:  pango-devel
 BuildRequires:  freetype-devel >= %{freetype_version}
@@ -427,13 +426,13 @@ esac
 
 cd %{tarballdir}
 
-echo "Generate big endian version of config/external/icu/data/icud58l.dat"
 %if 0%{?big_endian}
+  echo "Generate big endian version of config/external/icu/data/icud58l.dat"
   cd mozilla
   ./mach python intl/icu_sources_data.py .
   ls -l config/external/icu/data
   rm -f config/external/icu/data/icudt*l.dat
-  cd -
+  cd ..
 %endif
 
 # Update the various config.guess to upstream release for aarch64 support
