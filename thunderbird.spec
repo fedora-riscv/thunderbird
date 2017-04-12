@@ -136,7 +136,7 @@ Patch305:       build-fix-dupes.patch
 
 # Fedora specific patches
 Patch400:       rhbz-966424.patch
-Patch402:       rhbz-1014858.patch
+Patch403:       rhbz-1400293-fix-mozilla-1324096.patch
 # libvpx no longer has compat defines, use the current ones
 
 %if %{official_branding}
@@ -262,7 +262,8 @@ cd mozilla
 %endif
 %patch104 -p1 -b .gcc6
 %patch400 -p1 -b .966424
-#%patch402 -p1 -b .rhbz-1014858 FIXME musi byt
+%patch403 -p1 -b .rhbz-1400293
+
 %patch304 -p1 -b .1245783
 # Patch for big endian platforms only
 %if 0%{?big_endian}
