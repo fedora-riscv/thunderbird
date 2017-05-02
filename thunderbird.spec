@@ -123,6 +123,8 @@ Patch102:       build-werror.patch
 Patch103:       rhbz-1219542-s390-build.patch
 Patch104:       firefox-gcc-6.0.patch
 Patch105:       lightning-bad-langs.patch
+Patch106:       build-1360521-missing-cheddar.patch
+
 # Linux specific
 Patch200:       thunderbird-enable-addons.patch
 
@@ -264,6 +266,7 @@ cd mozilla
 %patch103 -p1 -b .rhbz-1219542-s390-build
 %endif
 %patch104 -p1 -b .gcc6
+%patch106 -p2 -b .1360521-missing-cheddar
 %patch400 -p1 -b .966424
 %patch403 -p1 -b .rhbz-1400293
 
