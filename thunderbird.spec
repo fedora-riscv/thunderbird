@@ -63,13 +63,13 @@
 %endif
 
 %define tb_version   45.6.0
-%define tarballdir   thunderbird-52.0
+%define tarballdir   thunderbird-52.1.0
 
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
 # Bump one with each minor lightning release
 %define gdata_version 3.3
 # BUMP VERSION THERE:
-%define gdata_version_internal 0.1
+%define gdata_version_internal 0.2
 %global gdata_extname %{_libdir}/mozilla/extensions/{3550f703-e582-4d05-9a08-453d09bdfdc6}/{a62ef8ec-5fdc-40c2-873c-223b8a6925cc}
 
 # The tarball is pretty inconsistent with directory structure.
@@ -91,14 +91,14 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        52.0
-Release:        2%{?dist}
+Version:        52.1.0
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20170404.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20170502.tar.xz
 %endif
 # Locales for lightning
 Source2:        l10n-lightning-%{version}.tar.xz
@@ -138,6 +138,9 @@ Patch305:       build-fix-dupes.patch
 Patch400:       rhbz-966424.patch
 Patch403:       rhbz-1400293-fix-mozilla-1324096.patch
 # libvpx no longer has compat defines, use the current ones
+
+# Upstream patches
+Patch500:       mozilla-1158578-recursion-fix.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -274,6 +277,7 @@ cd ..
 %patch305 -p1 -b .fix-dupes
 %patch105 -p1 -b .bad-langs
 %patch200 -p1 -b .addons
+%patch500 -p1 -b .1158578-recursion-fix
 
 
 %if %{official_branding}
@@ -720,6 +724,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue May  2 2017 Jan Horak <jhorak@redhat.com> - 52.1.0-1
+- Update to 52.1.0
+- Added patch for rhbz#1442903 - crash when compacting folder
+
 * Wed Apr 12 2017 Jan Horak <jhorak@redhat.com> - 52.0-2
 - Added fix for rhbz#1441601 - problems with TLS server certificates
 
