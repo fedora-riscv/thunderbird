@@ -92,7 +92,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        52.1.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -727,6 +727,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Mon May 15 2017 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 52.1.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_27_Mass_Rebuild
+
 * Tue May  2 2017 Jan Horak <jhorak@redhat.com> - 52.1.0-1
 - Update to 52.1.0
 - Added patch for rhbz#1442903 - crash when compacting folder
