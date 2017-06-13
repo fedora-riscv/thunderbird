@@ -203,7 +203,6 @@ Provides:       thunderbird-lightning
 BuildRequires:  rust
 BuildRequires:  cargo
 %endif
-ExcludeArch:    aarch64
 
 
 %description
