@@ -203,6 +203,7 @@ Provides:       thunderbird-lightning
 BuildRequires:  rust
 BuildRequires:  cargo
 %endif
+BuildRequires:  python2-devel
 
 
 %description
