@@ -37,8 +37,8 @@
 %define system_jpeg        1
 
 # Use system libicu?
-%if 0%{?fedora} > 27
-%define system_libicu      0
+%if 0%{?fedora} >= 27
+%define system_libicu      1
 %else
 %define system_libicu      0
 %endif
@@ -81,13 +81,14 @@
 %define mozappdir    %{_libdir}/%{name}
 
 %define official_branding 1
+
+%define enable_mozilla_crashreporter 0
 # enable crash reporter only for iX86
 %ifarch %{ix86} x86_64
+%if 0%{?fedora} < 27
 %define enable_mozilla_crashreporter 1
-%else
-%define enable_mozilla_crashreporter 0
 %endif
-
+%endif
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
