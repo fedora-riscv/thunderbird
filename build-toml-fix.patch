@@ -1,0 +1,12 @@
+diff -up thunderbird-52.3.0/mozilla/media/libstagefright/binding/mp4parse_capi/Cargo.toml.toml-fix thunderbird-52.3.0/mozilla/media/libstagefright/binding/mp4parse_capi/Cargo.toml
+--- thunderbird-52.3.0/mozilla/media/libstagefright/binding/mp4parse_capi/Cargo.toml.toml-fix	2017-08-21 10:51:01.408785691 +0200
++++ thunderbird-52.3.0/mozilla/media/libstagefright/binding/mp4parse_capi/Cargo.toml	2017-08-21 10:51:05.904787854 +0200
+@@ -20,8 +20,6 @@ exclude = [
+ 
+ build = false
+ 
+-build = false
+-
+ [dependencies]
+ "mp4parse" = {version = "0.6.0", path = "../mp4parse"}
+ 

@@ -38,7 +38,7 @@
 
 # Use system libicu?
 %if 0%{?fedora} > 27
-%define system_libicu      1
+%define system_libicu      0
 %else
 %define system_libicu      0
 %endif
@@ -135,6 +135,7 @@ Patch302:       mozilla-1228540.patch
 Patch303:       mozilla-1253216.patch
 Patch304:       mozilla-1245783.patch
 Patch305:       build-fix-dupes.patch
+Patch306:       build-toml-fix.patch
 
 # Fedora specific patches
 Patch400:       rhbz-966424.patch
@@ -245,8 +246,7 @@ your bug already has a solution!
 
 
 %prep
-%setup -q -c
-cd %{tarballdir}
+%setup -q
 
 %patch0   -p1 -b .dir
 %patch100 -p2 -b .objdir
@@ -277,6 +277,7 @@ cd mozilla
 cd ..
 
 %patch305 -p1 -b .fix-dupes
+%patch306 -p1 -b .build-toml-fix
 %patch105 -p1 -b .bad-langs
 %patch200 -p1 -b .addons
 
@@ -430,8 +431,6 @@ case "%{sqlite_build_version}" in
 esac
 %endif
 
-cd %{tarballdir}
-
 %if 0%{?big_endian}
   echo "Generate big endian version of config/external/icu/data/icud58l.dat"
   cd mozilla
@@ -513,7 +512,7 @@ make -C %{objdir} buildsymbols
 #===============================================================================
 
 %install
-cd %{tarballdir}/%{objdir}
+cd %{objdir}
 
 DESTDIR=$RPM_BUILD_ROOT make install
 
