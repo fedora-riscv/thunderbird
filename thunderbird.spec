@@ -664,7 +664,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %doc %{tarballdir}/mozilla/LEGAL %{tarballdir}/mozilla/LICENSE %{tarballdir}/mozilla/README.txt
 %{gdata_extname}
 #===============================================================================
-%files -f %{tarballdir}/%{name}.lang
+%files -f %{name}.lang
 %defattr(-,root,root,-)
 %attr(755,root,root) %{_bindir}/thunderbird
 %{_datadir}/appdata/*.appdata.xml
