@@ -63,7 +63,6 @@
 %endif
 
 %define tb_version   45.6.0
-%define tarballdir   thunderbird-52.3.0
 
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
 # Bump one with each minor lightning release
@@ -662,7 +661,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 # lightning-gdata files=========================================================
 %files lightning-gdata
-%doc %{tarballdir}/mozilla/LEGAL %{tarballdir}/mozilla/LICENSE %{tarballdir}/mozilla/README.txt
+%doc mozilla/LEGAL mozilla/LICENSE mozilla/README.txt
 %{gdata_extname}
 #===============================================================================
 %files -f %{name}.lang
