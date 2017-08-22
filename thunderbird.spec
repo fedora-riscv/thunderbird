@@ -661,7 +661,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 # lightning-gdata files=========================================================
 %files lightning-gdata
-%doc mozilla/LEGAL mozilla/LICENSE mozilla/README.txt
+# temp disable %doc mozilla/LEGAL mozilla/LICENSE mozilla/README.txt
 %{gdata_extname}
 #===============================================================================
 %files -f %{name}.lang
