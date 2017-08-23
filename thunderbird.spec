@@ -412,6 +412,11 @@ echo "ac_add_options --without-system-libvpx" >> .mozconfig
 %else
   echo "ac_add_options --enable-default-toolkit=cairo-gtk2" >> .mozconfig
 %endif
+%if %{enable_mozilla_crashreporter}
+echo "ac_add_options --enable-crashreporter" >> .mozconfig
+%else
+echo "ac_add_options --disable-crashreporter" >> .mozconfig
+%endif
 
 # install lightning langpacks
 cd ..
