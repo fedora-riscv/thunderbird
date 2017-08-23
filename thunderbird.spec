@@ -36,9 +36,9 @@
 
 %define system_jpeg        1
 
-# Use system libicu?
+# Use system libicu? - libicu even on rawhide too old
 %if 0%{?fedora} >= 27
-%define system_libicu      1
+%define system_libicu      0
 %else
 %define system_libicu      0
 %endif
