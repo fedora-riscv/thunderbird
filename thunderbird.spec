@@ -277,7 +277,7 @@ cd mozilla
 # Patch for big endian platforms only
 %if 0%{?big_endian}
 %patch26 -p1 -b .icu
-%patch307 -p1 -b .xlocale
+%patch307 -p2 -b .xlocale
 %endif
 cd ..
 
