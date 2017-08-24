@@ -62,6 +62,10 @@
 %endif
 %endif
 
+%if %{?system_libvpx}
+%global libvpx_version 1.4.0
+%endif
+
 %define tb_version   45.6.0
 
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
@@ -136,6 +140,7 @@ Patch303:       mozilla-1253216.patch
 Patch304:       mozilla-1245783.patch
 Patch305:       build-fix-dupes.patch
 Patch306:       build-toml-fix.patch
+Patch307:       build-missing-xlocale-h.patch
 
 # Fedora specific patches
 Patch400:       rhbz-966424.patch
@@ -191,7 +196,6 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  libcurl-devel
 BuildRequires:  mesa-libGL-devel
 BuildRequires:  libvpx-devel >= %{libvpx_version}
-Requires:       libvpx >= %{libvpx_version}
 BuildRequires:  pulseaudio-libs-devel
 BuildRequires:  libicu-devel
 BuildRequires:  GConf2-devel
@@ -273,6 +277,7 @@ cd mozilla
 # Patch for big endian platforms only
 %if 0%{?big_endian}
 %patch26 -p1 -b .icu
+%patch307 -p1 -b .xlocale
 %endif
 cd ..
 
