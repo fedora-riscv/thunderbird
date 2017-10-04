@@ -96,7 +96,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        52.4.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -732,9 +732,8 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
-* Wed Oct  4 2017 Jan Horak <jhorak@redhat.com> - 52.4.0-1
+* Wed Oct  4 2017 Jan Horak <jhorak@redhat.com> - 52.4.0-2
 - Update to 52.4.0 (b2)
-
 
 * Mon Aug 21 2017 Jan Horak <jhorak@redhat.com> - 52.3.0-1
 - Update to 52.3.0
