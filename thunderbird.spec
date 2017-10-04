@@ -72,7 +72,7 @@
 # Bump one with each minor lightning release
 %define gdata_version 3.3
 # BUMP VERSION THERE:
-%define gdata_version_internal 0.7
+%define gdata_version_internal 0.8
 %global gdata_extname %{_libdir}/mozilla/extensions/{3550f703-e582-4d05-9a08-453d09bdfdc6}/{a62ef8ec-5fdc-40c2-873c-223b8a6925cc}
 
 # The tarball is pretty inconsistent with directory structure.
@@ -102,7 +102,7 @@ License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20171003.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20171004.tar.xz
 %endif
 # Locales for lightning
 Source2:        l10n-lightning-%{version}.tar.xz
@@ -732,8 +732,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
-* Tue Oct  3 2017 Jan Horak <jhorak@redhat.com> - 52.4.0-1
-- Update to 52.4.0
+* Wed Oct  4 2017 Jan Horak <jhorak@redhat.com> - 52.4.0-1
+- Update to 52.4.0 (b2)
+
 
 * Mon Aug 21 2017 Jan Horak <jhorak@redhat.com> - 52.3.0-1
 - Update to 52.3.0
