@@ -9,7 +9,7 @@ tbver=`rpmspec -P thunderbird.spec |awk '/^Version:/ { print $2; exit }'`
 tag=THUNDERBIRD_${tbver//./_}_RELEASE
 branch=`rpmspec -P thunderbird.spec | awk '/^%define *tarballdir/ { print $3; exit }'`
 #locales=$PWD/thunderbird-${tbver}/${branch}/calendar/locales/shipped-locales
-locales=$PWD/thunderbird-${tbver}/thunderbird-${tbver}/calendar/locales/shipped-locales
+locales=$PWD/thunderbird-${tbver}/calendar/locales/shipped-locales
 #locales=$PWD/shipped-locales
 if [ ! -f $locales ]
 then
@@ -42,7 +42,7 @@ rm -rf l10n-merged
 cp -R l10n l10n-merged
 for lang in $(<$locales)
 do
-  compare-locales --merge l10n-merged/$lang $PWD/thunderbird-${tbver}/thunderbird-${tbver}/calendar/locales/l10n.ini l10n $lang
+  compare-locales --merge l10n-merged/$lang $PWD/thunderbird-${tbver}/calendar/locales/l10n.ini l10n $lang
 done
 
 

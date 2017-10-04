@@ -72,7 +72,7 @@
 # Bump one with each minor lightning release
 %define gdata_version 3.3
 # BUMP VERSION THERE:
-%define gdata_version_internal 0.6
+%define gdata_version_internal 0.7
 %global gdata_extname %{_libdir}/mozilla/extensions/{3550f703-e582-4d05-9a08-453d09bdfdc6}/{a62ef8ec-5fdc-40c2-873c-223b8a6925cc}
 
 # The tarball is pretty inconsistent with directory structure.
@@ -95,14 +95,14 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        52.3.0
+Version:        52.4.0
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20170821.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20171003.tar.xz
 %endif
 # Locales for lightning
 Source2:        l10n-lightning-%{version}.tar.xz
@@ -139,7 +139,6 @@ Patch302:       mozilla-1228540.patch
 Patch303:       mozilla-1253216.patch
 Patch304:       mozilla-1245783.patch
 Patch305:       build-fix-dupes.patch
-Patch306:       build-toml-fix.patch
 Patch307:       build-missing-xlocale-h.patch
 
 # Fedora specific patches
@@ -282,7 +281,6 @@ cd mozilla
 cd ..
 
 %patch305 -p1 -b .fix-dupes
-%patch306 -p1 -b .build-toml-fix
 %patch105 -p1 -b .bad-langs
 %patch200 -p1 -b .addons
 
@@ -734,6 +732,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Oct  3 2017 Jan Horak <jhorak@redhat.com> - 52.4.0-1
+- Update to 52.4.0
+
 * Mon Aug 21 2017 Jan Horak <jhorak@redhat.com> - 52.3.0-1
 - Update to 52.3.0
 
