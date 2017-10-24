@@ -1,0 +1,15 @@
+# HG changeset patch
+# Parent  d7181942327fc7ce8a820a2c09bd96534c2fef58
+
+diff --git a/browser/components/migration/FirefoxProfileMigrator.js b/browser/components/migration/FirefoxProfileMigrator.js
+--- a/browser/components/migration/FirefoxProfileMigrator.js
++++ b/browser/components/migration/FirefoxProfileMigrator.js
+@@ -130,7 +130,7 @@ FirefoxProfileMigrator.prototype._getRes
+   let places = getFileResource(types.HISTORY, ["places.sqlite", "places.sqlite-wal"]);
+   let cookies = getFileResource(types.COOKIES, ["cookies.sqlite", "cookies.sqlite-wal"]);
+   let passwords = getFileResource(types.PASSWORDS,
+-                                  ["signons.sqlite", "logins.json", "key3.db",
++                                  ["signons.sqlite", "logins.json", "key3.db", "key4.db",
+                                    "signedInUser.json"]);
+   let formData = getFileResource(types.FORMDATA, ["formhistory.sqlite"]);
+   let bookmarksBackups = getFileResource(types.OTHERDATA,

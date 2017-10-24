@@ -1,0 +1,269 @@
+# HG changeset patch
+# Parent  77c27a1e264305362865d6d64af201299e04dece
+
+diff --git a/security/certverifier/NSSCertDBTrustDomain.cpp b/security/certverifier/NSSCertDBTrustDomain.cpp
+--- a/security/certverifier/NSSCertDBTrustDomain.cpp
++++ b/security/certverifier/NSSCertDBTrustDomain.cpp
+@@ -1097,7 +1097,27 @@ InitializeNSS(const char* dir, bool read
+   if (!loadPKCS11Modules) {
+     flags |= NSS_INIT_NOMODDB;
+   }
+-  return ::NSS_Initialize(dir, "", "", SECMOD_DB, flags);
++  SECStatus srv = NSS_Initialize(dir, "", "", SECMOD_DB, flags);
++  if (srv != SECSuccess) {
++    return srv;
++  }
++
++  if (!readOnly) {
++    UniquePK11SlotInfo slot(PK11_GetInternalKeySlot());
++    if (!slot) {
++      return SECFailure;
++    }
++    // If the key DB doesn't have a password set, PK11_NeedUserInit will return
++    // true. For the SQL DB, we need to set a password or we won't be able to
++    // import any certificates or change trust settings.
++    if (PK11_NeedUserInit(slot.get())) {
++      srv = PK11_InitPin(slot.get(), nullptr, nullptr);
++      MOZ_ASSERT(srv == SECSuccess);
++      Unused << srv;
++    }
++  }
++
++  return SECSuccess;
+ }
+ 
+ void
+diff --git a/security/manager/ssl/nsIPK11Token.idl b/security/manager/ssl/nsIPK11Token.idl
+--- a/security/manager/ssl/nsIPK11Token.idl
++++ b/security/manager/ssl/nsIPK11Token.idl
+@@ -65,6 +65,14 @@ interface nsIPK11Token : nsISupports
+   void setAskPasswordDefaults([const] in long askTimes, [const] in long timeout);
+ 
+   /*
++   * True if a password has been configured for this token, and false otherwise.
++   * (Whether or not the user is currently logged in makes no difference.)
++   * In particular, this can be used to determine if a user has set a master
++   * password (if this is the internal key token).
++   */
++  readonly attribute boolean hasPassword;
++
++  /*
+    * Other attributes
+    */
+   boolean isHardwareToken();
+diff --git a/security/manager/ssl/nsNSSCertificateDB.cpp b/security/manager/ssl/nsNSSCertificateDB.cpp
+--- a/security/manager/ssl/nsNSSCertificateDB.cpp
++++ b/security/manager/ssl/nsNSSCertificateDB.cpp
+@@ -56,31 +56,6 @@ using mozilla::psm::SharedSSLState;
+ 
+ extern LazyLogModule gPIPNSSLog;
+ 
+-static nsresult
+-attemptToLogInWithDefaultPassword()
+-{
+-#ifdef NSS_DISABLE_DBM
+-  // The SQL NSS DB requires the user to be authenticated to set certificate
+-  // trust settings, even if the user's password is empty. To maintain
+-  // compatibility with the DBM-based database, try to log in with the
+-  // default empty password. This will allow, at least, tests that need to
+-  // change certificate trust to pass on all platforms. TODO(bug 978120): Do
+-  // proper testing and/or implement a better solution so that we are confident
+-  // that this does the correct thing outside of xpcshell tests too.
+-  UniquePK11SlotInfo slot(PK11_GetInternalKeySlot());
+-  if (!slot) {
+-    return MapSECStatus(SECFailure);
+-  }
+-  if (PK11_NeedUserInit(slot.get())) {
+-    // Ignore the return value. Presumably PK11_InitPin will fail if the user
+-    // has a non-default password.
+-    Unused << PK11_InitPin(slot.get(), nullptr, nullptr);
+-  }
+-#endif
+-
+-  return NS_OK;
+-}
+-
+ NS_IMPL_ISUPPORTS(nsNSSCertificateDB, nsIX509CertDB)
+ 
+ nsNSSCertificateDB::~nsNSSCertificateDB()
+@@ -843,11 +818,6 @@ nsNSSCertificateDB::SetCertTrust(nsIX509
+   nsresult rv;
+   UniqueCERTCertificate nsscert(cert->GetCert());
+ 
+-  rv = attemptToLogInWithDefaultPassword();
+-  if (NS_WARN_IF(rv != NS_OK)) {
+-    return rv;
+-  }
+-
+   SECStatus srv;
+   if (type == nsIX509Cert::CA_CERT) {
+     // always start with untrusted and move up
+@@ -1366,11 +1336,6 @@ nsNSSCertificateDB::AddCertFromBase64(co
+ 
+   MOZ_LOG(gPIPNSSLog, LogLevel::Debug, ("Created nick \"%s\"\n", nickname.get()));
+ 
+-  rv = attemptToLogInWithDefaultPassword();
+-  if (NS_WARN_IF(rv != NS_OK)) {
+-    return rv;
+-  }
+-
+   SECStatus srv = CERT_AddTempCertToPerm(tmpCert.get(), nickname.get(),
+                                          trust.GetTrust());
+   return MapSECStatus(srv);
+@@ -1400,11 +1365,6 @@ nsNSSCertificateDB::SetCertTrustFromStri
+   }
+   UniqueCERTCertificate nssCert(cert->GetCert());
+ 
+-  nsresult rv = attemptToLogInWithDefaultPassword();
+-  if (NS_WARN_IF(rv != NS_OK)) {
+-    return rv;
+-  }
+-
+   srv = CERT_ChangeCertTrust(CERT_GetDefaultCertDB(), nssCert.get(), &trust);
+   return MapSECStatus(srv);
+ }
+diff --git a/security/manager/ssl/nsNSSComponent.cpp b/security/manager/ssl/nsNSSComponent.cpp
+--- a/security/manager/ssl/nsNSSComponent.cpp
++++ b/security/manager/ssl/nsNSSComponent.cpp
+@@ -2081,8 +2081,14 @@ NS_IMETHODIMP
+ nsNSSComponent::Observe(nsISupports* aSubject, const char* aTopic,
+                         const char16_t* someData)
+ {
+-  if (nsCRT::strcmp(aTopic, PROFILE_BEFORE_CHANGE_TOPIC) == 0) {
+-    MOZ_LOG(gPIPNSSLog, LogLevel::Debug, ("receiving profile change topic\n"));
++  // In some tests, we don't receive a "profile-before-change" topic. However,
++  // we still have to shut down before the storage service shuts down, because
++  // closing the sql-backed softoken requires sqlite still be available. Thus,
++  // we observe "xpcom-shutdown" just in case.
++  if (nsCRT::strcmp(aTopic, PROFILE_BEFORE_CHANGE_TOPIC) == 0 ||
++      nsCRT::strcmp(aTopic, NS_XPCOM_SHUTDOWN_OBSERVER_ID) == 0) {
++    MOZ_LOG(gPIPNSSLog, LogLevel::Debug,
++            ("receiving profile change or XPCOM shutdown notification"));
+     DoProfileBeforeChange();
+   } else if (nsCRT::strcmp(aTopic, NS_PREFBRANCH_PREFCHANGE_TOPIC_ID) == 0) {
+     nsNSSShutDownPreventionLock locker;
+@@ -2234,6 +2240,7 @@ nsNSSComponent::RegisterObservers()
+   // keep a strong reference to this component. As a result, this will live at
+   // least as long as the observer service.
+   observerService->AddObserver(this, PROFILE_BEFORE_CHANGE_TOPIC, false);
++  observerService->AddObserver(this, NS_XPCOM_SHUTDOWN_OBSERVER_ID, false);
+ 
+   return NS_OK;
+ }
+diff --git a/security/manager/ssl/nsPK11TokenDB.cpp b/security/manager/ssl/nsPK11TokenDB.cpp
+--- a/security/manager/ssl/nsPK11TokenDB.cpp
++++ b/security/manager/ssl/nsPK11TokenDB.cpp
+@@ -293,11 +293,24 @@ NS_IMETHODIMP
+ nsPK11Token::InitPassword(const nsACString& initialPassword)
+ {
+   nsNSSShutDownPreventionLock locker;
+-  if (isAlreadyShutDown())
++  if (isAlreadyShutDown()) {
+     return NS_ERROR_NOT_AVAILABLE;
++  }
+ 
+-  return MapSECStatus(
+-    PK11_InitPin(mSlot.get(), "", PromiseFlatCString(initialPassword).get()));
++  const nsCString& passwordCStr = PromiseFlatCString(initialPassword);
++  // PSM initializes the sqlite-backed softoken with an empty password. The
++  // implementation considers this not to be a password (GetHasPassword returns
++  // false), but we can't actually call PK11_InitPin again. Instead, we call
++  // PK11_ChangePW with the empty password.
++  bool hasPassword;
++  nsresult rv = GetHasPassword(&hasPassword);
++  if (NS_FAILED(rv)) {
++    return rv;
++  }
++  if (!PK11_NeedUserInit(mSlot.get()) && !hasPassword) {
++    return MapSECStatus(PK11_ChangePW(mSlot.get(), "", passwordCStr.get()));
++  }
++  return MapSECStatus(PK11_InitPin(mSlot.get(), "", passwordCStr.get()));
+ }
+ 
+ NS_IMETHODIMP
+@@ -359,6 +372,23 @@ nsPK11Token::ChangePassword(const nsACSt
+ }
+ 
+ NS_IMETHODIMP
++nsPK11Token::GetHasPassword(bool* hasPassword)
++{
++  NS_ENSURE_ARG_POINTER(hasPassword);
++
++  nsNSSShutDownPreventionLock locker;
++  if (isAlreadyShutDown()) {
++    return NS_ERROR_NOT_AVAILABLE;
++  }
++
++  // PK11_NeedLogin returns true if the token is currently configured to require
++  // the user to log in (whether or not the user is actually logged in makes no
++  // difference).
++  *hasPassword = PK11_NeedLogin(mSlot.get()) && !PK11_NeedUserInit(mSlot.get());
++  return NS_OK;
++}
++
++NS_IMETHODIMP
+ nsPK11Token::IsHardwareToken(bool* _retval)
+ {
+   NS_ENSURE_ARG_POINTER(_retval);
+diff --git a/security/manager/ssl/tests/unit/head_psm.js b/security/manager/ssl/tests/unit/head_psm.js
+--- a/security/manager/ssl/tests/unit/head_psm.js
++++ b/security/manager/ssl/tests/unit/head_psm.js
+@@ -770,14 +770,6 @@ function add_prevented_cert_override_tes
+   add_connection_test(aHost, aExpectedError);
+ }
+ 
+-function loginToDBWithDefaultPassword() {
+-  let tokenDB = Cc["@mozilla.org/security/pk11tokendb;1"]
+-                  .getService(Ci.nsIPK11TokenDB);
+-  let token = tokenDB.getInternalKeyToken();
+-  token.initPassword("");
+-  token.login(/*force*/ false);
+-}
+-
+ // Helper for asyncTestCertificateUsages.
+ class CertVerificationResult {
+   constructor(certName, usageString, successExpected, resolve) {
+diff --git a/security/manager/ssl/tests/unit/test_certDB_import.js b/security/manager/ssl/tests/unit/test_certDB_import.js
+--- a/security/manager/ssl/tests/unit/test_certDB_import.js
++++ b/security/manager/ssl/tests/unit/test_certDB_import.js
+@@ -89,11 +89,6 @@ function testImportCACert() {
+ }
+ 
+ function run_test() {
+-  // We have to set a password and login before we attempt to import anything.
+-  // In particular, the SQL NSS DB requires the user to be authenticated to set
+-  // certificate trust settings, which we do when we import CA certs.
+-  loginToDBWithDefaultPassword();
+-
+   let certificateDialogsCID =
+     MockRegistrar.register("@mozilla.org/nsCertificateDialogs;1",
+                            gCertificateDialogs);
+diff --git a/security/manager/ssl/tests/unit/test_certDB_import_pkcs12.js b/security/manager/ssl/tests/unit/test_certDB_import_pkcs12.js
+--- a/security/manager/ssl/tests/unit/test_certDB_import_pkcs12.js
++++ b/security/manager/ssl/tests/unit/test_certDB_import_pkcs12.js
+@@ -73,9 +73,6 @@ function testImportPKCS12Cert() {
+ }
+ 
+ function run_test() {
+-  // We have to set a password and login before we attempt to import anything.
+-  loginToDBWithDefaultPassword();
+-
+   let certificateDialogsCID =
+     MockRegistrar.register("@mozilla.org/nsCertificateDialogs;1",
+                            gCertificateDialogs);
+diff --git a/security/manager/ssl/tests/unit/test_sdr.js b/security/manager/ssl/tests/unit/test_sdr.js
+--- a/security/manager/ssl/tests/unit/test_sdr.js
++++ b/security/manager/ssl/tests/unit/test_sdr.js
+@@ -22,12 +22,6 @@ const gTokenPasswordDialogs = {
+ };
+ 
+ function run_test() {
+-  // We have to set a password and login before we attempt to encrypt anything.
+-  // In particular, failing to do so will cause the Encrypt() implementation to
+-  // pop up a dialog asking for a password to be set. This won't work in the
+-  // xpcshell environment and will lead to an assertion.
+-  loginToDBWithDefaultPassword();
+-
+   let sdr = Cc["@mozilla.org/security/sdr;1"]
+               .getService(Ci.nsISecretDecoderRing);
+ 

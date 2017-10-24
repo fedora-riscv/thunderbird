@@ -96,7 +96,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        52.4.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -147,6 +147,15 @@ Patch403:       rhbz-1400293-fix-mozilla-1324096.patch
 # libvpx no longer has compat defines, use the current ones
 
 # Upstream patches
+
+# Backported upstream patches for compatibility with NSS sql database
+# format, rhbz#1496563
+Patch501:       sqlcompat-esr52-1-730495-backport
+Patch502:       sqlcompat-esr52-2-backport-1389664
+Patch503:       sqlcompat-esr52-3-backport-1394871
+Patch504:       sqlcompat-esr52-4-backport-1329360
+Patch505:       sqlcompat-esr52-5-backport-1382866
+Patch506:       sqlcompat-esr52-6-fix-logins-decrypt-test
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -283,6 +292,17 @@ cd ..
 %patch305 -p1 -b .fix-dupes
 %patch105 -p1 -b .bad-langs
 %patch200 -p1 -b .addons
+
+%if 0%{?fedora} > 27
+pushd mozilla
+%patch501 -p1 -b .sqlcompat-1
+%patch502 -p1 -b .sqlcompat-2
+%patch503 -p1 -b .sqlcompat-3
+%patch504 -p1 -b .sqlcompat-4
+%patch505 -p1 -b .sqlcompat-5
+%patch506 -p1 -b .sqlcompat-6
+popd
+%endif
 
 
 %if %{official_branding}
@@ -732,6 +752,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Oct 24 2017 Kai Engert <kaie@redhat.com> - 52.4.0-3
+- Backport several upstream patches for NSS sql db compatibility,
+  see rhbz#1496565
+
 * Wed Oct  4 2017 Jan Horak <jhorak@redhat.com> - 52.4.0-2
 - Update to 52.4.0 (b2)
 
