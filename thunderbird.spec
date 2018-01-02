@@ -755,6 +755,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 * Tue Jan  2 2018 Jan Horak <jhorak@redhat.com> - 52.5.2-1
 - Update to 52.5.2
 
+* Mon Dec 04 2017 Caolán McNamara <caolanm@redhat.com> - 52.5.0-2
+- rebuild for hunspell-1.6.2
+
 * Tue Nov 28 2017 Jan Horak <jhorak@redhat.com> - 52.5.0-1
 - Update to 52.5.0
 
