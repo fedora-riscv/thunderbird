@@ -50,13 +50,13 @@
 %define big_endian         1
 %endif
 
-%if 0%{?fedora} >= 26
+%if 0%{?fedora} >= 26 || 0%{?rhel} > 7
 %define use_gtk3           1
 %endif
 
 %define build_with_rust    0
 
-%if 0%{?fedora} > 23
+%if 0%{?fedora} > 23 || 0%{?rhel} > 7
 %ifarch x86_64
 %define build_with_rust    1
 %endif
@@ -88,7 +88,7 @@
 %define enable_mozilla_crashreporter 0
 # enable crash reporter only for iX86
 %ifarch %{ix86} x86_64
-%if 0%{?fedora} < 27
+%if 0%{?fedora} < 27 && 0%{?rhel} <= 7
 %define enable_mozilla_crashreporter 1
 %endif
 %endif
@@ -348,7 +348,7 @@ echo "ac_add_options --enable-system-ffi" >> .mozconfig
 %else
   %define optimize_flags "none"
   # Fedora 26 (gcc7) needs to disable default build flags (mozbz#1342344)
-  %if 0%{?fedora} > 25
+  %if 0%{?fedora} > 25 || 0%{?rhel} > 7
     %ifnarch s390 s390x
       %define optimize_flags "-g -O2"
     %endif
