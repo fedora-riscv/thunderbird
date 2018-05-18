@@ -217,7 +217,7 @@ BuildRequires:  rust
 BuildRequires:  cargo
 %endif
 BuildRequires:  python2-devel
-Requires:       u2f-hidraw-policy
+Suggests:       u2f-hidraw-policy
 
 %description
 Mozilla Thunderbird is a standalone mail and newsgroup client.
