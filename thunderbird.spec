@@ -126,7 +126,7 @@ Patch304:       mozilla-1245783.patch
 
 %endif
 
-
+BuildRequires:  gcc-c++
 %if %{?system_nss}
 BuildRequires:  nss-static >= %{nss_version}
 BuildRequires:  nspr-devel >= %{nspr_version}
