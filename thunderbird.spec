@@ -151,6 +151,10 @@ BuildRequires:  freetype-devel >= %{freetype_version}
 BuildRequires:  libXt-devel
 BuildRequires:  libXrender-devel
 BuildRequires:  hunspell-devel
+BuildRequires:  llvm
+BuildRequires:  llvm-devel
+BuildRequires:  clang
+BuildRequires:  clang-libs
 %if %{?system_sqlite}
 BuildRequires:  sqlite-devel >= %{sqlite_version}
 Requires:       sqlite >= %{sqlite_build_version}
