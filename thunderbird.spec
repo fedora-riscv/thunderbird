@@ -54,14 +54,6 @@
 %define use_gtk3           1
 %endif
 
-%define build_with_rust    0
-
-%if 0%{?fedora} > 23 || 0%{?rhel} > 7
-%ifarch x86_64
-%define build_with_rust    1
-%endif
-%endif
-
 %if %{?system_libvpx}
 %global libvpx_version 1.4.0
 %endif
@@ -69,11 +61,7 @@
 %define tb_version   45.6.0
 
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
-# Bump one with each minor lightning release
-%define gdata_version 3.3
-# BUMP VERSION THERE:
-%define gdata_version_internal 0.14
-%global gdata_extname %{_libdir}/mozilla/extensions/{3550f703-e582-4d05-9a08-453d09bdfdc6}/{a62ef8ec-5fdc-40c2-873c-223b8a6925cc}
+%global langpackdir   %{mozappdir}/distribution/extensions
 
 # The tarball is pretty inconsistent with directory structure.
 # Sometimes there is a top level directory.  That goes here.
@@ -95,14 +83,14 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        52.9.1
-Release:        2%{?dist}
+Version:        60.0
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20180710.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20180815.tar.xz
 %endif
 # Locales for lightning
 Source2:        l10n-lightning-%{version}.tar.xz
@@ -115,47 +103,20 @@ Source20:       thunderbird.desktop
 Source21:       thunderbird.sh.in
 
 # Mozilla (XULRunner) patches
-Patch0:         thunderbird-install-dir.patch
 Patch9:         mozilla-build-arm.patch
-Patch10:        firefox-build-prbool.patch
 Patch26:        build-icu-big-endian.patch
 
 # Build patches
-Patch100:       thunderbird-objdir.patch
-Patch101:       build-nspr-prbool.patch
-Patch102:       build-werror.patch
 Patch103:       rhbz-1219542-s390-build.patch
 Patch104:       firefox-gcc-6.0.patch
-Patch105:       lightning-bad-langs.patch
-Patch106:       build-1360521-missing-cheddar.patch
 
-# Linux specific
-Patch200:       thunderbird-enable-addons.patch
 
 # PPC fix
-Patch300:       xulrunner-24.0-jemalloc-ppc.patch
-Patch301:       mozilla-1228540-1.patch
-Patch302:       mozilla-1228540.patch
-Patch303:       mozilla-1253216.patch
 Patch304:       mozilla-1245783.patch
-Patch305:       build-fix-dupes.patch
-Patch307:       build-missing-xlocale-h.patch
 
 # Fedora specific patches
-Patch400:       rhbz-966424.patch
-Patch403:       rhbz-1400293-fix-mozilla-1324096.patch
-# libvpx no longer has compat defines, use the current ones
 
 # Upstream patches
-
-# Backported upstream patches for compatibility with NSS sql database
-# format, rhbz#1496563
-Patch501:       sqlcompat-esr52-1-730495-backport
-Patch502:       sqlcompat-esr52-2-backport-1389664
-Patch503:       sqlcompat-esr52-3-backport-1394871
-Patch504:       sqlcompat-esr52-4-backport-1329360
-Patch505:       sqlcompat-esr52-5-backport-1382866
-Patch506:       sqlcompat-esr52-6-fix-logins-decrypt-test
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -212,10 +173,11 @@ BuildRequires:  yasm
 BuildRequires:  dbus-glib-devel
 Obsoletes:      thunderbird-lightning
 Provides:       thunderbird-lightning
-%if %{?build_with_rust}
+Obsoletes:      thunderbird-lightning-gdata <= 1:3.3.0.14
+#Conflicts:      thunderbird-lightning-gdata <= 1:3.3.0.14
+#Obsoletes:      thunderbird-52.9.1
 BuildRequires:  rust
 BuildRequires:  cargo
-%endif
 BuildRequires:  python2-devel
 Suggests:       u2f-hidraw-policy
 
@@ -243,67 +205,25 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 
 %global tb_version %{version}
 
-%package lightning-gdata
-Summary:        Lightning data provider for Google Calendar
-Version:        %{gdata_version}.%{gdata_version_internal}
-Requires:       %{name}%{?_isa} = %{tb_version}-%{release}
-Epoch:          1
-
-%description lightning-gdata
-This extension allows Lightning to read and write events to a Google Calendar.
-
-Please read http://wiki.mozilla.org/Calendar:GDATA_Provider for more details
-and before filing a bug. Also, be sure to visit the dicussion forums, maybe
-your bug already has a solution!
 
 
 %prep
 %setup -q
 
-%patch0   -p1 -b .dir
-%patch100 -p2 -b .objdir
-
 # Mozilla (XULRunner) patches
-cd mozilla
+#cd mozilla
 %patch9   -p2 -b .arm
-%patch10 -p1 -b .build-prbool
-%patch300 -p2 -b .852698
-#%patch302 -p1 -b .mozbz-1228540
-%patch303 -p1 -b .mozilla-1253216
-#%patch301 -p1 -b .mozbz-1228540-1
-#%patch102 -p2 -b .build-werror
-#%patch101 -p1 -b .nspr-prbool
 %ifarch s390
 %patch103 -p1 -b .rhbz-1219542-s390-build
 %endif
 %patch104 -p1 -b .gcc6
-%patch106 -p2 -b .1360521-missing-cheddar
-%patch400 -p1 -b .966424
-%patch403 -p1 -b .rhbz-1400293
 
 %patch304 -p1 -b .1245783
 # Patch for big endian platforms only
 %if 0%{?big_endian}
 %patch26 -p1 -b .icu
-%patch307 -p2 -b .xlocale
 %endif
-cd ..
-
-%patch305 -p1 -b .fix-dupes
-%patch105 -p1 -b .bad-langs
-%patch200 -p1 -b .addons
-
-%if 0%{?fedora} > 27
-pushd mozilla
-%patch501 -p1 -b .sqlcompat-1
-%patch502 -p1 -b .sqlcompat-2
-%patch503 -p1 -b .sqlcompat-3
-%patch504 -p1 -b .sqlcompat-4
-%patch505 -p1 -b .sqlcompat-5
-%patch506 -p1 -b .sqlcompat-6
-popd
-%endif
-
+#cd ..
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -327,8 +247,8 @@ echo "ac_add_options --without-system-nspr" >> .mozconfig
 echo "ac_add_options --without-system-nss" >> .mozconfig
 %endif
 
-# s390(x) fails to start with jemalloc enabled
-%ifarch s390 s390x
+# Second arches fail to start with jemalloc enabled
+%ifnarch %{ix86} x86_64
 echo "ac_add_options --disable-jemalloc" >> .mozconfig
 %endif
 
@@ -411,10 +331,6 @@ echo "ac_add_options --with-system-icu" >> .mozconfig
 echo "ac_add_options --without-system-icu" >> .mozconfig
 %endif
 
-%if %{?build_with_rust}
-echo "ac_add_options --enable-rust" >> .mozconfig
-%endif
-
 %ifarch aarch64 ppc64 s390x
 echo "ac_add_options --disable-skia" >> .mozconfig
 %endif
@@ -461,11 +377,9 @@ esac
 
 %if 0%{?big_endian}
   echo "Generate big endian version of config/external/icu/data/icud58l.dat"
-  cd mozilla
   ./mach python intl/icu_sources_data.py .
   ls -l config/external/icu/data
   rm -f config/external/icu/data/icudt*l.dat
-  cd ..
 %endif
 
 # Update the various config.guess to upstream release for aarch64 support
@@ -520,10 +434,14 @@ MOZ_SMP_FLAGS=-j1
 [ "$RPM_BUILD_NCPUS" -ge 8 ] && MOZ_SMP_FLAGS=-j8
 %endif
 
-make -f client.mk build STRIP="/bin/true" MOZ_MAKE_FLAGS="$MOZ_SMP_FLAGS"
+
+export MOZ_MAKE_FLAGS="$MOZ_SMP_FLAGS"
+export STRIP=/bin/true
+./mach build
+#make -f client.mk build STRIP="/bin/true" MOZ_MAKE_FLAGS="$MOZ_SMP_FLAGS"
 
 # Package l10n files
-cd %{objdir}/calendar/lightning
+cd %{objdir}/comm/calendar/lightning
 grep -v 'osx' ../../../calendar/locales/shipped-locales | while read lang x
 do
    make AB_CD=en-US L10N_XPI_NAME=lightning libs-$lang
@@ -547,9 +465,9 @@ DESTDIR=$RPM_BUILD_ROOT make install
 cd ..
 
 # install icons
-for s in 16 22 24 32 48 256; do
+for s in 16 22 24 32 48 64 128 256; do
     %{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/${s}x${s}/apps
-    %{__cp} -p other-licenses/branding/%{name}/mailicon${s}.png \
+    %{__cp} -p comm/mail/branding/%{name}/default${s}.png \
                $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/${s}x${s}/apps/thunderbird.png
 done
 
@@ -584,15 +502,22 @@ rm -f $RPM_BUILD_ROOT/%{_bindir}/thunderbird
 %{__rm} -f %{name}.lang # Delete for --short-circuit option
 touch %{name}.lang
 %if %{build_langpacks}
-%{__mkdir_p} $RPM_BUILD_ROOT%{mozappdir}/langpacks
+%{__mkdir_p} %{buildroot}%{langpackdir}
 %{__tar} xf %{SOURCE1}
 for langpack in `ls thunderbird-langpacks/*.xpi`; do
   language=`basename $langpack .xpi`
   extensionID=langpack-$language@thunderbird.mozilla.org
+  %{__mkdir_p} $extensionID
+  unzip -qq $langpack -d $extensionID
+  find $extensionID -type f | xargs chmod 644
 
+  cd $extensionID
+  zip -qq -r9mX ../${extensionID}.xpi *
+  cd -
+
+  %{__install} -m 644 ${extensionID}.xpi %{buildroot}%{langpackdir}
   language=`echo $language | sed -e 's/-/_/g'`
-  %{__install} -m 644 ${langpack} $RPM_BUILD_ROOT%{mozappdir}/langpacks/${extensionID}.xpi
-  echo "%%lang($language) %{mozappdir}/langpacks/${extensionID}.xpi" >> %{name}.lang
+  echo "%%lang($language) %{langpackdir}/${extensionID}.xpi" >> %{name}.lang
 done
 %{__rm} -rf thunderbird-langpacks
 %endif # build_langpacks
@@ -601,9 +526,7 @@ done
 %{__rm} -rf $RPM_BUILD_ROOT%{_libdir}/%{name}-devel-%{tb_version}
 
 # Copy over the LICENSE
-cd mozilla
 install -c -m 644 LICENSE $RPM_BUILD_ROOT%{mozappdir}
-cd -
 
 # Use the system hunspell dictionaries
 %{__rm} -rf $RPM_BUILD_ROOT/%{mozappdir}/dictionaries
@@ -665,12 +588,6 @@ SentUpstream: 2014-09-22
 </application>
 EOF
 
-# lightning-gdata
-mkdir -p $RPM_BUILD_ROOT%{gdata_extname}
-touch $RPM_BUILD_ROOT%{gdata_extname}/chrome.manifest
-
-unzip -qod $RPM_BUILD_ROOT%{gdata_extname} %{objdir}/dist/xpi-stage/gdata-provider-%{gdata_version}.en-US.linux-*.xpi
-
 #===============================================================================
 
 %post
@@ -687,10 +604,6 @@ fi
 %posttrans
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
-# lightning-gdata files=========================================================
-%files lightning-gdata
-# temp disable %doc mozilla/LEGAL mozilla/LICENSE mozilla/README.txt
-%{gdata_extname}
 #===============================================================================
 %files -f %{name}.lang
 %defattr(-,root,root,-)
@@ -711,10 +624,11 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{mozappdir}/dictionaries
 %dir %{mozappdir}/extensions
 %{mozappdir}/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}.xpi
-%dir %{mozappdir}/langpacks
+%if %{build_langpacks}
+%dir %{langpackdir}
+%endif
 %{mozappdir}/greprefs
 %{mozappdir}/isp
-%{mozappdir}/run-mozilla.sh
 %{mozappdir}/thunderbird-bin
 %{mozappdir}/thunderbird
 %{mozappdir}/*.so
@@ -728,6 +642,8 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/icons/hicolor/256x256/apps/thunderbird.png
 %{_datadir}/icons/hicolor/32x32/apps/thunderbird.png
 %{_datadir}/icons/hicolor/48x48/apps/thunderbird.png
+%{_datadir}/icons/hicolor/64x64/apps/thunderbird.png
+%{_datadir}/icons/hicolor/128x128/apps/thunderbird.png
 %if %{enable_mozilla_crashreporter}
 %{mozappdir}/crashreporter
 %{mozappdir}/crashreporter.ini
@@ -736,15 +652,14 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %if !%{?system_nss}
 %{mozappdir}/*.chk
 %endif
-%exclude %{_datadir}/idl/%{name}-%{tb_version}
-%exclude %{_includedir}/%{name}-%{tb_version}
 %{mozappdir}/dependentlibs.list
 %{mozappdir}/distribution
 %if !%{?system_libicu}
-%{mozappdir}/icudt*.dat
+#%{mozappdir}/icudt*.dat
 %endif
 %{mozappdir}/fonts
 %{mozappdir}/chrome.manifest
+%{mozappdir}/pingsender
 %if %{?use_gtk3}
 %{mozappdir}/gtk2/libmozgtk.so
 %endif
@@ -752,6 +667,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Wed Aug 15 2018 Jan Horak <jhorak@redhat.com> - 60.0-1
+- Update to 60.0
+- Removing gdata-provider extension because it's no longer provided by Thunderbird
+
 * Sat Jul 14 2018 Fedora Release Engineering <releng@fedoraproject.org> - 52.9.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
