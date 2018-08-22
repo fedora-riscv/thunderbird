@@ -335,10 +335,6 @@ echo "ac_add_options --with-system-icu" >> .mozconfig
 echo "ac_add_options --without-system-icu" >> .mozconfig
 %endif
 
-%ifarch aarch64 ppc64 s390x
-echo "ac_add_options --disable-skia" >> .mozconfig
-%endif
-
 %if !%{?system_jpeg}
 echo "ac_add_options --without-system-jpeg" >> .mozconfig
 %else
