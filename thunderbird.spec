@@ -105,11 +105,15 @@ Source21:       thunderbird.sh.in
 # Mozilla (XULRunner) patches
 Patch9:         mozilla-build-arm.patch
 Patch26:        build-icu-big-endian.patch
+Patch37:        build-jit-atomic-always-lucky.patch
+Patch40:        build-aarch64-skia.patch
+Patch226:       rhbz-1354671.patch
+Patch415:       Bug-1238661---fix-mozillaSignalTrampoline-to-work-.patch
+Patch417:       bug1375074-save-restore-x28.patch
 
 # Build patches
 Patch103:       rhbz-1219542-s390-build.patch
 Patch104:       firefox-gcc-6.0.patch
-
 
 # PPC fix
 Patch304:       mozilla-1245783.patch
@@ -228,6 +232,17 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 # Patch for big endian platforms only
 %if 0%{?big_endian}
 %patch26 -p1 -b .icu
+%patch37 -p1 -b .jit-atomic-lucky
+%patch40 -p1 -b .aarch64-skia
+#ARM run-time patch
+%ifarch aarch64
+%patch226 -p1 -b .1354671
+%endif
+%ifarch %{arm}
+%patch415 -p1 -b .mozilla-1238661
+%endif
+%patch417 -p1 -b .bug1375074-save-restore-x28
+
 %patch305 -p1 -b .big-endian
 %patch306 -p1 -b .1353817
 %endif
