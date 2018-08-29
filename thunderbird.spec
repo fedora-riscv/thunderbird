@@ -312,7 +312,7 @@ echo "ac_add_options --enable-system-ffi" >> .mozconfig
   echo "ac_add_options --disable-debug" >> .mozconfig
 %endif
 
-%ifarch %{arm} aarch64
+%ifarch aarch64
 echo "ac_add_options --disable-ion" >> .mozconfig
 %endif
 
@@ -329,13 +329,11 @@ echo "ac_add_options --with-fpu=vfpv3-d16" >> .mozconfig
 echo "ac_add_options --with-arch=armv7-a" >> .mozconfig
 echo "ac_add_options --with-float-abi=hard" >> .mozconfig
 echo "ac_add_options --with-fpu=neon" >> .mozconfig
-echo "ac_add_options --disable-ion" >> .mozconfig
 echo "ac_add_options --disable-yarr-jit" >> .mozconfig
 %endif
 %ifarch armv5tel
 echo "ac_add_options --with-arch=armv5te" >> .mozconfig
 echo "ac_add_options --with-float-abi=soft" >> .mozconfig
-echo "ac_add_options --disable-ion" >> .mozconfig
 echo "ac_add_options --disable-yarr-jit" >> .mozconfig
 %endif
 
