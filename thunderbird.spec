@@ -195,6 +195,7 @@ Obsoletes:      thunderbird-lightning-gdata <= 1:3.3.0.14
 #Obsoletes:      thunderbird-52.9.1
 BuildRequires:  rust
 BuildRequires:  cargo
+BuildRequires:  clang-devel
 BuildRequires:  python2-devel
 Suggests:       u2f-hidraw-policy
 
