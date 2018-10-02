@@ -13,6 +13,11 @@
 
 %define build_langpacks 1
 
+%global disable_elfhack       0
+%if 0%{?fedora} > 28
+%global disable_elfhack       1
+%endif
+
 %if %{?system_nss}
 %global nspr_version 4.10.6
 %global nspr_build_version %(pkg-config --silence-errors --modversion nspr 2>/dev/null || echo 65536)
@@ -119,6 +124,7 @@ Patch104:       firefox-gcc-6.0.patch
 Patch304:       mozilla-1245783.patch
 Patch305:       build-big-endian.patch
 Patch306:       mozilla-1353817.patch
+Patch307:       build-big-endian.patch
 
 # Fedora specific patches
 
@@ -247,6 +253,9 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %patch417 -p1 -b .bug1375074-save-restore-x28
 
 %patch306 -p1 -b .1353817
+%if 0%{?disable_elfhack}
+%patch307 -p1 -b .build-big-endian
+%endif
 #cd ..
 
 %if %{official_branding}
