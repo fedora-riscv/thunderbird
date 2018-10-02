@@ -124,7 +124,7 @@ Patch104:       firefox-gcc-6.0.patch
 Patch304:       mozilla-1245783.patch
 Patch305:       build-big-endian.patch
 Patch306:       mozilla-1353817.patch
-Patch307:       build-big-endian.patch
+Patch307:       build-disable-elfhack.patch
 
 # Fedora specific patches
 
@@ -254,7 +254,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 
 %patch306 -p1 -b .1353817
 %if 0%{?disable_elfhack}
-%patch307 -p1 -b .build-big-endian
+%patch307 -p1 -b .elfhack
 %endif
 #cd ..
 
