@@ -1,0 +1,12 @@
+diff -up firefox-62.0.2/toolkit/moz.configure.elfhack firefox-62.0.2/toolkit/moz.configure
+--- firefox-62.0.2/toolkit/moz.configure.elfhack	2018-09-27 14:32:56.549507561 +0200
++++ firefox-62.0.2/toolkit/moz.configure	2018-09-27 14:33:08.219532121 +0200
+@@ -1195,7 +1195,7 @@ with only_when(has_elfhack):
+     option('--disable-elf-hack', help='Disable elf hacks')
+ 
+     set_config('USE_ELF_HACK',
+-               depends_if('--enable-elf-hack')(lambda _: True))
++               depends_if('--enable-elf-hack')(lambda _: False))
+ 
+ 
+ @depends(check_build_environment)
