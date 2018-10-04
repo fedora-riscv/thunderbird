@@ -89,7 +89,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        60.2.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -126,6 +126,7 @@ Patch305:       build-big-endian.patch
 Patch306:       mozilla-1353817.patch
 Patch307:       build-disable-elfhack.patch
 Patch308:       build-triplet-failure.patch
+Patch309:       mozilla-1460871-ldap-query.patch
 
 # Fedora specific patches
 
@@ -238,6 +239,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 
 %patch304 -p1 -b .1245783
 %patch308 -p1 -b .triplet-failure
+%patch309 -p1 -b .1460871-ldap-query
 # Patch for big endian platforms only
 %if 0%{?big_endian}
 %patch26 -p1 -b .icu
@@ -693,8 +695,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
-* Wed Oct  3 2018 Jan Horak <jhorak@redhat.com> - 60.2.1-1
+* Wed Oct  3 2018 Jan Horak <jhorak@redhat.com> - 60.2.1-2
 - Update to 60.2.1
+- Added fix for rhbz#1546988
 
 * Wed Aug 15 2018 Jan Horak <jhorak@redhat.com> - 60.0-1
 - Update to 60.0

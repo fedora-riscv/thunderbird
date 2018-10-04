@@ -1,0 +1,164 @@
+diff -up thunderbird-60.2.1/comm/ldap/xpcom/public/nsILDAPOperation.idl.1460871-ldap-query thunderbird-60.2.1/comm/ldap/xpcom/public/nsILDAPOperation.idl
+--- thunderbird-60.2.1/comm/ldap/xpcom/public/nsILDAPOperation.idl.1460871-ldap-query	2018-10-01 16:52:39.000000000 +0200
++++ thunderbird-60.2.1/comm/ldap/xpcom/public/nsILDAPOperation.idl	2018-10-04 09:40:04.491575949 +0200
+@@ -52,6 +52,10 @@ interface nsILDAPOperation : nsISupports
+      * private parameter (anything caller desires)
+      */
+     attribute nsISupports closure;
++    /**
++     * number of the request for compare that the request is still valid.
++     */
++    attribute unsigned long requestNum;
+ 
+     /**
+      * No time and/or size limit specified
+diff -up thunderbird-60.2.1/comm/ldap/xpcom/src/nsLDAPOperation.cpp.1460871-ldap-query thunderbird-60.2.1/comm/ldap/xpcom/src/nsLDAPOperation.cpp
+--- thunderbird-60.2.1/comm/ldap/xpcom/src/nsLDAPOperation.cpp.1460871-ldap-query	2018-10-01 16:52:39.000000000 +0200
++++ thunderbird-60.2.1/comm/ldap/xpcom/src/nsLDAPOperation.cpp	2018-10-04 09:40:04.491575949 +0200
+@@ -400,6 +400,19 @@ convertControlArray(nsIArray *aXpcomArra
+     return NS_OK;
+ }
+ 
++  /* attribute unsigned long requestNum; */
++NS_IMETHODIMP nsLDAPOperation::GetRequestNum(uint32_t *aRequestNum)
++{
++    *aRequestNum = mRequestNum;
++    return NS_OK;
++}
++
++NS_IMETHODIMP nsLDAPOperation::SetRequestNum(uint32_t aRequestNum)
++{
++    mRequestNum = aRequestNum;
++    return NS_OK;
++}
++
+ NS_IMETHODIMP
+ nsLDAPOperation::SearchExt(const nsACString& aBaseDn, int32_t aScope,
+                            const nsACString& aFilter,
+diff -up thunderbird-60.2.1/comm/ldap/xpcom/src/nsLDAPOperation.h.1460871-ldap-query thunderbird-60.2.1/comm/ldap/xpcom/src/nsLDAPOperation.h
+--- thunderbird-60.2.1/comm/ldap/xpcom/src/nsLDAPOperation.h.1460871-ldap-query	2018-10-01 16:52:39.000000000 +0200
++++ thunderbird-60.2.1/comm/ldap/xpcom/src/nsLDAPOperation.h	2018-10-04 09:40:04.491575949 +0200
+@@ -36,6 +36,8 @@ class nsLDAPOperation : public nsILDAPOp
+      * used to break cycles
+      */
+     void Clear();
++    // Stores the request number for later check of the operation is still valid
++    int32_t mRequestNum;
+ 
+   private:
+     virtual ~nsLDAPOperation();
+diff -up thunderbird-60.2.1/comm/mailnews/addrbook/src/nsAbLDAPDirectoryQuery.cpp.1460871-ldap-query thunderbird-60.2.1/comm/mailnews/addrbook/src/nsAbLDAPDirectoryQuery.cpp
+--- thunderbird-60.2.1/comm/mailnews/addrbook/src/nsAbLDAPDirectoryQuery.cpp.1460871-ldap-query	2018-10-01 16:52:43.000000000 +0200
++++ thunderbird-60.2.1/comm/mailnews/addrbook/src/nsAbLDAPDirectoryQuery.cpp	2018-10-04 09:40:55.334670404 +0200
+@@ -22,6 +22,8 @@
+ 
+ using namespace mozilla;
+ 
++extern mozilla::LazyLogModule gLDAPLogModule; // defined in nsLDAPService.cpp
++
+ // nsAbLDAPListenerBase inherits nsILDAPMessageListener
+ class nsAbQueryLDAPMessageListener : public nsAbLDAPListenerBase
+ {
+@@ -66,7 +68,6 @@ protected:
+ 
+   bool mFinished;
+   bool mCanceled;
+-  bool mWaitingForPrevQueryToFinish;
+ 
+   nsCOMPtr<nsIMutableArray> mServerSearchControls;
+   nsCOMPtr<nsIMutableArray> mClientSearchControls;
+@@ -94,7 +95,6 @@ nsAbQueryLDAPMessageListener::nsAbQueryL
+   mResultLimit(resultLimit),
+   mFinished(false),
+   mCanceled(false),
+-  mWaitingForPrevQueryToFinish(false),
+   mServerSearchControls(serverSearchControls),
+   mClientSearchControls(clientSearchControls)
+ {
+@@ -116,9 +116,6 @@ nsresult nsAbQueryLDAPMessageListener::C
+         return NS_OK;
+ 
+     mCanceled = true;
+-    if (!mFinished)
+-      mWaitingForPrevQueryToFinish = true;
+-
+     return NS_OK;
+ }
+ 
+@@ -129,6 +126,8 @@ NS_IMETHODIMP nsAbQueryLDAPMessageListen
+ 
+   int32_t messageType;
+   rv = aMessage->GetType(&messageType);
++  uint32_t requestNum;
++  mOperation->GetRequestNum(&requestNum);
+   NS_ENSURE_SUCCESS(rv, rv);
+ 
+   bool cancelOperation = false;
+@@ -137,6 +136,14 @@ NS_IMETHODIMP nsAbQueryLDAPMessageListen
+   {
+     MutexAutoLock lock (mLock);
+ 
++    if (requestNum != sCurrentRequestNum) {
++      MOZ_LOG(gLDAPLogModule, mozilla::LogLevel::Debug,
++           ("nsAbQueryLDAPMessageListener::OnLDAPMessage: Ignoring message with "
++            "request num %d, current request num is %d.",
++            requestNum, sCurrentRequestNum));
++      return NS_OK;
++    }
++
+     if (mFinished)
+       return NS_OK;
+ 
+@@ -166,11 +173,10 @@ NS_IMETHODIMP nsAbQueryLDAPMessageListen
+         rv = OnLDAPMessageSearchResult(aMessage);
+       break;
+     case nsILDAPMessage::RES_SEARCH_ENTRY:
+-      if (!mFinished && !mWaitingForPrevQueryToFinish)
++      if (!mFinished)
+         rv = OnLDAPMessageSearchEntry(aMessage);
+       break;
+     case nsILDAPMessage::RES_SEARCH_RESULT:
+-      mWaitingForPrevQueryToFinish = false;
+       rv = OnLDAPMessageSearchResult(aMessage);
+       NS_ENSURE_SUCCESS(rv, rv);
+       break;
+@@ -207,6 +213,8 @@ nsresult nsAbQueryLDAPMessageListener::D
+   rv = mOperation->Init(mConnection, this, nullptr);
+   NS_ENSURE_SUCCESS(rv, rv);
+ 
++  mOperation->SetRequestNum(++sCurrentRequestNum);
++
+   nsAutoCString dn;
+   rv = mSearchUrl->GetDn(dn);
+   NS_ENSURE_SUCCESS(rv, rv);
+diff -up thunderbird-60.2.1/comm/mailnews/addrbook/src/nsAbLDAPListenerBase.cpp.1460871-ldap-query thunderbird-60.2.1/comm/mailnews/addrbook/src/nsAbLDAPListenerBase.cpp
+--- thunderbird-60.2.1/comm/mailnews/addrbook/src/nsAbLDAPListenerBase.cpp.1460871-ldap-query	2018-10-01 16:52:43.000000000 +0200
++++ thunderbird-60.2.1/comm/mailnews/addrbook/src/nsAbLDAPListenerBase.cpp	2018-10-04 09:40:04.492575951 +0200
+@@ -20,6 +20,8 @@
+ 
+ using namespace mozilla;
+ 
++uint32_t nsAbLDAPListenerBase::sCurrentRequestNum = 0;
++
+ nsAbLDAPListenerBase::nsAbLDAPListenerBase(nsILDAPURL* url,
+                                            nsILDAPConnection* connection,
+                                            const nsACString &login,
+@@ -249,6 +251,7 @@ NS_IMETHODIMP nsAbLDAPListenerBase::OnLD
+     InitFailed();
+     return rv;
+   }
++  mOperation->SetRequestNum(++sCurrentRequestNum);
+ 
+   // Try non-password mechanisms first
+   if (mSaslMechanism.EqualsLiteral("GSSAPI"))
+diff -up thunderbird-60.2.1/comm/mailnews/addrbook/src/nsAbLDAPListenerBase.h.1460871-ldap-query thunderbird-60.2.1/comm/mailnews/addrbook/src/nsAbLDAPListenerBase.h
+--- thunderbird-60.2.1/comm/mailnews/addrbook/src/nsAbLDAPListenerBase.h.1460871-ldap-query	2018-10-01 16:52:43.000000000 +0200
++++ thunderbird-60.2.1/comm/mailnews/addrbook/src/nsAbLDAPListenerBase.h	2018-10-04 09:40:04.492575951 +0200
+@@ -47,6 +47,7 @@ protected:
+   int32_t mTimeOut;
+   bool mBound;
+   bool mInitialized;
++  static uint32_t sCurrentRequestNum;
+ 
+   mozilla::Mutex mLock;
+ };
