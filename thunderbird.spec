@@ -96,10 +96,10 @@ Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
 Source1:        thunderbird-langpacks-%{version}-20181003.tar.xz
-%endif
 # Locales for lightning
-Source2:        l10n-lightning-%{version}.tar.xz
-Source3:        mklangsource.sh
+Source2:        lightning-langpacks-%{version}.tar.xz
+%endif
+Source3:        get-calendar-langpacks.sh
 
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -385,10 +385,6 @@ echo "ac_add_options --enable-crashreporter" >> .mozconfig
 echo "ac_add_options --disable-crashreporter" >> .mozconfig
 %endif
 
-# install lightning langpacks
-cd ..
-%{__tar} xf %{SOURCE2}
-cd -
 #===============================================================================
 
 %build
@@ -466,17 +462,6 @@ MOZ_SMP_FLAGS=-j1
 export MOZ_MAKE_FLAGS="$MOZ_SMP_FLAGS"
 export STRIP=/bin/true
 ./mach build
-#make -f client.mk build STRIP="/bin/true" MOZ_MAKE_FLAGS="$MOZ_SMP_FLAGS"
-
-# Package l10n files
-cd %{objdir}/comm/calendar/lightning
-grep -v 'osx' ../../../calendar/locales/shipped-locales | while read lang x
-do
-   make AB_CD=en-US L10N_XPI_NAME=lightning libs-$lang
-done
-# install l10n files
-make tools
-cd -
 
 # create debuginfo for crash-stats.mozilla.com
 %if %{enable_mozilla_crashreporter}
@@ -548,6 +533,12 @@ for langpack in `ls thunderbird-langpacks/*.xpi`; do
   echo "%%lang($language) %{langpackdir}/${extensionID}.xpi" >> %{name}.lang
 done
 %{__rm} -rf thunderbird-langpacks
+
+# lightning langpacks install
+cd %{buildroot}%{langpackdir}
+%{__tar} xf %{SOURCE2}
+chmod a+r *.xpi
+cd -
 %endif # build_langpacks
 
 # Get rid of devel package and its debugsymbols
