@@ -88,14 +88,14 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        60.2.1
-Release:        2%{?dist}
+Version:        60.3.0
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20181003.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20181030.tar.xz
 # Locales for lightning
 Source2:        lightning-langpacks-%{version}.tar.xz
 %endif
@@ -125,7 +125,6 @@ Patch304:       mozilla-1245783.patch
 Patch305:       build-big-endian.patch
 Patch306:       mozilla-1353817.patch
 Patch307:       build-disable-elfhack.patch
-Patch308:       build-triplet-failure.patch
 Patch309:       mozilla-1460871-ldap-query.patch
 
 # Fedora specific patches
@@ -238,7 +237,6 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %patch104 -p1 -b .gcc6
 
 %patch304 -p1 -b .1245783
-%patch308 -p1 -b .triplet-failure
 %patch309 -p1 -b .1460871-ldap-query
 # Patch for big endian platforms only
 %if 0%{?big_endian}
@@ -686,6 +684,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Oct 30 2018 Jan Horak <jhorak@redhat.com> - 60.3.0-1
+- Update to 60.3.0
+
 * Wed Oct  3 2018 Jan Horak <jhorak@redhat.com> - 60.2.1-2
 - Update to 60.2.1
 - Added fix for rhbz#1546988
