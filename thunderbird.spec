@@ -128,6 +128,7 @@ Patch307:       build-disable-elfhack.patch
 Patch309:       mozilla-1460871-ldap-query.patch
 
 # Fedora specific patches
+Patch310:       disable-dbus-remote.patch
 
 # Upstream patches
 
@@ -243,6 +244,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %patch26 -p1 -b .icu
 %patch305 -p1 -b .big-endian
 %endif
+%patch310 -p1 -b .disable-dbus-remote
 
 %patch37 -p1 -b .jit-atomic-lucky
 %patch40 -p1 -b .aarch64-skia
