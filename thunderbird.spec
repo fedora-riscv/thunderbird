@@ -89,7 +89,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        60.3.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -686,6 +686,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Nov 13 2018 Caolán McNamara <caolanm@redhat.com> - 60.3.0-3
+- rebuild for hunspell-1.7.0
+
 * Tue Nov 6 Martin Stransky <stransky@redhat.com> - 60.3.0-2
 - Disabled DBus remote
 
