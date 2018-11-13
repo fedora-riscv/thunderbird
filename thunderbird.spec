@@ -689,7 +689,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 * Tue Nov 13 2018 Caolán McNamara <caolanm@redhat.com> - 60.3.0-3
 - rebuild for hunspell-1.7.0
 
-* Tue Nov 6 Martin Stransky <stransky@redhat.com> - 60.3.0-2
+* Tue Nov 6 2018 Martin Stransky <stransky@redhat.com> - 60.3.0-2
 - Disabled DBus remote
 
 * Tue Oct 30 2018 Jan Horak <jhorak@redhat.com> - 60.3.0-1
