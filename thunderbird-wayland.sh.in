@@ -1,0 +1,7 @@
+#!/bin/bash
+#
+# Run Thunderbird under Wayland
+#
+
+export GDK_BACKEND=wayland
+exec /usr/bin/thunderbird "$@"

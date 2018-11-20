@@ -9,7 +9,6 @@
 
 %define system_sqlite 0
 %define system_ffi    1
-%define use_gtk3      0
 
 %define build_langpacks 1
 
@@ -55,23 +54,19 @@
 %define big_endian         1
 %endif
 
-%if 0%{?fedora} >= 26 || 0%{?rhel} > 7
-%define use_gtk3           1
-%endif
-
 %if %{?system_libvpx}
 %global libvpx_version 1.4.0
 %endif
 
 %define tb_version   45.6.0
 
-%define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\} 
+%define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\}
 %global langpackdir   %{mozappdir}/distribution/extensions
 
 # The tarball is pretty inconsistent with directory structure.
 # Sometimes there is a top level directory.  That goes here.
 #
-# IMPORTANT: If there is no top level directory, this should be 
+# IMPORTANT: If there is no top level directory, this should be
 # set to the cwd, ie: '.'
 %define objdir       objdir
 %define mozappdir    %{_libdir}/%{name}
@@ -89,7 +84,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        60.3.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -106,6 +101,8 @@ Source11:       thunderbird-mozconfig-branded
 Source12:       thunderbird-redhat-default-prefs.js
 Source20:       thunderbird.desktop
 Source21:       thunderbird.sh.in
+Source28:       thunderbird-wayland.sh.in
+Source29:       thunderbird-wayland.desktop
 
 # Mozilla (XULRunner) patches
 Patch9:         mozilla-build-arm.patch
@@ -129,6 +126,8 @@ Patch309:       mozilla-1460871-ldap-query.patch
 
 # Fedora specific patches
 Patch310:       disable-dbus-remote.patch
+Patch311:       firefox-wayland.patch
+Patch312:       thunderbird-dbus-remote.patch
 
 # Upstream patches
 
@@ -155,9 +154,7 @@ BuildRequires:  zip
 BuildRequires:  bzip2-devel
 BuildRequires:  zlib-devel
 BuildRequires:  libIDL-devel
-%if %{?use_gtk3}
 BuildRequires:  pkgconfig(gtk+-3.0)
-%endif
 BuildRequires:  pkgconfig(gtk+-2.0)
 BuildRequires:  krb5-devel
 BuildRequires:  pango-devel
@@ -202,6 +199,16 @@ Suggests:       u2f-hidraw-policy
 
 %description
 Mozilla Thunderbird is a standalone mail and newsgroup client.
+
+%package wayland
+Summary: Thunderbird Wayland launcher.
+Requires: %{name}
+%description wayland
+The thunderbird-wayland package contains launcher and desktop file
+to run Thunderbird natively on Wayland.
+%files wayland
+%{_bindir}/thunderbird-wayland
+%attr(644,root,root) %{_datadir}/applications/mozilla-thunderbird-wayland.desktop
 
 %if %{enable_mozilla_crashreporter}
 %global moz_debug_prefix %{_prefix}/lib/debug
@@ -262,6 +269,11 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %patch307 -p1 -b .elfhack
 %endif
 #cd ..
+
+# TODO - needs fixes
+#%patch311 -p1 -b .wayland
+#%patch312 -p1 -b .thunderbird-dbus-remote
+
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -374,11 +386,6 @@ echo "ac_add_options --with-system-libvpx" >> .mozconfig
 %else
 echo "ac_add_options --without-system-libvpx" >> .mozconfig
 %endif
-%if %{?use_gtk3}
-  echo "ac_add_options --enable-default-toolkit=cairo-gtk3" >> .mozconfig
-%else
-  echo "ac_add_options --enable-default-toolkit=cairo-gtk2" >> .mozconfig
-%endif
 %if %{enable_mozilla_crashreporter}
 echo "ac_add_options --enable-crashreporter" >> .mozconfig
 %else
@@ -415,7 +422,7 @@ find ./ -name config.guess -exec cp /usr/lib/rpm/config.guess {} ';'
 # everywhere in the code; so, don't override that.
 #
 # Disable C++ exceptions since Mozilla code is not exception-safe
-# 
+#
 MOZ_OPT_FLAGS=$(echo "$RPM_OPT_FLAGS -fpermissive" | \
                       %{__sed} -e 's/-Wall//')
 #rhbz#1037353
@@ -488,12 +495,17 @@ done
 desktop-file-install --vendor mozilla \
   --dir $RPM_BUILD_ROOT%{_datadir}/applications \
   %{SOURCE20}
+desktop-file-install --vendor mozilla \
+  --dir $RPM_BUILD_ROOT%{_datadir}/applications \
+  %{SOURCE29}
 
 
 # set up the thunderbird start script
 rm -f $RPM_BUILD_ROOT/%{_bindir}/thunderbird
 %{__cat} %{SOURCE21}  > $RPM_BUILD_ROOT%{_bindir}/thunderbird
 %{__chmod} 755 $RPM_BUILD_ROOT/%{_bindir}/thunderbird
+%{__cat} %{SOURCE28} > %{buildroot}%{_bindir}/thunderbird-wayland
+%{__chmod} 755 %{buildroot}%{_bindir}/thunderbird-wayland
 
 # set up our default preferences
 %{__cat} %{SOURCE12} | %{__sed} -e 's,THUNDERBIRD_RPM_VR,%{tb_version}-%{release},g' > \
@@ -556,7 +568,7 @@ ln -s %{_datadir}/myspell $RPM_BUILD_ROOT%{mozappdir}/dictionaries
 touch $RPM_BUILD_ROOT%{mozappdir}/components/compreg.dat
 touch $RPM_BUILD_ROOT%{mozappdir}/components/xpti.dat
 
-# Add debuginfo for crash-stats.mozilla.com 
+# Add debuginfo for crash-stats.mozilla.com
 %if %{enable_mozilla_crashreporter}
 %{__mkdir_p} $RPM_BUILD_ROOT/%{moz_debug_dir}
 %{__cp} %{objdir}/dist/%{symbols_file_name} $RPM_BUILD_ROOT/%{moz_debug_dir}
@@ -673,19 +685,18 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 %{mozappdir}/dependentlibs.list
 %{mozappdir}/distribution
-%if !%{?system_libicu}
-#%{mozappdir}/icudt*.dat
-%endif
 %{mozappdir}/fonts
 %{mozappdir}/chrome.manifest
 %{mozappdir}/pingsender
-%if %{?use_gtk3}
 %{mozappdir}/gtk2/libmozgtk.so
-%endif
 
 #===============================================================================
 
 %changelog
+* Tue Nov 20 2018 Martin Stransky <stransky@redhat.com> - 60.3.0-4
+- Build with Wayland support
+- Enabled DBus remote for Wayland
+
 * Tue Nov 13 2018 Caolán McNamara <caolanm@redhat.com> - 60.3.0-3
 - rebuild for hunspell-1.7.0
 
@@ -986,7 +997,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 - Update to 24.3.0
 
 * Mon Dec 16 2013 Martin Stransky <stransky@redhat.com> - 24.2.0-4
-- Fixed rhbz#1024232 - thunderbird: squiggly lines used 
+- Fixed rhbz#1024232 - thunderbird: squiggly lines used
   for spelling correction disappear randomly
 
 * Fri Dec 13 2013 Martin Stransky <stransky@redhat.com> - 24.2.0-3
@@ -1322,7 +1333,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 - Update to 3.0.1
 
 * Mon Jan 18 2010 Martin Stransky <stransky@redhat.com> - 3.0-5
-- Added fix for #480603 - thunderbird takes 
+- Added fix for #480603 - thunderbird takes
   unacceptably long time to start
 
 * Wed Dec  9 2009 Jan Horak <jhorak@redhat.com> - 3.0-4
@@ -1371,7 +1382,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 * Mon Mar  2 2009 Jan Horak <jhorak@redhat.com> - 3.0-1.beta2
 - Update to 3.0 beta2
-- Added Patch2 to build correctly when building with --enable-shared option 
+- Added Patch2 to build correctly when building with --enable-shared option
 
 * Wed Feb 25 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.0.0.18-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
@@ -1425,7 +1436,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 - Removed hardcoded MAX_PATH, PATH_MAX and MAXPATHLEN macros
 
 * Tue Sep 11 2007 Christopher Aillon <caillon@redhat.com> 2.0.0.6-4
-- Fix crashes when using GTK+ themes containing a gtkrc which specify 
+- Fix crashes when using GTK+ themes containing a gtkrc which specify
   GtkOptionMenu::indicator_size and GtkOptionMenu::indicator_spacing
 
 * Mon Sep 10 2007 Martin Stransky <stransky@redhat.com> 2.0.0.6-3
@@ -1471,7 +1482,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 * Mon Feb 12 2007 Martin Stransky <stransky@redhat.com> 1.5.0.9-8
 - added fix for #227406: garbage characters on some websites
   (when pango is disabled)
-  
+
 * Tue Jan 30 2007 Christopher Aillon <caillon@redhat.com> 1.5.0.9-7
 - Updated cursor position patch from tagoh to fix issue with "jumping"
   cursor when in a textfield with tabs.
@@ -1740,7 +1751,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 * Wed Sep 01 2004 David Hill <djh[at]ii.net> 0.7.3-4
 - remove all Xvfb-related hacks
 
-* Wed Sep 01 2004 Warren Togami <wtogami@redhat.com> 
+* Wed Sep 01 2004 Warren Togami <wtogami@redhat.com>
 - actually apply psfonts
 - add mozilla gnome-uriloader patch to prevent build failure
 
@@ -1784,7 +1795,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 - temporary workaround for enigmail skin "modern" bug
 
 * Mon May 10 2004 David Hill <djh[at]ii.net> 0.6-0.fdr.4
-- update to Enigmail 0.84.0 
+- update to Enigmail 0.84.0
 - update launch script
 
 * Mon May 10 2004 David Hill <djh[at]ii.net> 0.6-0.fdr.3
@@ -1921,4 +1932,3 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 * Mon Sep 01 2003 David Hill <djh[at]ii.net>
 - initial RPM
   (based on the fedora MozillaFirebird-0.6.1 specfile)
-

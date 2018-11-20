@@ -37,6 +37,13 @@ MOZ_EXTENSIONS_PROFILE_DIR="$HOME/.mozilla/extensions/{3550f703-e582-4d05-9a08-4
 MOZ_LAUNCHER="$MOZ_DIST_BIN/thunderbird"
 
 ##
+## Enable X11 backend by default?
+##
+if ! [ "$GDK_BACKEND" ]; then
+  export GDK_BACKEND=x11
+fi
+
+##
 ## Set MOZ_ENABLE_PANGO is no longer used because Pango is enabled by default
 ## you may use MOZ_DISABLE_PANGO=1 to force disabling of pango
 ##
