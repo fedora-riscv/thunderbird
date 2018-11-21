@@ -84,7 +84,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        60.3.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -128,6 +128,7 @@ Patch309:       mozilla-1460871-ldap-query.patch
 Patch310:       disable-dbus-remote.patch
 Patch311:       firefox-wayland.patch
 Patch312:       thunderbird-dbus-remote.patch
+Patch313:       firefox-wayland-crash-mozbz1507475.patch
 
 # Upstream patches
 
@@ -189,8 +190,6 @@ BuildRequires:  dbus-glib-devel
 Obsoletes:      thunderbird-lightning
 Provides:       thunderbird-lightning
 Obsoletes:      thunderbird-lightning-gdata <= 1:3.3.0.14
-#Conflicts:      thunderbird-lightning-gdata <= 1:3.3.0.14
-#Obsoletes:      thunderbird-52.9.1
 BuildRequires:  rust
 BuildRequires:  cargo
 BuildRequires:  clang-devel
@@ -271,9 +270,9 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 #cd ..
 
 # TODO - needs fixes
-#%patch311 -p1 -b .wayland
+%patch311 -p1 -b .wayland
 #%patch312 -p1 -b .thunderbird-dbus-remote
-
+%patch313 -p1 -b .mozbz1507475
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -693,6 +692,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Wed Nov 21 2018 Martin Stransky <stransky@redhat.com> - 60.3.0-5
+- Backported Wayland related code from Firefox 63
+- Added fix for mozbz#1507475 - crash when display changes
+
 * Tue Nov 20 2018 Martin Stransky <stransky@redhat.com> - 60.3.0-4
 - Build with Wayland support
 - Enabled DBus remote for Wayland

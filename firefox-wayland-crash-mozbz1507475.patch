@@ -1,0 +1,94 @@
+diff -up firefox-63.0.3/widget/gtk/mozcontainer.cpp.mozbz1507475 firefox-63.0.3/widget/gtk/mozcontainer.cpp
+--- firefox-63.0.3/widget/gtk/mozcontainer.cpp.mozbz1507475	2018-11-15 01:20:56.000000000 +0100
++++ firefox-63.0.3/widget/gtk/mozcontainer.cpp	2018-11-21 15:41:41.858692640 +0100
+@@ -169,6 +169,8 @@ moz_container_class_init (MozContainerCl
+ }
+ 
+ #if defined(MOZ_WAYLAND)
++static struct wl_subcompositor *subcompositor;
++
+ static void
+ registry_handle_global (void *data,
+                         struct wl_registry *registry,
+@@ -176,9 +178,8 @@ registry_handle_global (void *data,
+                         const char *interface,
+                         uint32_t version)
+ {
+-    MozContainer *container = MOZ_CONTAINER(data);
+     if(strcmp(interface, "wl_subcompositor") == 0) {
+-        container->subcompositor =
++        subcompositor =
+             static_cast<wl_subcompositor*>(wl_registry_bind(registry,
+                                            name,
+                                            &wl_subcompositor_interface,
+@@ -197,6 +198,24 @@ static const struct wl_registry_listener
+     registry_handle_global,
+     registry_handle_global_remove
+ };
++
++struct wl_subcompositor* subcompositor_get(void)
++{
++    if (!subcompositor) {
++        GdkDisplay *gdk_display = gdk_display_get_default();
++        // Available as of GTK 3.8+
++        static auto sGdkWaylandDisplayGetWlDisplay =
++            (wl_display *(*)(GdkDisplay *))
++            dlsym(RTLD_DEFAULT, "gdk_wayland_display_get_wl_display");
++
++        wl_display* display = sGdkWaylandDisplayGetWlDisplay(gdk_display);
++        wl_registry* registry = wl_display_get_registry(display);
++        wl_registry_add_listener(registry, &registry_listener, nullptr);
++        wl_display_dispatch(display);
++        wl_display_roundtrip(display);
++    }
++    return subcompositor;
++}
+ #endif
+ 
+ void
+@@ -208,25 +227,10 @@ moz_container_init (MozContainer *contai
+ 
+ #if defined(MOZ_WAYLAND)
+     {
+-      container->subcompositor = nullptr;
+       container->surface = nullptr;
+       container->subsurface = nullptr;
+       container->eglwindow = nullptr;
+       container->parent_surface_committed = false;
+-
+-      GdkDisplay *gdk_display = gtk_widget_get_display(GTK_WIDGET(container));
+-      if (GDK_IS_WAYLAND_DISPLAY (gdk_display)) {
+-          // Available as of GTK 3.8+
+-          static auto sGdkWaylandDisplayGetWlDisplay =
+-              (wl_display *(*)(GdkDisplay *))
+-              dlsym(RTLD_DEFAULT, "gdk_wayland_display_get_wl_display");
+-
+-          wl_display* display = sGdkWaylandDisplayGetWlDisplay(gdk_display);
+-          wl_registry* registry = wl_display_get_registry(display);
+-          wl_registry_add_listener(registry, &registry_listener, container);
+-          wl_display_dispatch(display);
+-          wl_display_roundtrip(display);
+-        }
+     }
+ #endif
+ }
+@@ -298,7 +302,7 @@ moz_container_map_surface(MozContainer *
+         }
+ 
+         container->subsurface =
+-          wl_subcompositor_get_subsurface (container->subcompositor,
++          wl_subcompositor_get_subsurface (subcompositor_get(),
+                                            container->surface,
+                                            gtk_surface);
+         gint x, y;
+diff -up firefox-63.0.3/widget/gtk/mozcontainer.h.mozbz1507475 firefox-63.0.3/widget/gtk/mozcontainer.h
+--- firefox-63.0.3/widget/gtk/mozcontainer.h.mozbz1507475	2018-11-15 01:20:56.000000000 +0100
++++ firefox-63.0.3/widget/gtk/mozcontainer.h	2018-11-21 14:16:54.412397805 +0100
+@@ -69,7 +69,6 @@ struct _MozContainer
+     GList         *children;
+ 
+ #ifdef MOZ_WAYLAND
+-    struct wl_subcompositor *subcompositor;
+     struct wl_surface       *surface;
+     struct wl_subsurface    *subsurface;
+     struct wl_egl_window    *eglwindow;
