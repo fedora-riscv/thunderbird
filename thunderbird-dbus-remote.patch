@@ -75,7 +75,6 @@ diff -up thunderbird-60.3.0/widget/xremoteclient/DBusRemoteClient.cpp.old thunde
  
    return NS_OK;
  }
-diff -up thunderbird-60.3.0/widget/xremoteclient/DBusRemoteClient.h.old thunderbird-60.3.0/widget/xremoteclient/DBusRemoteClient.h
 diff -up thunderbird-60.3.0/widget/xremoteclient/moz.build.old thunderbird-60.3.0/widget/xremoteclient/moz.build
 --- thunderbird-60.3.0/widget/xremoteclient/moz.build.old	2018-10-31 01:08:14.000000000 +0100
 +++ thunderbird-60.3.0/widget/xremoteclient/moz.build	2018-11-14 13:37:32.244714628 +0100
@@ -186,3 +185,28 @@ diff -up thunderbird-60.3.0/widget/xremoteclient/XRemoteClient.cpp.old thunderbi
          // If there's a profile compare it with what we have
          if (data_return) {
 
+diff -up thunderbird-60.3.0/toolkit/xre/nsAppRunner.cpp.old thunderbird-60.3.0/toolkit/xre/nsAppRunner.cpp
+--- thunderbird-60.3.0/toolkit/xre/nsAppRunner.cpp.old	2018-11-22 10:24:36.980367239 +0100
++++ thunderbird-60.3.0/toolkit/xre/nsAppRunner.cpp	2018-11-22 10:23:22.702553710 +0100
+@@ -1830,18 +1830,13 @@ StartRemoteClient(const char* aDesktopSt
+ {
+   nsAutoPtr<nsRemoteClient> client;
+ 
+-  if (aIsX11Display) {
+-    client = new XRemoteClient();
+-  } else {
+ #if defined(MOZ_ENABLE_DBUS) && defined(MOZ_WAYLAND)
+-    client = new DBusRemoteClient();
++  client = new DBusRemoteClient();
+ #else
+-    MOZ_ASSERT(false, "Missing remote implementation!");
+-    return REMOTE_NOT_FOUND;
++  client = new XRemoteClient();
+ #endif
+-  }
+ 
+-  nsresult rv = client->Init();
++  nsresult rv = client ? client->Init() : NS_ERROR_FAILURE;
+   if (NS_FAILED(rv))
+     return REMOTE_NOT_FOUND;
+ 

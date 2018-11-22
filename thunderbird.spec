@@ -84,7 +84,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        60.3.0
-Release:        5%{?dist}
+Release:        6%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -271,7 +271,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 
 # TODO - needs fixes
 %patch311 -p1 -b .wayland
-#%patch312 -p1 -b .thunderbird-dbus-remote
+%patch312 -p1 -b .thunderbird-dbus-remote
 %patch313 -p1 -b .mozbz1507475
 
 %if %{official_branding}
@@ -692,6 +692,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Thu Nov 22 2018 Martin Stransky <stransky@redhat.com> - 60.3.0-6
+- Enabled DBus remote.
+
 * Wed Nov 21 2018 Martin Stransky <stransky@redhat.com> - 60.3.0-5
 - Backported Wayland related code from Firefox 63
 - Added fix for mozbz#1507475 - crash when display changes
