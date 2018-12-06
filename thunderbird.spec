@@ -83,14 +83,14 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        60.3.1
+Version:        60.3.3
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20181122.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20181205.tar.xz
 # Locales for lightning
 Source2:        lightning-langpacks-%{version}.tar.xz
 %endif
@@ -692,6 +692,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Wed Dec  5 2018 Jan Horak <jhorak@redhat.com> - 60.3.3-1
+- Update to 60.3.3
+
 * Thu Nov 22 2018 Jan Horak <jhorak@redhat.com> - 60.3.1-1
 - Update to 60.3.1
 
