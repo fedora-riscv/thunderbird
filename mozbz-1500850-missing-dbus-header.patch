@@ -1,0 +1,12 @@
+diff --git a/widget/xremoteclient/DBusRemoteClient.cpp b/widget/xremoteclient/DBusRemoteClient.cpp
+--- a/widget/xremoteclient/DBusRemoteClient.cpp
++++ b/widget/xremoteclient/DBusRemoteClient.cpp
+@@ -13,6 +13,7 @@
+ #include "nsPrintfCString.h"
+ 
+ #include <dlfcn.h>
++#include <dbus/dbus-glib-lowlevel.h>
+ 
+ using mozilla::LogLevel;
+ static mozilla::LazyLogModule sRemoteLm("DBusRemoteClient");
+

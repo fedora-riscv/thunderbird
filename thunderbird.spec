@@ -83,14 +83,14 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        60.3.3
+Version:        60.4.0
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20181205.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20190102.tar.xz
 # Locales for lightning
 Source2:        lightning-langpacks-%{version}.tar.xz
 %endif
@@ -123,11 +123,11 @@ Patch305:       build-big-endian.patch
 Patch306:       mozilla-1353817.patch
 Patch307:       build-disable-elfhack.patch
 Patch309:       mozilla-1460871-ldap-query.patch
+Patch314:       mozbz-1500850-missing-dbus-header.patch
 
 # Fedora specific patches
 Patch310:       disable-dbus-remote.patch
 Patch311:       firefox-wayland.patch
-Patch312:       thunderbird-dbus-remote.patch
 Patch313:       firefox-wayland-crash-mozbz1507475.patch
 
 # Upstream patches
@@ -245,6 +245,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 
 %patch304 -p1 -b .1245783
 %patch309 -p1 -b .1460871-ldap-query
+%patch314 -p1 -b .1500850-missing-dbus-header
 # Patch for big endian platforms only
 %if 0%{?big_endian}
 %patch26 -p1 -b .icu
@@ -271,7 +272,6 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 
 # TODO - needs fixes
 %patch311 -p1 -b .wayland
-%patch312 -p1 -b .thunderbird-dbus-remote
 %patch313 -p1 -b .mozbz1507475
 
 %if %{official_branding}
@@ -692,6 +692,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Wed Jan  2 2019 Jan Horak <jhorak@redhat.com> - 60.4.0-1
+- Update to 60.4.0
+
 * Wed Dec  5 2018 Jan Horak <jhorak@redhat.com> - 60.3.3-1
 - Update to 60.3.3
 
