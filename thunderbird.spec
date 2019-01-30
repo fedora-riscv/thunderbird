@@ -58,8 +58,6 @@
 %global libvpx_version 1.4.0
 %endif
 
-%define tb_version   45.6.0
-
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\}
 %global langpackdir   %{mozappdir}/distribution/extensions
 
@@ -83,14 +81,14 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        60.4.0
+Version:        60.5.0
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20190102.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20190129.tar.xz
 # Locales for lightning
 Source2:        lightning-langpacks-%{version}.tar.xz
 %endif
@@ -111,11 +109,11 @@ Patch37:        build-jit-atomic-always-lucky.patch
 Patch40:        build-aarch64-skia.patch
 Patch226:       rhbz-1354671.patch
 Patch415:       Bug-1238661---fix-mozillaSignalTrampoline-to-work-.patch
-Patch417:       bug1375074-save-restore-x28.patch
+#Patch417:       bug1375074-save-restore-x28.patch
 
 # Build patches
 Patch103:       rhbz-1219542-s390-build.patch
-Patch104:       firefox-gcc-6.0.patch
+#Patch104:       firefox-gcc-6.0.patch
 
 # PPC fix
 Patch304:       mozilla-1245783.patch
@@ -123,10 +121,10 @@ Patch305:       build-big-endian.patch
 Patch306:       mozilla-1353817.patch
 Patch307:       build-disable-elfhack.patch
 Patch309:       mozilla-1460871-ldap-query.patch
-Patch314:       mozbz-1500850-missing-dbus-header.patch
+#Patch314:       mozbz-1500850-missing-dbus-header.patch
 
 # Fedora specific patches
-Patch310:       disable-dbus-remote.patch
+#Patch310:       disable-dbus-remote.patch
 Patch311:       firefox-wayland.patch
 Patch313:       firefox-wayland-crash-mozbz1507475.patch
 
@@ -228,10 +226,6 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %defattr(-,root,root)
 %endif
 
-%global tb_version %{version}
-
-
-
 %prep
 %setup -q
 
@@ -241,17 +235,17 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %ifarch s390
 %patch103 -p1 -b .rhbz-1219542-s390-build
 %endif
-%patch104 -p1 -b .gcc6
+#%patch104 -p1 -b .gcc6
 
 %patch304 -p1 -b .1245783
 %patch309 -p1 -b .1460871-ldap-query
-%patch314 -p1 -b .1500850-missing-dbus-header
+#%patch314 -p1 -b .1500850-missing-dbus-header
 # Patch for big endian platforms only
 %if 0%{?big_endian}
 %patch26 -p1 -b .icu
 %patch305 -p1 -b .big-endian
 %endif
-%patch310 -p1 -b .disable-dbus-remote
+#%patch310 -p1 -b .disable-dbus-remote
 
 %patch37 -p1 -b .jit-atomic-lucky
 %patch40 -p1 -b .aarch64-skia
@@ -262,7 +256,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %ifarch %{arm}
 %patch415 -p1 -b .mozilla-1238661
 %endif
-%patch417 -p1 -b .bug1375074-save-restore-x28
+#%patch417 -p1 -b .bug1375074-save-restore-x28
 
 %patch306 -p1 -b .1353817
 %if 0%{?disable_elfhack}
@@ -270,9 +264,9 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %endif
 #cd ..
 
-# TODO - needs fixes
-%patch311 -p1 -b .wayland
-%patch313 -p1 -b .mozbz1507475
+#TODO - needs fixes
+#%patch311 -p1 -b .wayland
+#%patch313 -p1 -b .mozbz1507475
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -507,7 +501,7 @@ rm -f $RPM_BUILD_ROOT/%{_bindir}/thunderbird
 %{__chmod} 755 %{buildroot}%{_bindir}/thunderbird-wayland
 
 # set up our default preferences
-%{__cat} %{SOURCE12} | %{__sed} -e 's,THUNDERBIRD_RPM_VR,%{tb_version}-%{release},g' > \
+%{__cat} %{SOURCE12} | %{__sed} -e 's,THUNDERBIRD_RPM_VR,%{version}-%{release},g' > \
         $RPM_BUILD_ROOT/rh-default-prefs
 %{__install} -D $RPM_BUILD_ROOT/rh-default-prefs $RPM_BUILD_ROOT/%{mozappdir}/greprefs/all-redhat.js
 %{__install} -D $RPM_BUILD_ROOT/rh-default-prefs $RPM_BUILD_ROOT/%{mozappdir}/defaults/pref/all-redhat.js
@@ -553,7 +547,7 @@ cd -
 %endif # build_langpacks
 
 # Get rid of devel package and its debugsymbols
-%{__rm} -rf $RPM_BUILD_ROOT%{_libdir}/%{name}-devel-%{tb_version}
+%{__rm} -rf $RPM_BUILD_ROOT%{_libdir}/%{name}-devel-%{version}
 
 # Copy over the LICENSE
 install -c -m 644 LICENSE $RPM_BUILD_ROOT%{mozappdir}
@@ -692,6 +686,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Wed Jan 30 2019 Martin Stransky <stransky@redhat.com> - 60.5.0-1
+- Update to 60.5.0
+
 * Wed Jan  2 2019 Jan Horak <jhorak@redhat.com> - 60.4.0-1
 - Update to 60.4.0
 
