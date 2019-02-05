@@ -676,7 +676,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
-* Tue Jan 5 2019 Martin Stransky <stransky@redhat.com> - 60.5.0-3
+* Tue Feb 05 2019 Martin Stransky <stransky@redhat.com> - 60.5.0-3
 - Updated Wayland patches
 
 * Sun Feb 03 2019 Fedora Release Engineering <releng@fedoraproject.org> - 60.5.0-2
