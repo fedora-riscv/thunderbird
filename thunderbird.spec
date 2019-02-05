@@ -109,11 +109,9 @@ Patch37:        build-jit-atomic-always-lucky.patch
 Patch40:        build-aarch64-skia.patch
 Patch226:       rhbz-1354671.patch
 Patch415:       Bug-1238661---fix-mozillaSignalTrampoline-to-work-.patch
-#Patch417:       bug1375074-save-restore-x28.patch
 
 # Build patches
 Patch103:       rhbz-1219542-s390-build.patch
-#Patch104:       firefox-gcc-6.0.patch
 
 # PPC fix
 Patch304:       mozilla-1245783.patch
@@ -121,12 +119,9 @@ Patch305:       build-big-endian.patch
 Patch306:       mozilla-1353817.patch
 Patch307:       build-disable-elfhack.patch
 Patch309:       mozilla-1460871-ldap-query.patch
-#Patch314:       mozbz-1500850-missing-dbus-header.patch
 
 # Fedora specific patches
-#Patch310:       disable-dbus-remote.patch
 Patch311:       firefox-wayland.patch
-Patch313:       firefox-wayland-crash-mozbz1507475.patch
 
 # Upstream patches
 
@@ -235,17 +230,14 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %ifarch s390
 %patch103 -p1 -b .rhbz-1219542-s390-build
 %endif
-#%patch104 -p1 -b .gcc6
 
 %patch304 -p1 -b .1245783
 %patch309 -p1 -b .1460871-ldap-query
-#%patch314 -p1 -b .1500850-missing-dbus-header
 # Patch for big endian platforms only
 %if 0%{?big_endian}
 %patch26 -p1 -b .icu
 %patch305 -p1 -b .big-endian
 %endif
-#%patch310 -p1 -b .disable-dbus-remote
 
 %patch37 -p1 -b .jit-atomic-lucky
 %patch40 -p1 -b .aarch64-skia
@@ -256,7 +248,6 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %ifarch %{arm}
 %patch415 -p1 -b .mozilla-1238661
 %endif
-#%patch417 -p1 -b .bug1375074-save-restore-x28
 
 %patch306 -p1 -b .1353817
 %if 0%{?disable_elfhack}
@@ -264,9 +255,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %endif
 #cd ..
 
-#TODO - needs fixes
-#%patch311 -p1 -b .wayland
-#%patch313 -p1 -b .mozbz1507475
+%patch311 -p1 -b .wayland
 
 %if %{official_branding}
 # Required by Mozilla Corporation
