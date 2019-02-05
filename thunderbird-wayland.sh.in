@@ -3,5 +3,10 @@
 # Run Thunderbird under Wayland
 #
 
-export GDK_BACKEND=wayland
+##
+## Enable Wayland backend?
+##
+if [ "$XDG_CURRENT_DESKTOP" == "GNOME" ]; then
+  export MOZ_ENABLE_WAYLAND=1
+fi
 exec /usr/bin/thunderbird "$@"

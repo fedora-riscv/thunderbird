@@ -82,7 +82,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        60.5.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -122,6 +122,7 @@ Patch309:       mozilla-1460871-ldap-query.patch
 
 # Fedora specific patches
 Patch311:       firefox-wayland.patch
+Patch312:       mozilla-1522780.patch
 
 # Upstream patches
 
@@ -256,6 +257,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 #cd ..
 
 %patch311 -p1 -b .wayland
+%patch312 -p1 -b .1522780
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -676,6 +678,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Feb 05 2019 Martin Stransky <stransky@redhat.com> - 60.5.0-4
+- Use MOZ_ENABLE_WAYLAND for Wayland launcher.
+
 * Tue Feb 05 2019 Martin Stransky <stransky@redhat.com> - 60.5.0-3
 - Updated Wayland patches
 
