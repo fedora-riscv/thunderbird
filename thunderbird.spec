@@ -81,8 +81,8 @@
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        60.5.0
-Release:        4%{?dist}
+Version:        60.5.1
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -678,6 +678,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Mon Feb 18 2019 Martin Stransky <stransky@redhat.com> - 60.5.1-1
+- Update to 60.5.1
+
 * Tue Feb 05 2019 Martin Stransky <stransky@redhat.com> - 60.5.0-4
 - Use MOZ_ENABLE_WAYLAND for Wayland launcher.
 
