@@ -9,4 +9,4 @@
 if [ "$XDG_CURRENT_DESKTOP" == "GNOME" ]; then
   export MOZ_ENABLE_WAYLAND=1
 fi
-exec /usr/bin/thunderbird "$@"
+exec __PREFIX__/bin/thunderbird "$@"

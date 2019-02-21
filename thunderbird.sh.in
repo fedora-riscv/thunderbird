@@ -10,12 +10,12 @@
 MOZ_ARCH=$(uname -m)
 case $MOZ_ARCH in
         x86_64 | s390x | sparc64 )
-                MOZ_LIB_DIR="/usr/lib64"
-                SECONDARY_LIB_DIR="/usr/lib"
+                MOZ_LIB_DIR="__PREFIX__/lib64"
+                SECONDARY_LIB_DIR="__PREFIX__/lib"
                 ;;
         * )
-                MOZ_LIB_DIR="/usr/lib"
-                SECONDARY_LIB_DIR="/usr/lib64"
+                MOZ_LIB_DIR="__PREFIX__/lib"
+                SECONDARY_LIB_DIR="__PREFIX__/lib64"
                 ;;
 esac
 
@@ -46,7 +46,7 @@ MOZ_LAUNCHER="$MOZ_DIST_BIN/thunderbird"
 ##
 ## Set MOZ_APP_LAUNCHER for gnome-session
 ##
-export MOZ_APP_LAUNCHER="/usr/bin/thunderbird"
+export MOZ_APP_LAUNCHER="__PREFIX__/bin/thunderbird"
 
 ##
 ## Disable the GNOME crash dialog, Moz has it's own
