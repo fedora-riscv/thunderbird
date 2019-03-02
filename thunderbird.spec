@@ -82,7 +82,7 @@
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        60.5.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -547,7 +547,7 @@ install -c -m 644 LICENSE $RPM_BUILD_ROOT%{mozappdir}
 
 # Use the system hunspell dictionaries
 %{__rm} -rf $RPM_BUILD_ROOT/%{mozappdir}/dictionaries
-ln -s %{_datadir}/myspell $RPM_BUILD_ROOT%{mozappdir}/dictionaries
+ln -s $(pkg-config --variable prefix hunspell)/share/myspell $RPM_BUILD_ROOT%{mozappdir}/dictionaries
 
 # ghost files
 %{__mkdir_p} $RPM_BUILD_ROOT%{mozappdir}/components
@@ -680,6 +680,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Sat Mar 02 2019 Kalev Lember <klember@redhat.com> - 60.5.1-3
+- Fix hunspell dictionary symlink when built for flatpak
+
 * Thu Feb 21 2019 Kalev Lember <klember@redhat.com> - 60.5.1-2
 - Avoid hardcoding /usr in launcher scripts
 
