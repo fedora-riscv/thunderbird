@@ -35,8 +35,12 @@
 %define libnotify_version 0.4
 %define _default_patch_fuzz 2
 
-# Use system libvpx?
-%define system_libvpx      1
+# libvpx is too new for Firefox 65
+%if 0%{?fedora} < 30
+%global system_libvpx     1
+%else
+%global system_libvpx     0
+%endif
 
 %define system_jpeg        1
 
