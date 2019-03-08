@@ -413,8 +413,12 @@ find ./ -name config.guess -exec cp /usr/lib/rpm/config.guess {} ';'
 #
 MOZ_OPT_FLAGS=$(echo "$RPM_OPT_FLAGS -fpermissive" | \
                       %{__sed} -e 's/-Wall//')
-#rhbz#1037353
+%if 0%{?fedora} < 30
 MOZ_OPT_FLAGS="$MOZ_OPT_FLAGS -Wformat-security -Wformat -Werror=format-security"
+%else
+# Workaround for mozbz#1531309
+MOZ_OPT_FLAGS=$(echo "$MOZ_OPT_FLAGS" | %{__sed} -e 's/-Werror=format-security//')
+%endif
 # Disable null pointer gcc6 optimization (rhbz#1311886)
 MOZ_OPT_FLAGS="$MOZ_OPT_FLAGS -fno-delete-null-pointer-checks"
 # Use hardened build?
