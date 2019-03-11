@@ -178,7 +178,9 @@ BuildRequires:  autoconf213
 BuildRequires:  desktop-file-utils
 BuildRequires:  libcurl-devel
 BuildRequires:  mesa-libGL-devel
+%if %{?system_libvpx}
 BuildRequires:  libvpx-devel >= %{libvpx_version}
+%endif
 BuildRequires:  pulseaudio-libs-devel
 BuildRequires:  libicu-devel
 BuildRequires:  GConf2-devel
@@ -351,12 +353,6 @@ echo "ac_add_options --with-float-abi=soft" >> .mozconfig
 echo "ac_add_options --disable-yarr-jit" >> .mozconfig
 %endif
 
-%if %{?system_libvpx}
-echo "ac_add_options --with-system-libvpx" >> .mozconfig
-%else
-echo "ac_add_options --without-system-libvpx" >> .mozconfig
-%endif
-
 %if %{?system_libicu}
 echo "ac_add_options --with-system-icu" >> .mozconfig
 %else
@@ -374,6 +370,7 @@ echo "ac_add_options --with-system-libvpx" >> .mozconfig
 %else
 echo "ac_add_options --without-system-libvpx" >> .mozconfig
 %endif
+
 %if %{enable_mozilla_crashreporter}
 echo "ac_add_options --enable-crashreporter" >> .mozconfig
 %else
