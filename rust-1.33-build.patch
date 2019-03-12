@@ -1,14 +1,3 @@
-diff -up thunderbird-60.5.3/servo/components/style_traits/lib.rs.rust-1.33-build thunderbird-60.5.3/servo/components/style_traits/lib.rs
---- thunderbird-60.5.3/servo/components/style_traits/lib.rs.rust-1.33-build	2019-03-04 19:17:27.000000000 +0100
-+++ thunderbird-60.5.3/servo/components/style_traits/lib.rs	2019-03-12 12:10:04.596635368 +0100
-@@ -72,7 +72,6 @@ pub enum CSSPixel {}
- //   / hidpi_ratio => DeviceIndependentPixel
- //     / desktop_zoom => CSSPixel
- 
--pub mod cursor;
- #[macro_use]
- pub mod values;
- #[macro_use]
 diff -up thunderbird-60.5.3/servo/components/style_traits/values.rs.rust-1.33-build thunderbird-60.5.3/servo/components/style_traits/values.rs
 --- thunderbird-60.5.3/servo/components/style_traits/values.rs.rust-1.33-build	2019-03-04 19:17:27.000000000 +0100
 +++ thunderbird-60.5.3/servo/components/style_traits/values.rs	2019-03-12 12:10:04.596635368 +0100
