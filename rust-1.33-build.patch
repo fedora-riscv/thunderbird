@@ -1,0 +1,60 @@
+diff -up thunderbird-60.5.3/servo/components/style_traits/Cargo.toml.rust-1.33-build thunderbird-60.5.3/servo/components/style_traits/Cargo.toml
+--- thunderbird-60.5.3/servo/components/style_traits/Cargo.toml.rust-1.33-build	2019-03-04 19:17:27.000000000 +0100
++++ thunderbird-60.5.3/servo/components/style_traits/Cargo.toml	2019-03-12 12:09:28.754720164 +0100
+@@ -19,7 +19,7 @@ cssparser = "0.23.0"
+ bitflags = "1.0"
+ euclid = "0.17"
+ malloc_size_of = { path = "../malloc_size_of" }
+-malloc_size_of_derive = { path = "../malloc_size_of_derive" }
++malloc_size_of_derive = "0.1"
+ selectors = { path = "../selectors" }
+ serde = {version = "1.0", optional = true}
+ webrender_api = {git = "https://github.com/servo/webrender", optional = true}
+diff -up thunderbird-60.5.3/servo/components/style_traits/lib.rs.rust-1.33-build thunderbird-60.5.3/servo/components/style_traits/lib.rs
+--- thunderbird-60.5.3/servo/components/style_traits/lib.rs.rust-1.33-build	2019-03-04 19:17:27.000000000 +0100
++++ thunderbird-60.5.3/servo/components/style_traits/lib.rs	2019-03-12 12:10:04.596635368 +0100
+@@ -72,7 +72,6 @@ pub enum CSSPixel {}
+ //   / hidpi_ratio => DeviceIndependentPixel
+ //     / desktop_zoom => CSSPixel
+ 
+-pub mod cursor;
+ #[macro_use]
+ pub mod values;
+ #[macro_use]
+diff -up thunderbird-60.5.3/servo/components/style_traits/values.rs.rust-1.33-build thunderbird-60.5.3/servo/components/style_traits/values.rs
+--- thunderbird-60.5.3/servo/components/style_traits/values.rs.rust-1.33-build	2019-03-04 19:17:27.000000000 +0100
++++ thunderbird-60.5.3/servo/components/style_traits/values.rs	2019-03-12 12:10:04.596635368 +0100
+@@ -135,24 +135,6 @@ where
+     }
+ }
+ 
+-#[macro_export]
+-macro_rules! serialize_function {
+-    ($dest: expr, $name: ident($( $arg: expr, )+)) => {
+-        serialize_function!($dest, $name($($arg),+))
+-    };
+-    ($dest: expr, $name: ident($first_arg: expr $( , $arg: expr )*)) => {
+-        {
+-            $dest.write_str(concat!(stringify!($name), "("))?;
+-            $first_arg.to_css($dest)?;
+-            $(
+-                $dest.write_str(", ")?;
+-                $arg.to_css($dest)?;
+-            )*
+-            $dest.write_char(')')
+-        }
+-    }
+-}
+-
+ /// Convenience wrapper to serialise CSS values separated by a given string.
+ pub struct SequenceWriter<'a, 'b: 'a, W: 'b> {
+     inner: &'a mut CssWriter<'b, W>,
+@@ -404,7 +386,7 @@ impl_to_css_for_predefined_type!(::csspa
+ impl_to_css_for_predefined_type!(::cssparser::Color);
+ impl_to_css_for_predefined_type!(::cssparser::UnicodeRange);
+ 
+-#[macro_export]
++/// Define an enum type with unit variants that each correspond to a CSS keyword.
+ macro_rules! define_css_keyword_enum {
+     (pub enum $name:ident { $($variant:ident = $css:expr,)+ }) => {
+         #[allow(missing_docs)]

@@ -106,15 +106,14 @@ Source21:       thunderbird.sh.in
 Source28:       thunderbird-wayland.sh.in
 Source29:       thunderbird-wayland.desktop
 
-# Mozilla (XULRunner) patches
+# Build patches
+Patch1:         rust-1.33-build.patch
 Patch9:         mozilla-build-arm.patch
 Patch26:        build-icu-big-endian.patch
 Patch37:        build-jit-atomic-always-lucky.patch
 Patch40:        build-aarch64-skia.patch
 Patch226:       rhbz-1354671.patch
 Patch415:       Bug-1238661---fix-mozillaSignalTrampoline-to-work-.patch
-
-# Build patches
 Patch103:       rhbz-1219542-s390-build.patch
 
 # PPC fix
@@ -231,8 +230,8 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %prep
 %setup -q
 
-# Mozilla (XULRunner) patches
-#cd mozilla
+# Build patches
+%patch1   -p1 -b .rust-1.33-build
 %patch9   -p2 -b .arm
 %ifarch s390
 %patch103 -p1 -b .rhbz-1219542-s390-build
