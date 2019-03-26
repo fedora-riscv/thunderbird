@@ -89,7 +89,7 @@ ExcludeArch: s390x
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        60.6.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -118,6 +118,7 @@ Patch40:        build-aarch64-skia.patch
 Patch226:       rhbz-1354671.patch
 Patch415:       Bug-1238661---fix-mozillaSignalTrampoline-to-work-.patch
 Patch103:       rhbz-1219542-s390-build.patch
+Patch104:       mozilla-1533969.patch
 
 # PPC fix
 Patch304:       mozilla-1245783.patch
@@ -239,6 +240,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %ifarch s390
 %patch103 -p1 -b .rhbz-1219542-s390-build
 %endif
+%patch104 -p1 -b .1533969
 
 %patch304 -p1 -b .1245783
 %patch309 -p1 -b .1460871-ldap-query
@@ -687,6 +689,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Mar 26 2019 Martin Stransky <stransky@redhat.com> - 60.6.1-2
+- Added rawhide build fix
+
 * Mon Mar 25 2019 Martin Stransky <stransky@redhat.com> - 60.6.1-1
 - Update to 60.6.1
 
