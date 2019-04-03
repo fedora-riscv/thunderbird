@@ -89,7 +89,7 @@ ExcludeArch: s390x
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        60.6.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -132,6 +132,9 @@ Patch311:       firefox-wayland.patch
 Patch312:       mozilla-1522780.patch
 
 # Upstream patches
+Patch400:       mozilla-1526243.patch
+Patch401:       mozilla-1540145.patch
+Patch402:       mozilla-526293.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -268,6 +271,10 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 
 %patch311 -p1 -b .wayland
 %patch312 -p1 -b .1522780
+
+%patch400 -p1 -b .1526243
+%patch401 -p1 -b .1540145
+%patch402 -p1 -b .526293
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -689,6 +696,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Wed Apr 3 2019 Martin Stransky <stransky@redhat.com> - 60.6.1-3
+- Added fixes for mozbz#1526243, mozbz#1540145, mozbz#526293
+
 * Tue Mar 26 2019 Martin Stransky <stransky@redhat.com> - 60.6.1-2
 - Added rawhide build fix
 
