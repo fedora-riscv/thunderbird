@@ -92,7 +92,6 @@ Version:        60.6.1
 Release:        4%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
-Group:          Applications/Internet
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
 Source1:        thunderbird-langpacks-%{version}-20190325.tar.xz
@@ -226,7 +225,6 @@ to run Thunderbird natively on Wayland.
 %global crashreporter_pkg_name mozilla-crashreporter-%{name}-debuginfo
 %package -n %{crashreporter_pkg_name}
 Summary: Debugging symbols used by Mozilla's crash reporter servers
-Group: Development/Debug
 %description -n %{crashreporter_pkg_name}
 This package provides debug information for XULRunner, for use by
 Mozilla's crash reporter servers.  If you are trying to locally
