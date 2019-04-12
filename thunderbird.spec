@@ -89,7 +89,7 @@ ExcludeArch: s390x
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        60.6.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Group:          Applications/Internet
@@ -135,6 +135,7 @@ Patch312:       mozilla-1522780.patch
 Patch400:       mozilla-1526243.patch
 Patch401:       mozilla-1540145.patch
 Patch402:       mozilla-526293.patch
+Patch403:       mozilla-1508378.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -275,6 +276,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %patch400 -p1 -b .1526243
 %patch401 -p1 -b .1540145
 %patch402 -p1 -b .526293
+%patch403 -p1 -b .1508378
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -696,6 +698,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Fri Apr 12 2019 Martin Stransky <stransky@redhat.com> - 60.6.1-4
+- Addef fix for mozbz#1508378
+
 * Wed Apr 3 2019 Martin Stransky <stransky@redhat.com> - 60.6.1-3
 - Added fixes for mozbz#1526243, mozbz#1540145, mozbz#526293
 
