@@ -100,7 +100,7 @@ for lang in $LOCALES; do
     }
   },
   "langpack_id": "$lang",
-  "version": "$LIGHTNING_VERSION$BUILD_ID",
+  "version": "7.$LIGHTNING_VERSION.$BUILD_ID",
   "name": "$lang Language Pack Calendar",
   "manifest_version": 2,
   "sources": {
