@@ -89,7 +89,7 @@ ExcludeArch: s390x
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        60.6.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
@@ -118,6 +118,7 @@ Patch226:       rhbz-1354671.patch
 Patch415:       Bug-1238661---fix-mozillaSignalTrampoline-to-work-.patch
 Patch103:       rhbz-1219542-s390-build.patch
 Patch104:       mozilla-1533969.patch
+Patch105:       thunderbird-debug.patch
 
 # PPC fix
 Patch304:       mozilla-1245783.patch
@@ -243,6 +244,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %patch103 -p1 -b .rhbz-1219542-s390-build
 %endif
 %patch104 -p1 -b .1533969
+%patch105 -p1 -b .debug
 
 %patch304 -p1 -b .1245783
 %patch309 -p1 -b .1460871-ldap-query
@@ -696,6 +698,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* May Wed 15 2019 Martin Stransky <stransky@redhat.com> - 60.6.1-5
+- Fixed startup crashes (rhbz#1709373, rhbz#1685276, rhbz#1708611)
+
 * Fri Apr 12 2019 Martin Stransky <stransky@redhat.com> - 60.6.1-4
 - Addef fix for mozbz#1508378
 

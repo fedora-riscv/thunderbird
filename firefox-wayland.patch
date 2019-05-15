@@ -2956,7 +2956,7 @@ diff -up thunderbird-60.5.0/widget/gtk/nsWindow.cpp.wayland thunderbird-60.5.0/w
 +      // If the window were to get unredirected, there could be visible
 +      // tearing because Gecko does not align its framebuffer updates with
 +      // vblank.
-+      SetCompositorHint(GTK_WIDGET_COMPOSIDED_ENABLED);
++      // SetCompositorHint(GTK_WIDGET_COMPOSIDED_ENABLED);
 +    }
    }
  #ifdef MOZ_WAYLAND
@@ -3179,7 +3179,7 @@ diff -up thunderbird-60.5.0/widget/gtk/nsWindow.cpp.wayland thunderbird-60.5.0/w
 +    g_object_set_data(G_OBJECT(gtk_widget_get_window(mShell)), "nsWindow",
 +                      this);
 +#ifdef MOZ_X11
-+    SetCompositorHint(GTK_WIDGET_COMPOSIDED_ENABLED);
++    // SetCompositorHint(GTK_WIDGET_COMPOSIDED_ENABLED);
 +#endif
 +    RefreshWindowClass();
 +
@@ -4426,3 +4426,16 @@ diff -up thunderbird-60.5.0/widget/gtk/WindowSurfaceWayland.h.wayland thunderbir
  };
  
  }  // namespace widget
+diff -up thunderbird-60.6.1/widget/gtk/WindowSurfaceProvider.cpp.old thunderbird-60.6.1/widget/gtk/WindowSurfaceProvider.cpp
+--- thunderbird-60.6.1/widget/gtk/WindowSurfaceProvider.cpp.old	2019-05-14 21:11:50.219841534 +0200
++++ thunderbird-60.6.1/widget/gtk/WindowSurfaceProvider.cpp	2019-05-14 21:11:58.228755117 +0200
+@@ -52,9 +52,6 @@ void WindowSurfaceProvider::Initialize(D
+ 
+ #ifdef MOZ_WAYLAND
+ void WindowSurfaceProvider::Initialize(nsWindow* aWidget) {
+-  MOZ_ASSERT(aWidget->GetWaylandDisplay(),
+-             "We are supposed to have a Wayland display!");
+-
+   mWidget = aWidget;
+   mIsX11Display = false;
+ }
