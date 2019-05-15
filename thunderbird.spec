@@ -698,7 +698,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
-* May Wed 15 2019 Martin Stransky <stransky@redhat.com> - 60.6.1-5
+* Wed May 15 2019 Martin Stransky <stransky@redhat.com> - 60.6.1-5
 - Fixed startup crashes (rhbz#1709373, rhbz#1685276, rhbz#1708611)
 
 * Fri Apr 12 2019 Martin Stransky <stransky@redhat.com> - 60.6.1-4
