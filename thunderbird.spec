@@ -88,13 +88,13 @@ ExcludeArch: s390x
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        60.6.1
-Release:        5%{?dist}
+Version:        60.7.0
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20190325.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20190520.tar.xz
 # Locales for lightning
 Source2:        lightning-langpacks-%{version}.tar.xz
 %endif
@@ -698,6 +698,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Mon May 20 2019 Martin Stransky <stransky@redhat.com> - 60.7.0-1
+- Update to 60.7.0
+
 * Wed May 15 2019 Martin Stransky <stransky@redhat.com> - 60.6.1-5
 - Fixed startup crashes (rhbz#1709373, rhbz#1685276, rhbz#1708611)
 
