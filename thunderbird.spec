@@ -89,12 +89,12 @@ ExcludeArch: s390x
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        60.7.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20190620.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20190621.tar.xz
 # Locales for lightning
 Source2:        lightning-langpacks-%{version}.tar.xz
 %endif
@@ -698,6 +698,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Fri Jun 21 2019 Jan Horak <jhorak@redhat.com> - 60.7.2-2
+- Update to 60.7.2 build 2
+
 * Thu Jun 20 2019 Jan Horak <jhorak@redhat.com> - 60.7.2-1
 - Update to 60.7.2
 
