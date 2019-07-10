@@ -88,13 +88,13 @@ ExcludeArch: s390x
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        60.7.2
-Release:        2%{?dist}
+Version:        60.8.0
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20190621.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20190704.tar.xz
 # Locales for lightning
 Source2:        lightning-langpacks-%{version}.tar.xz
 %endif
@@ -109,7 +109,7 @@ Source28:       thunderbird-wayland.sh.in
 Source29:       thunderbird-wayland.desktop
 
 # Build patches
-Patch1:         rust-1.33-build.patch
+#Patch1:         rust-1.33-build.patch
 Patch9:         mozilla-build-arm.patch
 Patch26:        build-icu-big-endian.patch
 Patch37:        build-jit-atomic-always-lucky.patch
@@ -238,7 +238,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %setup -q
 
 # Build patches
-%patch1   -p1 -b .rust-1.33-build
+#%patch1   -p1 -b .rust-1.33-build
 %patch9   -p2 -b .arm
 %ifarch s390
 %patch103 -p1 -b .rhbz-1219542-s390-build
@@ -698,6 +698,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Wed Jul 10 2019 Martin Stransky <stransky@redhat.com> - 60.8.0-1
+- Update to 60.8.0
+
 * Fri Jun 21 2019 Jan Horak <jhorak@redhat.com> - 60.7.2-2
 - Update to 60.7.2 build 2
 
