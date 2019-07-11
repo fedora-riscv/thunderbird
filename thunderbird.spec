@@ -109,7 +109,7 @@ Source28:       thunderbird-wayland.sh.in
 Source29:       thunderbird-wayland.desktop
 
 # Build patches
-#Patch1:         rust-1.33-build.patch
+Patch1:         rust-1.33-build.patch
 Patch9:         mozilla-build-arm.patch
 Patch26:        build-icu-big-endian.patch
 Patch37:        build-jit-atomic-always-lucky.patch
@@ -238,7 +238,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %setup -q
 
 # Build patches
-#%patch1   -p1 -b .rust-1.33-build
+%patch1   -p1 -b .rust-1.33-build
 %patch9   -p2 -b .arm
 %ifarch s390
 %patch103 -p1 -b .rhbz-1219542-s390-build
