@@ -101,6 +101,7 @@ Source1:        thunderbird-langpacks-%{version}-20190829.tar.xz
 Source2:        lightning-langpacks-%{version}.tar.xz
 %endif
 Source3:        get-calendar-langpacks.sh
+Source4:        cbindgen-vendor.tar.xz
 
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -389,7 +390,7 @@ echo "ac_add_options --disable-crashreporter" >> .mozconfig
 
 mkdir -p my_rust_vendor
 cd my_rust_vendor
-%{__tar} xf %{SOURCE2}
+%{__tar} xf %{SOURCE4}
 cd -
 mkdir -p .cargo
 cat > .cargo/config <<EOL
