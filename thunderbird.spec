@@ -14,6 +14,7 @@ ExcludeArch: s390x
 %define system_ffi    1
 
 %define build_langpacks 1
+%global build_with_clang  0
 
 %global disable_elfhack       0
 %if 0%{?fedora} > 28
@@ -88,13 +89,13 @@ ExcludeArch: s390x
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        60.8.0
-Release:        2%{?dist}
+Version:        68.0
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20190704.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20190829.tar.xz
 # Locales for lightning
 Source2:        lightning-langpacks-%{version}.tar.xz
 %endif
@@ -109,15 +110,12 @@ Source28:       thunderbird-wayland.sh.in
 Source29:       thunderbird-wayland.desktop
 
 # Build patches
-Patch1:         rust-1.33-build.patch
 Patch9:         mozilla-build-arm.patch
 Patch26:        build-icu-big-endian.patch
-Patch37:        build-jit-atomic-always-lucky.patch
-Patch40:        build-aarch64-skia.patch
 Patch226:       rhbz-1354671.patch
 Patch415:       Bug-1238661---fix-mozillaSignalTrampoline-to-work-.patch
+Patch416:       firefox-SIOCGSTAMP.patch
 Patch103:       rhbz-1219542-s390-build.patch
-Patch104:       mozilla-1533969.patch
 Patch105:       thunderbird-debug.patch
 
 # PPC fix
@@ -125,17 +123,11 @@ Patch304:       mozilla-1245783.patch
 Patch305:       build-big-endian.patch
 Patch306:       mozilla-1353817.patch
 Patch307:       build-disable-elfhack.patch
-Patch309:       mozilla-1460871-ldap-query.patch
 
 # Fedora specific patches
-Patch311:       firefox-wayland.patch
-Patch312:       mozilla-1522780.patch
 
 # Upstream patches
-Patch400:       mozilla-1526243.patch
-Patch401:       mozilla-1540145.patch
 Patch402:       mozilla-526293.patch
-Patch403:       mozilla-1508378.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -170,8 +162,9 @@ BuildRequires:  libXrender-devel
 BuildRequires:  hunspell-devel
 BuildRequires:  llvm
 BuildRequires:  llvm-devel
-BuildRequires:  clang
-BuildRequires:  clang-libs
+%if 0%{?build_with_clang}
+BuildRequires:  lld
+%endif
 %if %{?system_sqlite}
 BuildRequires:  sqlite-devel >= %{sqlite_version}
 Requires:       sqlite >= %{sqlite_build_version}
@@ -238,24 +231,19 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %setup -q
 
 # Build patches
-%patch1   -p1 -b .rust-1.33-build
 %patch9   -p2 -b .arm
 %ifarch s390
 %patch103 -p1 -b .rhbz-1219542-s390-build
 %endif
-%patch104 -p1 -b .1533969
 %patch105 -p1 -b .debug
 
 %patch304 -p1 -b .1245783
-%patch309 -p1 -b .1460871-ldap-query
 # Patch for big endian platforms only
 %if 0%{?big_endian}
 %patch26 -p1 -b .icu
 %patch305 -p1 -b .big-endian
 %endif
 
-%patch37 -p1 -b .jit-atomic-lucky
-%patch40 -p1 -b .aarch64-skia
 #ARM run-time patch
 %ifarch aarch64
 %patch226 -p1 -b .1354671
@@ -263,6 +251,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %ifarch %{arm}
 %patch415 -p1 -b .mozilla-1238661
 %endif
+%patch416 -p1 -b .SIOCGSTAMP
 
 %patch306 -p1 -b .1353817
 %if 0%{?disable_elfhack}
@@ -270,13 +259,8 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %endif
 #cd ..
 
-%patch311 -p1 -b .wayland
-%patch312 -p1 -b .1522780
 
-%patch400 -p1 -b .1526243
-%patch401 -p1 -b .1540145
 %patch402 -p1 -b .526293
-%patch403 -p1 -b .1508378
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -445,8 +429,10 @@ MOZ_OPT_FLAGS=$(echo "$MOZ_OPT_FLAGS" | %{__sed} -e 's/-g/-g1/')
 # (OOM when linking, rhbz#1238225)
 export MOZ_DEBUG_FLAGS=" "
 %endif
+%if !0%{?build_with_clang}
 %ifarch s390 %{arm} ppc aarch64 i686
 MOZ_LINK_FLAGS="-Wl,--no-keep-memory -Wl,--reduce-memory-overheads"
+%endif
 %endif
 
 export CFLAGS=`echo $MOZ_OPT_FLAGS |sed -e 's/-fpermissive//g'`
@@ -455,6 +441,25 @@ export LDFLAGS=$MOZ_LINK_FLAGS
 
 export PREFIX='%{_prefix}'
 export LIBDIR='%{_libdir}'
+
+%if 0%{?build_with_clang}
+export LLVM_PROFDATA="llvm-profdata"
+export AR="llvm-ar"
+export NM="llvm-nm"
+export RANLIB="llvm-ranlib"
+echo "ac_add_options --enable-linker=lld" >> .mozconfig
+%else
+export CC=gcc
+export CXX=g++
+export AR="gcc-ar"
+export NM="gcc-nm"
+export RANLIB="gcc-ranlib"
+%endif
+
+%if 0%{?build_with_pgo}
+echo "ac_add_options MOZ_PGO=1" >> .mozconfig
+echo "ac_add_options --enable-lto" >> .mozconfig
+%endif
 
 MOZ_SMP_FLAGS=-j1
 # On x86 architectures, Mozilla can build up to 4 jobs at once in parallel,
@@ -657,8 +662,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{mozappdir}/plugin-container
 %{mozappdir}/defaults
 %{mozappdir}/dictionaries
-%dir %{mozappdir}/extensions
-%{mozappdir}/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}.xpi
 %if %{build_langpacks}
 %dir %{langpackdir}
 %endif
@@ -698,6 +701,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Thu Aug 29 2019 Jan Horak <jhorak@redhat.com> - 68.0-1
+- Update to 68.0
+
 * Sat Jul 27 2019 Fedora Release Engineering <releng@fedoraproject.org> - 60.8.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
