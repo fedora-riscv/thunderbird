@@ -164,6 +164,8 @@ BuildRequires:  libXrender-devel
 BuildRequires:  hunspell-devel
 BuildRequires:  llvm
 BuildRequires:  llvm-devel
+BuildRequires:  clang
+BuildRequires:  clang-libs
 %if 0%{?build_with_clang}
 BuildRequires:  lld
 %endif
