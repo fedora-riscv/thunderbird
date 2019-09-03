@@ -15,6 +15,7 @@ ExcludeArch: s390x
 
 %define build_langpacks 1
 %global build_with_clang  0
+%global use_bundled_cbindgen  1
 
 %global disable_elfhack       0
 %if 0%{?fedora} > 28
@@ -192,8 +193,15 @@ Provides:       thunderbird-lightning
 Obsoletes:      thunderbird-lightning-gdata <= 1:3.3.0.14
 BuildRequires:  rust
 BuildRequires:  cargo
+%if 0%{?build_with_clang}
 BuildRequires:  clang-devel
+%endif
 BuildRequires:  python2-devel
+%if !0%{?use_bundled_cbindgen}
+BuildRequires:  cbindgen
+%endif
+
+
 Suggests:       u2f-hidraw-policy
 
 %description
@@ -377,6 +385,25 @@ echo "ac_add_options --disable-crashreporter" >> .mozconfig
 #===============================================================================
 
 %build
+%if 0%{?use_bundled_cbindgen}
+
+mkdir -p my_rust_vendor
+cd my_rust_vendor
+%{__tar} xf %{SOURCE2}
+cd -
+mkdir -p .cargo
+cat > .cargo/config <<EOL
+[source.crates-io]
+replace-with = "vendored-sources"
+
+[source.vendored-sources]
+directory = "`pwd`/my_rust_vendor"
+EOL
+
+env CARGO_HOME=.cargo cargo install cbindgen
+export PATH=`pwd`/.cargo/bin:$PATH
+%endif
+
 %if %{?system_sqlite}
 # Do not proceed with build if the sqlite require would be broken:
 # make sure the minimum requirement is non-empty, ...
