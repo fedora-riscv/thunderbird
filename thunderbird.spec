@@ -258,7 +258,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 
 #ARM run-time patch
 %ifarch aarch64
-%patch226 -p1 -b .1354671
+#%patch226 -p1 -b .1354671
 %endif
 %ifarch %{arm}
 %patch415 -p1 -b .mozilla-1238661
