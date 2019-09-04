@@ -110,6 +110,7 @@ Source20:       thunderbird.desktop
 Source21:       thunderbird.sh.in
 Source28:       thunderbird-wayland.sh.in
 Source29:       thunderbird-wayland.desktop
+Source32:       node-stdout-nonblocking-wrapper
 
 # Build patches
 Patch9:         mozilla-build-arm.patch
@@ -201,6 +202,8 @@ BuildRequires:  python2-devel
 %if !0%{?use_bundled_cbindgen}
 BuildRequires:  cbindgen
 %endif
+BuildRequires:  nodejs
+BuildRequires:  nasm >= 1.13
 
 
 Suggests:       u2f-hidraw-policy
@@ -383,6 +386,8 @@ echo "ac_add_options --enable-crashreporter" >> .mozconfig
 echo "ac_add_options --disable-crashreporter" >> .mozconfig
 %endif
 
+echo 'export NODEJS="%{_buildrootdir}/bin/node-stdout-nonblocking-wrapper"' >> .mozconfig
+
 #===============================================================================
 
 %build
@@ -422,6 +427,9 @@ esac
   ls -l config/external/icu/data
   rm -f config/external/icu/data/icudt*l.dat
 %endif
+
+mkdir %{_buildrootdir}/bin || :
+cp %{SOURCE32} %{_buildrootdir}/bin || :
 
 # Update the various config.guess to upstream release for aarch64 support
 find ./ -name config.guess -exec cp /usr/lib/rpm/config.guess {} ';'
