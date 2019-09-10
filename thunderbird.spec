@@ -320,19 +320,8 @@ echo "ac_add_options --enable-system-ffi" >> .mozconfig
   echo "ac_add_options --enable-debug" >> .mozconfig
   echo "ac_add_options --disable-optimize" >> .mozconfig
 %else
-  %define optimize_flags "none"
-  # Fedora 26 (gcc7) needs to disable default build flags (mozbz#1342344)
-  %if 0%{?fedora} > 25 || 0%{?rhel} > 7
-    %ifnarch s390 s390x
-      %define optimize_flags "-g -O2"
-    %endif
-  %endif
-  %ifarch armv7hl
-    # ARMv7 need that (rhbz#1426850)
-    %define optimize_flags "-g -O2 -fno-schedule-insns"
-  %endif
   %ifarch ppc64le aarch64
-    %define optimize_flags "-g -O2"
+    %global optimize_flags "-g -O2"
   %endif
   %if %{optimize_flags} != "none"
     echo 'ac_add_options --enable-optimize=%{?optimize_flags}' >> .mozconfig
