@@ -470,9 +470,19 @@ MOZ_OPT_FLAGS=$(echo "$MOZ_OPT_FLAGS" | %{__sed} -e 's/-g/-g1/')
 # (OOM when linking, rhbz#1238225)
 export MOZ_DEBUG_FLAGS=" "
 %endif
+
+%ifarch %{arm} %{ix86}
+MOZ_OPT_FLAGS=$(echo "$MOZ_OPT_FLAGS" | %{__sed} -e 's/-g/-g0/')
+export MOZ_DEBUG_FLAGS=" "
+%endif
+
 %if !0%{?build_with_clang}
-%ifarch s390 %{arm} ppc aarch64 i686
+%ifarch s390 ppc aarch64 %{ix86}
 MOZ_LINK_FLAGS="-Wl,--no-keep-memory -Wl,--reduce-memory-overheads"
+%endif
+%ifarch %{arm}
+MOZ_LINK_FLAGS="-Wl,--no-keep-memory"
+echo "ac_add_options --enable-linker=gold" >> .mozconfig
 %endif
 %endif
 
