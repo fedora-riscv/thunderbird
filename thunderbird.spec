@@ -320,10 +320,11 @@ echo "ac_add_options --enable-system-ffi" >> .mozconfig
   echo "ac_add_options --enable-debug" >> .mozconfig
   echo "ac_add_options --disable-optimize" >> .mozconfig
 %else
+  %global optimize_flags "none"
   %ifarch ppc64le aarch64
     %global optimize_flags "-g -O2"
   %endif
-  %if %{optimize_flags} != "none"
+  %if %{?optimize_flags} != "none"
     echo 'ac_add_options --enable-optimize=%{?optimize_flags}' >> .mozconfig
   %else
     echo 'ac_add_options --enable-optimize' >> .mozconfig
