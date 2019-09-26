@@ -153,4 +153,7 @@ do
   esac
 done
 
+# Don't throw "old profile" dialog box.
+export MOZ_ALLOW_DOWNGRADE=1
+
 exec $MOZ_PROGRAM "$@"
