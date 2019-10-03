@@ -60,6 +60,12 @@ export GNOME_DISABLE_CRASH_DIALOG
 export G_SLICE=always-malloc
 
 ##
+## Allow downgrade because during distro upgrade the build time can be
+## older in newer version than the previous one.
+##
+export MOZ_ALLOW_DOWNGRADE=1
+
+##
 ## To disable the use of Firefox localization, set MOZ_DISABLE_LANGPACKS=1
 ## in your environment before launching Firefox.
 ##
