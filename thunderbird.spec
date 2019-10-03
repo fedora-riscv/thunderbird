@@ -94,7 +94,7 @@ ExcludeArch: s390x
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        68.1.1
-Release:        2%{?dist}
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
@@ -133,11 +133,9 @@ Patch306:       mozilla-1353817.patch
 Patch307:       build-disable-elfhack.patch
 
 # Fedora specific patches
-Patch200:       rh-old-version-check.patch
 
 # Upstream patches
 Patch402:       mozilla-526293.patch
-
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -282,7 +280,6 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 
 
 %patch402 -p1 -b .526293
-%patch200 -p1 -b .old-version-check
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -751,10 +748,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
-* Wed Oct  2 2019 Jan Horak <jhorak@redhat.com> - 68.1.1-2
-- Do not compare buildID to check for older version because
-  it could cause problems after distro upgrade
-
 * Fri Sep 27 2019 Jan Horak <jhorak@redhat.com> - 68.1.1-1
 - Update to 68.1.1
 
