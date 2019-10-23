@@ -94,7 +94,7 @@ ExcludeArch: s390x
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        68.1.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
@@ -755,6 +755,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Wed Oct 23 2019 Jan Horak <jhorak@redhat.com> - 68.1.1-4
+- Added symbolic icon
+
 * Thu Oct  3 2019 Jan Horak <jhorak@redhat.com> - 68.1.1-3
 - Allow downgrades of the profile because after distro upgrade there is a chance
   that the the downgrade refusal dialog is shown.
