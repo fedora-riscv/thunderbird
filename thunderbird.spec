@@ -111,6 +111,7 @@ Source11:       thunderbird-mozconfig-branded
 Source12:       thunderbird-redhat-default-prefs.js
 Source20:       thunderbird.desktop
 Source21:       thunderbird.sh.in
+Source25:       thunderbird-symbolic.svg
 Source28:       thunderbird-wayland.sh.in
 Source29:       thunderbird-wayland.desktop
 Source32:       node-stdout-nonblocking-wrapper
@@ -545,6 +546,11 @@ for s in 16 22 24 32 48 64 128 256; do
                $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/${s}x${s}/apps/thunderbird.png
 done
 
+# Install hight contrast icon
+%{__mkdir_p} %{buildroot}%{_datadir}/icons/hicolor/symbolic/apps
+%{__cp} -p %{SOURCE25} \
+           %{buildroot}%{_datadir}/icons/hicolor/symbolic/apps
+
 
 desktop-file-install --vendor mozilla \
   --dir $RPM_BUILD_ROOT%{_datadir}/applications \
@@ -730,6 +736,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/icons/hicolor/48x48/apps/thunderbird.png
 %{_datadir}/icons/hicolor/64x64/apps/thunderbird.png
 %{_datadir}/icons/hicolor/128x128/apps/thunderbird.png
+%{_datadir}/icons/hicolor/symbolic/apps/thunderbird-symbolic.svg
 %if %{enable_mozilla_crashreporter}
 %{mozappdir}/crashreporter
 %{mozappdir}/crashreporter.ini
