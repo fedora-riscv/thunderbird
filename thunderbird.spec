@@ -93,7 +93,7 @@ ExcludeArch: s390x
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        68.2.0
+Version:        68.2.1
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
@@ -755,6 +755,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Fri Nov 01 2019 Jan Horak <jhorak@redhat.com> - 68.2.1-1
+- Update to 68.2.1 build1
+
 * Tue Oct 29 2019 Jan Horak <jhorak@redhat.com> - 68.2.0-1
 - Update to 68.2.0
 
