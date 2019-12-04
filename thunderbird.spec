@@ -124,6 +124,7 @@ Patch415:       Bug-1238661---fix-mozillaSignalTrampoline-to-work-.patch
 Patch416:       firefox-SIOCGSTAMP.patch
 Patch417:       build-aarch64-user_vfp.patch
 Patch418:       mozilla-1512162.patch
+Patch419:       bindgen-d0dfc52706f23db9dc9d74642eeebd89d73cb8d0.patch
 Patch103:       rhbz-1219542-s390-build.patch
 Patch105:       thunderbird-debug.patch
 
@@ -272,6 +273,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %patch416 -p1 -b .SIOCGSTAMP
 %patch417 -p1 -b .aarch64-user_vfp
 %patch418 -p1 -b .mozbz-1512162
+%patch419 -p1 -b .bindgen
 
 %patch306 -p1 -b .1353817
 %if 0%{?disable_elfhack}
