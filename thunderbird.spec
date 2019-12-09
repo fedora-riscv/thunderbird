@@ -94,7 +94,7 @@ ExcludeArch: s390x
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        68.3.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
@@ -138,6 +138,7 @@ Patch307:       build-disable-elfhack.patch
 
 # Upstream patches
 Patch402:       mozilla-526293.patch
+Patch403:       mozilla-1576268.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -281,8 +282,8 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %endif
 #cd ..
 
-
 %patch402 -p1 -b .526293
+%patch403 -p1 -b .1576268
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -757,6 +758,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Mon Dec 9 2019 Martin Stransky <stransky@redhat.com> - 68.3.0-2
+- Added fix for mzbz#1576268
+
 * Tue Dec 03 2019 Jan Horak <jhorak@redhat.com> - 68.3.0-1
 - Update to 68.3.0 build2
 
