@@ -93,13 +93,13 @@ ExcludeArch: s390x
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        68.3.1
+Version:        68.4.1
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20191217.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20200113.tar.xz
 # Locales for lightning
 Source2:        lightning-langpacks-%{version}.tar.xz
 %endif
@@ -274,7 +274,8 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %patch416 -p1 -b .SIOCGSTAMP
 %patch417 -p1 -b .aarch64-user_vfp
 %patch418 -p1 -b .mozbz-1512162
-%patch419 -p1 -b .bindgen
+# most likely fixed
+#%patch419 -p1 -b .bindgen
 
 %patch306 -p1 -b .1353817
 %if 0%{?disable_elfhack}
@@ -758,6 +759,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Mon Jan 13 2020 Jan Horak <jhorak@redhat.com> - 68.4.1-1
+- Update to 68.4.1 build1
+
 * Tue Dec 17 2019 Jan Horak <jhorak@redhat.com> - 68.3.1-1
 - Update to 68.3.1 build1
 
