@@ -75,6 +75,13 @@ export MOZ_ALLOW_DOWNGRADE=1
 #
 
 ##
+## Use D-Bus remote exclusively when there's Wayland display.
+##
+if [ "$WAYLAND_DISPLAY" ]; then
+  export MOZ_DBUS_REMOTE=1
+fi
+
+##
 ## Automatically installed langpacks are tracked by .fedora-langpack-install
 ## config file.
 ##
