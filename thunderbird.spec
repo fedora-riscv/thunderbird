@@ -93,13 +93,13 @@ ExcludeArch: s390x
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        68.10.0
-Release:        3%{?dist}
+Version:        68.11.0
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20200709.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20200806.tar.xz
 # Locales for lightning
 Source2:        lightning-langpacks-%{version}.tar.xz
 %endif
@@ -761,6 +761,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Thu Aug 06 2020 Jan Horak <jhorak@redhat.com> - 68.11.0-1
+- Update to 68.11.0 build1
+
 * Sat Aug 01 2020 Fedora Release Engineering <releng@fedoraproject.org> - 68.10.0-3
 - Second attempt - Rebuilt for
   https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
