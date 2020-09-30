@@ -13,7 +13,6 @@ ExcludeArch: s390x
 # Hardened build?
 %define hardened_build    1
 
-%define system_sqlite 0
 %define system_ffi    1
 
 %define build_langpacks 1
@@ -26,19 +25,13 @@ ExcludeArch: s390x
 %endif
 
 %if %{?system_nss}
-%global nspr_version 4.10.6
+%global nspr_version 4.26.0
 %global nspr_build_version %(pkg-config --silence-errors --modversion nspr 2>/dev/null || echo 65536)
-%global nss_version 3.16.2.3
+%global nss_version 3.55.0
 %global nss_build_version %(pkg-config --silence-errors --modversion nss 2>/dev/null || echo 65536)
 %endif
 
 %define freetype_version 2.1.9
-
-%if %{?system_sqlite}
-%define sqlite_version 3.8.4.2
-# The actual sqlite version (see #480989):
-%global sqlite_build_version %(pkg-config --silence-errors --modversion sqlite3 2>/dev/null || echo 65536)
-%endif
 
 %define libnotify_version 0.4
 %define _default_patch_fuzz 2
@@ -93,15 +86,13 @@ ExcludeArch: s390x
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        68.12.0
+Version:        78.3.1
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20200908.tar.xz
-# Locales for lightning
-Source2:        lightning-langpacks-%{version}.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20200930.tar.xz
 %endif
 Source3:        get-calendar-langpacks.sh
 Source4:        cbindgen-vendor.tar.xz
@@ -126,20 +117,16 @@ Patch417:       build-aarch64-user_vfp.patch
 Patch418:       mozilla-1512162.patch
 Patch419:       bindgen-d0dfc52706f23db9dc9d74642eeebd89d73cb8d0.patch
 Patch103:       rhbz-1219542-s390-build.patch
-Patch105:       thunderbird-debug.patch
 
 # PPC fix
 Patch304:       mozilla-1245783.patch
 Patch305:       build-big-endian.patch
-Patch306:       mozilla-1353817.patch
 Patch307:       build-disable-elfhack.patch
 
 # Fedora specific patches
 
 # Upstream patches
 Patch402:       mozilla-526293.patch
-Patch403:       mozilla-1576268.patch
-Patch404:       thunderbird-dbus-remote.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -178,10 +165,6 @@ BuildRequires:  clang
 BuildRequires:  clang-libs
 %if 0%{?build_with_clang}
 BuildRequires:  lld
-%endif
-%if %{?system_sqlite}
-BuildRequires:  sqlite-devel >= %{sqlite_version}
-Requires:       sqlite >= %{sqlite_build_version}
 %endif
 %if %{?system_ffi}
 BuildRequires:  libffi-devel
@@ -256,7 +239,6 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %ifarch s390
 %patch103 -p1 -b .rhbz-1219542-s390-build
 %endif
-%patch105 -p1 -b .debug
 
 %patch304 -p1 -b .1245783
 # Patch for big endian platforms only
@@ -278,15 +260,12 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 # most likely fixed
 #%patch419 -p1 -b .bindgen
 
-%patch306 -p1 -b .1353817
 %if 0%{?disable_elfhack}
 %patch307 -p1 -b .elfhack
 %endif
 #cd ..
 
 %patch402 -p1 -b .526293
-%patch403 -p1 -b .1576268
-%patch404 -p1 -b .thunderbird-dbus-remote
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -315,11 +294,6 @@ echo "ac_add_options --without-system-nss" >> .mozconfig
 echo "ac_add_options --disable-jemalloc" >> .mozconfig
 %endif
 
-%if %{?system_sqlite}
-echo "ac_add_options --enable-system-sqlite"  >> .mozconfig
-%else
-echo "ac_add_options --disable-system-sqlite" >> .mozconfig
-%endif
 
 %if %{?system_ffi}
 echo "ac_add_options --enable-system-ffi" >> .mozconfig
@@ -412,17 +386,6 @@ EOL
 
 env CARGO_HOME=.cargo cargo install cbindgen
 export PATH=`pwd`/.cargo/bin:$PATH
-%endif
-
-%if %{?system_sqlite}
-# Do not proceed with build if the sqlite require would be broken:
-# make sure the minimum requirement is non-empty, ...
-sqlite_version=$(expr "%{sqlite_version}" : '\([0-9]*\.\)[0-9]*\.') || exit 1
-# ... and that major number of the computed build-time version matches:
-case "%{sqlite_build_version}" in
-  "$sqlite_version"*) ;;
-  *) exit 1 ;;
-esac
 %endif
 
 %if 0%{?big_endian}
@@ -614,12 +577,6 @@ for langpack in `ls thunderbird-langpacks/*.xpi`; do
 done
 %{__rm} -rf thunderbird-langpacks
 
-# lightning langpacks install
-cd %{buildroot}%{langpackdir}
-%{__tar} xf %{SOURCE2}
-chmod a+r *.xpi
-cd -
-%endif # build_langpacks
 
 # Get rid of devel package and its debugsymbols
 %{__rm} -rf $RPM_BUILD_ROOT%{_libdir}/%{name}-devel-%{version}
@@ -761,6 +718,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Wed Sep 30 2020 Jan Horak <jhorak@redhat.com> - 78.3.1-1
+- Update to 78.3.1 build1
+
 * Tue Sep 08 2020 Jan Horak <jhorak@redhat.com> - 68.12.0-1
 - Update to 68.12.0 build1
 
