@@ -557,6 +557,7 @@ rm -f $RPM_BUILD_ROOT/%{_bindir}/thunderbird
 # Install langpacks
 %{__rm} -f %{name}.lang # Delete for --short-circuit option
 touch %{name}.lang
+
 %if %{build_langpacks}
 %{__mkdir_p} %{buildroot}%{langpackdir}
 %{__tar} xf %{SOURCE1}
@@ -576,6 +577,7 @@ for langpack in `ls thunderbird-langpacks/*.xpi`; do
   echo "%%lang($language) %{langpackdir}/${extensionID}.xpi" >> %{name}.lang
 done
 %{__rm} -rf thunderbird-langpacks
+%endif
 
 
 # Get rid of devel package and its debugsymbols
