@@ -95,7 +95,7 @@ Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_
 Source1:        thunderbird-langpacks-%{version}-20200930.tar.xz
 %endif
 Source3:        get-calendar-langpacks.sh
-Source4:        cbindgen-vendor.tar.xz
+Source4:        cbindgen-vendor-0.14.3.tar.xz
 
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
