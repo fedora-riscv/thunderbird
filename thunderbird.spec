@@ -369,6 +369,9 @@ echo 'export NODEJS="%{_buildrootdir}/bin/node-stdout-nonblocking-wrapper"' >> .
 #===============================================================================
 
 %build
+# Disable LTO to work around rhbz#1883904
+%define _lto_cflags %{nil}
+
 %if 0%{?use_bundled_cbindgen}
 
 mkdir -p my_rust_vendor
@@ -447,6 +450,10 @@ MOZ_LINK_FLAGS="-Wl,--no-keep-memory"
 echo "ac_add_options --enable-linker=gold" >> .mozconfig
 %endif
 %endif
+
+# We don't want thunderbird to use CK_GCM_PARAMS_V3 in nss
+MOZ_OPT_FLAGS="$MOZ_OPT_FLAGS -DNSS_PKCS11_3_0_STRICT"
+
 
 export CFLAGS=`echo $MOZ_OPT_FLAGS |sed -e 's/-fpermissive//g'`
 export CXXFLAGS=$MOZ_OPT_FLAGS
