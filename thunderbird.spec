@@ -704,7 +704,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{mozappdir}/*.so
 %{mozappdir}/platform.ini
 %{mozappdir}/application.ini
-%{mozappdir}/blocklist.xml
 %{mozappdir}/features/*.xpi
 %exclude %{mozappdir}/removed-files
 %{_datadir}/icons/hicolor/16x16/apps/thunderbird.png
@@ -727,7 +726,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{mozappdir}/dependentlibs.list
 %{mozappdir}/distribution
 %{mozappdir}/fonts
-%{mozappdir}/chrome.manifest
 %{mozappdir}/pingsender
 %{mozappdir}/gtk2/libmozgtk.so
 
