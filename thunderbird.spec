@@ -1,9 +1,6 @@
 # Disabled arm due to rhbz#1658940
 ExcludeArch: armv7hl
 
-# Disabled due to https://pagure.io/fedora-infrastructure/issue/7581
-ExcludeArch: s390x
-
 # Use system nspr/nss?
 %define system_nss        1
 
