@@ -106,7 +106,6 @@ Source32:       node-stdout-nonblocking-wrapper
 
 # Build patches
 Patch9:         mozilla-build-arm.patch
-Patch26:        build-icu-big-endian.patch
 Patch226:       rhbz-1354671.patch
 Patch415:       Bug-1238661---fix-mozillaSignalTrampoline-to-work-.patch
 Patch416:       firefox-SIOCGSTAMP.patch
@@ -117,7 +116,6 @@ Patch103:       rhbz-1219542-s390-build.patch
 
 # PPC fix
 Patch304:       mozilla-1245783.patch
-Patch305:       build-big-endian.patch
 Patch307:       build-disable-elfhack.patch
 
 # Fedora specific patches
@@ -239,10 +237,8 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 
 %patch304 -p1 -b .1245783
 # Patch for big endian platforms only
-%if 0%{?big_endian}
-%patch26 -p1 -b .icu
-%patch305 -p1 -b .big-endian
-%endif
+#%if 0%{?big_endian}
+#%endif
 
 #ARM run-time patch
 %ifarch aarch64
