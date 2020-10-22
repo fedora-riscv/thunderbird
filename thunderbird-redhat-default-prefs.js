@@ -30,4 +30,6 @@ pref("network.negotiate-auth.allow-insecure-ntlm-v1", true);
 pref("security.use_mozillapkix_verification", false);
 /* Use OS settings for UI language */
 pref("intl.locale.requested", "");
+/* Disable telemetry */
+pref("datareporting.healthreport.uploadEnabled", false);
 
