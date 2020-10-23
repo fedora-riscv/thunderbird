@@ -32,4 +32,5 @@ pref("security.use_mozillapkix_verification", false);
 pref("intl.locale.requested", "");
 /* Disable telemetry */
 pref("datareporting.healthreport.uploadEnabled", false);
-
+pref("datareporting.policy.dataSubmissionEnabled", false);
+pref("toolkit.telemetry.archive.enabled", false);
