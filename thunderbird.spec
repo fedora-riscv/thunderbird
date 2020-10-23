@@ -398,6 +398,7 @@ export PATH=`pwd`/.cargo/bin:$PATH
   ./mach python intl/icu_sources_data.py .
   ls -l config/external/icu/data
   rm -f config/external/icu/data/icudt*l.dat
+  cat /tmp/icu*
 %endif
 
 mkdir %{_buildrootdir}/bin || :
