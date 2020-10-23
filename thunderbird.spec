@@ -122,6 +122,7 @@ Patch307:       build-disable-elfhack.patch
 
 # Upstream patches
 Patch402:       mozilla-526293.patch
+Patch404:        rust-1.47.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -259,6 +260,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 #cd ..
 
 %patch402 -p1 -b .526293
+%patch404 -p1 -b .rust-1.47
 
 %if %{official_branding}
 # Required by Mozilla Corporation
