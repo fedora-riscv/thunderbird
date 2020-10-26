@@ -193,6 +193,9 @@ BuildRequires:  cbindgen
 BuildRequires:  nodejs
 BuildRequires:  nasm >= 1.13
 
+%if 0%{?big_endian}
+BuildRequires:  icu
+%endif
 
 Suggests:       u2f-hidraw-policy
 
@@ -395,10 +398,13 @@ export PATH=`pwd`/.cargo/bin:$PATH
 
 %if 0%{?big_endian}
   echo "Generate big endian version of config/external/icu/data/icud58l.dat"
-  ./mach python intl/icu_sources_data.py .
+  icupkg -tb config/external/icu/data/icudt67l.dat config/external/icu/data/icudt67b.dat
   ls -l config/external/icu/data
   rm -f config/external/icu/data/icudt*l.dat
-  cat /tmp/icu*
+#  ./mach python intl/icu_sources_data.py .
+#  ls -l config/external/icu/data
+#  rm -f config/external/icu/data/icudt*l.dat
+#  cat /tmp/icu*
 %endif
 
 mkdir %{_buildrootdir}/bin || :
