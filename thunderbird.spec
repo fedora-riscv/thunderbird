@@ -1,6 +1,9 @@
 # Disabled arm due to rhbz#1658940
 ExcludeArch: armv7hl
 
+# Disabled due to https://bugzilla.redhat.com/show_bug.cgi?id=1886672
+ExcludeArch: s390x
+
 # Use system nspr/nss?
 %define system_nss        1
 
