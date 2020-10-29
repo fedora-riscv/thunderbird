@@ -81,7 +81,7 @@ ExcludeArch: armv7hl
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        78.4.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
@@ -733,7 +733,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
-* Thu Oct 22 2020 Jan Horak <jhorak@redhat.com> - 78.4.0-1
+* Thu Oct 22 2020 Jan Horak <jhorak@redhat.com> - 78.4.0-2
 - Update to 78.4.0 build1
 
 * Wed Oct 07 2020 Jan Horak <jhorak@redhat.com> - 78.3.1-2
