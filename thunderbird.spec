@@ -1,9 +1,6 @@
 # Disabled arm due to rhbz#1658940
 ExcludeArch: armv7hl
 
-# Disabled due to https://bugzilla.redhat.com/show_bug.cgi?id=1886672
-ExcludeArch: s390x
-
 # Use system nspr/nss?
 %define system_nss        1
 
@@ -19,10 +16,7 @@ ExcludeArch: s390x
 %global build_with_clang  0
 %global use_bundled_cbindgen  1
 
-%global disable_elfhack       0
-%if 0%{?fedora} > 28
 %global disable_elfhack       1
-%endif
 
 %if %{?system_nss}
 %global nspr_version 4.26.0
@@ -126,6 +120,7 @@ Patch307:       build-disable-elfhack.patch
 # Upstream patches
 Patch402:       mozilla-526293.patch
 Patch404:        rust-1.47.patch
+Patch405:        mozilla-1556931-s390x-hidden-syms.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -267,6 +262,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 
 %patch402 -p1 -b .526293
 %patch404 -p1 -b .rust-1.47
+%patch405 -p1 -b .1556931-s390x-hidden-syms
 
 %if %{official_branding}
 # Required by Mozilla Corporation
