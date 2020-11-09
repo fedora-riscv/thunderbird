@@ -81,7 +81,7 @@ ExcludeArch: armv7hl
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        78.4.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
@@ -655,6 +655,9 @@ SentUpstream: 2014-09-22
   <screenshots>
     <screenshot type="default">https://raw.githubusercontent.com/hughsie/fedora-appstream/master/screenshots-extra/mozilla-thunderbird/a.png</screenshot>
   </screenshots>
+  <releases>
+    <release version="%{version}" date="$(date '+%F')"/>
+  </releases>
   <!-- FIXME: change this to an upstream email address for spec updates
   <updatecontact>someone_who_cares@upstream_project.org</updatecontact>
    -->
@@ -733,6 +736,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Mon Nov 09 2020 Kalev Lember <klember@redhat.com> - 78.4.0-3
+- Add release tag to appdata
+
 * Thu Oct 22 2020 Jan Horak <jhorak@redhat.com> - 78.4.0-2
 - Update to 78.4.0 build1
 
