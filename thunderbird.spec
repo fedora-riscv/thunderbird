@@ -119,7 +119,6 @@ Patch307:       build-disable-elfhack.patch
 
 # Upstream patches
 Patch402:       mozilla-526293.patch
-Patch404:        rust-1.47.patch
 Patch405:        mozilla-1556931-s390x-hidden-syms.patch
 
 %if %{official_branding}
@@ -261,7 +260,6 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 #cd ..
 
 %patch402 -p1 -b .526293
-#%patch404 -p1 -R -b .rust-1.47
 %patch405 -p1 -b .1556931-s390x-hidden-syms
 
 %if %{official_branding}
