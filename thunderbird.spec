@@ -129,6 +129,7 @@ Patch405:        mozilla-1556931-s390x-hidden-syms.patch
 
 %endif
 
+BuildRequires: make
 BuildRequires:  gcc-c++
 %if %{?system_nss}
 BuildRequires:  nss-static >= %{nss_version}
