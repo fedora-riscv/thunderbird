@@ -737,12 +737,13 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{mozappdir}/distribution
 %{mozappdir}/fonts
 %{mozappdir}/pingsender
-%{mozappdir}/gtk2/libmozgtk.so
+%{mozappdir}/gtk2
 
 #===============================================================================
 
 %changelog
 * Wed Jan 20 2021 Orion Poplawski <orion@nwra.com> - 78.6.1-2
+- Own /usr/lib*/thunderbird/gtk2 directory
 - Provide /etc/thunderbird/pref (bug #1525709)
 
 * Thu Jan 14 2021 Jan Horak <jhorak@redhat.com> - 78.6.1-1
