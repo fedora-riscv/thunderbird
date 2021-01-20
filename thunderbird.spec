@@ -81,7 +81,7 @@ ExcludeArch: armv7hl
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        78.6.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
@@ -120,6 +120,7 @@ Patch307:       build-disable-elfhack.patch
 # Upstream patches
 Patch402:       mozilla-526293.patch
 Patch405:        mozilla-1556931-s390x-hidden-syms.patch
+Patch406:        mozilla-1170092.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -262,6 +263,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 
 %patch402 -p1 -b .526293
 %patch405 -p1 -b .1556931-s390x-hidden-syms
+%patch406 -p1 -b .1170092-etc-conf
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -568,6 +570,9 @@ rm -f $RPM_BUILD_ROOT/%{_bindir}/thunderbird
 %{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/mozilla/extensions/%{thunderbird_app_id}
 %{__mkdir_p} $RPM_BUILD_ROOT%{_libdir}/mozilla/extensions/%{thunderbird_app_id}
 
+# System config dir (#1525709)
+%{__mkdir_p} %{buildroot}%{_sysconfdir}/%{name}/pref
+
 # Install langpacks
 %{__rm} -f %{name}.lang # Delete for --short-circuit option
 touch %{name}.lang
@@ -685,6 +690,8 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %attr(755,root,root) %{_bindir}/thunderbird
 %{_datadir}/appdata/*.appdata.xml
 %attr(644,root,root) %{_datadir}/applications/mozilla-thunderbird.desktop
+%dir %{_sysconfdir}/%{name}
+%dir %{_sysconfdir}/%{name}/*
 %dir %{_datadir}/mozilla/extensions/%{thunderbird_app_id}
 %dir %{_libdir}/mozilla/extensions/%{thunderbird_app_id}
 %dir %{mozappdir}
@@ -735,6 +742,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Wed Jan 20 2021 Orion Poplawski <orion@nwra.com> - 78.6.1-2
+- Provide /etc/thunderbird/pref (bug #1525709)
+
 * Thu Jan 14 2021 Jan Horak <jhorak@redhat.com> - 78.6.1-1
 - Update to 78.6.1 build1
 
