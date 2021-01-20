@@ -198,6 +198,11 @@ BuildRequires:  icu
 
 Suggests:       u2f-hidraw-policy
 
+# Do not check .so files in an application-specific library directory
+# or any files in the application's data directory for provides
+%global __requires_exclude_from ^(%{_libdir}/%{name}/.*\\.so.*|%{_libdir}/%{name}/gtk2/.*\\.so.*)$
+%global __provides_exclude_from ^(%{_libdir}/%{name}/.*\\.so.*|%{_libdir}/%{name}/gtk2/.*\\.so.*)$
+
 %description
 Mozilla Thunderbird is a standalone mail and newsgroup client.
 
@@ -745,6 +750,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 * Wed Jan 20 2021 Orion Poplawski <orion@nwra.com> - 78.6.1-2
 - Own /usr/lib*/thunderbird/gtk2 directory
 - Provide /etc/thunderbird/pref (bug #1525709)
+- Filter package provides and requires 
 
 * Thu Jan 14 2021 Jan Horak <jhorak@redhat.com> - 78.6.1-1
 - Update to 78.6.1 build1
