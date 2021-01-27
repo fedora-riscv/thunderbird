@@ -80,13 +80,13 @@ ExcludeArch: armv7hl
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        78.6.1
-Release:        2%{?dist}
+Version:        78.7.0
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20210114.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20210127.tar.xz
 %endif
 Source3:        get-calendar-langpacks.sh
 Source4:        cbindgen-vendor-0.14.3.tar.xz
@@ -747,6 +747,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Wed Jan 27 2021 Jan Horak <jhorak@redhat.com> - 78.7.0-1
+- Update to 78.7.0 build2
+
 * Wed Jan 20 2021 Orion Poplawski <orion@nwra.com> - 78.6.1-2
 - Own /usr/lib*/thunderbird/gtk2 directory
 - Provide /etc/thunderbird/pref (bug #1525709)
