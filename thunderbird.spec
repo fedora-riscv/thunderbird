@@ -202,6 +202,7 @@ Suggests:       u2f-hidraw-policy
 # or any files in the application's data directory for provides
 %global __requires_exclude_from ^(%{_libdir}/%{name}/.*\\.so.*|%{_libdir}/%{name}/gtk2/.*\\.so.*)$
 %global __provides_exclude_from ^(%{_libdir}/%{name}/.*\\.so.*|%{_libdir}/%{name}/gtk2/.*\\.so.*)$
+%global __requires_exclude ^libxul.*$
 
 %description
 Mozilla Thunderbird is a standalone mail and newsgroup client.
