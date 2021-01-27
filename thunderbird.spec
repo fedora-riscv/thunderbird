@@ -30,6 +30,11 @@ ExcludeArch: armv7hl
 %define libnotify_version 0.4
 %define _default_patch_fuzz 2
 
+# There are still build problems on s390x, see
+# https://koji.fedoraproject.org/koji/taskinfo?taskID=55048351
+# https://bugzilla.redhat.com/show_bug.cgi?id=1897522
+ExcludeArch: s390x
+
 # libvpx is too new for Firefox 65
 %if 0%{?fedora} < 30
 %global system_libvpx     1
