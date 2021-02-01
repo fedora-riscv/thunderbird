@@ -71,7 +71,7 @@ ExcludeArch: s390x
 # IMPORTANT: If there is no top level directory, this should be
 # set to the cwd, ie: '.'
 %define objdir       objdir
-%define mozappdir    %{_libdir}/%{name}
+%define mozappdir    %{_libdir}/thunderbird
 
 %define official_branding 1
 
