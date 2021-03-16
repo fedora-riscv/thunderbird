@@ -1,0 +1,16 @@
+--- a/other-licenses/atk-1.0/atk/atkobject.orig.h	2021-02-05 19:53:35.000000000 +0100
++++ b/other-licenses/atk-1.0/atk/atkobject.h	2021-02-06 19:29:57.596256493 +0100
+@@ -20,11 +20,12 @@
+ #ifndef __ATK_OBJECT_H__
+ #define __ATK_OBJECT_H__
+ 
++#include <glib-object.h>
++
+ #ifdef __cplusplus
+ extern "C" {
+ #endif /* __cplusplus */
+ 
+-#include <glib-object.h>
+ #include <atk/atkstate.h>
+ #include <atk/atkrelationtype.h>
+ 
