@@ -90,7 +90,7 @@ ExcludeArch: s390x
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        78.10.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Source0:        https://archive.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
@@ -204,10 +204,27 @@ BuildRequires:  nasm >= 1.13
 BuildRequires:  icu
 %endif
 
+# require any OpenPGP backend with the librnp interface
+Requires:       thunderbird-librnp%{?_isa}
+# prefer the librnp implementation bundled with thunderbird
+Suggests:       thunderbird-librnp-rnp%{?_isa}
+
 Suggests:       u2f-hidraw-policy
 
 %description
 Mozilla Thunderbird is a standalone mail and newsgroup client.
+
+%package librnp-rnp
+Summary: OpenPGP implementation for Thunderbird based on RNP
+Requires: %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Provides: thunderbird-librnp
+Provides: thunderbird-librnp%{?_isa}
+Conflicts: thunderbird-librnp%{?_isa}
+%description librnp-rnp
+The thunderbird-librnp-rnp package contains an OpenPGP implementation
+based on RNP.
+%files librnp-rnp
+%{mozappdir}/librnp.so
 
 %package wayland
 Summary: Thunderbird Wayland launcher.
@@ -719,6 +736,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{mozappdir}/thunderbird-bin
 %{mozappdir}/thunderbird
 %{mozappdir}/*.so
+%exclude %{mozappdir}/librnp.so
 %{mozappdir}/platform.ini
 %{mozappdir}/application.ini
 %{mozappdir}/features/*.xpi
@@ -749,6 +767,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Sat May 15 2021 Fabio Valentini <decathorpe@gmail.com> - 78.10.1-3
+- Split off librnp and make it possible to use a different OpenPGP backend.
+
 * Wed May 05 2021 Jan Horak <jhorak@redhat.com> - 78.10.1-2
 - Fixed source0
 
