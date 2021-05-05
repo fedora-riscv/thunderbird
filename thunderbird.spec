@@ -90,10 +90,10 @@ ExcludeArch: s390x
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        78.10.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
-Source0:        ftp://ftp.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
+Source0:        https://archive.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
 Source1:        thunderbird-langpacks-%{version}-20210504.tar.xz
 %endif
@@ -749,6 +749,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Wed May 05 2021 Jan Horak <jhorak@redhat.com> - 78.10.1-2
+- Fixed source0
+
 * Tue May 04 2021 Jan Horak <jhorak@redhat.com> - 78.10.1-1
 - Update to 78.10.1 build1
 
