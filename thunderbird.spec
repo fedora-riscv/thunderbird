@@ -89,13 +89,13 @@ ExcludeArch: s390x
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        78.10.1
-Release:        3%{?dist}
+Version:        78.11.0
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Source0:        https://archive.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20210504.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20210602.tar.xz
 %endif
 Source3:        get-calendar-langpacks.sh
 Source4:        cbindgen-vendor-0.14.3.tar.xz
@@ -767,6 +767,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Wed Jun 02 2021 Jan Horak <jhorak@redhat.com> - 78.11.0-1
+- Update to 78.11.0 build1
+
 * Sat May 15 2021 Fabio Valentini <decathorpe@gmail.com> - 78.10.1-3
 - Split off librnp and make it possible to use a different OpenPGP backend.
 
