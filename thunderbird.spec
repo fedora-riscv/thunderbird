@@ -119,6 +119,7 @@ Patch417:       build-aarch64-user_vfp.patch
 Patch418:       mozilla-1512162.patch
 Patch419:       bindgen-d0dfc52706f23db9dc9d74642eeebd89d73cb8d0.patch
 Patch103:       rhbz-1219542-s390-build.patch
+Patch104:       build-python3.10.patch
 
 # PPC fix
 Patch304:       mozilla-1245783.patch
@@ -261,6 +262,11 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %patch9   -p2 -b .arm
 %ifarch s390
 %patch103 -p1 -b .rhbz-1219542-s390-build
+%endif
+
+%if 0%{?fedora} >= 35
+# since python3.10 we need to use  `from collections.abc` instead of `from collections`. 
+%patch104 -p1 -b .python3.10
 %endif
 
 %patch304 -p1 -b .1245783

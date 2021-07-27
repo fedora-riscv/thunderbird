@@ -1,0 +1,12 @@
+diff -up thunderbird-78.12.0/python/mach/mach/main.py.python3.10 thunderbird-78.12.0/python/mach/mach/main.py
+--- thunderbird-78.12.0/python/mach/mach/main.py.python3.10	2021-07-27 08:10:52.680466611 +0200
++++ thunderbird-78.12.0/python/mach/mach/main.py	2021-07-27 08:11:17.377561233 +0200
+@@ -16,7 +16,7 @@ import os
+ import sys
+ import traceback
+ import uuid
+-from collections import Iterable
++from collections.abc import Iterable
+ 
+ from six import string_types
+ 
