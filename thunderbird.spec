@@ -173,7 +173,7 @@ BuildRequires:  libffi-devel
 %endif
 BuildRequires:  startup-notification-devel
 BuildRequires:  alsa-lib-devel
-#BuildRequires:  autoconf213
+BuildRequires:  m4
 BuildRequires:  desktop-file-utils
 BuildRequires:  libcurl-devel
 BuildRequires:  mesa-libGL-devel
