@@ -89,16 +89,16 @@ ExcludeArch: s390x
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        91.0
+Version:        91.0.2
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Source0:        https://archive.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20210816.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20210823.tar.xz
 %endif
 Source3:        get-calendar-langpacks.sh
-Source4:        cbindgen-vendor-0.14.3.tar.xz
+Source4:        cbindgen-vendor.tar.xz
 
 Source10:       thunderbird-mozconfig
 Source11:       thunderbird-mozconfig-branded
@@ -766,6 +766,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Mon Aug 23 2021 Jan Horak <jhorak@redhat.com> - 91.0.2-1
+- Update to 91.0.2 build1
+
 * Mon Aug 16 2021 Jan Horak <jhorak@redhat.com> - 91.0-1
 - Update to 91.0 build1
 
