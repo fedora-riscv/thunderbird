@@ -574,7 +574,7 @@ desktop-file-install --vendor mozilla \
 # set up the thunderbird start script
 rm -f $RPM_BUILD_ROOT/%{_bindir}/thunderbird
 %{__cat} %{SOURCE21} | %{__sed} -e 's,__PREFIX__,%{_prefix},g' > \
-        $RPM_BUILD_ROOT%{_bindir}/thunderbird
+        $RPM_BUILD_ROOT/%{_bindir}/thunderbird
 %{__chmod} 755 $RPM_BUILD_ROOT/%{_bindir}/thunderbird
 %{__cat} %{SOURCE28} | %{__sed} -e 's,__PREFIX__,%{_prefix},g' > \
         %{buildroot}%{_bindir}/thunderbird-wayland
