@@ -531,6 +531,7 @@ MOZ_SMP_FLAGS=-j1
 
 export MOZ_MAKE_FLAGS="$MOZ_SMP_FLAGS"
 export STRIP=/bin/true
+export MACH_USE_SYSTEM_PYTHON=1
 ./mach build -v
 
 # create debuginfo for crash-stats.mozilla.com
