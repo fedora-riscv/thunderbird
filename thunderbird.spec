@@ -89,13 +89,13 @@ ExcludeArch: s390x
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        78.12.0
-Release:        2%{?dist}
+Version:        91.0
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Source0:        https://archive.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20210721.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20210816.tar.xz
 %endif
 Source3:        get-calendar-langpacks.sh
 Source4:        cbindgen-vendor-0.14.3.tar.xz
@@ -119,11 +119,9 @@ Patch417:       build-aarch64-user_vfp.patch
 Patch418:       mozilla-1512162.patch
 Patch419:       bindgen-d0dfc52706f23db9dc9d74642eeebd89d73cb8d0.patch
 Patch103:       rhbz-1219542-s390-build.patch
-Patch104:       build-python3.10.patch
 
 # PPC fix
 Patch304:       mozilla-1245783.patch
-Patch307:       build-disable-elfhack.patch
 
 # Fedora specific patches
 
@@ -154,7 +152,7 @@ BuildRequires:  libjpeg-devel
 BuildRequires:  zip
 BuildRequires:  bzip2-devel
 BuildRequires:  zlib-devel
-BuildRequires:  libIDL-devel
+#BuildRequires:  libIDL-devel
 BuildRequires:  pkgconfig(gtk+-3.0)
 BuildRequires:  pkgconfig(gtk+-2.0)
 BuildRequires:  krb5-devel
@@ -175,7 +173,7 @@ BuildRequires:  libffi-devel
 %endif
 BuildRequires:  startup-notification-devel
 BuildRequires:  alsa-lib-devel
-BuildRequires:  autoconf213
+#BuildRequires:  autoconf213
 BuildRequires:  desktop-file-utils
 BuildRequires:  libcurl-devel
 BuildRequires:  mesa-libGL-devel
@@ -266,7 +264,6 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 
 %if 0%{?fedora} >= 35
 # since python3.10 we need to use  `from collections.abc` instead of `from collections`. 
-%patch104 -p1 -b .python3.10
 %endif
 
 %patch304 -p1 -b .1245783
@@ -281,14 +278,13 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %ifarch %{arm}
 %patch415 -p1 -b .mozilla-1238661
 %endif
-%patch416 -p1 -b .SIOCGSTAMP
+#FIXME %patch416 -p1 -b .SIOCGSTAMP
 %patch417 -p1 -b .aarch64-user_vfp
 %patch418 -p1 -b .mozbz-1512162
 # most likely fixed
 #%patch419 -p1 -b .bindgen
 
 %if 0%{?disable_elfhack}
-%patch307 -p1 -b .elfhack
 %endif
 #cd ..
 
@@ -458,8 +454,6 @@ MOZ_OPT_FLAGS="$MOZ_OPT_FLAGS -Wformat-security -Wformat -Werror=format-security
 # Workaround for mozbz#1531309
 MOZ_OPT_FLAGS=$(echo "$MOZ_OPT_FLAGS" | %{__sed} -e 's/-Werror=format-security//')
 %endif
-# Disable null pointer gcc6 optimization (rhbz#1311886)
-MOZ_OPT_FLAGS="$MOZ_OPT_FLAGS -fno-delete-null-pointer-checks"
 # Use hardened build?
 %if %{?hardened_build}
 MOZ_OPT_FLAGS="$MOZ_OPT_FLAGS -fPIC -Wl,-z,relro -Wl,-z,now"
@@ -489,39 +483,38 @@ MOZ_LINK_FLAGS="-Wl,--no-keep-memory"
 echo "ac_add_options --enable-linker=gold" >> .mozconfig
 %endif
 %endif
-
+%if 0%{?flatpak}
+# Make sure the linker can find libraries in /app/lib64 as we don't use
+# __global_ldflags that normally sets this.
+MOZ_LINK_FLAGS="$MOZ_LINK_FLAGS -L%{_libdir}"
+%endif
+%ifarch %{arm} %{ix86} %{s390x}
+export RUSTFLAGS="-Cdebuginfo=0"
+%endif
 # We don't want thunderbird to use CK_GCM_PARAMS_V3 in nss
 MOZ_OPT_FLAGS="$MOZ_OPT_FLAGS -DNSS_PKCS11_3_0_STRICT"
 
-
-export CFLAGS=`echo $MOZ_OPT_FLAGS |sed -e 's/-fpermissive//g'`
-export CXXFLAGS=$MOZ_OPT_FLAGS
-export LDFLAGS=$MOZ_LINK_FLAGS
-
-export PREFIX='%{_prefix}'
-export LIBDIR='%{_libdir}'
-
-%ifarch %{arm} %{ix86}
-export RUSTFLAGS="-Cdebuginfo=0"
-%endif
+echo "export CFLAGS=\"$MOZ_OPT_FLAGS\"" >> .mozconfig
+echo "export CXXFLAGS=\"$MOZ_OPT_FLAGS\"" >> .mozconfig
+echo "export LDFLAGS=\"$MOZ_LINK_FLAGS\"" >> .mozconfig
 
 %if 0%{?build_with_clang}
-export LLVM_PROFDATA="llvm-profdata"
-export AR="llvm-ar"
-export NM="llvm-nm"
-export RANLIB="llvm-ranlib"
+echo "export LLVM_PROFDATA=\"llvm-profdata\"" >> .mozconfig
+echo "export AR=\"llvm-ar\"" >> .mozconfig
+echo "export NM=\"llvm-nm\"" >> .mozconfig
+echo "export RANLIB=\"llvm-ranlib\"" >> .mozconfig
 echo "ac_add_options --enable-linker=lld" >> .mozconfig
 %else
-export CC=gcc
-export CXX=g++
-export AR="gcc-ar"
-export NM="gcc-nm"
-export RANLIB="gcc-ranlib"
+echo "export CC=gcc" >> .mozconfig
+echo "export CXX=g++" >> .mozconfig
+echo "export AR=\"gcc-ar\"" >> .mozconfig
+echo "export NM=\"gcc-nm\"" >> .mozconfig
+echo "export RANLIB=\"gcc-ranlib\"" >> .mozconfig
 %endif
-
 %if 0%{?build_with_pgo}
 echo "ac_add_options MOZ_PGO=1" >> .mozconfig
-echo "ac_add_options --enable-lto" >> .mozconfig
+# PGO build doesn't work with ccache
+export CCACHE_DISABLE=1
 %endif
 
 MOZ_SMP_FLAGS=-j1
@@ -538,7 +531,7 @@ MOZ_SMP_FLAGS=-j1
 
 export MOZ_MAKE_FLAGS="$MOZ_SMP_FLAGS"
 export STRIP=/bin/true
-./mach build
+./mach build -v
 
 # create debuginfo for crash-stats.mozilla.com
 %if %{enable_mozilla_crashreporter}
@@ -773,6 +766,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Mon Aug 16 2021 Jan Horak <jhorak@redhat.com> - 91.0-1
+- Update to 91.0 build1
+
 * Fri Jul 23 2021 Fedora Release Engineering <releng@fedoraproject.org> - 78.12.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
 

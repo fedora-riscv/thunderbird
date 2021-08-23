@@ -1,23 +1,39 @@
 mk_add_options MOZ_CO_PROJECT=mail
 ac_add_options --enable-application=comm/mail
-mk_add_options AUTOCONF=autoconf-2.13
 
-ac_add_options --enable-default-toolkit=cairo-gtk3-wayland
-
-ac_add_options --prefix="$PREFIX"
-ac_add_options --libdir="$LIBDIR"
-ac_add_options --with-system-jpeg
 ac_add_options --with-system-zlib
-ac_add_options --with-system-libvpx
-ac_add_options --disable-tests
 ac_add_options --disable-strip
-# temporary disable system cairo, because compilation fails
-ac_add_options --disable-necko-wifi
+#ac_add_options --enable-libnotify
+ac_add_options --enable-necko-wifi
 ac_add_options --disable-updater
-ac_add_options --with-system-icu
+ac_add_options --enable-chrome-format=omni
+ac_add_options --enable-pulseaudio
+ac_add_options --enable-av1
+ac_add_options --without-system-icu
+ac_add_options --enable-release
+ac_add_options --update-channel=release
+ac_add_options --allow-addon-sideload
+ac_add_options --enable-js-shell
+ac_add_options --with-unsigned-addon-scopes=app,system
 
-# lightning related
-ac_add_options --enable-calendar
+
+
+
+#mk_add_options AUTOCONF=autoconf-2.13
+
+#ac_add_options --enable-default-toolkit=cairo-gtk3-wayland
+
+#ac_add_options --prefix="$PREFIX"
+#ac_add_options --libdir="$LIBDIR"
+#ac_add_options --with-system-jpeg
+#ac_add_options --with-system-zlib
+#ac_add_options --with-system-libvpx
+#ac_add_options --disable-tests
+#ac_add_options --disable-strip
+## temporary disable system cairo, because compilation fails
+#ac_add_options --disable-necko-wifi
+#ac_add_options --disable-updater
+#ac_add_options --with-system-icu
 
 export BUILD_OFFICIAL=1
 export MOZILLA_OFFICIAL=1
