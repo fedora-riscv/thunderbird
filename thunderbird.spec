@@ -740,7 +740,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %exclude %{mozappdir}/librnp.so
 %{mozappdir}/platform.ini
 %{mozappdir}/application.ini
-%{mozappdir}/features/*.xpi
 %exclude %{mozappdir}/removed-files
 %{_datadir}/icons/hicolor/16x16/apps/thunderbird.png
 %{_datadir}/icons/hicolor/22x22/apps/thunderbird.png
@@ -763,7 +762,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{mozappdir}/distribution
 %{mozappdir}/fonts
 %{mozappdir}/pingsender
-%{mozappdir}/gtk2
 
 #===============================================================================
 
