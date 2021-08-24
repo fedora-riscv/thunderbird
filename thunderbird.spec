@@ -307,6 +307,9 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %{__cat} %{SOURCE11} >> .mozconfig
 %endif
 
+echo "ac_add_options --prefix=\"%{_prefix}\"" >> .mozconfig
+echo "ac_add_options --libdir=\"%{_libdir}\"" >> .mozconfig
+
 %if %{?system_nss}
 echo "ac_add_options --with-system-nspr" >> .mozconfig
 echo "ac_add_options --with-system-nss" >> .mozconfig
