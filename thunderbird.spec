@@ -63,7 +63,7 @@ ExcludeArch: s390x
 %endif
 
 %define thunderbird_app_id \{3550f703-e582-4d05-9a08-453d09bdfdc6\}
-%global langpackdir   %{mozappdir}/distribution/extensions
+%global langpackdir   %{mozappdir}/extensions
 
 # The tarball is pretty inconsistent with directory structure.
 # Sometimes there is a top level directory.  That goes here.
@@ -759,7 +759,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{mozappdir}/*.chk
 %endif
 %{mozappdir}/dependentlibs.list
-%{mozappdir}/distribution
 %{mozappdir}/fonts
 %{mozappdir}/pingsender
 
