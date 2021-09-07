@@ -89,13 +89,13 @@ ExcludeArch: s390x
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        91.0.3
-Release:        2%{?dist}
+Version:        91.1.0
+Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Source0:        https://archive.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20210826.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20210907.tar.xz
 %endif
 Source3:        get-calendar-langpacks.sh
 Source4:        cbindgen-vendor.tar.xz
@@ -115,11 +115,9 @@ Patch9:         mozilla-build-arm.patch
 Patch226:       rhbz-1354671.patch
 Patch415:       Bug-1238661---fix-mozillaSignalTrampoline-to-work-.patch
 Patch416:       firefox-SIOCGSTAMP.patch
-Patch417:       build-aarch64-user_vfp.patch
 Patch418:       mozilla-1512162.patch
 Patch419:       bindgen-d0dfc52706f23db9dc9d74642eeebd89d73cb8d0.patch
 Patch103:       rhbz-1219542-s390-build.patch
-Patch104:       firefox-glibc-dynstack.patch
 
 # PPC fix
 Patch304:       mozilla-1245783.patch
@@ -263,7 +261,6 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %ifarch s390
 %patch103 -p1 -b .rhbz-1219542-s390-build
 %endif
-%patch104 -p1 -b .dynstack
 
 %if 0%{?fedora} >= 35
 # since python3.10 we need to use  `from collections.abc` instead of `from collections`. 
@@ -282,7 +279,6 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %patch415 -p1 -b .mozilla-1238661
 %endif
 #FIXME %patch416 -p1 -b .SIOCGSTAMP
-%patch417 -p1 -b .aarch64-user_vfp
 %patch418 -p1 -b .mozbz-1512162
 # most likely fixed
 #%patch419 -p1 -b .bindgen
@@ -769,6 +765,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Sep 07 2021 Jan Horak <jhorak@redhat.com> - 91.1.0-1
+- Update to 91.1.0 build2
+
 * Thu Aug 26 2021 Jan Horak <jhorak@redhat.com> - 91.0.3-2
 - Update to 91.0.3 build1
 
