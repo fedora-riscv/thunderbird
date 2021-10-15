@@ -646,52 +646,8 @@ touch $RPM_BUILD_ROOT%{mozappdir}/components/xpti.dat
 %endif
 
 # Register as an application to be visible in the software center
-#
-# NOTE: It would be *awesome* if this file was maintained by the upstream
-# project, translated and installed into the right place during `make install`.
-#
-# See http://www.freedesktop.org/software/appstream/docs/ for more details.
-#
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
-cat > $RPM_BUILD_ROOT%{_datadir}/appdata/mozilla-thunderbird.appdata.xml <<EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2014 Richard Hughes <richard@hughsie.com> -->
-<!--
-BugReportURL: https://bugzilla.mozilla.org/show_bug.cgi?id=1071065
-SentUpstream: 2014-09-22
--->
-<application>
-  <id type="desktop">mozilla-thunderbird.desktop</id>
-  <metadata_license>CC0-1.0</metadata_license>
-  <description>
-    <p>
-      Thunderbird is an email client that allows you to read, write and organise all
-      of your email messages. It is compatible with most email accounts, including the
-      most popular webmail services.
-    </p>
-    <p>
-      Thunderbird is designed by Mozilla, a global community working together to make
-      the Internet better. Mozilla believe that the Internet should be open, public,
-      and accessible to everyone without any restrictions.
-    </p>
-    <ul>
-      <li>Easier than ever to set up a new e-mail account</li>
-      <li>Awesome search allows you to find your messages fast</li>
-      <li>Thousands of add-ons give you the freedom to make Thunderbird your own</li>
-    </ul>
-  </description>
-  <url type="homepage">http://www.mozilla.org/thunderbird/</url>
-  <screenshots>
-    <screenshot type="default">https://raw.githubusercontent.com/hughsie/fedora-appstream/master/screenshots-extra/mozilla-thunderbird/a.png</screenshot>
-  </screenshots>
-  <releases>
-    <release version="%{version}" date="$(date '+%F')"/>
-  </releases>
-  <!-- FIXME: change this to an upstream email address for spec updates
-  <updatecontact>someone_who_cares@upstream_project.org</updatecontact>
-   -->
-</application>
-EOF
+%{__cp} -p comm/mail/branding/%{name}/net.thunderbird.Thunderbird.appdata.xml $RPM_BUILD_ROOT%{_datadir}/appdata/thunderbird.appdata.xml
 
 #===============================================================================
 
