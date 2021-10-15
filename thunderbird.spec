@@ -127,7 +127,6 @@ Patch304:       mozilla-1245783.patch
 # Upstream patches
 Patch402:       mozilla-526293.patch
 Patch406:        mozilla-1170092.patch
-Patch407:        mozilla-1727113-enableaddons.diff
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -290,7 +289,6 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %patch402 -p1 -b .526293
 %patch406 -p1 -b .1170092-etc-conf
 pushd comm
-%patch407 -p1 -b .1727113-enableaddons.diff
 popd
 
 %if %{official_branding}
