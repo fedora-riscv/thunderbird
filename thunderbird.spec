@@ -90,7 +90,7 @@ ExcludeArch: s390x
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        91.5.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Source0:        https://archive.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
@@ -644,8 +644,8 @@ touch $RPM_BUILD_ROOT%{mozappdir}/components/xpti.dat
 %endif
 
 # Register as an application to be visible in the software center
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
-%{__cp} -p comm/mail/branding/%{name}/net.thunderbird.Thunderbird.appdata.xml $RPM_BUILD_ROOT%{_datadir}/appdata/thunderbird.appdata.xml
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/metainfo
+%{__cp} -p comm/mail/branding/%{name}/net.thunderbird.Thunderbird.appdata.xml $RPM_BUILD_ROOT%{_datadir}/metainfo/thunderbird.appdata.xml
 
 #===============================================================================
 
@@ -719,6 +719,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Wed Feb 09 2022 Jan Horak <jhorak@redhat.com> - 91.5.0-3
+- Put appdata.xml to medainfo location
+
 * Sat Jan 22 2022 Fedora Release Engineering <releng@fedoraproject.org> - 91.5.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
 
