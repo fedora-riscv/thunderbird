@@ -667,7 +667,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %files -f %{name}.lang
 %defattr(-,root,root,-)
 %attr(755,root,root) %{_bindir}/thunderbird
-%{_datadir}/appdata/*.appdata.xml
+%{_datadir}/metainfo/*.appdata.xml
 %attr(644,root,root) %{_datadir}/applications/mozilla-thunderbird.desktop
 %dir %{_sysconfdir}/%{name}
 %dir %{_sysconfdir}/%{name}/*
