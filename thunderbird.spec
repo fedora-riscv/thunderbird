@@ -646,6 +646,7 @@ touch $RPM_BUILD_ROOT%{mozappdir}/components/xpti.dat
 # Register as an application to be visible in the software center
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/metainfo
 %{__cp} -p comm/mail/branding/%{name}/net.thunderbird.Thunderbird.appdata.xml $RPM_BUILD_ROOT%{_datadir}/metainfo/thunderbird.appdata.xml
+sed -i -e 's|<icon .*|<icon type="stock">thunderbird</icon>' "$RPM_BUILD_ROOT%{_datadir}/metainfo/thunderbird.appdata.xml
 
 #===============================================================================
 
