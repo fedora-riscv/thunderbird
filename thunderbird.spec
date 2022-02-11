@@ -90,7 +90,7 @@ ExcludeArch: s390x
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        91.6.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Source0:        https://archive.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
@@ -720,6 +720,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Fri Feb 11 2022 Jan Horak <jhorak@redhat.com> - 91.6.0-2
+- Supply stock icon to the appdata file
+
 * Wed Feb 09 2022 Jan Horak <jhorak@redhat.com> - 91.6.0-1
 - Update to 91.6.0 build1
 
