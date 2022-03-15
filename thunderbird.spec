@@ -89,13 +89,13 @@ ExcludeArch: s390x
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        91.6.2
+Version:        91.7.0
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Source0:        https://archive.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20220307.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20220308.tar.xz
 %endif
 Source3:        get-calendar-langpacks.sh
 Source4:        cbindgen-vendor.tar.xz
@@ -127,6 +127,11 @@ Patch304:       mozilla-1245783.patch
 # Upstream patches
 Patch402:       mozilla-526293.patch
 Patch406:        mozilla-1170092.patch
+
+# Bundled expat backported patches
+Patch501:       expat-CVE-2022-25235.patch
+Patch502:       expat-CVE-2022-25236.patch
+Patch503:       expat-CVE-2022-25315.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -290,6 +295,10 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %patch406 -p1 -b .1170092-etc-conf
 pushd comm
 popd
+
+%patch501 -p1 -b .expat-CVE-2022-25235
+%patch502 -p1 -b .expat-CVE-2022-25236
+%patch503 -p1 -b .expat-CVE-2022-25315
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -720,6 +729,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue Mar 15 2022 Eike Rathke <erack@redhat.com> - 91.7.0-1
+- Update to 91.7.0
+- plus patches to bundled expat against CVE-2022-25235 CVE-2022-25236 CVE-2022-25315
+
 * Mon Mar  7 2022 Jan Horak <jhorak@redhat.com> - 91.6.2-1
 - Update to 91.6.2
 
@@ -864,7 +877,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 * Fri Mar 13 2020 Jan Horak <jhorak@redhat.com> - 68.6.0-1
 - Update to 68.6.0 build2
 
-* Wed Mar  3 2020 David Auer <dreua@posteo.de> - 68.5.0-2
+* Thu Mar 03 2020 David Auer <dreua@posteo.de> - 68.5.0-2
 - Fix spellcheck (rhbz#1753011)
 
 * Thu Feb 13 2020 Jan Horak <jhorak@redhat.com> - 68.5.0-1
