@@ -1,3 +1,9 @@
+%if 0%{?fedora} > 35 || 0%{?rhel} > 9
+%global dictionarydir hunspell
+%else
+%global dictionarydir myspell
+%endif
+
 # Disabled arm due to rhbz#1658940
 ExcludeArch: armv7hl
 
@@ -90,7 +96,7 @@ ExcludeArch: s390x
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        91.8.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Source0:        https://archive.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
@@ -595,8 +601,9 @@ rm -f $RPM_BUILD_ROOT/%{_bindir}/thunderbird
 %{__chmod} 755 %{buildroot}%{_bindir}/thunderbird-wayland
 
 # set up our default preferences
-%{__cat} %{SOURCE12} | %{__sed} -e 's,THUNDERBIRD_RPM_VR,%{version}-%{release},g' > \
-        $RPM_BUILD_ROOT/rh-default-prefs
+%{__cat} %{SOURCE12} | %{__sed} -e 's,THUNDERBIRD_RPM_VR,%{version}-%{release},g' \
+        -e 's,myspell,%{dictionarydir},g' \
+        > $RPM_BUILD_ROOT/rh-default-prefs
 %{__install} -D $RPM_BUILD_ROOT/rh-default-prefs $RPM_BUILD_ROOT/%{mozappdir}/greprefs/all-redhat.js
 %{__install} -D $RPM_BUILD_ROOT/rh-default-prefs $RPM_BUILD_ROOT/%{mozappdir}/defaults/pref/all-redhat.js
 %{__rm} $RPM_BUILD_ROOT/rh-default-prefs
@@ -647,7 +654,7 @@ install -c -m 644 LICENSE $RPM_BUILD_ROOT%{mozappdir}
 
 # Use the system hunspell dictionaries
 %{__rm} -rf $RPM_BUILD_ROOT/%{mozappdir}/dictionaries
-ln -s $(pkg-config --variable prefix hunspell)/share/myspell $RPM_BUILD_ROOT%{mozappdir}/dictionaries
+ln -s $(pkg-config --variable prefix hunspell)/share/%{dictionarydir} $RPM_BUILD_ROOT%{mozappdir}/dictionaries
 
 # ghost files
 %{__mkdir_p} $RPM_BUILD_ROOT%{mozappdir}/components
@@ -737,6 +744,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Wed Apr 20 2022 Parag Nemade <pnemade AT redhat DOT com> - 91.8.0-2
+- Update hunspell dictionary path
+  F36 Change https://fedoraproject.org/wiki/Changes/Hunspell_dictionary_dir_change
+
 * Mon Apr 11 2022 Eike Rathke <erack@redhat.com> - 91.8.0-1
 - Update to 91.8.0
 
