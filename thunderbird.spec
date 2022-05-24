@@ -95,13 +95,13 @@ ExcludeArch: s390x
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        91.9.0
+Version:        91.9.1
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Source0:        https://archive.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20220503.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20220523.tar.xz
 %endif
 Source3:        get-calendar-langpacks.sh
 Source4:        cbindgen-vendor.tar.xz
@@ -744,6 +744,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Tue May 24 2022 Eike Rathke <erack@redhat.com> - 91.9.1-1
+- Update to 91.9.1
+
 * Wed May 04 2022 Eike Rathke <erack@redhat.com> - 91.9.0-1
 - Update to 91.9.0
 
