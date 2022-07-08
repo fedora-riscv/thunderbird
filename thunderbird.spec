@@ -746,7 +746,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
-* Fri Jul 05 2022 Tom Stellard <tstellar@redhat.com> - 91.11.0-2
+* Tue Jul 05 2022 Tom Stellard <tstellar@redhat.com> - 91.11.0-2
 - Clean up macros that allow building with clang
 
 * Wed Jun 29 2022 Eike Rathke <erack@redhat.com> - 91.11.0-1
