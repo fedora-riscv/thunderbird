@@ -1,0 +1,27 @@
+--- thunderbird-91.11.0/xpcom/idl-parser/xpidl/xpidl.py.python-inline-flags	2022-06-28 04:39:56.000000000 +0200
++++ thunderbird-91.11.0/xpcom/idl-parser/xpidl/xpidl.py	2022-07-11 21:55:05.287553042 +0200
+@@ -1563,13 +1563,13 @@ class IDLParser(object):
+     t_ignore = " \t"
+ 
+     def t_multilinecomment(self, t):
+-        r"/\*(?s).*?\*/"
++        r"/\*(?s:.*?)\*/"
+         t.lexer.lineno += t.value.count("\n")
+         if t.value.startswith("/**"):
+             self._doccomments.append(t.value)
+ 
+     def t_singlelinecomment(self, t):
+-        r"(?m)//.*?$"
++        r"(?m://.*?$)"
+ 
+     def t_IID(self, t):
+         return t
+@@ -1582,7 +1582,7 @@ class IDLParser(object):
+         return t
+ 
+     def t_LCDATA(self, t):
+-        r"(?s)%\{[ ]*C\+\+[ ]*\n(?P<cdata>.*?\n?)%\}[ ]*(C\+\+)?"
++        r"(?s:%\{[ ]*C\+\+[ ]*\n(?P<cdata>.*?\n?)%\}[ ]*(C\+\+)?)"
+         t.type = "CDATA"
+         t.value = t.lexer.lexmatch.group("cdata")
+         t.lexer.lineno += t.value.count("\n")

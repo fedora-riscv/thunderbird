@@ -100,7 +100,7 @@ ExcludeArch: s390x
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        91.11.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Source0:        https://archive.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
@@ -131,6 +131,10 @@ Patch103:       rhbz-1219542-s390-build.patch
 # gcc 12 build fix patches
 Patch421:       gcc12-D139088.patch
 Patch422:       0001-GLIBCXX-fix-for-GCC-12.patch
+# Python 3.11 "ValueError: invalid mode: 'rU'"; 'U' is deprecated since Python 3 and default, error with Python 3.11
+Patch423:       python3.11-open-U.patch
+# Python 3.11 "Invalid regular expression for rule '...'. global flags not at the start of the expression at position ...
+Patch424:       python3.11-regex-inline-flags.patch
 
 # PPC fix
 Patch304:       mozilla-1245783.patch
@@ -311,6 +315,8 @@ popd
 
 %patch421 -p1 -b .gcc12-D139088
 %patch422 -p1 -b .0001-GLIBCXX-fix-for-GCC-12
+%patch423 -p1 -b .python3.11-open-U
+%patch424 -p1 -b .python3.11-regex-inline-flags
 
 %patch501 -p1 -b .expat-CVE-2022-25235
 %patch502 -p1 -b .expat-CVE-2022-25236
@@ -746,6 +752,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Mon Jul 11 2022 Eike Rathke <erack@redhat.com> - 91.11.0-3
+- Fix f37 FTBFS Python 3.11 API incompatibilities
+
 * Tue Jul 05 2022 Tom Stellard <tstellar@redhat.com> - 91.11.0-2
 - Clean up macros that allow building with clang
 
