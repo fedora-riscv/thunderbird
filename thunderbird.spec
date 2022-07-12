@@ -213,7 +213,6 @@ Obsoletes:      thunderbird-lightning-gdata <= 1:3.3.0.14
 BuildRequires:  rust
 BuildRequires:  cargo
 BuildRequires:  clang-devel
-BuildRequires:  python2-devel
 %if !0%{?use_bundled_cbindgen}
 BuildRequires:  cbindgen
 %endif
