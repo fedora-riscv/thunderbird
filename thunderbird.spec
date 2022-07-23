@@ -100,7 +100,7 @@ ExcludeArch: s390x
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        91.11.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPLv1.1 or GPLv2+ or LGPLv2+
 Source0:        https://archive.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
@@ -751,6 +751,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Sat Jul 23 2022 Fedora Release Engineering <releng@fedoraproject.org> - 91.11.0-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
+
 * Mon Jul 11 2022 Eike Rathke <erack@redhat.com> - 91.11.0-3
 - Fix f37 FTBFS Python 3.11 API incompatibilities
 
