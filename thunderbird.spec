@@ -142,6 +142,7 @@ Patch304:       mozilla-1245783.patch
 # Upstream patches
 Patch402:       mozilla-526293.patch
 Patch406:        mozilla-1170092.patch
+Patch407:        D147721-python-ru.diff
 
 # Bundled expat backported patches
 Patch501:       expat-CVE-2022-25235.patch
@@ -307,6 +308,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 
 %patch402 -p1 -b .526293
 %patch406 -p1 -b .1170092-etc-conf
+%patch407 -p1 -b .D147721-python-ru.diff
 pushd comm
 popd
 

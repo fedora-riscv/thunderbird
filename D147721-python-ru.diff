@@ -1,0 +1,136 @@
+diff --git a/dom/base/usecounters.py b/dom/base/usecounters.py
+--- a/dom/base/usecounters.py
++++ b/dom/base/usecounters.py
+@@ -6,11 +6,11 @@
+ import re
+ 
+ 
+ def read_conf(conf_filename):
+     # Can't read/write from a single StringIO, so make a new one for reading.
+-    stream = open(conf_filename, "rU")
++    stream = open(conf_filename, "r")
+ 
+     def parse_counters(stream):
+         for line_num, line in enumerate(stream):
+             line = line.rstrip("\n")
+             if not line or line.startswith("//"):
+diff --git a/python/mozbuild/mozbuild/action/process_define_files.py b/python/mozbuild/mozbuild/action/process_define_files.py
+--- a/python/mozbuild/mozbuild/action/process_define_files.py
++++ b/python/mozbuild/mozbuild/action/process_define_files.py
+@@ -34,11 +34,11 @@
+     if mozpath.basedir(
+         path, [mozpath.join(topsrcdir, "js/src")]
+     ) and not config.substs.get("JS_STANDALONE"):
+         config = PartialConfigEnvironment(mozpath.join(topobjdir, "js", "src"))
+ 
+-    with open(path, "rU") as input:
++    with open(path, "r") as input:
+         r = re.compile(
+             "^\s*#\s*(?P<cmd>[a-z]+)(?:\s+(?P<name>\S+)(?:\s+(?P<value>\S+))?)?", re.U
+         )
+         for l in input:
+             m = r.match(l)
+diff --git a/python/mozbuild/mozbuild/backend/base.py b/python/mozbuild/mozbuild/backend/base.py
+--- a/python/mozbuild/mozbuild/backend/base.py
++++ b/python/mozbuild/mozbuild/backend/base.py
+@@ -270,11 +270,11 @@
+         self._write_purgecaches(config)
+ 
+         return status
+ 
+     @contextmanager
+-    def _write_file(self, path=None, fh=None, readmode="rU"):
++    def _write_file(self, path=None, fh=None, readmode="r"):
+         """Context manager to write a file.
+ 
+         This is a glorified wrapper around FileAvoidWrite with integration to
+         update the summary data on this instance.
+ 
+diff --git a/python/mozbuild/mozbuild/preprocessor.py b/python/mozbuild/mozbuild/preprocessor.py
+--- a/python/mozbuild/mozbuild/preprocessor.py
++++ b/python/mozbuild/mozbuild/preprocessor.py
+@@ -529,11 +529,11 @@
+                 )
+             depfile = get_output_file(options.depend)
+ 
+         if args:
+             for f in args:
+-                with io.open(f, "rU", encoding="utf-8") as input:
++                with io.open(f, "r", encoding="utf-8") as input:
+                     self.processFile(input=input, output=out)
+             if depfile:
+                 mk = Makefile()
+                 mk.create_rule([six.ensure_text(options.output)]).add_dependencies(
+                     self.includes
+@@ -858,11 +858,11 @@
+                 args = _to_text(args)
+                 if filters:
+                     args = self.applyFilters(args)
+                 if not os.path.isabs(args):
+                     args = os.path.join(self.curdir, args)
+-                args = io.open(args, "rU", encoding="utf-8")
++                args = io.open(args, "r", encoding="utf-8")
+             except Preprocessor.Error:
+                 raise
+             except Exception:
+                 raise Preprocessor.Error(self, "FILE_NOT_FOUND", _to_text(args))
+         self.checkLineNumbers = bool(
+@@ -912,11 +912,11 @@
+ 
+ 
+ def preprocess(includes=[sys.stdin], defines={}, output=sys.stdout, marker="#"):
+     pp = Preprocessor(defines=defines, marker=marker)
+     for f in includes:
+-        with io.open(f, "rU", encoding="utf-8") as input:
++        with io.open(f, "r", encoding="utf-8") as input:
+             pp.processFile(input=input, output=output)
+     return pp.includes
+ 
+ 
+ # Keep this module independently executable.
+diff --git a/python/mozbuild/mozbuild/util.py b/python/mozbuild/mozbuild/util.py
+--- a/python/mozbuild/mozbuild/util.py
++++ b/python/mozbuild/mozbuild/util.py
+@@ -234,11 +234,11 @@
+     Additionally, there is dry run mode where the file is not actually written
+     out, but reports whether the file was existing and would have been updated
+     still occur, as well as diff capture if requested.
+     """
+ 
+-    def __init__(self, filename, capture_diff=False, dry_run=False, readmode="rU"):
++    def __init__(self, filename, capture_diff=False, dry_run=False, readmode="r"):
+         BytesIO.__init__(self)
+         self.name = filename
+         assert type(capture_diff) == bool
+         assert type(dry_run) == bool
+         assert "r" in readmode
+diff --git a/python/mozbuild/mozpack/files.py b/python/mozbuild/mozpack/files.py
+--- a/python/mozbuild/mozpack/files.py
++++ b/python/mozbuild/mozpack/files.py
+@@ -552,11 +552,11 @@
+ 
+     def inputs(self):
+         pp = Preprocessor(defines=self.defines, marker=self.marker)
+         pp.setSilenceDirectiveWarnings(self.silence_missing_directive_warnings)
+ 
+-        with _open(self.path, "rU") as input:
++        with _open(self.path, "r") as input:
+             with _open(os.devnull, "w") as output:
+                 pp.processFile(input=input, output=output)
+ 
+         # This always yields at least self.path.
+         return pp.includes
+@@ -609,11 +609,11 @@
+         if self.depfile:
+             deps_out = FileAvoidWrite(self.depfile)
+         pp = Preprocessor(defines=self.defines, marker=self.marker)
+         pp.setSilenceDirectiveWarnings(self.silence_missing_directive_warnings)
+ 
+-        with _open(self.path, "rU") as input:
++        with _open(self.path, "r") as input:
+             pp.processFile(input=input, output=dest, depfile=deps_out)
+ 
+         dest.close()
+         if self.depfile:
+             deps_out.close()
+
