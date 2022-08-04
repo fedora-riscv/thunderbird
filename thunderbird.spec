@@ -244,6 +244,8 @@ The thunderbird-librnp-rnp package contains an OpenPGP implementation
 based on RNP.
 %files librnp-rnp
 %{mozappdir}/librnp.so
+%{mozappdir}/rnp-cli
+%{mozappdir}/rnp-keys
 
 %package wayland
 Summary: Thunderbird Wayland launcher.
