@@ -1,0 +1,11 @@
+diff -up thunderbird-102.1.0/gfx/webrender_bindings/webrender_ffi.h.cbindgen-covers thunderbird-102.1.0/gfx/webrender_bindings/webrender_ffi.h
+--- thunderbird-102.1.0/gfx/webrender_bindings/webrender_ffi.h.cbindgen-covers	2022-08-04 12:47:06.970587140 +0200
++++ thunderbird-102.1.0/gfx/webrender_bindings/webrender_ffi.h	2022-08-04 12:47:13.642579587 +0200
+@@ -73,7 +73,6 @@ struct WrPipelineInfo;
+ struct WrPipelineIdAndEpoch;
+ using WrPipelineIdEpochs = nsTArray<WrPipelineIdAndEpoch>;
+ 
+-const uint64_t ROOT_CLIP_CHAIN = ~0;
+ 
+ }  // namespace wr
+ }  // namespace mozilla
