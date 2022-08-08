@@ -245,7 +245,7 @@ based on RNP.
 %files librnp-rnp
 %{mozappdir}/librnp.so
 %{mozappdir}/rnp-cli
-%{mozappdir}/rnp-keys
+%{mozappdir}/rnpkeys
 
 %package wayland
 Summary: Thunderbird Wayland launcher.
