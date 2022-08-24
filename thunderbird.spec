@@ -128,6 +128,7 @@ Patch415:       Bug-1238661---fix-mozillaSignalTrampoline-to-work-.patch
 Patch418:       mozilla-1512162.patch
 Patch419:        cbindgen-already-covers.patch
 Patch420:        D154024.diff
+Patch421:        D153716-arc4random.diff
 #Patch419:       bindgen-d0dfc52706f23db9dc9d74642eeebd89d73cb8d0.patch
 Patch103:       rhbz-1219542-s390-build.patch
 # gcc 12 build fix patches
@@ -306,7 +307,8 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %patch418 -p1 -b .mozbz-1512162
 %patch419 -p1 -b .cbindgen-already-covers
 #arc4random failures
-%patch420 -p1 -b .D154024.diff
+%patch420 -p1 -b .D154024
+%patch421 -p1 -b .D153716-arc4random
 # most likely fixed
 #%patch419 -p1 -b .bindgen
 
