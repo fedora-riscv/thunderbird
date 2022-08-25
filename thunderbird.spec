@@ -312,8 +312,6 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 # most likely fixed
 #%patch419 -p1 -b .bindgen
 
-%if 0%{?disable_elfhack}
-%endif
 #cd ..
 
 %patch402 -p1 -b .526293
@@ -341,6 +339,10 @@ popd
 %{__cp} %{SOURCE10} .mozconfig
 %if %{official_branding}
 %{__cat} %{SOURCE11} >> .mozconfig
+%endif
+
+%if 0%{?disable_elfhack}
+echo "ac_add_options --disable-elfhack" >> .mozconfig
 %endif
 
 echo "ac_add_options --prefix=\"%{_prefix}\"" >> .mozconfig
