@@ -228,7 +228,9 @@ BuildRequires:  icu
 %endif
 
 # require any OpenPGP backend with the librnp interface
-Requires:       thunderbird-librnp%{?_isa}
+# see comm/mail/extensions/openpgp/content/modules/RNPLib.jsm
+# %%{mozappdir}/librnp.so or %%{_libdir}/librnp.so.0
+Requires:      (thunderbird-librnp%{?_isa} or librnp%{?_isa})
 # prefer the librnp implementation bundled with thunderbird
 Suggests:       thunderbird-librnp-rnp%{?_isa}
 
