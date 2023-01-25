@@ -134,6 +134,7 @@ Patch422:       0001-GLIBCXX-fix-for-GCC-12.patch
 # Python 3.11 "Invalid regular expression for rule '...'. global flags not at the start of the expression at position ...
 Patch424:       python3.11-regex-inline-flags.patch
 Patch425:        build-disable-elfhack.patch
+Patch426:       gcc13-header-dependencies.patch
 
 # PPC fix
 Patch304:       mozilla-1245783.patch
@@ -326,6 +327,7 @@ popd
 
 %patch422 -p1 -b .0001-GLIBCXX-fix-for-GCC-12
 %patch424 -p1 -b .python3.11-regex-inline-flags
+%patch426 -p1 -b .gcc13-header-dependencies
 
 %patch501 -p1 -b .expat-CVE-2022-25235
 %patch502 -p1 -b .expat-CVE-2022-25236
@@ -763,6 +765,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %changelog
 * Tue Jan 24 2023 Eike Rathke <erack@redhat.com> - 102.7.1-1
 - Update to 102.7.1
+- Fix FTBFS gcc13 header dependencies
 
 * Sat Jan 21 2023 Fedora Release Engineering <releng@fedoraproject.org> - 102.6.0-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
