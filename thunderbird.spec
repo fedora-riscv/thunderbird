@@ -99,7 +99,7 @@ ExcludeArch: s390x
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        102.7.2
+Version:        102.8.0
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPL-2.0 OR GPL-2.0-or-later OR LGPL-2.0-or-later
@@ -132,7 +132,6 @@ Patch103:       rhbz-1219542-s390-build.patch
 Patch422:       0001-GLIBCXX-fix-for-GCC-12.patch
 # Python 3.11 "ValueError: invalid mode: 'rU'"; 'U' is deprecated since Python 3 and default, error with Python 3.11
 # Python 3.11 "Invalid regular expression for rule '...'. global flags not at the start of the expression at position ...
-Patch424:       python3.11-regex-inline-flags.patch
 Patch425:        build-disable-elfhack.patch
 Patch426:       gcc13-header-dependencies.patch
 
@@ -144,7 +143,6 @@ Patch304:       mozilla-1245783.patch
 # Upstream patches
 Patch402:       mozilla-526293.patch
 Patch406:        mozilla-1170092.patch
-Patch407:        D147721-python-ru.diff
 Patch408:       D165150.diff
 Patch409:       D165152.diff
 
@@ -318,7 +316,6 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 
 %patch402 -p1 -b .526293
 %patch406 -p1 -b .1170092-etc-conf
-%patch407 -p1 -b .D147721-python-ru.diff
 %patch408 -p1 -b .D165150
 %patch409 -p1 -b .D165152
 
@@ -326,7 +323,6 @@ pushd comm
 popd
 
 %patch422 -p1 -b .0001-GLIBCXX-fix-for-GCC-12
-%patch424 -p1 -b .python3.11-regex-inline-flags
 %patch426 -p1 -b .gcc13-header-dependencies
 
 %patch501 -p1 -b .expat-CVE-2022-25235
@@ -763,6 +759,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Fri Feb 17 2023 Eike Rathke <erack@redhat.com> - 102.8.0-1
+- Update to 102.8.0
+
 * Wed Feb 08 2023 Eike Rathke <erack@redhat.com> - 102.7.2-1
 - Update to 102.7.2
 
