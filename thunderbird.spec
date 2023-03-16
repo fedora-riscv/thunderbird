@@ -527,6 +527,9 @@ MOZ_LINK_FLAGS="$MOZ_LINK_FLAGS -L%{_libdir}"
 %endif
 %ifarch %{arm} %{ix86} %{s390x}
 export RUSTFLAGS="-Cdebuginfo=0"
+%else
+# Otherwise since https://src.fedoraproject.org/rpms/redhat-rpm-config/pull-request/243 breaks build.
+unset RUSTFLAGS
 %endif
 # We don't want thunderbird to use CK_GCM_PARAMS_V3 in nss
 MOZ_OPT_FLAGS="$MOZ_OPT_FLAGS -DNSS_PKCS11_3_0_STRICT"
