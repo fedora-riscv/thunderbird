@@ -176,7 +176,6 @@ BuildRequires:  bzip2-devel
 BuildRequires:  zlib-devel
 #BuildRequires:  libIDL-devel
 BuildRequires:  pkgconfig(gtk+-3.0)
-BuildRequires:  pkgconfig(gtk+-2.0)
 BuildRequires:  krb5-devel
 BuildRequires:  pango-devel
 BuildRequires:  freetype-devel >= %{freetype_version}
