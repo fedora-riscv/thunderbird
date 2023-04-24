@@ -151,6 +151,12 @@ Patch501:       expat-CVE-2022-25235.patch
 Patch502:       expat-CVE-2022-25236.patch
 Patch503:       expat-CVE-2022-25315.patch
 
+# Tentative patch for RUSTFLAGS parsing issue,
+# borrowed from firefox commit 24c9accce19c5cae9394430b24eaf938a9c17882:
+# https://bugzilla.redhat.com/show_bug.cgi?id=2184743
+# https://bugzilla.mozilla.org/show_bug.cgi?id=1474486
+Patch1200:       rustflags-commasplit.patch
+
 %if %{official_branding}
 # Required by Mozilla Corporation
 
@@ -327,6 +333,8 @@ popd
 %patch501 -p1 -b .expat-CVE-2022-25235
 %patch502 -p1 -b .expat-CVE-2022-25236
 %patch503 -p1 -b .expat-CVE-2022-25315
+
+%patch1200 -p1 -b .rustflags-commasplit
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -526,9 +534,6 @@ MOZ_LINK_FLAGS="$MOZ_LINK_FLAGS -L%{_libdir}"
 %endif
 %ifarch %{arm} %{ix86} %{s390x}
 export RUSTFLAGS="-Cdebuginfo=0"
-%else
-# Otherwise since https://src.fedoraproject.org/rpms/redhat-rpm-config/pull-request/243 breaks build.
-unset RUSTFLAGS
 %endif
 # We don't want thunderbird to use CK_GCM_PARAMS_V3 in nss
 MOZ_OPT_FLAGS="$MOZ_OPT_FLAGS -DNSS_PKCS11_3_0_STRICT"
