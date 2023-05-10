@@ -100,7 +100,7 @@ ExcludeArch: s390x
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
 Version:        102.10.0
-Release:        1%{?dist}
+Release:        1.rv64%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPL-2.0 OR GPL-2.0-or-later OR LGPL-2.0-or-later
 Source0:        https://archive.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
@@ -150,6 +150,9 @@ Patch409:       D165152.diff
 Patch501:       expat-CVE-2022-25235.patch
 Patch502:       expat-CVE-2022-25236.patch
 Patch503:       expat-CVE-2022-25315.patch
+
+# riscv64 support from Arch Linux
+Patch600:       makotokato-riscv64-support-and-zenithal-backported.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -328,6 +331,10 @@ popd
 %patch501 -p1 -b .expat-CVE-2022-25235
 %patch502 -p1 -b .expat-CVE-2022-25236
 %patch503 -p1 -b .expat-CVE-2022-25315
+
+%ifarch riscv64
+%patch600 -p1 -b .riscv64
+%endif
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -762,6 +769,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Thu May 11 2023 Liu Yang <Yang.Liu.sn@gmail.com> - 102.10.0-1.rv64
+- Add riscv64 support.
+
 * Tue Apr 11 2023 Eike Rathke <erack@redhat.com> - 102.10.0-1
 - Update to 102.10.0
 
