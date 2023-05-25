@@ -99,13 +99,13 @@ ExcludeArch: s390x
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        102.11.0
+Version:        102.11.1
 Release:        1%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPL-2.0 OR GPL-2.0-or-later OR LGPL-2.0-or-later
 Source0:        https://archive.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20230504.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20230525.tar.xz
 %endif
 Source3:        get-calendar-langpacks.sh
 Source4:        cbindgen-vendor.tar.xz
@@ -288,53 +288,53 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %setup -q
 
 # Build patches
-%patch9   -p2 -b .arm
+%patch -P 9   -p2 -b .arm
 %ifarch s390
-%patch103 -p1 -b .rhbz-1219542-s390-build
+%patch -P 103 -p1 -b .rhbz-1219542-s390-build
 %endif
 
 %if 0%{?fedora} >= 35
 # since python3.10 we need to use  `from collections.abc` instead of `from collections`. 
 %endif
 
-%patch304 -p1 -b .1245783
+%patch -P 304 -p1 -b .1245783
 # Patch for big endian platforms only
 #%if 0%{?big_endian}
 #%endif
 
 #ARM run-time patch
 %ifarch aarch64
-#%patch226 -p1 -b .1354671
+#%patch -P 226 -p1 -b .1354671
 %endif
 %ifarch %{arm}
-%patch415 -p1 -b .mozilla-1238661
+%patch -P 415 -p1 -b .mozilla-1238661
 %endif
-#FIXME %patch416 -p1 -b .SIOCGSTAMP
-%patch418 -p1 -b .mozbz-1512162
+#FIXME %patch -P 416 -p1 -b .SIOCGSTAMP
+%patch -P 418 -p1 -b .mozbz-1512162
 %if 0%{?disable_elfhack}
-%patch425 -p1 -b .build-disable-elfhack
+%patch -P 425 -p1 -b .build-disable-elfhack
 %endif
 # most likely fixed
-#%patch419 -p1 -b .bindgen
+#%patch -P 419 -p1 -b .bindgen
 
 #cd ..
 
-%patch402 -p1 -b .526293
-%patch406 -p1 -b .1170092-etc-conf
-%patch408 -p1 -b .D165150
-%patch409 -p1 -b .D165152
+%patch -P 402 -p1 -b .526293
+%patch -P 406 -p1 -b .1170092-etc-conf
+%patch -P 408 -p1 -b .D165150
+%patch -P 409 -p1 -b .D165152
 
 pushd comm
 popd
 
-%patch422 -p1 -b .0001-GLIBCXX-fix-for-GCC-12
-%patch426 -p1 -b .gcc13-header-dependencies
+%patch -P 422 -p1 -b .0001-GLIBCXX-fix-for-GCC-12
+%patch -P 426 -p1 -b .gcc13-header-dependencies
 
-%patch501 -p1 -b .expat-CVE-2022-25235
-%patch502 -p1 -b .expat-CVE-2022-25236
-%patch503 -p1 -b .expat-CVE-2022-25315
+%patch -P 501 -p1 -b .expat-CVE-2022-25235
+%patch -P 502 -p1 -b .expat-CVE-2022-25236
+%patch -P 503 -p1 -b .expat-CVE-2022-25315
 
-%patch1200 -p1 -b .rustflags-commasplit
+%patch -P 1200 -p1 -b .rustflags-commasplit
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -766,6 +766,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
+* Thu May 25 2023 Eike Rathke <erack@redhat.com> - 102.11.1-1
+- Update to 102.11.1
+- Change %%patchN ... to %%patch -P N ...
+
 * Wed May 10 2023 Eike Rathke <erack@redhat.com> - 102.11.0-1
 - Update to 102.11.0
 
