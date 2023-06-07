@@ -135,6 +135,11 @@ Patch422:       0001-GLIBCXX-fix-for-GCC-12.patch
 Patch425:        build-disable-elfhack.patch
 Patch426:       gcc13-header-dependencies.patch
 
+# With clang LLVM 16 rust-bindgen 0.56.0 is too old, combined
+# https://github.com/rust-lang/rust-bindgen/pull/2319
+# https://github.com/rust-lang/rust-bindgen/pull/2339
+Patch427:       rust-bindgen-2319-2339.patch
+
 # PPC fix
 Patch304:       mozilla-1245783.patch
 
@@ -329,6 +334,12 @@ popd
 
 %patch -P 422 -p1 -b .0001-GLIBCXX-fix-for-GCC-12
 %patch -P 426 -p1 -b .gcc13-header-dependencies
+
+%if 0%{?fedora} >= 38
+# MUST ONLY be applied for building against clang LLVM 16.
+# Would crash with earlier clang.
+%patch -P 427 -p1 -b .rust-bindgen-2319-2339
+%endif
 
 %patch -P 501 -p1 -b .expat-CVE-2022-25235
 %patch -P 502 -p1 -b .expat-CVE-2022-25236
