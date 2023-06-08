@@ -140,6 +140,10 @@ Patch426:       gcc13-header-dependencies.patch
 # https://github.com/rust-lang/rust-bindgen/pull/2339
 Patch427:       rust-bindgen-2319-2339.patch
 
+# Needed with rust 1.70
+# https://github.com/mozilla/mp4parse-rust/commit/8b5b652d38e007e736bb442ccd5aa5ed699db100
+Patch428:       mp4parse-rust-8b5b652d38e007e736bb442ccd5aa5ed699db100.patch
+
 # PPC fix
 Patch304:       mozilla-1245783.patch
 
@@ -339,6 +343,8 @@ popd
 # MUST ONLY be applied for building against clang LLVM 16.
 # Would crash with earlier clang.
 %patch -P 427 -p1 -b .rust-bindgen-2319-2339
+# Needed with rust 1.70
+%patch -P 428 -p1 -b .mp4parse-rust-8b5b652d38e007e736bb442ccd5aa5ed699db100
 %endif
 
 %patch -P 501 -p1 -b .expat-CVE-2022-25235
