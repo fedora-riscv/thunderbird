@@ -130,9 +130,7 @@ Patch418:       mozilla-1512162.patch
 Patch103:       rhbz-1219542-s390-build.patch
 # gcc 12 build fix patches
 Patch422:       0001-GLIBCXX-fix-for-GCC-12.patch
-# Python 3.11 "ValueError: invalid mode: 'rU'"; 'U' is deprecated since Python 3 and default, error with Python 3.11
-# Python 3.11 "Invalid regular expression for rule '...'. global flags not at the start of the expression at position ...
-Patch425:        build-disable-elfhack.patch
+Patch425:       build-disable-elfhack.patch
 Patch426:       gcc13-header-dependencies.patch
 
 # With clang LLVM 16 rust-bindgen 0.56.0 is too old, combined
@@ -302,10 +300,6 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %patch -P 103 -p1 -b .rhbz-1219542-s390-build
 %endif
 
-%if 0%{?fedora} >= 35
-# since python3.10 we need to use  `from collections.abc` instead of `from collections`. 
-%endif
-
 %patch -P 304 -p1 -b .1245783
 # Patch for big endian platforms only
 #%if 0%{?big_endian}
@@ -326,15 +320,10 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 # most likely fixed
 #%patch -P 419 -p1 -b .bindgen
 
-#cd ..
-
 %patch -P 402 -p1 -b .526293
 %patch -P 406 -p1 -b .1170092-etc-conf
 %patch -P 408 -p1 -b .D165150
 %patch -P 409 -p1 -b .D165152
-
-pushd comm
-popd
 
 %patch -P 422 -p1 -b .0001-GLIBCXX-fix-for-GCC-12
 %patch -P 426 -p1 -b .gcc13-header-dependencies
