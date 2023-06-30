@@ -99,13 +99,13 @@ ExcludeArch: s390x
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        102.10.0
+Version:        102.12.0
 Release:        1.rv64%{?dist}
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPL-2.0 OR GPL-2.0-or-later OR LGPL-2.0-or-later
 Source0:        https://archive.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}-20230411.tar.xz
+Source1:        thunderbird-langpacks-%{version}-20230605.tar.xz
 %endif
 Source3:        get-calendar-langpacks.sh
 Source4:        cbindgen-vendor.tar.xz
@@ -130,10 +130,17 @@ Patch418:       mozilla-1512162.patch
 Patch103:       rhbz-1219542-s390-build.patch
 # gcc 12 build fix patches
 Patch422:       0001-GLIBCXX-fix-for-GCC-12.patch
-# Python 3.11 "ValueError: invalid mode: 'rU'"; 'U' is deprecated since Python 3 and default, error with Python 3.11
-# Python 3.11 "Invalid regular expression for rule '...'. global flags not at the start of the expression at position ...
-Patch425:        build-disable-elfhack.patch
+Patch425:       build-disable-elfhack.patch
 Patch426:       gcc13-header-dependencies.patch
+
+# With clang LLVM 16 rust-bindgen 0.56.0 is too old, combined
+# https://github.com/rust-lang/rust-bindgen/pull/2319
+# https://github.com/rust-lang/rust-bindgen/pull/2339
+Patch427:       rust-bindgen-2319-2339.patch
+
+# Needed with rust 1.70
+# https://github.com/mozilla/mp4parse-rust/commit/8b5b652d38e007e736bb442ccd5aa5ed699db100
+Patch428:       mp4parse-rust-8b5b652d38e007e736bb442ccd5aa5ed699db100.patch
 
 # PPC fix
 Patch304:       mozilla-1245783.patch
@@ -153,6 +160,12 @@ Patch503:       expat-CVE-2022-25315.patch
 
 # riscv64 support from Arch Linux
 Patch600:       makotokato-riscv64-support-and-zenithal-backported.patch
+
+# Tentative patch for RUSTFLAGS parsing issue,
+# borrowed from firefox commit 24c9accce19c5cae9394430b24eaf938a9c17882:
+# https://bugzilla.redhat.com/show_bug.cgi?id=2184743
+# https://bugzilla.mozilla.org/show_bug.cgi?id=1474486
+Patch1200:       rustflags-commasplit.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -179,7 +192,6 @@ BuildRequires:  bzip2-devel
 BuildRequires:  zlib-devel
 #BuildRequires:  libIDL-devel
 BuildRequires:  pkgconfig(gtk+-3.0)
-BuildRequires:  pkgconfig(gtk+-2.0)
 BuildRequires:  krb5-devel
 BuildRequires:  pango-devel
 BuildRequires:  freetype-devel >= %{freetype_version}
@@ -286,51 +298,52 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %setup -q
 
 # Build patches
-%patch9   -p2 -b .arm
+%patch -P 9   -p2 -b .arm
 %ifarch s390
-%patch103 -p1 -b .rhbz-1219542-s390-build
+%patch -P 103 -p1 -b .rhbz-1219542-s390-build
 %endif
 
-%if 0%{?fedora} >= 35
-# since python3.10 we need to use  `from collections.abc` instead of `from collections`. 
-%endif
-
-%patch304 -p1 -b .1245783
+%patch -P 304 -p1 -b .1245783
 # Patch for big endian platforms only
 #%if 0%{?big_endian}
 #%endif
 
 #ARM run-time patch
 %ifarch aarch64
-#%patch226 -p1 -b .1354671
+#%patch -P 226 -p1 -b .1354671
 %endif
 %ifarch %{arm}
-%patch415 -p1 -b .mozilla-1238661
+%patch -P 415 -p1 -b .mozilla-1238661
 %endif
-#FIXME %patch416 -p1 -b .SIOCGSTAMP
-%patch418 -p1 -b .mozbz-1512162
+#FIXME %patch -P 416 -p1 -b .SIOCGSTAMP
+%patch -P 418 -p1 -b .mozbz-1512162
 %if 0%{?disable_elfhack}
-%patch425 -p1 -b .build-disable-elfhack
+%patch -P 425 -p1 -b .build-disable-elfhack
 %endif
 # most likely fixed
-#%patch419 -p1 -b .bindgen
+#%patch -P 419 -p1 -b .bindgen
 
-#cd ..
+%patch -P 402 -p1 -b .526293
+%patch -P 406 -p1 -b .1170092-etc-conf
+%patch -P 408 -p1 -b .D165150
+%patch -P 409 -p1 -b .D165152
 
-%patch402 -p1 -b .526293
-%patch406 -p1 -b .1170092-etc-conf
-%patch408 -p1 -b .D165150
-%patch409 -p1 -b .D165152
+%patch -P 422 -p1 -b .0001-GLIBCXX-fix-for-GCC-12
+%patch -P 426 -p1 -b .gcc13-header-dependencies
 
-pushd comm
-popd
+%if 0%{?fedora} >= 38
+# MUST ONLY be applied for building against clang LLVM 16.
+# Would crash with earlier clang.
+%patch -P 427 -p1 -b .rust-bindgen-2319-2339
+# Needed with rust 1.70
+%patch -P 428 -p1 -b .mp4parse-rust-8b5b652d38e007e736bb442ccd5aa5ed699db100
+%endif
 
-%patch422 -p1 -b .0001-GLIBCXX-fix-for-GCC-12
-%patch426 -p1 -b .gcc13-header-dependencies
+%patch -P 501 -p1 -b .expat-CVE-2022-25235
+%patch -P 502 -p1 -b .expat-CVE-2022-25236
+%patch -P 503 -p1 -b .expat-CVE-2022-25315
 
-%patch501 -p1 -b .expat-CVE-2022-25235
-%patch502 -p1 -b .expat-CVE-2022-25236
-%patch503 -p1 -b .expat-CVE-2022-25315
+%patch -P 1200 -p1 -b .rustflags-commasplit
 
 %ifarch riscv64
 %patch600 -p1 -b .riscv64
@@ -534,9 +547,6 @@ MOZ_LINK_FLAGS="$MOZ_LINK_FLAGS -L%{_libdir}"
 %endif
 %ifarch %{arm} %{ix86} %{s390x}
 export RUSTFLAGS="-Cdebuginfo=0"
-%else
-# Otherwise since https://src.fedoraproject.org/rpms/redhat-rpm-config/pull-request/243 breaks build.
-unset RUSTFLAGS
 %endif
 # We don't want thunderbird to use CK_GCM_PARAMS_V3 in nss
 MOZ_OPT_FLAGS="$MOZ_OPT_FLAGS -DNSS_PKCS11_3_0_STRICT"
@@ -769,8 +779,18 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
-* Thu May 11 2023 Liu Yang <Yang.Liu.sn@gmail.com> - 102.10.0-1.rv64
+* Fri Jun 30 2023 Liu Yang <Yang.Liu.sn@gmail.com> - 102.12.0-1.rv64
 - Add riscv64 support.
+
+* Wed Jun 07 2023 Eike Rathke <erack@redhat.com> - 102.12.0-1
+- Update to 102.12.0
+
+* Thu May 25 2023 Eike Rathke <erack@redhat.com> - 102.11.1-1
+- Update to 102.11.1
+- Change %%patchN ... to %%patch -P N ...
+
+* Wed May 10 2023 Eike Rathke <erack@redhat.com> - 102.11.0-1
+- Update to 102.11.0
 
 * Tue Apr 11 2023 Eike Rathke <erack@redhat.com> - 102.10.0-1
 - Update to 102.10.0
